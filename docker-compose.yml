@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  orbitscore:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: orbitscore-app
+    ports:
+      - "8000:8000"
+    environment:
+      - ORBIT_ENV=production
+      - ORBIT_SECRET_KEY=dev-secret-key-change-for-production
+      - ORBIT_LIVE_DATA_ENABLED=false
+    volumes:
+      - orbitdata:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+volumes:
+  orbitdata:

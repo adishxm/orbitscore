@@ -60,14 +60,14 @@ Ship the evidence-backed subset; keep the human gate.
 
 - [x] `backend/app/adapters/celestrak.py` + `space_track.py` stubs behind `ORBIT_LIVE_DATA_ENABLED=false`; return bundled fixture TLEs first, real fetch later.
 - [x] Register live sources in `research/SOURCE_REGISTER.md` (CelesTrak, Space-Track, NASA ODPO docs) with freshness/scope notes.
-- [ ] Extend `OrbitalContextCard` to optionally render TLE-derived ground track; **truth-in-advertising badge must auto-switch** SYNTHETIC ↔ LIVE-SOURCE-CITED.
-- [ ] v1 "alert zones": rule-based proximity flags against a bundled catalog snapshot (labeled heuristic).
-- [ ] Generalize the static decay estimate (currently fixed ~3.8 yr @ 500 km) into an altitude-parameterized schematic curve.
+- [x] Extend `OrbitalContextCard` to optionally render TLE-derived ground track; **truth-in-advertising badge must auto-switch** SYNTHETIC ↔ LIVE-SOURCE-CITED.
+- [x] v1 "alert zones": rule-based proximity flags against a bundled catalog snapshot (labeled heuristic via `/missions/{id}/collision-alerts`).
+- [x] Generalize the static decay estimate into an altitude-parameterized schematic curve (via `/missions/{id}/decay-path`).
 
 ## 4. Feature 4 — National-to-Global Scalability Matrix (already landed — tighten)
 
-- [ ] Split `fixtures/rules_profiles.json` into named, citable tiers: `isro_dfsm_2030`, `fcc_5yr_deorbit`, `naso_std_8719_14`→`nasa_std_8719_14`, `esa_zero_debris` — each with source doc, revision, date.
-- [ ] Surface tier names in the profile gate UI verbatim (matches application wording).
+- [x] Split `fixtures/rules_profiles.json` into named, citable tiers: `isro_dfsm_2030`, `fcc_5yr_deorbit`, `nasa_std_8719_14`, `internal_pre_review` — each with source doc, revision, date.
+- [x] Surface tier names in the profile gate UI verbatim (matches application wording).
 
 ---
 

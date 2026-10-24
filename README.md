@@ -41,7 +41,7 @@ OrbitScore delivers a polished, responsive mission evidence workspace and synthe
 ### Canonical Frontend (`frontend/`)
 
 ```bash
-# Run tests (67 tests across 10 suites)
+# Run tests (68 tests across 10 suites)
 npm test
 
 # Typecheck
@@ -63,7 +63,7 @@ npm run lint:banned-words
 # Install dependencies including the editable ai_ml package
 pip install -r requirements.txt
 
-# Run backend test suite (55 tests)
+# Run backend test suite (62 tests)
 python -m pytest backend/tests
 
 # Run synthetic verification matrix

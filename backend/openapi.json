@@ -1318,7 +1318,7 @@
     "/missions/{mission_id}/export/odar": {
       "get": {
         "summary": "Export Nasa Odar Report",
-        "description": "Generate a complete NASA-STD-8719.14 compliant draft ODAR markdown document. Returns 423 if locked.",
+        "description": "Generate a complete NASA-STD-8719.14 compliant draft ODAR document (markdown or PDF). Returns 423 if locked.",
         "operationId": "export_nasa_odar_report_missions__mission_id__export_odar_get",
         "security": [
           {
@@ -1337,16 +1337,25 @@
               "type": "string",
               "title": "Mission Id"
             }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(markdown|pdf)$",
+              "default": "markdown",
+              "title": "Format"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
-              "text/html": {
-                "schema": {
-                  "type": "string"
-                }
+              "application/json": {
+                "schema": {}
               }
             }
           },
@@ -1366,7 +1375,7 @@
     "/missions/{mission_id}/export/eomp": {
       "get": {
         "summary": "Export Isro Fcc Eomp Plan",
-        "description": "Generate an End-of-Mission Plan (EOMP) conforming to ISRO DFSM 2030 and FCC 5-year rules. Returns 423 if locked.",
+        "description": "Generate an End-of-Mission Plan (EOMP) conforming to ISRO DFSM 2030 and FCC 5-year rules (markdown or PDF). Returns 423 if locked.",
         "operationId": "export_isro_fcc_eomp_plan_missions__mission_id__export_eomp_get",
         "security": [
           {
@@ -1385,16 +1394,25 @@
               "type": "string",
               "title": "Mission Id"
             }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(markdown|pdf)$",
+              "default": "markdown",
+              "title": "Format"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
-              "text/html": {
-                "schema": {
-                  "type": "string"
-                }
+              "application/json": {
+                "schema": {}
               }
             }
           },
@@ -1646,6 +1664,68 @@
             }
           }
         }
+      }
+    },
+    "/ready": {
+      "get": {
+        "summary": "Readiness Check",
+        "description": "Readiness probe checking database connectivity and system integrations.",
+        "operationId": "readiness_check_ready_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fleet/space-credit-index": {
+      "post": {
+        "summary": "Batch Fleet Credit Index",
+        "description": "Batch calculation of the Space Credit Index across a fleet of missions with tier aggregation.",
+        "operationId": "batch_fleet_credit_index_fleet_space_credit_index_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FleetIndexRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
       }
     }
   },
@@ -2917,6 +2997,39 @@
         },
         "type": "object",
         "title": "FieldUpdateRequest"
+      },
+      "FleetIndexRequest": {
+        "properties": {
+          "mission_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mission Ids"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Page",
+            "default": 1
+          },
+          "page_size": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 1.0,
+            "title": "Page Size",
+            "default": 10
+          }
+        },
+        "type": "object",
+        "title": "FleetIndexRequest"
       },
       "HTTPValidationError": {
         "properties": {

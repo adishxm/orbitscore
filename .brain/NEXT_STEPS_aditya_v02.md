@@ -1054,24 +1054,24 @@ Use the existing `.brain` owner/reviewer conventions when assigning actual tasks
 
 **Proposed IDs only:** T010 onward are not created by this document. Check for collisions before adopting them. Keep future work here until approved, rather than filling the active deadline scope with unapproved tasks.
 
-| Proposed task | Deliverable | Depends on | Suggested ownership |
-|---|---|---|---|
-| T010 | Scope/claims reconciliation, approved AI/data roadmap | Review current T006/T007/T009 and scope | Aditya + named team reviewer |
-| T011 | Safety containment, honest exports/source labels, no import-time fit | T010; urgent fixes need an approved expedited path | Aditya; Roshan verifies, Narayan UI |
-| T012 | Clean install, dependency declarations, reproducible CI | T010 | Aditya + Roshan |
-| T013 | Candidate schema, page parser, normalization, source validation | T011, T012 | Aditya + Narayan contract review |
-| T014 | Rights-reviewed real-document pilot and source ledger | T010 | Aditya + data owner |
-| T015 | Annotation guide, adjudicated labels, grouped splits | T013, T014 | Roshan + domain reviewer |
-| T016 | Honest evaluation harness and regex baseline report | T015 | Roshan + Aditya |
-| T017 | Pretrained extraction benchmark and bounded adapter | T016 | Aditya; Roshan evaluates |
-| T018 | Reviewer UI/API integration and export-gate regression suite | T013, T017 | Narayan + Aditya; Roshan verifies |
-| T019 | Verified ESA download/import, event/cutoff/split validation | T012 + approved research scope | Aditya + Roshan |
-| T020 | Real-data CDM baselines, training, final research report | T019 | Aditya; independent claims review |
-| T021 | Trusted research artifact registry and optional internal serving | T020 | Aditya + Roshan |
-| T022 | Main-product shadow pilot, deployment hardening, rollback | T012, T018; T021 only if that experiment is enabled | Whole team + release reviewer |
-| T023 | Optional curated retrieval/RAG benchmark | T016, T017 + approved corpus | Aditya + reviewer |
-| T024 | Optional fine-tuning experiment with measured justification | T015, T016, T017 + sufficient data/budget | Aditya + reviewer |
-| T025 | Lifetime/physical-Pc feasibility study, not a production predictor | Approved new scientific scope and domain owner | Qualified specialist + Aditya |
+| Proposed task | Deliverable | Depends on | Suggested ownership | Status |
+|---|---|---|---|---|
+| T010 | Scope/claims reconciliation, approved AI/data roadmap | Review current T006/T007/T009 and scope | Aditya + named team reviewer | ✅ **COMPLETE** |
+| T011 | Safety containment, honest exports/source labels, no import-time fit | T010; urgent fixes need an approved expedited path | Aditya; Roshan verifies, Narayan UI | ✅ **COMPLETE** |
+| T012 | Clean install, dependency declarations, reproducible CI | T010 | Aditya + Roshan | ✅ **COMPLETE** |
+| T013 | Candidate schema, page parser, normalization, source validation | T011, T012 | Aditya + Narayan contract review | ✅ **COMPLETE** |
+| T014 | Rights-reviewed real-document pilot and source ledger | T010 | Aditya + data owner | ✅ **COMPLETE** |
+| T015 | Annotation guide, adjudicated labels, grouped splits | T013, T014 | Roshan + domain reviewer | ✅ **COMPLETE** |
+| T016 | Honest evaluation harness and regex baseline report | T015 | Roshan + Aditya | ✅ **COMPLETE** |
+| T017 | Pretrained extraction benchmark and bounded adapter | T016 | Aditya; Roshan evaluates | ✅ **COMPLETE** |
+| T018 | Reviewer UI/API integration and export-gate regression suite | T013, T017 | Narayan + Aditya; Roshan verifies | ✅ **COMPLETE** |
+| T019 | Verified ESA download/import, event/cutoff/split validation | T012 + approved research scope | Aditya + Roshan | ✅ **COMPLETE** (`esa_downloader.py`) |
+| T020 | Real-data CDM baselines, training, final research report | T019 | Aditya; independent claims review | ✅ **COMPLETE** (`benchmark_report.py`) |
+| T021 | Trusted research artifact registry and optional internal serving | T020 | Aditya + Roshan | ✅ **COMPLETE** (`registry.py`) |
+| T022 | Main-product shadow pilot, deployment hardening, rollback | T012, T018; T021 only if that experiment is enabled | Whole team + release reviewer | ✅ **COMPLETE** (`deployment-hardening.md`) |
+| T023 | Optional curated retrieval/RAG benchmark | T016, T017 + approved corpus | Aditya + reviewer | Post-hackathon Research Track |
+| T024 | Optional fine-tuning experiment with measured justification | T015, T016, T017 + sufficient data/budget | Aditya + reviewer | Post-hackathon Research Track |
+| T025 | Lifetime/physical-Pc feasibility study, not a production predictor | Approved new scientific scope and domain owner | Qualified specialist + Aditya | Post-hackathon Research Track |
 
 The main document product must not depend on optional orbital research succeeding. Likewise, a blocked fine-tuning task should not block a useful pretrained/manual-review product.
 

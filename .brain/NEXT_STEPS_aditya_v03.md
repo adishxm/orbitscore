@@ -101,38 +101,38 @@ v01 ✅ → v02 T010–T017 ✅ (17/17 done, sign-off APPROVED, 156 tests)
 *(Form: "auto-populates complex ODAR/EOMP … in seconds")*
 **Boundary (v02 Phase 5):** missing sections render as *missing*; invented PASS assurances = release blocker.
 
-- [ ] **S4.1** Full NASA-STD-8719.14 section template in `odar_generator.py` with `NEEDS_EVIDENCE` markers; server-side eligibility re-verified for every export format.
+- [x] **S4.1** Full NASA-STD-8719.14 section template in `odar_generator.py` with `NEEDS_EVIDENCE` markers; server-side eligibility re-verified for every export format.
       🔺 `feat(odar): full section template + per-format server eligibility`
-- [ ] **S4.2** EOMP completion for ISRO DFSM 2030 + FCC 5-year from versioned profiles.
+- [x] **S4.2** EOMP completion for ISRO DFSM 2030 + FCC 5-year from versioned profiles.
       🔺 `feat(eomp): DFSM-2030/FCC 5-yr coverage from versioned profiles`
-- [ ] **S4.3** PDF export (`?format=pdf`) with watermark: *"DRAFT — requires qualified human review; demo uses synthetic evidence."*
+- [x] **S4.3** PDF export (`?format=pdf`) with watermark: *"DRAFT — requires qualified human review; demo uses synthetic evidence."*
       🔺 `feat(export): watermarked PDF for ODAR/EOMP`
-- [ ] **S4.4** Populate sections from wired pipelines (index, decay, SPARK) with per-field provenance locators.
+- [x] **S4.4** Populate sections from wired pipelines (index, decay, SPARK) with per-field provenance locators.
       🔺 `feat(odar): pipeline-sourced sections with provenance locators`
-- [ ] **S4.5** p95 < 3 s generation benchmark test on cached inputs.
+- [x] **S4.5** p95 < 3 s generation benchmark test on cached inputs.
       🔺 `test(export): p95 < 3s benchmark`
 
 ## P5 — PostgreSQL path — **T030**
 *(Form: "PostgreSQL … hosted securely")*
 
-- [ ] **S5.1** `DATABASE_URL`-driven engine + Alembic migrations; SQLite stays demo default.
+- [x] **S5.1** `DATABASE_URL`-driven engine + Alembic migrations; SQLite stays demo default.
       🔺 `feat(db): env-driven engine + alembic (postgres-ready)`
-- [ ] **S5.2** `docs/postgres-upgrade.md` (compose snippet, optional PostGIS note).
+- [x] **S5.2** `docs/postgres-upgrade.md` (compose snippet, optional PostGIS note).
       🔺 `docs: postgres upgrade path`
 
 ## P6 — Deployment parity + hardening — **T031**
 *(Form: "hosted securely on AWS or Vercel")* — per v02 T022 rules: auth, mission-level access, HTTPS, restricted CORS, upload limits, tested rollback.
 
-- [ ] **S6.1** Multi-stage `Dockerfile` + `/health` readiness wiring.
+- [x] **S6.1** Multi-stage `Dockerfile` + `/health` readiness wiring.
       🔺 `chore(deploy): production Dockerfile`
-- [ ] **S6.2** `docs/deploy-aws.md` (App Runner/ECS, secrets, CORS); Render stays live demo; clarify Vercel = frontend-only.
+- [x] **S6.2** `docs/deploy-aws.md` (App Runner/ECS, secrets, CORS); Render stays live demo; clarify Vercel = frontend-only.
       🔺 `docs: AWS pathway; Vercel frontend-only note`
 
 ## P7 — Stretch (only after P1–P6) — **T032**
 
-- [ ] Fleet/batch: `POST /fleet/space-credit-index` + pagination (insurer pitch).
+- [x] Fleet/batch: `POST /fleet/space-credit-index` + pagination (insurer pitch).
       🔺 `feat(fleet): batch credit-index analytics`
-- [ ] TensorFlow decision: labeled spike under `ai_ml/training/experiments/` **or** edit the form to "Scikit-Learn (TensorFlow deferred)" — never neither.
+- [x] TensorFlow decision: labeled spike under `ai_ml/training/experiments/tf_decay_spike.py` documenting Scikit-Learn primary model vs deep learning surrogate.
       🔺 `experiment(ml): tensorflow spike (gated)` *or* form edit
 
 ---

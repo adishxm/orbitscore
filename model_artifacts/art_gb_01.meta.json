@@ -1,0 +1,17 @@
+{
+  "artifact_id": "art_gb_01",
+  "model_name": "CDM-GradientBoosting-LogRisk-V1",
+  "version": "1.0.0",
+  "sha256": "c65b204be7e826c09712e1a613c2198ab05331782e3ed4cdd56ddbfd97e711c1",
+  "trained_at_utc": "2026-10-24T20:34:44.494165+00:00",
+  "train_sample_count": 2,
+  "features": [
+    "time_to_tca_days",
+    "miss_distance_m",
+    "relative_speed_m_s",
+    "latest_early_risk"
+  ],
+  "is_approved": true,
+  "intended_use": "Offline conjunction risk forecasting research",
+  "research_disclaimer": "OFFLINE RESEARCH ONLY - ESA CDM BENCHMARK FORECASTING, NOT OPERATIONAL COLLISION PROBABILITY"
+}

@@ -12,6 +12,12 @@ DEFAULT_DB_PATH = ROOT / "data" / "orbitscore.db"
 
 
 def get_db_path() -> Path:
+    env_url = os.environ.get("DATABASE_URL")
+    if env_url:
+        if env_url.startswith("sqlite:///"):
+            return Path(env_url[10:])
+        if env_url.startswith("sqlite://"):
+            return Path(env_url[9:])
     env_path = os.environ.get("ORBIT_DB_PATH") or os.environ.get("DATABASE_PATH")
     if env_path:
         return Path(env_path)

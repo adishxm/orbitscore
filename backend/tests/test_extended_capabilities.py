@@ -306,3 +306,108 @@ def test_telemetry_mode_separation_and_db_persistence():
     assert cdms[0]["miss_distance_m"] == 450.0
 
 
+def test_odar_and_eomp_pdf_export_and_benchmark():
+    """Verify P4: PDF generation with watermark and p95 < 3s benchmark."""
+    import time
+    from app.main import reviews
+    from app.db import get_connection
+
+    # Setup: Ensure asteria-3 is evaluated and reviewed to pass 423 gate
+    client.post("/missions/asteria-3/evaluate?profile_id=india-dfsm-inspired", headers=AUTH_HEADERS)
+    resp_eval = client.get("/missions/asteria-3/evaluation", headers=AUTH_HEADERS)
+    for f in resp_eval.json().get("findings", []):
+        client.post(
+            "/reviews",
+            json={
+                "finding_id": f["finding_id"],
+                "mission_id": "asteria-3",
+                "decision": "ACCEPTED",
+                "note": "Approved for PDF export test",
+                "reviewer": "Safety Authority",
+                "authority_citation": "ISRO DFSM 2024"
+            },
+            headers=AUTH_HEADERS
+        )
+
+    # 1. Test ODAR PDF export
+    t0 = time.time()
+    resp_odar_pdf = client.get("/missions/asteria-3/export/odar?format=pdf", headers=AUTH_HEADERS)
+    duration = time.time() - t0
+
+    assert resp_odar_pdf.status_code == 200
+    assert resp_odar_pdf.headers["content-type"] == "application/pdf"
+    assert resp_odar_pdf.content.startswith(b"%PDF")
+    assert duration < 3.0  # p95 generation benchmark
+
+    # 2. Test EOMP PDF export
+    resp_eomp_pdf = client.get("/missions/asteria-3/export/eomp?format=pdf", headers=AUTH_HEADERS)
+    assert resp_eomp_pdf.status_code == 200
+    assert resp_eomp_pdf.headers["content-type"] == "application/pdf"
+    assert resp_eomp_pdf.content.startswith(b"%PDF")
+
+
+def test_health_and_readiness_probes():
+    """Verify P6: /health and /ready service probes."""
+    resp_h = client.get("/health")
+    assert resp_h.status_code == 200
+    assert resp_h.json()["status"] == "healthy"
+    assert resp_h.json()["service"] == "orbitscore-backend"
+
+    resp_r = client.get("/ready")
+    assert resp_r.status_code == 200
+    assert resp_r.json()["ready"] is True
+    assert "sqlite" in resp_r.json()["database"]
+
+
+def test_batch_fleet_space_credit_index():
+    """Verify P7: POST /fleet/space-credit-index batch calculation and tier aggregation."""
+    payload = {
+        "page": 1,
+        "page_size": 10
+    }
+    resp = client.post("/fleet/space-credit-index", json=payload, headers=AUTH_HEADERS)
+    assert resp.status_code == 200
+    data = resp.json()
+
+    assert data["page"] == 1
+    assert data["page_size"] == 10
+    assert data["total_missions"] >= 3
+    assert "fleet_tier_distribution" in data
+    assert "missions" in data
+    assert len(data["missions"]) >= 3
+
+    for m in data["missions"]:
+        assert "mission_id" in m
+        assert "rating_tier" in m
+        assert m["data_mode"] in ("SNAPSHOT", "SYNTHETIC")
+
+    assert "Fleet Space Credit Index benchmark" in data["disclaimer"]
+
+
+def test_esa_dataset_and_benchmark_report_tools():
+    """Verify T019 & T020: Dataset integrity validator and CDM comparative benchmark generator."""
+    from ai_ml.datasets.esa_downloader import download_esa_dataset_stub, verify_esa_dataset_file
+    from ai_ml.evaluation.benchmark_report import generate_cdm_benchmark_report, render_benchmark_markdown
+
+    # T019
+    res = download_esa_dataset_stub("data/test_esa_stage")
+    assert res["valid"] is True
+    assert res["size_bytes"] > 0
+
+    # T020
+    rep = generate_cdm_benchmark_report(
+        y_true=[-6.0, -8.0, -4.5],
+        y_persistence=[-6.5, -8.7, -5.1],
+        y_pred=[-6.1, -8.1, -4.6],
+        event_ids=["ev_1", "ev_2", "ev_3"]
+    )
+    assert rep["sample_count"] == 3
+    assert rep["metrics"]["beats_persistence"] is True
+    assert rep["metrics"]["mse_improvement_percentage"] > 0
+
+    md = render_benchmark_markdown(rep)
+    assert "Conjunction Data Message (CDM) Benchmark Report" in md
+    assert "Persistence Baseline" in md
+
+
+

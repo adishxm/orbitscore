@@ -49,6 +49,12 @@ def evaluate_mission(mission: dict, profile_id: str) -> dict:
     catalog = load_profiles()
     profile = catalog["profiles"].get(profile_id)
     if profile is None:
+        for pid, pdata in catalog["profiles"].items():
+            if pdata.get("tier_id") == profile_id:
+                profile = pdata
+                profile_id = pid
+                break
+    if profile is None:
         raise ValueError(f"Unknown profile: {profile_id}")
     conflicts = detect_conflicts(mission)
     conflict_fields = {c["field"] for c in conflicts}

@@ -205,7 +205,12 @@
           "remediation_lever": "Provide and review evidence for passivated.",
           "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
         }
-      ]
+      ],
+      "tier_id": "isro_dfsm_2030",
+      "tier_label": "Tier 1: ISRO DFSM 2030 (India)",
+      "source_doc": "ISRO Debris-Free Space Missions Initiative",
+      "revision": "2024.1",
+      "published_date": "2024-03-01"
     },
     "nasa-std-8719-14c-inspired": {
       "version": "1.0.0",
@@ -407,7 +412,12 @@
           "remediation_lever": "Provide and review evidence for casualty_expectation.",
           "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
         }
-      ]
+      ],
+      "tier_id": "nasa_std_8719_14",
+      "tier_label": "Tier 3: NASA-STD-8719.14 (Global Baseline)",
+      "source_doc": "NASA Standard 8719.14C Process for Limiting Orbital Debris",
+      "revision": "Rev C",
+      "published_date": "2021-08-01"
     },
     "fcc-22-74-inspired": {
       "version": "1.0.0",
@@ -497,7 +507,12 @@
           "remediation_lever": "Provide and review evidence for maneuverable.",
           "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
         }
-      ]
+      ],
+      "tier_id": "fcc_5yr_deorbit",
+      "tier_label": "Tier 2: FCC 5-Year Deorbit Rule (Global)",
+      "source_doc": "FCC-22-74 Second Report & Order",
+      "revision": "FCC-22-74",
+      "published_date": "2022-09-29"
     },
     "internal-pre-review": {
       "version": "1.0.0",
@@ -699,7 +714,12 @@
           "remediation_lever": "Provide and review evidence for evidence_locator.",
           "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
         }
-      ]
+      ],
+      "tier_id": "internal_pre_review",
+      "tier_label": "Tier 0: Engineering Internal Pre-Review",
+      "source_doc": "Team TwinForge Internal Engineering Baseline",
+      "revision": "2026.10",
+      "published_date": "2026-10-20"
     }
   },
   "notice": "Demonstration profiles are simplified, source-linked screening interpretations. They are not authoritative legal opinions, compliance determinations, or certification."

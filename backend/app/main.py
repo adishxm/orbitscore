@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from typing import Optional, List
 from pydantic import BaseModel, Field
 
-from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Query, Request, Depends
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Query, Request, Depends, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 
@@ -47,7 +47,7 @@ from ai_ml.orbital_ml import (
 )
 from .integrations.space_track import space_track_service, SpaceTrackTLE, ConjunctionAlert
 from .integrations.nasa_spark import nasa_spark_service, DebrisDensityBand, DebrisFluxAssessment
-from .odar_generator import generate_nasa_odar_markdown, generate_eomp_markdown
+from .odar_generator import generate_nasa_odar_markdown, generate_eomp_markdown, generate_pdf_report
 from .db import (
     init_db, reset_db, get_connection, save_mission, get_mission_db, list_missions_db,
     save_artifact_db, get_artifact_db, get_artifact_content_db,
@@ -241,7 +241,9 @@ events = EventsList()
 @app.get("/health")
 def health():
     return {
+        "status": "healthy",
         "ok": True,
+        "service": "orbitscore-backend",
         "version": app.version,
         "ai_enabled": is_ai_enabled(),
         "database": "sqlite_durable"
@@ -793,12 +795,13 @@ async def assess_nasa_spark_flux(
 
 # --- Automated ODAR & EOMP Export Pipeline Endpoints ---
 
-@app.get("/missions/{mission_id}/export/odar", response_class=HTMLResponse)
+@app.get("/missions/{mission_id}/export/odar")
 def export_nasa_odar_report(
     mission_id: str,
+    format: str = Query("markdown", pattern="^(markdown|pdf)$"),
     user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
 ):
-    """Generate a complete NASA-STD-8719.14 compliant draft ODAR markdown document. Returns 423 if locked."""
+    """Generate a complete NASA-STD-8719.14 compliant draft ODAR document (markdown or PDF). Returns 423 if locked."""
     evaluation = get_evaluation_db(mission_id)
     if not evaluation:
         raise HTTPException(423, detail={"code": "EXPORT_LOCKED", "message": "Mission must be evaluated before export", "pending_decisions": 1})
@@ -811,15 +814,23 @@ def export_nasa_odar_report(
     fields = m.get("fields", [])
     decisions = [v for v in reviews.values() if v.get("mission_id") == m.get("mission_id")]
     md = generate_nasa_odar_markdown(m, fields, decisions)
+    if format == "pdf":
+        pdf_bytes = generate_pdf_report("Orbital Debris Assessment Report (ODAR)", md, m.get("name", mission_id))
+        return Response(
+            content=pdf_bytes,
+            media_type="application/pdf",
+            headers={"Content-Disposition": f'attachment; filename="ODAR_{mission_id}.pdf"'}
+        )
     return HTMLResponse(content=md, media_type="text/markdown; charset=utf-8")
 
 
-@app.get("/missions/{mission_id}/export/eomp", response_class=HTMLResponse)
+@app.get("/missions/{mission_id}/export/eomp")
 def export_isro_fcc_eomp_plan(
     mission_id: str,
+    format: str = Query("markdown", pattern="^(markdown|pdf)$"),
     user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
 ):
-    """Generate an End-of-Mission Plan (EOMP) conforming to ISRO DFSM 2030 and FCC 5-year rules. Returns 423 if locked."""
+    """Generate an End-of-Mission Plan (EOMP) conforming to ISRO DFSM 2030 and FCC 5-year rules (markdown or PDF). Returns 423 if locked."""
     evaluation = get_evaluation_db(mission_id)
     if not evaluation:
         raise HTTPException(423, detail={"code": "EXPORT_LOCKED", "message": "Mission must be evaluated before export", "pending_decisions": 1})
@@ -831,6 +842,13 @@ def export_isro_fcc_eomp_plan(
     m = get_mission(mission_id)
     fields = m.get("fields", [])
     md = generate_eomp_markdown(m, fields)
+    if format == "pdf":
+        pdf_bytes = generate_pdf_report("End-of-Mission Plan (EOMP)", md, m.get("name", mission_id))
+        return Response(
+            content=pdf_bytes,
+            media_type="application/pdf",
+            headers={"Content-Disposition": f'attachment; filename="EOMP_{mission_id}.pdf"'}
+        )
     return HTMLResponse(content=md, media_type="text/markdown; charset=utf-8")
 
 
@@ -1223,6 +1241,88 @@ def explain_space_credit_index(
         data_mode=data_mode,
         disclaimer=index_res.disclaimer,
     )
+
+
+# --- System Hardening, Health, Readiness & Fleet Endpoints ---
+
+
+@app.get("/ready")
+def readiness_check():
+    """Readiness probe checking database connectivity and system integrations."""
+    db_ok = True
+    try:
+        conn = get_connection()
+        conn.execute("SELECT 1")
+    except Exception:
+        db_ok = False
+    return {
+        "ready": db_ok,
+        "database": "sqlite_connected" if db_ok else "unavailable",
+        "live_telemetry_enabled": os.environ.get("ORBIT_LIVE_DATA_ENABLED", "false").lower() == "true",
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
+
+class FleetIndexRequest(BaseModel):
+    mission_ids: Optional[List[str]] = None
+    page: int = Field(1, ge=1)
+    page_size: int = Field(10, ge=1, le=100)
+
+
+@app.post("/fleet/space-credit-index")
+def batch_fleet_credit_index(
+    req: FleetIndexRequest,
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
+    """Batch calculation of the Space Credit Index across a fleet of missions with tier aggregation."""
+    all_missions = list_missions()
+    if req.mission_ids:
+        target_missions = [m for m in all_missions if m.get("mission_id") in req.mission_ids]
+    else:
+        target_missions = all_missions
+
+    total_count = len(target_missions)
+    start_idx = (req.page - 1) * req.page_size
+    page_missions = target_missions[start_idx : start_idx + req.page_size]
+
+    results = []
+    tier_counts = {"AAA": 0, "AA": 0, "A": 0, "BBB": 0, "BB": 0, "B": 0, "C": 0, "UNRATED": 0}
+
+    for m in page_missions:
+        mid = m.get("mission_id")
+        fields = m.get("fields", [])
+        if not fields:
+            idx_res = {
+                "mission_id": mid,
+                "mission_name": m.get("name"),
+                "overall_score": None,
+                "rating_tier": "UNRATED",
+                "missing_pillars": ["size", "orbital_trajectory", "debris_legacy", "collision_avoidance"],
+                "data_mode": "SYNTHETIC"
+            }
+            tier_counts["UNRATED"] += 1
+        else:
+            calc = compute_space_credit_index(m, fields)
+            tier = calc.rating_tier if hasattr(calc, 'rating_tier') else calc.get("rating_tier", "UNRATED")
+            tier_counts[tier] = tier_counts.get(tier, 0) + 1
+            idx_res = {
+                "mission_id": mid,
+                "mission_name": m.get("name"),
+                "overall_score": calc.overall_score if hasattr(calc, 'overall_score') else calc.get("overall_score"),
+                "rating_tier": tier,
+                "data_mode": "SNAPSHOT"
+            }
+        results.append(idx_res)
+
+    return {
+        "page": req.page,
+        "page_size": req.page_size,
+        "total_missions": total_count,
+        "total_pages": (total_count + req.page_size - 1) // req.page_size if total_count else 0,
+        "fleet_tier_distribution": tier_counts,
+        "missions": results,
+        "disclaimer": "Fleet Space Credit Index benchmark is an evidence-readiness aggregation, not an underwriting rating or safety certification."
+    }
 
 
 

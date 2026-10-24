@@ -40,6 +40,7 @@ OrbitScore is a source-linked decision-support/pre-review application. The polic
 | Method | Route | Function |
 |---|---|---|
 | `GET` | `/health` | Health and engine version response |
+| `GET` | `/ready` | Database readiness and live telemetry flag response |
 | `GET` | `/profiles` | Catalog of selectable policy profiles |
 | `GET` | `/missions` | Database-backed mission list |
 | `GET` | `/missions/{mission_id}` | Retrieve mission record |
@@ -52,14 +53,19 @@ OrbitScore is a source-linked decision-support/pre-review application. The polic
 | `GET` | `/provenance` | Return SHA-256 event chain and verification result |
 | `GET` | `/export/{mission_id}` | Generate cited packet (locked until every finding has a decision) |
 | `GET` | `/missions/{mission_id}/space-credit-index` | Compute 4-pillar Space Credit Index (0–100, AAA/AA/A tier) |
+| `GET` | `/missions/{mission_id}/space-credit-index/explain` | Detailed 4-pillar contribution breakdown with missing evidence disclosure |
+| `POST` | `/fleet/space-credit-index` | Batch calculation of Space Credit Index across a fleet with tier distribution |
+| `GET` | `/missions/{mission_id}/pathway` | Deterministic SGP4 spherical orbit ground-track waypoint series |
+| `GET` | `/missions/{mission_id}/collision-alerts` | Heuristic CDM screening bands and catalog density counts |
+| `GET` | `/missions/{mission_id}/decay-path` | Atmospheric drag decay profile with research-gate indicators |
 | `POST` | `/missions/{mission_id}/ml/predict-decay` | Scikit-Learn GradientBoostingRegressor orbital decay lifetime |
 | `POST` | `/missions/{mission_id}/ml/collision-risk` | Scikit-Learn RandomForestClassifier conjunction risk vector |
 | `GET` | `/integrations/space-track/tle/{norad_id}` | Space-Track TLE orbit state vector with offline caching |
 | `GET` | `/integrations/space-track/conjunctions/{norad_id}` | Close encounter CDMs from Space-Track catalog |
 | `GET` | `/integrations/nasa-spark/debris-density` | LEO spatial debris density distribution from NASA SPARK / ORDEM |
 | `GET` | `/integrations/nasa-spark/assess-flux` | Smallsat collision probability against NASA SPARK orbital models |
-| `GET` | `/missions/{mission_id}/export/odar` | Automated NASA-STD-8719.14 ODAR draft markdown generation |
-| `GET` | `/missions/{mission_id}/export/eomp` | Automated ISRO DFSM 2030 / FCC 5-year EOMP markdown generation |
+| `GET` | `/missions/{mission_id}/export/odar` | Automated NASA-STD-8719.14 ODAR draft generation (`?format=markdown` or `?format=pdf`) |
+| `GET` | `/missions/{mission_id}/export/eomp` | Automated ISRO DFSM 2030 / FCC 5-year EOMP generation (`?format=markdown` or `?format=pdf`) |
 | `POST` | `/research/cdm-forecast` | Offline research forecast of reported CDM log-risk with trusted artifact registry lookup |
 | `GET` | `/integrations/status` | Status and boundaries of all 6 external integrations |
 | `POST` | `/integrations/agent37/triage` | Pre-submission candidate extractor adapter |
@@ -77,10 +83,10 @@ FastAPI interactive OpenAPI docs are served at `/docs`.
 
 ## Verified commands
 
-- **Canonical Frontend Tests:** `npm test` (or `npm --prefix frontend test`) — 67 tests passed (10 suites)
+- **Canonical Frontend Tests:** `npm test` (or `npm --prefix frontend test`) — 68 tests passed (10 suites)
 - **Canonical Frontend Typecheck:** `npm run typecheck` (or `npm --prefix frontend run lint`) — passed (0 errors)
 - **Canonical Frontend Build:** `npm run build` (or `npm --prefix frontend run build`) — passed (Vite production bundle)
-- **Backend Tests:** `python -m pytest backend/tests` — 55 passed
+- **Backend Tests:** `python -m pytest backend/tests` — 62 passed
 - **AI/ML Tests:** `python -m pytest ai_ml/tests` — 33 passed (training, evaluation, inference, adapter, baselines)
 - **Backend Verification Matrix:** `python -m app.verification` (from `backend/`) — 12 evaluations, 12 provenance events, valid: true
 - **Legacy Console Tests:** `npm run legacy:web:test` — 10 passed

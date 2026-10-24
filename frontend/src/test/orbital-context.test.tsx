@@ -31,6 +31,14 @@ describe('Orbital Context Component & Honesty Rules', () => {
     expect(screen.getByText(/Tier 2 — Global Guidelines:/i)).toBeInTheDocument();
   });
 
+  it('switches to LIVE-SOURCE-CITED badge when liveMode is enabled', () => {
+    render(<OrbitalContextCard mission={ASTERIA_3_MISSION} liveMode={true} />);
+
+    expect(screen.getByText('LIVE-SOURCE-CITED')).toBeInTheDocument();
+    expect(screen.getByText('SPACE-TRACK EPHEMERIS')).toBeInTheDocument();
+    expect(screen.queryByText('SYNTHETIC DEMO DATA')).not.toBeInTheDocument();
+  });
+
   it('passes axe accessibility audit', async () => {
     const { container } = render(<OrbitalContextCard mission={ASTERIA_3_MISSION} />);
     const results = await axe.run(container);

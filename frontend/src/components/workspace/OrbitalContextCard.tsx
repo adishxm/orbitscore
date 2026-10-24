@@ -5,27 +5,39 @@ import styles from './OrbitalContextCard.module.css';
 
 interface OrbitalContextCardProps {
   mission: Mission;
+  liveMode?: boolean;
 }
 
-export const OrbitalContextCard: React.FC<OrbitalContextCardProps> = ({ mission }) => {
+export const OrbitalContextCard: React.FC<OrbitalContextCardProps> = ({ mission, liveMode = false }) => {
+  const isLive = liveMode || (mission as unknown as { telemetry_mode?: string }).telemetry_mode === 'LIVE';
+
   return (
     <section className={styles.card} aria-labelledby="orbital-context-heading">
       <div className={styles.headerRow}>
         <div className={styles.titleArea}>
-          <div className={styles.kicker}>STAGE 1B • SYNTHETIC ORBITAL CONTEXT</div>
+          <div className={styles.kicker}>
+            {isLive ? 'STAGE 1B • LIVE ORBITAL INTELLIGENCE' : 'STAGE 1B • SYNTHETIC ORBITAL CONTEXT'}
+          </div>
           <h2 id="orbital-context-heading" className={styles.title}>
             <span>Orbital Trajectory & Mission Envelope</span>
           </h2>
         </div>
 
         <div className={styles.badgeGroup}>
-          <span className={styles.syntheticBadge}>
-            <Info size={12} aria-hidden="true" />
-            SYNTHETIC DEMO DATA
-          </span>
+          {isLive ? (
+            <span className={styles.liveBadge} data-testid="live-telemetry-badge">
+              <Globe size={12} aria-hidden="true" />
+              LIVE-SOURCE-CITED
+            </span>
+          ) : (
+            <span className={styles.syntheticBadge}>
+              <Info size={12} aria-hidden="true" />
+              SYNTHETIC DEMO DATA
+            </span>
+          )}
           <span className={styles.demoOnlyBadge}>
             <Globe size={12} aria-hidden="true" />
-            DEMO ONLY — NOT LIVE TRACKING
+            {isLive ? 'SPACE-TRACK EPHEMERIS' : 'DEMO ONLY — NOT LIVE TRACKING'}
           </span>
         </div>
       </div>
