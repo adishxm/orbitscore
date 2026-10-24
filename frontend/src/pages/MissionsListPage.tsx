@@ -23,24 +23,19 @@ export const MissionsListPage: React.FC = () => {
         </section>
 
         {/* Missions Selection Grid */}
-        <section aria-labelledby="fixtures-heading">
-          <h2 id="fixtures-heading" className={styles.title} style={{ fontSize: 'var(--font-size-2xl)' }}>
-            Available Synthetic Mission Fixtures
-          </h2>
+        <section className={styles.section} aria-labelledby="fixtures-heading">
+          <div className={styles.sectionHeader}>
+            <h2 id="fixtures-heading" className={styles.sectionTitle}>
+              Available Synthetic Mission Fixtures
+            </h2>
+          </div>
 
           <div className={styles.cardGrid}>
             {/* Asteria-3 */}
-            <div className={styles.card} style={{ borderColor: 'var(--color-brand-cyan)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-2)' }}>
-                <span className={styles.kicker} style={{ margin: 0 }}>Primary Demo</span>
-                <span style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: 'var(--font-size-xs)',
-                  background: 'rgba(78, 205, 196, 0.1)',
-                  color: 'var(--color-brand-cyan)',
-                  padding: '2px 8px',
-                  borderRadius: 'var(--radius-sm)'
-                }}>
+            <div className={`${styles.card} ${styles.cardPrimary}`}>
+              <div className={styles.cardHeaderRow}>
+                <span className={`${styles.kicker} ${styles.kickerPlain}`}>Primary Demo</span>
+                <span className={styles.badgeCyan}>
                   SYNTHETIC 3U
                 </span>
               </div>
@@ -52,7 +47,7 @@ export const MissionsListPage: React.FC = () => {
                 stale thermal vacuum test reports, missing launch deployment dates, and an unconfirmed battery report.
               </p>
 
-              <div style={{ marginTop: 'var(--space-6)' }}>
+              <div className={styles.cardActions}>
                 <Link to="/missions/asteria-3" className={styles.actionButton}>
                   <span>Open Asteria-3 Workspace</span>
                   <ArrowUpRight size={16} aria-hidden="true" />
@@ -62,16 +57,9 @@ export const MissionsListPage: React.FC = () => {
 
             {/* Microsat-X */}
             <div className={styles.card}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-2)' }}>
-                <span className={styles.kicker} style={{ margin: 0, color: 'var(--color-state-stale)' }}>Boundary Fixture</span>
-                <span style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: 'var(--font-size-xs)',
-                  background: 'rgba(217, 119, 6, 0.1)',
-                  color: 'var(--color-state-stale)',
-                  padding: '2px 8px',
-                  borderRadius: 'var(--radius-sm)'
-                }}>
+              <div className={styles.cardHeaderRow}>
+                <span className={`${styles.kicker} ${styles.kickerAmber} ${styles.kickerPlain}`}>Boundary Fixture</span>
+                <span className={styles.badgeAmber}>
                   OUT OF SCOPE
                 </span>
               </div>
@@ -83,7 +71,7 @@ export const MissionsListPage: React.FC = () => {
                 halting automated CubeSat checks and requesting a tailored profile.
               </p>
 
-              <div style={{ marginTop: 'var(--space-6)' }}>
+              <div className={styles.cardActions}>
                 <Link to="/missions/microsat-x" className={styles.actionButtonSecondary}>
                   <span>Open Boundary Workspace</span>
                   <ArrowUpRight size={16} aria-hidden="true" />

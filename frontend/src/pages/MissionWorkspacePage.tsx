@@ -106,15 +106,7 @@ export const MissionWorkspacePage: React.FC = () => {
         >
           <Link
             to="/missions"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 'var(--space-2)',
-              color: 'var(--color-text-secondary)',
-              textDecoration: 'none',
-              fontFamily: 'var(--font-mono)',
-              fontSize: 'var(--font-size-xs)',
-            }}
+            className={styles.breadcrumbLink}
           >
             <ArrowLeft size={14} aria-hidden="true" />
             <span>Back to Mission Registry</span>
@@ -152,10 +144,10 @@ export const MissionWorkspacePage: React.FC = () => {
 
         {/* Mandatory Scope Callout */}
         <div className={styles.disclaimerCallout} role="note">
-          <ShieldAlert size={22} color="var(--color-state-conflicting)" aria-hidden="true" />
+          <ShieldAlert size={22} color="var(--os-color-accent-amber)" aria-hidden="true" className={styles.flexShrink0} />
           <div>
             <div className={styles.disclaimerCalloutTitle}>Workspace Review Boundary</div>
-            <p style={{ margin: 0, fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)' }}>
+            <p className={`${styles.cardText} ${styles.scopeNoticeText}`}>
               Despite the name, OrbitScore does not score or certify missions; it organizes evidence for human review.
               All findings are deterministic consistency checks and must be evaluated by a qualified engineer.
             </p>
@@ -181,7 +173,7 @@ export const MissionWorkspacePage: React.FC = () => {
 
             <OrbitalContextCard mission={currentMission} />
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--space-6)' }}>
+            <div className={styles.buttonGroupEnd}>
               <button
                 type="button"
                 className={styles.actionButton}
@@ -209,7 +201,7 @@ export const MissionWorkspacePage: React.FC = () => {
               onAddItem={() => setIsAddModalOpen(true)}
             />
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 'var(--space-6)' }}>
+            <div className={styles.buttonGroupBetween}>
               <button
                 type="button"
                 className={styles.actionButtonSecondary}
@@ -247,7 +239,7 @@ export const MissionWorkspacePage: React.FC = () => {
               onProceedToFindings={() => setCurrentStep('findings')}
             />
 
-            <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: 'var(--space-6)' }}>
+            <div className={styles.buttonGroupStart}>
               <button
                 type="button"
                 className={styles.actionButtonSecondary}
@@ -315,7 +307,7 @@ export const MissionWorkspacePage: React.FC = () => {
               onProceedToExport={() => setCurrentStep('export')}
             />
 
-            <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: 'var(--space-6)' }}>
+            <div className={styles.buttonGroupStart}>
               <button
                 type="button"
                 className={styles.actionButtonSecondary}

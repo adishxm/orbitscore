@@ -47,7 +47,6 @@ export const StatusPage: React.FC = () => {
             type="button"
             onClick={refreshStatus}
             className={styles.actionButtonSecondary}
-            style={{ marginTop: 'var(--space-2)' }}
           >
             <RefreshCw size={14} aria-hidden="true" />
             <span>Refresh Diagnostics</span>
@@ -55,15 +54,17 @@ export const StatusPage: React.FC = () => {
         </section>
 
         {/* Diagnostics Grid */}
-        <section aria-labelledby="env-heading">
-          <h2 id="env-heading" className={styles.title} style={{ fontSize: 'var(--font-size-2xl)' }}>
-            Client Environment Attributes
-          </h2>
+        <section className={styles.section} aria-labelledby="env-heading">
+          <div className={styles.sectionHeader}>
+            <h2 id="env-heading" className={styles.sectionTitle}>
+              Client Environment Attributes
+            </h2>
+          </div>
 
           <div className={styles.cardGrid}>
             <div className={styles.card}>
               <div className={styles.cardTitle}>
-                <Cpu size={20} style={{ color: 'var(--color-brand-cyan)', marginBottom: '8px' }} />
+                <Cpu size={20} color="var(--os-color-accent-cyan)" className={styles.statusCardIcon} aria-hidden="true" />
                 <div>Evaluation Engine</div>
               </div>
               <p className={styles.cardText}>
@@ -77,7 +78,7 @@ export const StatusPage: React.FC = () => {
 
             <div className={styles.card}>
               <div className={styles.cardTitle}>
-                <HardDrive size={20} style={{ color: 'var(--color-state-confirmed)', marginBottom: '8px' }} />
+                <HardDrive size={20} color="var(--os-color-accent-green)" className={styles.statusCardIcon} aria-hidden="true" />
                 <div>Browser Storage</div>
               </div>
               <p className={styles.cardText}>
@@ -91,7 +92,7 @@ export const StatusPage: React.FC = () => {
 
             <div className={styles.card}>
               <div className={styles.cardTitle}>
-                <Database size={20} style={{ color: 'var(--color-state-stale)', marginBottom: '8px' }} />
+                <Database size={20} color="var(--os-color-accent-amber)" className={styles.statusCardIcon} aria-hidden="true" />
                 <div>Synthetic Fixtures</div>
               </div>
               <p className={styles.cardText}>
@@ -105,7 +106,7 @@ export const StatusPage: React.FC = () => {
 
             <div className={styles.card}>
               <div className={styles.cardTitle}>
-                <AlertTriangle size={20} style={{ color: 'var(--color-state-conflicting)', marginBottom: '8px' }} />
+                <AlertTriangle size={20} color="var(--os-color-accent-red)" className={styles.statusCardIcon} aria-hidden="true" />
                 <div>Honesty Guardrail</div>
               </div>
               <p className={styles.cardText}>
@@ -119,8 +120,8 @@ export const StatusPage: React.FC = () => {
 
             <div className={styles.card}>
               <div className={styles.cardTitle}>
-                <Cpu size={20} style={{ color: 'var(--color-brand-cyan)', marginBottom: '8px' }} />
-                <div>FastAPI Backend & Provenance</div>
+                <Cpu size={20} color="var(--os-color-accent-cyan)" className={styles.statusCardIcon} aria-hidden="true" />
+                <div>Backend Configuration</div>
               </div>
               <p className={styles.cardText}>
                 Active Mode: <strong>{apiMode === 'live' ? 'Live FastAPI Backend' : 'Local Deterministic Engine'}</strong>
@@ -129,14 +130,15 @@ export const StatusPage: React.FC = () => {
                 <br />
                 SHA-256 Provenance Chain: <strong>{provenance.valid ? `VERIFIED (${provenance.checkedEvents} events checked)` : 'Check Pending'}</strong>
               </p>
-              <button
-                type="button"
-                onClick={() => toggleApiMode()}
-                className={styles.actionButtonSecondary}
-                style={{ marginTop: 'var(--space-2)', fontSize: '0.75rem', padding: '4px 8px' }}
-              >
-                <span>{apiMode === 'live' ? 'Switch to Mock' : 'Connect Live API'}</span>
-              </button>
+              <div className={styles.cardActions}>
+                <button
+                  type="button"
+                  onClick={() => toggleApiMode()}
+                  className={styles.actionButtonSecondary}
+                >
+                  <span>{apiMode === 'live' ? 'Switch to Mock' : 'Toggle Backend Mode'}</span>
+                </button>
+              </div>
             </div>
           </div>
         </section>

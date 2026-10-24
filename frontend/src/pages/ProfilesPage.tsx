@@ -23,27 +23,19 @@ export const ProfilesPage: React.FC = () => {
         </section>
 
         {/* Demo Profile Details */}
-        <section aria-labelledby="active-profile-heading" style={{ marginBottom: 'var(--space-10)' }}>
-          <div className={styles.card} style={{ borderColor: 'var(--color-brand-cyan)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 'var(--space-4)' }}>
+        <section className={styles.section} aria-labelledby="active-profile-heading">
+          <div className={styles.card}>
+            <div className={styles.cardHeaderRow}>
               <div>
                 <div className={styles.kicker}>Active Specification</div>
-                <h2 id="active-profile-heading" className={styles.cardTitle} style={{ fontSize: 'var(--font-size-2xl)' }}>
+                <h2 id="active-profile-heading" className={styles.cardTitle}>
                   Demo Evidence Completeness Profile
                 </h2>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', marginBottom: 'var(--space-4)' }}>
+                <div className={styles.metaText}>
                   ID: demo-evidence-completeness-v0.1.0 • Engine: pure client-side deterministic
                 </div>
               </div>
-              <span style={{
-                background: 'var(--color-surface-sunken)',
-                border: '1px solid var(--color-border-subtle)',
-                padding: 'var(--space-2) var(--space-4)',
-                borderRadius: 'var(--radius-sm)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: 'var(--font-size-xs)',
-                color: 'var(--color-brand-cyan)'
-              }}>
+              <span className={styles.badgeCyan}>
                 v0.1.0 STABLE
               </span>
             </div>
@@ -54,11 +46,11 @@ export const ProfilesPage: React.FC = () => {
               and thermal vacuum test reports.
             </p>
 
-            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--font-size-lg)', marginTop: 'var(--space-6)', marginBottom: 'var(--space-3)' }}>
+            <h3 className={styles.ruleSubheading}>
               Declared Checks in this Profile:
             </h3>
 
-            <div style={{ display: 'grid', gap: 'var(--space-3)' }}>
+            <div className={styles.ruleList}>
               <div className={styles.codeBlock}>
                 <strong>C-01 [Mass Budget Ceiling]:</strong> Verifies total measured wet mass does not exceed the mission form factor limit (e.g. 4.0 kg for 3U) and checks for conflicting mass figures across ICD and CAD models.
               </div>
@@ -79,7 +71,7 @@ export const ProfilesPage: React.FC = () => {
               </div>
             </div>
 
-            <div style={{ marginTop: 'var(--space-6)' }}>
+            <div className={styles.cardActions}>
               <Link to="/missions" className={styles.actionButton}>
                 <span>Run Against Asteria-3 Demo</span>
                 <ArrowUpRight size={16} aria-hidden="true" />
@@ -89,11 +81,13 @@ export const ProfilesPage: React.FC = () => {
         </section>
 
         {/* Applicability Boundary */}
-        <section aria-labelledby="boundary-heading">
-          <h2 id="boundary-heading" className={styles.title} style={{ fontSize: 'var(--font-size-xl)' }}>
-            Applicability Boundaries
-          </h2>
-          <p className={styles.cardText} style={{ maxWidth: '70ch' }}>
+        <section className={styles.section} aria-labelledby="boundary-heading">
+          <div className={styles.sectionHeader}>
+            <h2 id="boundary-heading" className={styles.sectionTitle}>
+              Applicability Boundaries
+            </h2>
+          </div>
+          <p className={styles.lead}>
             When a mission configuration falls outside a profile's declared domain (for example, a GEO communications
             platform or a deep space probe), the inspection engine issues an applicability notice rather than
             producing misleading findings.
