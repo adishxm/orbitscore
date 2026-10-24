@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ShieldAlert, Layers, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, ShieldAlert, Layers, ArrowRight } from 'lucide-react';
 import { useOrbitStore } from '../store/useOrbitStore';
 import { Stepper, WorkspaceStep } from '../components/workspace/Stepper';
 import { MissionContextCard } from '../components/workspace/MissionContextCard';
@@ -9,6 +9,9 @@ import { SidePanel } from '../components/workspace/SidePanel';
 import { AddEvidenceModal } from '../components/workspace/AddEvidenceModal';
 import { ProfileGateCard } from '../components/workspace/ProfileGateCard';
 import { FindingsView } from '../components/workspace/FindingsView';
+import { ReviewDecisionForm } from '../components/workspace/ReviewDecisionForm';
+import { OpenIssuesList } from '../components/workspace/OpenIssuesList';
+import { ExportGateBlocker } from '../components/workspace/ExportGateBlocker';
 import { ASTERIA_3_MISSION } from '../fixtures/asteria-3';
 import styles from './pages.module.css';
 
@@ -25,16 +28,21 @@ export const MissionWorkspacePage: React.FC = () => {
     checkRuns,
     isCheckRunStale,
     reviewDecisions,
+    openIssues,
     selectedEvidenceId,
     selectEvidenceItem,
     confirmEvidenceItem,
     deleteEvidenceItem,
     addEvidenceItem,
     runChecks,
+    recordDecision,
+    addOpenIssue,
+    updateOpenIssueStatus,
   } = useOrbitStore();
 
   const [currentStep, setCurrentStep] = useState<WorkspaceStep>('evidence');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [selectedReviewFindingId, setSelectedReviewFindingId] = useState<string>('');
 
   useEffect(() => {
     if (missionId !== activeMissionId) {
@@ -46,24 +54,36 @@ export const MissionWorkspacePage: React.FC = () => {
   const currentEvidence = evidence[missionId] || [];
   const currentCheckRun = checkRuns[missionId] || null;
   const isStale = Boolean(isCheckRunStale[missionId]);
+  const currentDecisions = reviewDecisions[missionId] || [];
+  const currentIssues = openIssues[missionId] || [];
 
   const selectedItem =
     currentEvidence.find((e) => e.id === selectedEvidenceId) || null;
 
   const decisionsMap = useMemo(() => {
     const map: Record<string, boolean> = {};
-    const list = reviewDecisions[missionId] || [];
-    for (const d of list) {
+    for (const d of currentDecisions) {
       map[d.finding_id] = true;
     }
     return map;
-  }, [reviewDecisions, missionId]);
+  }, [currentDecisions]);
 
   const completedSteps: WorkspaceStep[] = ['context'];
   if (currentEvidence.length > 0) completedSteps.push('evidence');
   if (currentCheckRun) {
     completedSteps.push('profile');
     completedSteps.push('findings');
+  }
+  const actionRequiredFindings = (currentCheckRun?.findings || []).filter(
+    (f) => f.severity === 'action_required'
+  );
+  const isReviewComplete =
+    actionRequiredFindings.length > 0 &&
+    actionRequiredFindings.every((f) =>
+      currentDecisions.some((d) => d.finding_id === f.id && d.decision !== 'action_pending')
+    );
+  if (isReviewComplete) {
+    completedSteps.push('review');
   }
 
   return (
@@ -220,31 +240,47 @@ export const MissionWorkspacePage: React.FC = () => {
           />
         )}
 
-        {/* Step 5: Review Decisions Placeholder */}
+        {/* Step 5: Review Decisions & Gating */}
         {currentStep === 'review' && (
-          <div className={styles.card} style={{ textAlign: 'center', padding: 'var(--space-12) var(--space-6)' }}>
-            <CheckCircle2 size={36} style={{ color: 'var(--color-state-confirmed)', margin: '0 auto var(--space-4)' }} />
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--font-size-xl)', marginBottom: 'var(--space-2)' }}>
-              Stage 5: Designated Review Decisions & Open Issues
-            </h2>
-            <p className={styles.cardText} style={{ maxWidth: '60ch', margin: '0 auto var(--space-6)' }}>
-              Technical reviewers record rationales, waivers, and action items before export gating is unlocked.
-            </p>
-            <div style={{ display: 'flex', gap: 'var(--space-4)', justifyContent: 'center' }}>
+          <div>
+            <ReviewDecisionForm
+              findings={currentCheckRun?.findings || []}
+              decisions={currentDecisions}
+              selectedFindingId={selectedReviewFindingId}
+              onRecordDecision={(decisionData) => {
+                recordDecision(missionId, decisionData);
+              }}
+            />
+
+            <OpenIssuesList
+              issues={currentIssues}
+              findings={currentCheckRun?.findings || []}
+              onAddIssue={(issueData) => {
+                addOpenIssue(missionId, issueData);
+              }}
+              onUpdateStatus={(issueId, status) => {
+                updateOpenIssueStatus(missionId, issueId, status);
+              }}
+            />
+
+            <ExportGateBlocker
+              findings={currentCheckRun?.findings || []}
+              decisions={currentDecisions}
+              onSelectFinding={(findingId) => {
+                setSelectedReviewFindingId(findingId);
+                // Scroll to top of review section
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              onProceedToExport={() => setCurrentStep('export')}
+            />
+
+            <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: 'var(--space-6)' }}>
               <button
                 type="button"
                 className={styles.actionButtonSecondary}
                 onClick={() => setCurrentStep('findings')}
               >
-                <span>Back to Findings</span>
-              </button>
-              <button
-                type="button"
-                className={styles.actionButton}
-                onClick={() => setCurrentStep('export')}
-              >
-                <span>Proceed to Export Dossier</span>
-                <ArrowRight size={16} aria-hidden="true" />
+                <span>Back to Automated Findings</span>
               </button>
             </div>
           </div>
