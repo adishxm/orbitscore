@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ShieldAlert, Layers, ArrowRight, Play, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, ShieldAlert, Layers, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useOrbitStore } from '../store/useOrbitStore';
 import { Stepper, WorkspaceStep } from '../components/workspace/Stepper';
 import { MissionContextCard } from '../components/workspace/MissionContextCard';
 import { DataTable } from '../components/workspace/DataTable';
 import { SidePanel } from '../components/workspace/SidePanel';
 import { AddEvidenceModal } from '../components/workspace/AddEvidenceModal';
+import { ProfileGateCard } from '../components/workspace/ProfileGateCard';
+import { FindingsView } from '../components/workspace/FindingsView';
 import { ASTERIA_3_MISSION } from '../fixtures/asteria-3';
 import styles from './pages.module.css';
 
@@ -19,11 +21,16 @@ export const MissionWorkspacePage: React.FC = () => {
     evidence,
     activeMissionId,
     setActiveMission,
+    activeProfile,
+    checkRuns,
+    isCheckRunStale,
+    reviewDecisions,
     selectedEvidenceId,
     selectEvidenceItem,
     confirmEvidenceItem,
     deleteEvidenceItem,
     addEvidenceItem,
+    runChecks,
   } = useOrbitStore();
 
   const [currentStep, setCurrentStep] = useState<WorkspaceStep>('evidence');
@@ -37,8 +44,27 @@ export const MissionWorkspacePage: React.FC = () => {
 
   const currentMission = missions[missionId] || ASTERIA_3_MISSION;
   const currentEvidence = evidence[missionId] || [];
+  const currentCheckRun = checkRuns[missionId] || null;
+  const isStale = Boolean(isCheckRunStale[missionId]);
+
   const selectedItem =
     currentEvidence.find((e) => e.id === selectedEvidenceId) || null;
+
+  const decisionsMap = useMemo(() => {
+    const map: Record<string, boolean> = {};
+    const list = reviewDecisions[missionId] || [];
+    for (const d of list) {
+      map[d.finding_id] = true;
+    }
+    return map;
+  }, [reviewDecisions, missionId]);
+
+  const completedSteps: WorkspaceStep[] = ['context'];
+  if (currentEvidence.length > 0) completedSteps.push('evidence');
+  if (currentCheckRun) {
+    completedSteps.push('profile');
+    completedSteps.push('findings');
+  }
 
   return (
     <div className={styles.pageRoot}>
@@ -66,7 +92,7 @@ export const MissionWorkspacePage: React.FC = () => {
         <Stepper
           currentStep={currentStep}
           onStepChange={(step) => setCurrentStep(step)}
-          completedSteps={['context']}
+          completedSteps={completedSteps}
         />
 
         {/* Mandatory Scope Callout */}
@@ -147,18 +173,24 @@ export const MissionWorkspacePage: React.FC = () => {
           </div>
         )}
 
-        {/* Step 3: Profile Gate Placeholder */}
+        {/* Step 3: Profile Gate */}
         {currentStep === 'profile' && (
-          <div className={styles.card} style={{ textAlign: 'center', padding: 'var(--space-12) var(--space-6)' }}>
-            <Layers size={36} style={{ color: 'var(--color-brand-cyan)', margin: '0 auto var(--space-4)' }} />
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--font-size-xl)', marginBottom: 'var(--space-2)' }}>
-              Stage 3: Profile Gate & Rule Inspection
-            </h2>
-            <p className={styles.cardText} style={{ maxWidth: '60ch', margin: '0 auto var(--space-6)' }}>
-              Active Profile: <strong>Demo Evidence Completeness v0.1.0</strong>.
-              Ready to evaluate deterministic consistency checks against {currentEvidence.length} recorded parameters.
-            </p>
-            <div style={{ display: 'flex', gap: 'var(--space-4)', justifyContent: 'center' }}>
+          <div>
+            <ProfileGateCard
+              mission={currentMission}
+              profile={activeProfile}
+              checkRun={currentCheckRun}
+              isStale={isStale}
+              onRunChecks={() => {
+                const run = runChecks(missionId);
+                if (run.is_applicable) {
+                  setCurrentStep('findings');
+                }
+              }}
+              onProceedToFindings={() => setCurrentStep('findings')}
+            />
+
+            <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: 'var(--space-6)' }}>
               <button
                 type="button"
                 className={styles.actionButtonSecondary}
@@ -166,46 +198,26 @@ export const MissionWorkspacePage: React.FC = () => {
               >
                 <span>Back to Evidence Register</span>
               </button>
-              <button
-                type="button"
-                className={styles.actionButton}
-                onClick={() => setCurrentStep('findings')}
-              >
-                <span>Run Inspection Checks</span>
-                <Play size={15} aria-hidden="true" />
-              </button>
             </div>
           </div>
         )}
 
-        {/* Step 4: Findings Placeholder */}
+        {/* Step 4: Automated Findings */}
         {currentStep === 'findings' && (
-          <div className={styles.card} style={{ textAlign: 'center', padding: 'var(--space-12) var(--space-6)' }}>
-            <Layers size={36} style={{ color: 'var(--color-brand-lavender)', margin: '0 auto var(--space-4)' }} />
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--font-size-xl)', marginBottom: 'var(--space-2)' }}>
-              Stage 4: Automated Consistency Findings
-            </h2>
-            <p className={styles.cardText} style={{ maxWidth: '60ch', margin: '0 auto var(--space-6)' }}>
-              Automated deterministic findings will be reviewed here with bidirectional traceability links to evidence records.
-            </p>
-            <div style={{ display: 'flex', gap: 'var(--space-4)', justifyContent: 'center' }}>
-              <button
-                type="button"
-                className={styles.actionButtonSecondary}
-                onClick={() => setCurrentStep('profile')}
-              >
-                <span>Back to Profile</span>
-              </button>
-              <button
-                type="button"
-                className={styles.actionButton}
-                onClick={() => setCurrentStep('review')}
-              >
-                <span>Proceed to Human Review</span>
-                <ArrowRight size={16} aria-hidden="true" />
-              </button>
-            </div>
-          </div>
+          <FindingsView
+            checkRun={currentCheckRun}
+            decisionsMap={decisionsMap}
+            onNavigateToEvidence={(key) => {
+              setCurrentStep('evidence');
+              const found = currentEvidence.find((e) => e.parameter_key === key);
+              if (found) {
+                selectEvidenceItem(found.id);
+              }
+            }}
+            onProceedToReview={() => setCurrentStep('review')}
+            onBackToGate={() => setCurrentStep('profile')}
+            onReRunChecks={() => runChecks(missionId)}
+          />
         )}
 
         {/* Step 5: Review Decisions Placeholder */}
