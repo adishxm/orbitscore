@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ShieldAlert, ArrowRight, RotateCcw } from 'lucide-react';
+import { ArrowLeft, ShieldAlert, ArrowRight, RotateCcw, Bot } from 'lucide-react';
 import { useOrbitStore } from '../store/useOrbitStore';
 import { Stepper, WorkspaceStep } from '../components/workspace/Stepper';
 import { MissionContextCard } from '../components/workspace/MissionContextCard';
@@ -15,6 +15,7 @@ import { OpenIssuesList } from '../components/workspace/OpenIssuesList';
 import { ExportGateBlocker } from '../components/workspace/ExportGateBlocker';
 import { ExportPacketView } from '../components/workspace/ExportPacketView';
 import { CounterfactualLab } from '../components/workspace/CounterfactualLab';
+import { Agent37Copilot } from '../components/workspace/Agent37Copilot';
 import { ASTERIA_3_MISSION } from '../fixtures/asteria-3';
 import styles from './pages.module.css';
 
@@ -46,6 +47,7 @@ export const MissionWorkspacePage: React.FC = () => {
 
   const [currentStep, setCurrentStep] = useState<WorkspaceStep>('evidence');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isAgent37Open, setIsAgent37Open] = useState(false);
   const [selectedReviewFindingId, setSelectedReviewFindingId] = useState<string>('');
 
   useEffect(() => {
@@ -112,27 +114,63 @@ export const MissionWorkspacePage: React.FC = () => {
             <span>Back to Mission Registry</span>
           </Link>
 
-          <button
-            type="button"
-            onClick={() => resetDemo()}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              background: 'transparent',
-              border: '1px solid var(--color-border-subtle)',
-              borderRadius: 'var(--radius-sm)',
-              padding: '4px 10px',
-              color: 'var(--color-text-secondary)',
-              fontFamily: 'var(--font-mono)',
-              fontSize: '11px',
-              cursor: 'pointer',
-            }}
-            title="Restore pristine Asteria-3 synthetic fixture data"
-          >
-            <RotateCcw size={12} aria-hidden="true" />
-            <span>Reset Demo Data</span>
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button
+              type="button"
+              onClick={() => setIsAgent37Open(true)}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(168, 85, 247, 0.25) 100%)',
+                border: '1px solid rgba(99, 102, 241, 0.5)',
+                borderRadius: 'var(--radius-sm)',
+                padding: '5px 12px',
+                color: '#c7d2fe',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '11px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                boxShadow: '0 0 12px rgba(99, 102, 241, 0.25)',
+                transition: 'all 0.15s ease-in-out',
+              }}
+              title="Open Agent 37 Mission Triage Copilot"
+            >
+              <Bot size={13} aria-hidden="true" style={{ color: '#818cf8' }} />
+              <span>Agent 37 Copilot</span>
+              <span
+                style={{
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '50%',
+                  background: '#10b981',
+                  boxShadow: '0 0 6px #10b981',
+                }}
+              />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => resetDemo()}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: 'transparent',
+                border: '1px solid var(--color-border-subtle)',
+                borderRadius: 'var(--radius-sm)',
+                padding: '4px 10px',
+                color: 'var(--color-text-secondary)',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '11px',
+                cursor: 'pointer',
+              }}
+              title="Restore pristine Asteria-3 synthetic fixture data"
+            >
+              <RotateCcw size={12} aria-hidden="true" />
+              <span>Reset Demo Data</span>
+            </button>
+          </div>
         </div>
 
         {/* Stepper Workflow Header */}
@@ -350,6 +388,12 @@ export const MissionWorkspacePage: React.FC = () => {
           onAdd={(newItem) => {
             addEvidenceItem(missionId, newItem);
           }}
+        />
+
+        {/* Agent 37 Triage & Copilot Drawer */}
+        <Agent37Copilot
+          isOpen={isAgent37Open}
+          onClose={() => setIsAgent37Open(false)}
         />
       </div>
     </div>
