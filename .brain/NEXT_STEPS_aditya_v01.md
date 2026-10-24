@@ -31,7 +31,7 @@
   python .brain/scripts/build_team_report.py
   python .brain/scripts/project_completion_check.py
   ```
-- [ ] **Set GitHub repo description + topics** (currently empty): e.g., `space-debris`, `compliance`, `fastapi`, `react`, `decision-support`, `isro-dfsm`.
+- [x] **Set GitHub repo description + topics**: e.g., "OrbitScore — space sustainability & compliance decision-support platform (ISRO DFSM 2030 / FCC / NASA / ESA)" · topics: `space-safety`, `compliance`, `space-debris`, `isro-dfsm`, `fastapi`, `react`.
 
 ---
 

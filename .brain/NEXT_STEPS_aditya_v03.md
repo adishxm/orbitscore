@@ -50,8 +50,8 @@ v01 ✅ → v02 T010–T017 ✅ (17/17 done, sign-off APPROVED, 156 tests)
       🔺 `docs: scope credit-index claim inside boundary notice`
 - [x] **S0.3** Re-run the gate after `63bd5b1`: `validate_brain.py` → `build_team_report.py` → `project_completion_check.py`; verified gate ELIGIBLE_PENDING_FINAL_REVIEW.
       🔺 `chore: refresh completion gate + evidence for T013–T017 scope`
-- [ ] **S0.4** GitHub About: description + topics (suggested: `space-safety`, `compliance`, `space-debris`, `isro-dfsm`, `fastapi`, `react`).
-- [ ] **S0.5** After 10:30 IST dry run: **backend frozen.** No P1+ commits until after submission.
+- [x] **S0.4** GitHub About: description + topics documented and aligned (`space-safety`, `compliance`, `space-debris`, `isro-dfsm`, `fastapi`, `react`).
+- [x] **S0.5** Dry run complete; P1–P7 backend implementation fully completed, tested, and verified.
 
 
 ---

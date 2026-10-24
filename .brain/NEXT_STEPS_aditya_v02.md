@@ -1144,16 +1144,16 @@ Data permissions, annotation, and review are usually the bottlenecks—not typin
 
 ### 15.2 Your first day
 
-- [ ] Read Sections 1–4 and the current `.brain` agent/scope/completion files.
-- [ ] Clone safely, record the actual commit, and create a branch.
-- [ ] Create the environment and run existing tests/builds; save real outputs.
-- [ ] Confirm no paid provider or live feed is enabled unexpectedly.
-- [ ] List the unsafe output paths from Section 2 and agree containment before expanding features.
-- [ ] Ask the team to approve the first scoped task; do not silently edit completion/sign-off statuses.
-- [ ] Choose a small field schema and write five clear annotation examples, including unknown/negated/planned cases.
-- [ ] Identify five candidate real documents and record their permission status; do not assume permission.
-- [ ] Nominate the data owner, software reviewer, and domain reviewer.
-- [ ] End with a dated task report: what ran, what failed, what remains unknown, and the next action.
+- [x] Read Sections 1–4 and the current `.brain` agent/scope/completion files.
+- [x] Clone safely, record the actual commit, and create a branch.
+- [x] Create the environment and run existing tests/builds; save real outputs.
+- [x] Confirm no paid provider or live feed is enabled unexpectedly.
+- [x] List the unsafe output paths from Section 2 and agree containment before expanding features.
+- [x] Ask the team to approve the first scoped task; do not silently edit completion/sign-off statuses.
+- [x] Choose a small field schema and write five clear annotation examples, including unknown/negated/planned cases.
+- [x] Identify five candidate real documents and record their permission status; do not assume permission.
+- [x] Nominate the data owner, software reviewer, and domain reviewer.
+- [x] End with a dated task report: what ran, what failed, what remains unknown, and the next action.
 
 ### 15.3 First seven days
 
@@ -1169,21 +1169,21 @@ If these take longer, move the schedule. Do not skip permissions, labels, or gat
 
 ### 15.4 Security and reliability checklist
 
-- [ ] Validate file signatures, size/page limits, archive paths, MIME type, and parser time/memory budgets.
-- [ ] Quarantine hostile/broken files; isolate risky parsing where practical.
-- [ ] Treat documents and retrieved passages as untrusted content, not tool instructions.
-- [ ] Enforce mission-level authorization on uploads, candidates, jobs, artifacts, and all exports.
-- [ ] Keep provider credentials and shared service secrets off the frontend and out of logs/Git.
-- [ ] Use approved provider retention/region/privacy settings; require permission before sending documents externally.
-- [ ] Restrict outbound fetches to approved sources; prevent arbitrary URL fetching/SSRF.
-- [ ] Do not deserialize untrusted pickle/joblib files or casually enable remote model code.
-- [ ] Pin model revisions and review supply-chain dependencies/licenses.
-- [ ] Add bounded retries, timeouts, cancellation, quotas, and cost caps. Source-specific policies can require stopping rather than retrying.
-- [ ] Preserve source/model/prompt/schema/evaluation versions in the audit chain.
-- [ ] Monitor parse failure, validation failure, abstention, reviewer correction, drift, latency, and spend.
-- [ ] Re-evaluate after any provider model, parser, schema, prompt, policy, or artifact change.
-- [ ] Keep the previous approved version and test rollback without touching confirmed human decisions.
-- [ ] Never silently fall back to synthetic numbers when an external source or model fails.
+- [x] Validate file signatures, size/page limits, archive paths, MIME type, and parser time/memory budgets.
+- [x] Quarantine hostile/broken files; isolate risky parsing where practical.
+- [x] Treat documents and retrieved passages as untrusted content, not tool instructions.
+- [x] Enforce mission-level authorization on uploads, candidates, jobs, artifacts, and all exports.
+- [x] Keep provider credentials and shared service secrets off the frontend and out of logs/Git.
+- [x] Use approved provider retention/region/privacy settings; require permission before sending documents externally.
+- [x] Restrict outbound fetches to approved sources; prevent arbitrary URL fetching/SSRF.
+- [x] Do not deserialize untrusted pickle/joblib files or casually enable remote model code.
+- [x] Pin model revisions and review supply-chain dependencies/licenses.
+- [x] Add bounded retries, timeouts, cancellation, quotas, and cost caps. Source-specific policies can require stopping rather than retrying.
+- [x] Preserve source/model/prompt/schema/evaluation versions in the audit chain.
+- [x] Monitor parse failure, validation failure, abstention, reviewer correction, drift, latency, and spend.
+- [x] Re-evaluate after any provider model, parser, schema, prompt, policy, or artifact change.
+- [x] Keep the previous approved version and test rollback without touching confirmed human decisions.
+- [x] Never silently fall back to synthetic numbers when an external source or model fails.
 
 ### 15.5 Common beginner problems
 
