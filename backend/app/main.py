@@ -797,3 +797,43 @@ def export_isro_fcc_eomp_plan(
     return HTMLResponse(content=md, media_type="text/markdown; charset=utf-8")
 
 
+# --- Offline Research Demonstration Endpoints ---
+
+try:
+    from ai_ml.inference.cdm_forecast import run_cdm_forecast, CDMMakeForecastResult
+except ImportError:
+    run_cdm_forecast = None
+    CDMMakeForecastResult = dict
+
+
+class ResearchCDMForecastRequest(BaseModel):
+    event_id: str
+    time_to_tca_days: float = 2.5
+    miss_distance_m: float = 8500.0
+    relative_speed_m_s: float = 14200.0
+    latest_early_risk: float = -5.8
+    artifact_id: Optional[str] = None
+
+
+@app.post("/research/cdm-forecast")
+def execute_research_cdm_forecast(
+    req: ResearchCDMForecastRequest,
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
+    """
+    Offline research-only forecast of reported log-risk for a close approach event.
+    Explicitly labeled as research benchmark, not operational collision probability or maneuver advice.
+    """
+    if run_cdm_forecast is None:
+        raise HTTPException(503, "AI/ML research inference module unavailable.")
+    result = run_cdm_forecast(
+        event_id=req.event_id,
+        time_to_tca_days=req.time_to_tca_days,
+        miss_distance_m=req.miss_distance_m,
+        relative_speed_m_s=req.relative_speed_m_s,
+        latest_early_risk=req.latest_early_risk,
+        artifact_id=req.artifact_id,
+    )
+    return result.model_dump()
+
+

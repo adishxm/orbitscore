@@ -1,0 +1,28 @@
+experiment_id: extraction_v1
+purpose: "Evaluate bounded extraction and quote validation on multi-page mission filings"
+owner: Aditya
+schema_version: "mission-candidates-v2"
+target_fields:
+  - wet_mass_kg
+  - dry_mass_kg
+  - apogee_altitude_km
+  - perigee_altitude_km
+  - disposal_duration_years
+  - human_casualty_risk
+  - passivation_method
+  - energy_storage_joules
+split:
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+  group_by: mission_family_id
+validation:
+  strict_quote_verification: true
+  fail_on_out_of_bounds: true
+tolerances:
+  wet_mass_kg: 1.0
+  dry_mass_kg: 1.0
+  apogee_altitude_km: 5.0
+  perigee_altitude_km: 5.0
+  disposal_duration_years: 0.2
+research_disclaimer: "OFFLINE EXTRACTION BENCHMARK ONLY - ALL CANDIDATES REQUIRE QUALIFIED HUMAN CONFIRMATION"

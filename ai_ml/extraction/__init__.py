@@ -14,6 +14,12 @@ from ai_ml.extraction.validation import (
     CandidateValidationResult,
 )
 
+from ai_ml.extraction.parsing import (
+    detect_page_features,
+    parse_document_text_by_page,
+)
+from ai_ml.extraction.pretrained import BoundedExtractionRunner
+
 __all__ = [
     "normalize_mass",
     "normalize_distance",
@@ -21,4 +27,7 @@ __all__ = [
     "normalize_duration_years",
     "validate_candidate_evidence",
     "CandidateValidationResult",
+    "detect_page_features",
+    "parse_document_text_by_page",
+    "BoundedExtractionRunner",
 ]

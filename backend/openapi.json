@@ -1344,6 +1344,51 @@
           }
         }
       }
+    },
+    "/research/cdm-forecast": {
+      "post": {
+        "summary": "Execute Research Cdm Forecast",
+        "description": "Offline research-only forecast of reported log-risk for a close approach event.\nExplicitly labeled as research benchmark, not operational collision probability or maneuver advice.",
+        "operationId": "execute_research_cdm_forecast_research_cdm_forecast_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResearchCDMForecastRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -2400,6 +2445,50 @@
           "name"
         ],
         "title": "MissionProfile"
+      },
+      "ResearchCDMForecastRequest": {
+        "properties": {
+          "event_id": {
+            "type": "string",
+            "title": "Event Id"
+          },
+          "time_to_tca_days": {
+            "type": "number",
+            "title": "Time To Tca Days",
+            "default": 2.5
+          },
+          "miss_distance_m": {
+            "type": "number",
+            "title": "Miss Distance M",
+            "default": 8500.0
+          },
+          "relative_speed_m_s": {
+            "type": "number",
+            "title": "Relative Speed M S",
+            "default": 14200.0
+          },
+          "latest_early_risk": {
+            "type": "number",
+            "title": "Latest Early Risk",
+            "default": -5.8
+          },
+          "artifact_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Artifact Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "event_id"
+        ],
+        "title": "ResearchCDMForecastRequest"
       },
       "SpaceCreditIndexResult": {
         "properties": {

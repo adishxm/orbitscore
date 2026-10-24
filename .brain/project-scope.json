@@ -47,6 +47,24 @@
       "allowed_dispositions": ["complete", "deferred_by_owner"],
       "current_disposition": "complete",
       "note": "Cutoff-safe event assembly, disjoint event partitioning, persistence baseline, and CLI subcommands."
+    },
+    "T015": {
+      "title": "Document processing, grouped family splits, and bounded extraction",
+      "allowed_dispositions": ["complete", "deferred_by_owner"],
+      "current_disposition": "complete",
+      "note": "Page-aware document parsing, mission family train/val/test partitioning, and bounded candidate extractor."
+    },
+    "T016": {
+      "title": "Offline CDM scikit-learn training pipeline and experiment reporting",
+      "allowed_dispositions": ["complete", "deferred_by_owner"],
+      "current_disposition": "complete",
+      "note": "GradientBoosting regressor pipeline, experiment report generator, and configuration definitions."
+    },
+    "T017": {
+      "title": "Trusted artifact registry and research forecast serving",
+      "allowed_dispositions": ["complete", "deferred_by_owner"],
+      "current_disposition": "complete",
+      "note": "Cryptographic model registry, research inference runner, and isolated /research/cdm-forecast endpoint."
     }
   },
   "completion_scope_warning": "This defines tracked MVP scope only; it cannot prove every possible product requirement, domain correctness, market success, regulatory fitness, or production readiness."
