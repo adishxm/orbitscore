@@ -34,7 +34,7 @@
 ## Slice Execution Progress
 
 ### Slice 1: Scaffold, Tooling & Design System Foundation
-- **Status**: COMPLETE
+- **Status**: COMPLETE (commit `25cec28`)
 - **Gates Verified**:
   - `tsc --noEmit`: 0 errors
   - `npm run build`: Success in 526ms (Initial JS: 45.2 KB gzipped; CSS: 2.41 KB gzipped — both well within §8 performance budgets)
@@ -42,13 +42,24 @@
   - Self-hosted fonts: Space Grotesk, Inter, JetBrains Mono downloaded and configured with `@font-face` and `font-display: swap` in `/public/fonts`
   - Zero external font CDN requests
 
+### Slice 2: Layout Shell, Navigation & Honesty Banners
+- **Status**: COMPLETE
+- **Gates Verified**:
+  - `tsc --noEmit`: 0 errors
+  - `npm run build`: Success in 563ms (clean chunking into React, state, motion, icons, app CSS)
+  - `npm test`: 10/10 tests passed across 2 test suites (`banned-words-lint.test.ts` & `layout-shell.test.tsx`)
+  - Axe accessibility audit: 0 violations on layout shell
+  - Honesty requirements verified: `DEMO / MOCK`, `SYNTHETIC DATA: Asteria-3`, `LOCAL ONLY` badges present
+  - Mandatory disclaimer on all pages and footer: "Despite the name, OrbitScore does not score or certify missions; it organizes evidence for human review."
+  - Routes verified: `/`, `/how-it-works`, `/profiles`, `/about-limits`, `/status`, `/missions`, `/missions/:id`, `*` (404)
+
 ---
 
 ## Next 3 Actions
 
-1. **Slice 2 (Layout Shell & Routing)**: Build Header, Footer, Status Banner (`DEMO / MOCK`, `SYNTHETIC DATA`), routing structure (`/`, `/how-it-works`, `/profiles`, `/about-limits`, `/status`, `/app/missions`, 404), and accessibility landmark tests.
-2. **Slice 3 (Domain Types & Check Engine Module)**: Implement domain models in `/src/types/domain.ts` and pure check functions in `/src/profiles/demo-evidence-completeness.ts` with 100% Vitest coverage.
-3. **Slice 4 (Asteria-3 Fixture & State Store)**: Implement Zustand store with persistence, reset action, and the Asteria-3 synthetic 3U CubeSat dataset.
+1. **Slice 3 (Domain Types & Pure Check Engine)**: Implement domain models in `src/types/domain.ts` and pure check functions in `src/profiles/demo-evidence-completeness.ts` (checks C-01 through C-06 and applicability gate) with 100% test coverage.
+2. **Slice 4 (Synthetic Asteria-3 Fixture & State Store)**: Implement `src/fixtures/asteria-3.ts`, `src/fixtures/microsat-x.ts`, and Zustand store `useOrbitStore.ts` with local persistence, input snapshot freezing, and clean demo reset.
+3. **Slice 5 (Workspace Flow: Context, Evidence Register & Confirmation)**: Build DataTable with 5 state chips, citation locator inspector drawer, and Stepper navigation.
 
 ---
 
