@@ -1,0 +1,361 @@
+/* Cinematic HUD Overlays Stylesheet */
+
+.hudRoot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100svh;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 20;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  font-family: var(--os-font-body, 'Inter', sans-serif);
+}
+
+/* Precision Corner Brackets (White 1px Hairlines) */
+.cornerTL,
+.cornerTR,
+.cornerBL,
+.cornerBR {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.cornerTL {
+  top: 24px;
+  left: 24px;
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+}
+
+.cornerTR {
+  top: 24px;
+  right: 24px;
+  border-top: 1px solid #ffffff;
+  border-right: 1px solid #ffffff;
+}
+
+.cornerBL {
+  bottom: 24px;
+  left: 24px;
+  border-bottom: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+}
+
+.cornerBR {
+  bottom: 24px;
+  right: 24px;
+  border-bottom: 1px solid #ffffff;
+  border-right: 1px solid #ffffff;
+}
+
+@media (max-width: 768px) {
+  .cornerTL,
+  .cornerTR,
+  .cornerBL,
+  .cornerBR {
+    display: none;
+  }
+}
+
+/* Center Crosshair */
+.crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28px;
+  height: 28px;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.crosshair::before,
+.crosshair::after {
+  content: '';
+  position: absolute;
+  background: #ffffff;
+}
+
+.crosshair::before {
+  top: 13px;
+  left: 0;
+  width: 28px;
+  height: 1px;
+}
+
+.crosshair::after {
+  top: 0;
+  left: 13px;
+  width: 1px;
+  height: 28px;
+}
+
+/* Top Sticky Navigation Bar */
+.topBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 40px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .topBar {
+    padding: 20px;
+  }
+}
+
+.headerBrand {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.brandWordmark {
+  font-family: var(--os-font-display, 'Space Grotesk', sans-serif);
+  font-weight: 700;
+  font-size: 1.125rem;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+}
+
+.topControls {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Chapter Rail Buttons (1 to 6) */
+.chapterRail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(16, 21, 28, 0.6);
+  border: 1px solid #1c2530;
+  border-radius: 20px;
+  padding: 4px 8px;
+}
+
+@media (max-width: 768px) {
+  .chapterRail {
+    display: none;
+  }
+}
+
+.chapterBtn {
+  background: transparent;
+  border: none;
+  font-family: var(--os-font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.75rem;
+  color: #6f8298;
+  padding: 4px 8px;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.chapterBtn:hover {
+  color: #ffffff;
+}
+
+.chapterBtnActive {
+  color: #000000;
+  background: #00a1ff;
+  font-weight: 600;
+}
+
+/* Sound Toggle Button */
+.soundBtn {
+  background: rgba(16, 21, 28, 0.6);
+  border: 1px solid #1c2530;
+  border-radius: 20px;
+  padding: 6px 14px;
+  color: #9daec2;
+  font-family: var(--os-font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.soundBtn:hover,
+.soundBtn:focus-visible {
+  border-color: #00a1ff;
+  color: #ffffff;
+}
+
+.soundBars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 10px;
+}
+
+.soundBar {
+  width: 2px;
+  height: 100%;
+  background-color: #00a1ff;
+}
+
+.soundBarPlaying:nth-child(1) {
+  animation: soundWave 0.8s ease-in-out infinite alternate;
+}
+.soundBarPlaying:nth-child(2) {
+  animation: soundWave 0.5s ease-in-out infinite alternate 0.2s;
+}
+.soundBarPlaying:nth-child(3) {
+  animation: soundWave 0.9s ease-in-out infinite alternate 0.4s;
+}
+
+@keyframes soundWave {
+  0% { height: 20%; }
+  100% { height: 100%; }
+}
+
+/* Live Telemetry Display Overlay */
+.telemetryOverlay {
+  position: absolute;
+  bottom: 60px;
+  left: 60px;
+  max-width: 440px;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .telemetryOverlay {
+    bottom: 40px;
+    left: 20px;
+    right: 20px;
+    max-width: none;
+  }
+}
+
+.kickerRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.kickerBadge {
+  font-family: var(--os-font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #00a1ff;
+  letter-spacing: 0.1em;
+}
+
+.chapterTitle {
+  font-family: var(--os-font-display, 'Space Grotesk', sans-serif);
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: #ffffff;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.chapterDesc {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #9daec2;
+  margin: 0 0 1.25rem;
+}
+
+.hudPillRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  pointer-events: auto;
+}
+
+.hudPill {
+  background: rgba(16, 21, 28, 0.75);
+  border: 1px solid #1c2530;
+  padding: 4px 10px;
+  border-radius: 2px;
+  font-family: var(--os-font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.75rem;
+  color: #f0f4f8;
+}
+
+.hudPillLabel {
+  color: #6f8298;
+  margin-right: 0.35rem;
+}
+
+.hudPillVal {
+  color: #00a1ff;
+  font-weight: 600;
+}
+
+/* Side Progress Rail */
+.progressRail {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 1px;
+}
+
+@media (max-width: 768px) {
+  .progressRail {
+    display: none;
+  }
+}
+
+.progressRailThumb {
+  position: absolute;
+  top: 0;
+  left: -2px;
+  width: 6px;
+  height: 24px;
+  background: #00a1ff;
+  border-radius: 3px;
+  transition: transform 0.05s linear;
+}
+
+/* Persistent Governance Notice */
+.persistentCaption {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--os-font-body, 'Inter', sans-serif);
+  font-size: 0.6875rem;
+  color: #6f8298;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .persistentCaption {
+    white-space: normal;
+    text-align: center;
+    width: 90%;
+    bottom: 8px;
+  }
+}

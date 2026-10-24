@@ -17,6 +17,8 @@ import { OrbitHudNav } from '../components/common/OrbitHudNav';
 import { useOrbitStore } from '../store/useOrbitStore';
 import styles from './LandingPage.module.css';
 
+const CinematicExperience = React.lazy(() => import('../cinematic/CinematicExperience'));
+
 interface StateExplanation {
   state: EvidenceState;
   shortDesc: string;
@@ -197,6 +199,13 @@ export const LandingPage: React.FC = () => {
 
   return (
     <div className={styles.landingRoot}>
+      {/* 0. Fullscreen Cinematic 3D Tour (Edolus-Inspired WebGL Experience) */}
+      <section id="cinematic-tour" aria-label="Cinematic 3D Mission Tour">
+        <React.Suspense fallback={<div style={{ minHeight: '100vh', background: '#000000' }} />}>
+          <CinematicExperience />
+        </React.Suspense>
+      </section>
+
       {/* Floating Scroll-Driven HUD Navigation Bar */}
       <OrbitHudNav />
 

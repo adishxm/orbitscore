@@ -1,0 +1,207 @@
+.fallbackRoot {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--os-color-bg-base, #090d12);
+  color: var(--os-color-text-primary, #f0f4f8);
+  padding: 4rem 1.5rem 6rem;
+  box-sizing: border-box;
+  font-family: var(--os-font-body, 'Inter', sans-serif);
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.posterWrap {
+  position: relative;
+  width: 100%;
+  height: 340px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--os-color-border-subtle, #1c2530);
+  background: radial-gradient(circle at 50% 30%, #1a2936 0%, #05070a 80%);
+  margin-bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.posterIllustration {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #00a1ff 0%, #003366 60%, #05070a 100%);
+  box-shadow: 0 0 40px rgba(0, 161, 255, 0.35);
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.posterIllustration::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -20px;
+  right: -20px;
+  bottom: -10px;
+  border: 1px dashed rgba(0, 161, 255, 0.4);
+  border-radius: 50%;
+  transform: rotate(-25deg);
+}
+
+.posterTitle {
+  font-family: var(--os-font-display, 'Space Grotesk', sans-serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--os-color-text-white, #ffffff);
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.posterSubtitle {
+  font-size: 0.9375rem;
+  color: var(--os-color-text-secondary, #9daec2);
+  max-width: 540px;
+  margin: 0;
+}
+
+.noticeBox {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 1.25rem 1.5rem;
+  border-radius: 4px;
+  margin-bottom: 3rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.noticeBox h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+  color: var(--os-color-accent-amber, #f59e0b);
+  font-family: var(--os-font-mono, 'JetBrains Mono', monospace);
+}
+
+.noticeBox p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--os-color-text-secondary, #9daec2);
+  line-height: 1.5;
+}
+
+.chapterList {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.chapterCard {
+  background: var(--os-color-surface-card, #141a23);
+  border: 1px solid var(--os-color-border-subtle, #1c2530);
+  border-radius: 4px;
+  padding: 1.75rem;
+  transition: border-color 0.2s ease;
+}
+
+.chapterCard:hover {
+  border-color: var(--os-color-border-mid, #2b3644);
+}
+
+.chapterKicker {
+  font-family: var(--os-font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.75rem;
+  color: var(--os-color-accent-cyan, #00a1ff);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.chapterTitle {
+  font-family: var(--os-font-display, 'Space Grotesk', sans-serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: var(--os-color-text-white, #ffffff);
+}
+
+.chapterSub {
+  font-size: 0.875rem;
+  color: var(--os-color-text-secondary, #9daec2);
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.chapterDesc {
+  font-size: 0.9375rem;
+  color: var(--os-color-text-muted, #6f8298);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.hudSummary {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--os-color-border-subtle, #1c2530);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.hudPill {
+  font-family: var(--os-font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  background: var(--os-color-surface-subtle, #10151c);
+  border: 1px solid var(--os-color-border-subtle, #1c2530);
+  border-radius: 2px;
+  color: var(--os-color-text-secondary, #9daec2);
+}
+
+.actions {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.actionPrimary {
+  background: var(--os-color-accent-cyan, #00a1ff);
+  color: #000000;
+  font-family: var(--os-font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.9rem 2rem;
+  border-radius: 2px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.actionPrimary:hover {
+  background: var(--os-color-accent-cyan-hover, #33b4ff);
+}
+
+.actionSecondary {
+  background: transparent;
+  color: var(--os-color-text-primary, #f0f4f8);
+  border: 1px solid var(--os-color-border-mid, #2b3644);
+  font-family: var(--os-font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.8125rem;
+  padding: 0.9rem 2rem;
+  border-radius: 2px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: border-color 0.2s ease;
+}
+
+.actionSecondary:hover {
+  border-color: var(--os-color-accent-cyan, #00a1ff);
+}
