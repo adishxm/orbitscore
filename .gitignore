@@ -42,3 +42,5 @@ coverage/
 .vite/
 *.zip
 nottopushongit/
+model_artifacts/*.bin
+

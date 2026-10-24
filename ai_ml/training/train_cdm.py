@@ -4,6 +4,7 @@ Location: ai_ml/training/train_cdm.py
 Strict Invariant:
 Trains strictly on pre-cutoff feature snapshots from training events.
 Uses scikit-learn Pipeline with train-only preprocessing to prevent leakage.
+Enforces event-disjoint splits, cutoff horizon, domain bounds, and non-finite checks.
 All outputs are strictly designated for offline research, not operational flight maneuvers.
 """
 
@@ -61,12 +62,38 @@ def train_and_evaluate_cdm_regressor(
 ) -> Dict[str, Any]:
     """
     Train regressor on train_events and evaluate against persistence baseline on test_events.
+    Enforces event-disjoint splits, feature cutoff horizons, domain validity, and finite inputs.
     """
     if len(train_events) < 2 or len(test_events) < 1:
         raise ValueError("Insufficient events to train and evaluate: require at least 2 train and 1 test.")
 
+    # 1. Event ID Disjointness / Group Leakage Guard
+    train_eids = {ev.event_id for ev in train_events}
+    test_eids = {ev.event_id for ev in test_events}
+    overlap = train_eids.intersection(test_eids)
+    if overlap:
+        raise ValueError(f"Leakage detected: Event IDs appear in both train and test sets: {sorted(list(overlap))}")
+
+    # 2. Cutoff Horizon & Domain Validity Guards
+    all_events = list(train_events) + list(test_events)
+    for ev in all_events:
+        cutoff = getattr(ev, 'cutoff_days', 2.0) or 2.0
+        if ev.feature_time_to_tca_days < cutoff:
+            raise ValueError(
+                f"Event {ev.event_id}: Feature snapshot at {ev.feature_time_to_tca_days} days to TCA "
+                f"violates pre-TCA cutoff horizon of {cutoff} days."
+            )
+        if ev.miss_distance_m < 0 or ev.relative_speed_m_s < 0:
+            raise ValueError(f"Event {ev.event_id}: Geometric parameters (miss distance, relative speed) cannot be negative.")
+        if ev.latest_early_risk > 0.0 or ev.final_reported_log10_risk > 0.0:
+            raise ValueError(f"Event {ev.event_id}: Log10 risk values must be <= 0.0 (representing probability <= 1.0).")
+
     X_train, y_train = extract_cdm_feature_matrix(train_events)
     X_test, y_test = extract_cdm_feature_matrix(test_events)
+
+    # 3. Finite Input Verification
+    if not (np.all(np.isfinite(X_train)) and np.all(np.isfinite(y_train)) and np.all(np.isfinite(X_test)) and np.all(np.isfinite(y_test))):
+        raise ValueError("Non-finite values (NaN or Inf) detected in CDM training/test feature matrices.")
 
     pipeline = build_cdm_regressor_pipeline()
     pipeline.fit(X_train, y_train)

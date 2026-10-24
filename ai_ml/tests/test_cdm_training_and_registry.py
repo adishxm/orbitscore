@@ -10,6 +10,7 @@ from ai_ml.inference.registry import (
     register_trusted_artifact,
     get_registered_artifact,
     list_registered_artifacts,
+    compute_object_sha256,
 )
 from ai_ml.inference.cdm_forecast import run_cdm_forecast
 from ai_ml.evaluation.reports import generate_experiment_markdown_report
@@ -48,11 +49,12 @@ def test_cdm_training_pipeline_and_registry():
     assert "pipeline" in result
 
     # Register artifact
+    digest, _ = compute_object_sha256(result["pipeline"])
     meta = ModelArtifactMetadata(
         artifact_id="art_gb_01",
         model_name=result["model_name"],
         version="1.0.0",
-        sha256="a" * 64,
+        sha256=digest,
         trained_at_utc=result["trained_at_utc"],
         train_sample_count=2,
         features=result["feature_names"],

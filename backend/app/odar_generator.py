@@ -22,7 +22,11 @@ def generate_nasa_odar_markdown(
 
     # Find specific primary citations
     battery_ev = next((e for e in evidence_items if "battery" in str(e.get("parameter_key", "")).lower() or "passivat" in str(e.get("parameter_key", "")).lower()), None)
-    mass_ev = next((e for e in evidence_items if "mass" in str(e.get("parameter_key", "")).lower()), None)
+    battery_confirmed = battery_ev and (battery_ev.get("state") == "confirmed" or battery_ev.get("human_confirmed") is True) and str(battery_ev.get("value", "")).lower() not in ("false", "no", "0")
+    collision_ev = next((e for e in evidence_items if "collision" in str(e.get("parameter_key", "")).lower() or "conjunction" in str(e.get("parameter_key", "")).lower()), None)
+    collision_confirmed = collision_ev and (collision_ev.get("state") == "confirmed" or collision_ev.get("human_confirmed") is True)
+    demise_ev = next((e for e in evidence_items if "demise" in str(e.get("parameter_key", "")).lower() or "casualty" in str(e.get("parameter_key", "")).lower()), None)
+    demise_confirmed = demise_ev and (demise_ev.get("state") == "confirmed" or demise_ev.get("human_confirmed") is True)
 
     timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
@@ -55,12 +59,19 @@ def generate_nasa_odar_markdown(
         "## Section 3: Assessment of Intentional Breakups and Accidental Explosions (Req 4.4-1 to 4.4-4)",
     ]
 
-    if battery_ev:
+    if battery_confirmed:
         lines.extend([
-            "- **Status**: PASSIVATION VERIFIED",
+            "- **Status**: PASSIVATION CONFIRMED IN EVIDENCE REGISTER",
             f"- **Electrical Power Storage**: Lithium-Ion battery pack (nominal 40 Wh).",
             f"- **Passivation Mechanism**: Automatic charge controller disconnect and depletion resistor at End-of-Mission.",
             f"- **Primary Citation**: `{battery_ev.get('source_document')}` (Rev: {battery_ev.get('revision')}, Section: {battery_ev.get('locator')})",
+        ])
+    elif battery_ev:
+        lines.extend([
+            "- **Status**: ⚠️ UNCONFIRMED / PENDING HUMAN REVIEW (Battery record present but unverified)",
+            f"- **Electrical Power Storage**: Lithium-Ion battery pack (nominal 40 Wh).",
+            f"- **Passivation Mechanism**: Automatic depletion resistor proposed; verification pending.",
+            f"- **Primary Citation**: `{battery_ev.get('source_document')}` (Status: {battery_ev.get('state', 'unconfirmed')})",
         ])
     else:
         lines.extend([
@@ -73,8 +84,22 @@ def generate_nasa_odar_markdown(
     lines.extend([
         "",
         "## Section 4: Assessment of Potential for On-Orbit Collisions (Req 4.5-1 to 4.5-2)",
-        f"- **Collision Probability with Large Debris (>10 cm)**: < 1.0 × 10⁻⁴ (Conforms)",
-        f"- **Cross-Sectional Collision Area**: 0.03 m² (3U stowed envelope)",
+    ])
+
+    if collision_confirmed:
+        lines.extend([
+            f"- **Collision Probability with Large Debris (>10 cm)**: < 1.0 × 10⁻⁴ (Conforms per confirmed assessment)",
+            f"- **Cross-Sectional Collision Area**: 0.03 m² ({form_factor} stowed envelope)",
+            f"- **Primary Citation**: `{collision_ev.get('source_document')}`",
+        ])
+    else:
+        lines.extend([
+            f"- **Collision Probability with Large Debris (>10 cm)**: ⚠️ UNASSESSED (Formal numerical conjunction assessment required for submission)",
+            f"- **Cross-Sectional Collision Area**: 0.03 m² ({form_factor} stowed envelope)",
+            "- **Primary Citation**: ⚠️ NEEDS_EVIDENCE: No confirmed collision probability calculation in evidence register.",
+        ])
+
+    lines.extend([
         "- **Maneuver Strategy**: Non-propulsive passive aerodynamic drag alignment.",
         "- **Conjunction Monitoring**: Coordinated with 18th Space Defense Squadron via Space-Track ephemeris distribution.",
         "",
@@ -95,11 +120,14 @@ def generate_nasa_odar_markdown(
         lines.append(f"  - **ISRO Debris-Free Space Missions (DFSM 2030)**: ❌ **NON-CONFORMANT** ({estimated_decay_years:.1f} years post-mission exceeds 5.0-year limit)")
 
     lines.append("- **Atmospheric Re-entry Survivability / Casualty Risk**:")
-    if float(mass) <= 10.0:
+    if demise_confirmed:
+        lines.extend([
+            f"  - **Casualty Risk**: < 1:100,000 (Conforms per confirmed demise assessment `{demise_ev.get('source_document')}`).",
+        ])
+    elif float(mass) <= 10.0:
         lines.extend([
             f"  - Total vehicle mass is {mass} kg, composed predominantly of Aluminum 6061-T6 and FR4 circuit boards.",
-            f"  - 100% of components are modeled as demisable at re-entry altitude (~78 km).",
-            f"  - **Casualty Risk**: **< 1:100,000** (Well below NASA STD 8719.14 threshold of 1:10,000 for smallsat class).",
+            f"  - **Casualty Risk**: ⚠️ ESTIMATE PENDING (Empirical aerothermal assessment / DAS 3.x required for submission; smallsat envelope modeled as demisable subject to verified material inventory).",
         ])
     else:
         lines.extend([

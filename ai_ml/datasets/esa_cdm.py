@@ -84,17 +84,41 @@ def partition_cdm_events_by_event_id(
 ) -> Tuple[List[CDMEventExample], List[CDMEventExample], List[CDMEventExample]]:
     """
     Partition events into disjoint train, val, test sets strictly by event_id.
-    Guarantees no messages from the same event appear across multiple splits.
+    Guarantees no messages/examples from the same event appear across multiple splits.
     """
-    total = len(events)
-    if total == 0:
+    if not events:
         return [], [], []
 
-    train_end = max(1, int(total * train_ratio))
-    val_end = max(train_end + 1, int(total * (train_ratio + val_ratio)))
+    # Group all examples by unique event_id
+    grouped: Dict[str, List[CDMEventExample]] = {}
+    for ev in events:
+        grouped.setdefault(ev.event_id, []).append(ev)
 
-    train = events[:train_end]
-    val = events[train_end:val_end]
-    test = events[val_end:]
+    unique_event_ids = sorted(list(grouped.keys()))
+    n_unique = len(unique_event_ids)
+
+    if n_unique == 1:
+        # All examples belong to a single event: put all in train, keep val and test empty
+        # to strictly preserve event disjointness!
+        return list(events), [], []
+
+    train_count = max(1, int(n_unique * train_ratio))
+    val_count = int(n_unique * val_ratio)
+    if train_count + val_count >= n_unique:
+        val_count = max(0, n_unique - train_count - 1)
+
+    train_ids = set(unique_event_ids[:train_count])
+    val_ids = set(unique_event_ids[train_count : train_count + val_count])
+    test_ids = set(unique_event_ids[train_count + val_count :])
+
+    train = [ev for eid in train_ids for ev in grouped[eid]]
+    val = [ev for eid in val_ids for ev in grouped[eid]]
+    test = [ev for eid in test_ids for ev in grouped[eid]]
+
+    # Rigorous invariant check: splits MUST be disjoint by event_id
+    assert train_ids.isdisjoint(val_ids), "Train and val sets must be event-disjoint"
+    assert train_ids.isdisjoint(test_ids), "Train and test sets must be event-disjoint"
+    assert val_ids.isdisjoint(test_ids), "Val and test sets must be event-disjoint"
 
     return train, val, test
+

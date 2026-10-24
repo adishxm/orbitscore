@@ -118,8 +118,27 @@ def test_nasa_spark_debris_density_and_flux():
 
 
 def test_nasa_odar_and_isro_eomp_generation():
-    """Verify automated ODAR and EOMP markdown report generators populate regulatory sections."""
-    # ODAR endpoint
+    """Verify automated ODAR and EOMP markdown report generators enforce review gate and populate sections."""
+    # 1. Verify locked gate when unevaluated or unreviewed
+    eval_resp = client.post("/missions/asteria-3/evaluate", json={"profile_id": "fcc-22-74-inspired"}, headers=AUTH_HEADERS)
+    assert eval_resp.status_code == 200
+    findings = eval_resp.json().get("findings", [])
+
+    # If there are findings, test that ODAR export is locked (423) before review
+    if findings:
+        resp_locked = client.get("/missions/asteria-3/export/odar", headers=AUTH_HEADERS)
+        assert resp_locked.status_code == 423
+        assert resp_locked.json()["detail"]["code"] == "EXPORT_LOCKED"
+
+        # Complete review decisions for all findings
+        for idx, f in enumerate(findings):
+            client.post(
+                f"/missions/asteria-3/findings/{f['finding_id']}/decision",
+                json={"decision": "APPROVED", "note": f"Reviewed finding {idx}", "reviewer": "Aditya"},
+                headers=AUTH_HEADERS
+            )
+
+    # 2. ODAR endpoint unlocked
     resp_odar = client.get("/missions/asteria-3/export/odar", headers=AUTH_HEADERS)
     assert resp_odar.status_code == 200
     odar_md = resp_odar.text
@@ -131,7 +150,7 @@ def test_nasa_odar_and_isro_eomp_generation():
     assert "FCC 5-Year Rule" in odar_md
     assert "ISRO Debris-Free Space Missions" in odar_md
 
-    # EOMP endpoint
+    # 3. EOMP endpoint unlocked
     resp_eomp = client.get("/missions/asteria-3/export/eomp", headers=AUTH_HEADERS)
     assert resp_eomp.status_code == 200
     eomp_md = resp_eomp.text

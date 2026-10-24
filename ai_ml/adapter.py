@@ -74,8 +74,27 @@ def run_ai_candidate_extraction(
             raw_json = resp.json()["choices"][0]["message"]["content"]
             validated = AIResponseSchema.model_validate_json(raw_json)
 
+            page_map = {p_num: p_text for p_num, p_text in pages}
             candidates: list[AICandidateField] = []
             for item in validated.extracted_fields:
+                if item.page not in page_map:
+                    logger.warning(f"AI extracted field {item.field} with invalid page {item.page}; rejecting.")
+                    continue
+
+                page_text = page_map[item.page]
+                # Rigorous validation of candidate against page text and schema
+                from .extraction.validation import validate_candidate_evidence
+                val_res = validate_candidate_evidence(
+                    field_name=item.field,
+                    value=item.value,
+                    quote=item.quote,
+                    raw_page_text=page_text,
+                    unit=item.unit,
+                )
+                if not val_res.is_valid:
+                    logger.warning(f"AI candidate failed evidence validation ({val_res.status}): {val_res.details}; rejecting.")
+                    continue
+
                 candidates.append(
                     AICandidateField(
                         field=item.field,

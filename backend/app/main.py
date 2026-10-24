@@ -6,7 +6,7 @@ import uuid
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import Optional, List
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Query, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -771,16 +771,25 @@ async def assess_nasa_spark_flux(
 
 # --- Automated ODAR & EOMP Export Pipeline Endpoints ---
 
+# --- Automated ODAR & EOMP Export Pipeline Endpoints ---
+
 @app.get("/missions/{mission_id}/export/odar", response_class=HTMLResponse)
 def export_nasa_odar_report(
     mission_id: str,
     user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
 ):
-    """Generate a complete NASA-STD-8719.14 compliant draft ODAR markdown document."""
+    """Generate a complete NASA-STD-8719.14 compliant draft ODAR markdown document. Returns 423 if locked."""
+    evaluation = get_evaluation_db(mission_id)
+    if not evaluation:
+        raise HTTPException(423, detail={"code": "EXPORT_LOCKED", "message": "Mission must be evaluated before export", "pending_decisions": 1})
+    reviews = list_reviews_db()
+    missing = [f["finding_id"] for f in evaluation.get("findings", []) if f["finding_id"] not in reviews]
+    if missing:
+        raise HTTPException(423, detail={"code": "EXPORT_LOCKED", "unreviewed_findings": missing, "pending_decisions": len(missing)})
+
     m = get_mission(mission_id)
     fields = m.get("fields", [])
-    revs = list_reviews_db()
-    decisions = [v for v in revs.values() if v.get("mission_id") == m.get("mission_id")]
+    decisions = [v for v in reviews.values() if v.get("mission_id") == m.get("mission_id")]
     md = generate_nasa_odar_markdown(m, fields, decisions)
     return HTMLResponse(content=md, media_type="text/markdown; charset=utf-8")
 
@@ -790,7 +799,15 @@ def export_isro_fcc_eomp_plan(
     mission_id: str,
     user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
 ):
-    """Generate an End-of-Mission Plan (EOMP) conforming to ISRO DFSM 2030 and FCC 5-year rules."""
+    """Generate an End-of-Mission Plan (EOMP) conforming to ISRO DFSM 2030 and FCC 5-year rules. Returns 423 if locked."""
+    evaluation = get_evaluation_db(mission_id)
+    if not evaluation:
+        raise HTTPException(423, detail={"code": "EXPORT_LOCKED", "message": "Mission must be evaluated before export", "pending_decisions": 1})
+    reviews = list_reviews_db()
+    missing = [f["finding_id"] for f in evaluation.get("findings", []) if f["finding_id"] not in reviews]
+    if missing:
+        raise HTTPException(423, detail={"code": "EXPORT_LOCKED", "unreviewed_findings": missing, "pending_decisions": len(missing)})
+
     m = get_mission(mission_id)
     fields = m.get("fields", [])
     md = generate_eomp_markdown(m, fields)
@@ -808,10 +825,10 @@ except ImportError:
 
 class ResearchCDMForecastRequest(BaseModel):
     event_id: str
-    time_to_tca_days: float = 2.5
-    miss_distance_m: float = 8500.0
-    relative_speed_m_s: float = 14200.0
-    latest_early_risk: float = -5.8
+    time_to_tca_days: float = Field(2.5, ge=2.0, description="Pre-TCA horizon (must be >= 2.0 days)")
+    miss_distance_m: float = Field(8500.0, ge=0.0, description="Encounter miss distance in meters")
+    relative_speed_m_s: float = Field(14200.0, ge=0.0, description="Encounter relative speed in m/s")
+    latest_early_risk: float = Field(-5.8, le=0.0, description="Reported log10 risk (must be <= 0.0)")
     artifact_id: Optional[str] = None
 
 
@@ -826,14 +843,19 @@ def execute_research_cdm_forecast(
     """
     if run_cdm_forecast is None:
         raise HTTPException(503, "AI/ML research inference module unavailable.")
-    result = run_cdm_forecast(
-        event_id=req.event_id,
-        time_to_tca_days=req.time_to_tca_days,
-        miss_distance_m=req.miss_distance_m,
-        relative_speed_m_s=req.relative_speed_m_s,
-        latest_early_risk=req.latest_early_risk,
-        artifact_id=req.artifact_id,
-    )
-    return result.model_dump()
+    try:
+        result = run_cdm_forecast(
+            event_id=req.event_id,
+            time_to_tca_days=req.time_to_tca_days,
+            miss_distance_m=req.miss_distance_m,
+            relative_speed_m_s=req.relative_speed_m_s,
+            latest_early_risk=req.latest_early_risk,
+            artifact_id=req.artifact_id,
+        )
+        return result.model_dump()
+    except LookupError as exc:
+        raise HTTPException(404, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(400, detail=str(exc))
 
 

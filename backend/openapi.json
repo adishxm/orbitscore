@@ -1252,7 +1252,7 @@
     "/missions/{mission_id}/export/odar": {
       "get": {
         "summary": "Export Nasa Odar Report",
-        "description": "Generate a complete NASA-STD-8719.14 compliant draft ODAR markdown document.",
+        "description": "Generate a complete NASA-STD-8719.14 compliant draft ODAR markdown document. Returns 423 if locked.",
         "operationId": "export_nasa_odar_report_missions__mission_id__export_odar_get",
         "security": [
           {
@@ -1300,7 +1300,7 @@
     "/missions/{mission_id}/export/eomp": {
       "get": {
         "summary": "Export Isro Fcc Eomp Plan",
-        "description": "Generate an End-of-Mission Plan (EOMP) conforming to ISRO DFSM 2030 and FCC 5-year rules.",
+        "description": "Generate an End-of-Mission Plan (EOMP) conforming to ISRO DFSM 2030 and FCC 5-year rules. Returns 423 if locked.",
         "operationId": "export_isro_fcc_eomp_plan_missions__mission_id__export_eomp_get",
         "security": [
           {
@@ -2454,22 +2454,30 @@
           },
           "time_to_tca_days": {
             "type": "number",
+            "minimum": 2.0,
             "title": "Time To Tca Days",
+            "description": "Pre-TCA horizon (must be >= 2.0 days)",
             "default": 2.5
           },
           "miss_distance_m": {
             "type": "number",
+            "minimum": 0.0,
             "title": "Miss Distance M",
+            "description": "Encounter miss distance in meters",
             "default": 8500.0
           },
           "relative_speed_m_s": {
             "type": "number",
+            "minimum": 0.0,
             "title": "Relative Speed M S",
+            "description": "Encounter relative speed in m/s",
             "default": 14200.0
           },
           "latest_early_risk": {
             "type": "number",
+            "maximum": 0.0,
             "title": "Latest Early Risk",
+            "description": "Reported log10 risk (must be <= 0.0)",
             "default": -5.8
           },
           "artifact_id": {

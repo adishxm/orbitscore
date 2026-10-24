@@ -45,18 +45,29 @@ def compute_space_credit_index(
     breakdowns = []
     recommendations = []
 
-    has_evidence = len(evidence_items) > 0
-    has_mission_info = bool(mission.get("name") or mission.get("id") or mission.get("mission_id"))
+    # Filter out empty or uninformative dicts like [{}]
+    valid_evidence = [
+        e for e in evidence_items
+        if any(k in e for k in ("parameter_key", "field", "value", "field_name"))
+        and (e.get("parameter_key") or e.get("field") or e.get("value") is not None)
+    ]
+    has_evidence = len(valid_evidence) > 0
+    has_mission_orbit = bool(mission.get("target_orbit") or mission.get("orbit"))
+    has_mass = bool(mission.get("mass_budget_kg") or mission.get("mass_kg"))
 
     # 1. Trajectory & Orbit Lifetime (25 max points)
     # Require explicit decay years or orbital context; missing evidence yields 0 points
-    if estimated_decay_years is None and "orbit" not in mission and not has_evidence:
+    if estimated_decay_years is None and not has_mission_orbit and not has_evidence:
         decay_points = 0.0
         decay_notes = "No orbital ephemeris or decay lifetime evidence submitted."
         recommendations.append("Upload orbital ephemeris or datasheet to evaluate post-mission deorbit timeline.")
     else:
-        decay_val = estimated_decay_years if estimated_decay_years is not None else 3.8
-        if decay_val <= 5.0:
+        decay_val = estimated_decay_years if estimated_decay_years is not None else (3.8 if (has_mission_orbit or has_evidence) else None)
+        if decay_val is None:
+            decay_points = 0.0
+            decay_notes = "No orbital ephemeris or decay lifetime evidence submitted."
+            recommendations.append("Upload orbital ephemeris or datasheet to evaluate post-mission deorbit timeline.")
+        elif decay_val <= 5.0:
             decay_points = 25.0
             decay_notes = f"Estimated decay of {decay_val:.1f} yrs conforms to 5-year deorbit limit."
         elif decay_val <= 10.0:
@@ -83,7 +94,6 @@ def compute_space_credit_index(
     )
 
     # 2. Collision Footprint & Form Factor (25 max points)
-    has_mass = "mass_budget_kg" in mission or "mass_kg" in mission
     if not has_mass and not has_evidence:
         footprint_points = 0.0
         footprint_notes = "Vehicle mass and form factor evidence missing."
@@ -120,7 +130,7 @@ def compute_space_credit_index(
         disposal_points = 20.0  # Base for demisable CubeSat (< 10 kg, atmospheric demisability)
         has_battery_evidence = any(
             any(k in str(e.get("parameter_key") or e.get("field") or "").lower() for k in ("battery", "power", "passivation"))
-            for e in evidence_items
+            for e in valid_evidence
         )
         if has_battery_evidence:
             disposal_points += 5.0
@@ -140,13 +150,13 @@ def compute_space_credit_index(
     )
 
     # 4. Sourced Evidence Provenance (25 max points)
-    total_items = len(evidence_items)
+    total_items = len(valid_evidence)
     confirmed_items = sum(
-        1 for e in evidence_items
+        1 for e in valid_evidence
         if e.get("state") == "confirmed" or e.get("human_confirmed") is True
     )
-    conflicting_items = sum(1 for e in evidence_items if e.get("state") == "conflicting")
-    missing_items = sum(1 for e in evidence_items if e.get("state") == "missing")
+    conflicting_items = sum(1 for e in valid_evidence if e.get("state") == "conflicting")
+    missing_items = sum(1 for e in valid_evidence if e.get("state") == "missing")
 
     if total_items > 0:
         ratio = confirmed_items / total_items
@@ -193,11 +203,25 @@ def compute_space_credit_index(
     decay_actual = estimated_decay_years if estimated_decay_years is not None else 3.8
     mass_actual = float(mission.get("mass_budget_kg") or mission.get("mass_kg") or 4.0)
 
-    # Require minimum overall score (>=60) and confirmed evidence for alignment claims
-    isro_aligned = has_evidence and decay_points >= 20.0 and decay_actual <= 5.0 and mass_actual <= 10.0 and overall >= 60.0
-    fcc_aligned = has_evidence and decay_points >= 20.0 and decay_actual <= 5.0 and conflicting_items == 0 and overall >= 60.0
+    # Invariant: alignment claims strictly require confirmed evidence and non-zero evidence provenance
+    isro_aligned = (
+        has_evidence
+        and confirmed_items >= 1
+        and decay_points >= 20.0
+        and decay_actual <= 5.0
+        and mass_actual <= 10.0
+        and overall >= 60.0
+    )
+    fcc_aligned = (
+        has_evidence
+        and confirmed_items >= 1
+        and decay_points >= 20.0
+        and decay_actual <= 5.0
+        and conflicting_items == 0
+        and overall >= 60.0
+    )
 
-    if overall < 40.0 or not has_evidence:
+    if overall < 40.0 or not has_evidence or confirmed_items == 0:
         summary_text = f"Space Credit Index: {overall}/100 (Tier {tier}). Insufficient verified mission evidence; review required."
     else:
         summary_text = f"Space Credit Index: {overall}/100 (Tier {tier}). Vehicle demonstrates favorable orbital sustainability and verifiable evidence lineage."

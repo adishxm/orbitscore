@@ -8,6 +8,7 @@ Never hardcodes 1.0 or assigns perfect precision without empirical verification.
 """
 
 from __future__ import annotations
+import math
 from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
 
@@ -38,22 +39,26 @@ class ExtractionMetricReport(BaseModel):
 
 
 def _values_match(pred_val: Any, gold_val: Any, tolerance: float) -> bool:
-    """Compare predicted and gold values using type-aware matching and tolerance."""
+    """Compare predicted and gold values using type-aware matching and magnitude-aware tolerance."""
     if pred_val is None and gold_val is None:
         return True
     if pred_val is None or gold_val is None:
         return False
 
-    # Numeric comparison with tolerance
-    if isinstance(gold_val, (int, float)) and isinstance(pred_val, (int, float)):
-        return abs(float(pred_val) - float(gold_val)) <= tolerance
-
-    # If gold is float but pred is string, try converting
-    if isinstance(gold_val, (int, float)) and isinstance(pred_val, str):
-        try:
-            return abs(float(pred_val) - float(gold_val)) <= tolerance
-        except ValueError:
+    # Attempt numeric comparison
+    try:
+        p_float = float(pred_val)
+        g_float = float(gold_val)
+        if math.isnan(p_float) or math.isnan(g_float):
             return False
+        # If gold value is small (< 1.0), absolute tolerance of 0.1 is far too loose.
+        # Enforce relative tolerance (5%) or tight scientific precision (1e-6).
+        if abs(g_float) < 1.0:
+            rel_err = abs(p_float - g_float) / max(abs(g_float), 1e-9)
+            return rel_err <= 0.05 or abs(p_float - g_float) <= 1e-6
+        return abs(p_float - g_float) <= tolerance
+    except (ValueError, TypeError):
+        pass
 
     # String comparison (trimmed, case-insensitive)
     return str(pred_val).strip().lower() == str(gold_val).strip().lower()
