@@ -1,0 +1,226 @@
+/* OrbitScore Base CSS & Layout Primitives */
+/* WCAG 2.2 AA accessible reset, typography baseline, focus states & layout primitives */
+
+/* 1. Box Sizing & Baseline Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  background-color: var(--os-color-bg-deep);
+  color: var(--os-color-text-primary);
+  font-family: var(--os-font-sans);
+  line-height: var(--os-lh-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--os-color-bg-deep);
+  color: var(--os-color-text-primary);
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* 2. Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--os-color-bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--os-color-border-bright);
+  border-radius: var(--os-radius-sm);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--os-color-accent-cyan);
+}
+
+/* 3. Typography Hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--os-font-display);
+  color: var(--os-color-text-white);
+  font-weight: 700;
+  line-height: var(--os-lh-tight);
+  letter-spacing: var(--os-tracking-tight);
+}
+
+h1 { font-size: var(--os-type-title-1); }
+h2 { font-size: var(--os-type-title-2); }
+h3 { font-size: var(--os-type-title-3); }
+h4 { font-size: var(--os-type-body-l); }
+h5 { font-size: var(--os-type-body); }
+h6 { font-size: var(--os-type-body-s); }
+
+p {
+  color: var(--os-color-text-secondary);
+  font-size: var(--os-type-body);
+  line-height: var(--os-lh-normal);
+}
+
+code, pre, kbd, samp {
+  font-family: var(--os-font-mono);
+  font-size: 0.875em;
+}
+
+small {
+  font-size: var(--os-type-caption);
+  color: var(--os-color-text-muted);
+}
+
+/* 4. Interactive Baseline */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--os-duration-fast) var(--os-ease-standard);
+}
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled, input:disabled, select:disabled, textarea:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* 5. Accessibility Focus Ring (WCAG 2.2 AA) */
+:focus-visible {
+  outline: 2px solid var(--os-color-accent-cyan);
+  outline-offset: 2px;
+  border-radius: var(--os-radius-xs);
+}
+
+/* 6. Skip to Main Content Link */
+.skip-link {
+  position: absolute;
+  top: -120px;
+  left: 1.5rem;
+  z-index: var(--os-z-banner);
+  background: var(--os-color-accent-cyan);
+  color: #000000;
+  padding: var(--os-space-3) var(--os-space-5);
+  font-weight: 700;
+  font-size: var(--os-type-body-s);
+  border-radius: var(--os-radius-xs);
+  text-decoration: none;
+  transition: top var(--os-duration-fast) ease;
+}
+
+.skip-link:focus {
+  top: 1.5rem;
+}
+
+/* 7. Layout Primitives */
+
+/* Centered Container */
+.container {
+  width: 100%;
+  max-width: var(--os-container-xl);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--os-container-pad);
+  padding-right: var(--os-container-pad);
+}
+
+/* Focused Content Column (960px max width inside container) */
+.containerNarrow {
+  width: 100%;
+  max-width: var(--os-content-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--os-container-pad);
+  padding-right: var(--os-container-pad);
+}
+
+/* Standard Section Rhythm */
+.section {
+  padding: var(--os-space-12) 0;
+  border-bottom: 1px solid var(--os-color-border-subtle);
+  margin-bottom: var(--os-space-12);
+}
+
+/* Layout Grids */
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--os-space-6);
+}
+
+@media (max-width: 768px) {
+  .grid2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--os-space-6);
+}
+
+@media (max-width: 1024px) {
+  .grid3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.grid4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--os-space-4);
+}
+
+@media (max-width: 1024px) {
+  .grid4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .grid4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Stack: Vertical flow with consistent gap */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--os-space-4);
+}
+
+/* Cluster: Horizontal wrap flow */
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--os-space-3);
+}
+
+/* 8. Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    /* Required by master prompt to disable motion for sensitive users */
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
