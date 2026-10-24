@@ -94,7 +94,7 @@ export const Footer: React.FC = () => {
         {/* Bottom Bar */}
         <div className={styles.bottomBar}>
           <div className={styles.copyright}>
-            © {new Date().getFullYear()} OrbitScore. Open-source mission evidence tooling for small
+            © {new Date().getFullYear()} OrbitScore. Mission evidence preparation tooling for small
             spacecraft teams.
           </div>
           <div className={styles.legalNotice}>

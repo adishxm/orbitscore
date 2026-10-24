@@ -82,14 +82,14 @@
   padding: 3px 8px;
   border-radius: var(--os-radius-xs);
   font-size: 0.75rem;
-  font-family: var(--font-mono);
+  font-family: var(--os-font-mono);
   cursor: pointer;
   transition: all var(--os-duration-fast) var(--os-ease-standard);
 }
 
 .modeToggleBtn:hover {
-  border-color: var(--os-color-primary);
-  color: var(--os-color-primary);
+  border-color: var(--os-color-accent-cyan);
+  color: var(--os-color-accent-cyan);
 }
 
 .noticeText {
@@ -149,4 +149,89 @@
   .noticeText {
     display: none;
   }
+}
+
+/* Not Implemented Modal */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--os-z-modal);
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--os-space-4);
+}
+
+.modalDialog {
+  background-color: var(--os-color-surface-card);
+  border: 1px solid var(--os-color-border-bright);
+  border-radius: var(--os-radius-md);
+  box-shadow: var(--os-shadow-lg);
+  max-width: 520px;
+  width: 100%;
+  padding: var(--os-space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--os-space-4);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--os-color-border-subtle);
+  padding-bottom: var(--os-space-3);
+}
+
+.modalTitle {
+  font-family: var(--os-font-display);
+  font-size: var(--os-type-title-3);
+  color: var(--os-color-text-white);
+  margin: 0;
+}
+
+.modalCloseBtn {
+  color: var(--os-color-text-muted);
+  padding: 4px;
+  border-radius: var(--os-radius-xs);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalCloseBtn:hover {
+  color: var(--os-color-text-white);
+}
+
+.modalBody {
+  font-size: var(--os-type-body-s);
+  color: var(--os-color-text-secondary);
+  line-height: var(--os-lh-relaxed);
+}
+
+.modalBody p + p {
+  margin-top: var(--os-space-3);
+}
+
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--os-color-border-subtle);
+  padding-top: var(--os-space-3);
+}
+
+.modalPrimaryBtn {
+  background-color: var(--os-color-accent-cyan);
+  color: #000000;
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-body-s);
+  font-weight: 700;
+  padding: var(--os-space-2) var(--os-space-4);
+  border-radius: var(--os-radius-xs);
+  cursor: pointer;
 }
