@@ -51,6 +51,10 @@ npm run lint:banned-words
 - **Bundler**: Vite 5
 - **Routing**: React Router v6
 - **State Management**: Zustand 5 with localStorage persistence (`orbitscore_store_v1`) and safe in-memory fallback
+- **Dual-Mode Backend Engine**:
+  - **Local Mock Mode**: Fast, zero-dependency client-side deterministic evaluation with synthetic Asteria-3 and Microsat-X fixtures
+  - **Live FastAPI Mode**: Direct HTTP client (`/src/api/backend.ts`) connecting to the FastAPI backend (`http://127.0.0.1:8000`), persisting events in SQLite with SHA-256 tamper-evident provenance chain verification
+- **Counterfactual Lab**: Interactive parameter simulation component for testing what-if policy levers (e.g., disposal lifetime, altitude) against deterministic profile thresholds
 - **Typography & Design System**: Self-hosted Space Grotesk, Inter, and JetBrains Mono with CSS variable design tokens
 - **Deterministic Check Engine**: Pure mathematical/structural evaluation functions (`demo-evidence-completeness.ts`)
 - **Accessibility**: Audited with axe-core (WCAG 2.2 AA compliant, zero violations)

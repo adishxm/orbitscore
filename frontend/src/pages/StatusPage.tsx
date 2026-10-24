@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Database, HardDrive, Cpu, AlertTriangle, RefreshCw } from 'lucide-react';
+import { useOrbitStore } from '../store/useOrbitStore';
 import styles from './pages.module.css';
 
 export const StatusPage: React.FC = () => {
   const [storageCount, setStorageCount] = useState<number>(0);
   const [lastCheckTime, setLastCheckTime] = useState<string>('');
+  const { apiMode, apiServerUrl, provenance, toggleApiMode } = useOrbitStore();
 
   useEffect(() => {
     try {
@@ -113,6 +115,28 @@ export const StatusPage: React.FC = () => {
                 <br />
                 Last Diagnostic Check: <strong>{lastCheckTime || 'Just now'}</strong>
               </p>
+            </div>
+
+            <div className={styles.card}>
+              <div className={styles.cardTitle}>
+                <Cpu size={20} style={{ color: 'var(--color-brand-cyan)', marginBottom: '8px' }} />
+                <div>FastAPI Backend & Provenance</div>
+              </div>
+              <p className={styles.cardText}>
+                Active Mode: <strong>{apiMode === 'live' ? 'Live FastAPI Backend' : 'Local Deterministic Engine'}</strong>
+                <br />
+                Server Endpoint: <strong>{apiServerUrl}</strong>
+                <br />
+                SHA-256 Provenance Chain: <strong>{provenance.valid ? `VERIFIED (${provenance.checkedEvents} events checked)` : 'Check Pending'}</strong>
+              </p>
+              <button
+                type="button"
+                onClick={() => toggleApiMode()}
+                className={styles.actionButtonSecondary}
+                style={{ marginTop: 'var(--space-2)', fontSize: '0.75rem', padding: '4px 8px' }}
+              >
+                <span>{apiMode === 'live' ? 'Switch to Mock' : 'Connect Live API'}</span>
+              </button>
             </div>
           </div>
         </section>

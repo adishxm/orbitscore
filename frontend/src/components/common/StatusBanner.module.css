@@ -66,6 +66,32 @@
   border: 1px solid rgba(148, 163, 184, 0.25);
 }
 
+.badgeLive {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.modeToggleBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--os-color-text-secondary);
+  background-color: var(--os-color-surface-card);
+  border: 1px solid var(--os-color-border-mid);
+  padding: 3px 8px;
+  border-radius: var(--os-radius-xs);
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: all var(--os-duration-fast) var(--os-ease-standard);
+}
+
+.modeToggleBtn:hover {
+  border-color: var(--os-color-primary);
+  color: var(--os-color-primary);
+}
+
 .noticeText {
   color: var(--os-color-text-muted);
   font-size: 0.75rem;

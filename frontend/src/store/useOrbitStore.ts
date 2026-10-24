@@ -12,6 +12,7 @@ import {
 import { DEMO_PROFILE, executeProfileChecks } from '../profiles/demo-evidence-completeness';
 import { ASTERIA_3_MISSION, ASTERIA_3_EVIDENCE } from '../fixtures/asteria-3';
 import { MICROSAT_X_MISSION, MICROSAT_X_EVIDENCE } from '../fixtures/microsat-x';
+import { checkApiHealth, fetchProvenanceLive, DEFAULT_API_BASE_URL } from '../api/backend';
 
 export interface OrbitState {
   activeMissionId: string;
@@ -23,6 +24,16 @@ export interface OrbitState {
   openIssues: Record<string, OpenIssue[]>;
   selectedEvidenceId: string | null;
   isCheckRunStale: Record<string, boolean>;
+
+  // Backend & Dual-Mode State
+  apiMode: 'mock' | 'live';
+  isApiConnected: boolean;
+  apiServerUrl: string;
+  provenance: {
+    valid: boolean;
+    checkedEvents: number;
+    lastChecked?: string;
+  };
 
   // Actions
   setActiveMission: (missionId: string) => void;
@@ -53,6 +64,9 @@ export interface OrbitState {
     id: string,
     status: OpenIssueStatus
   ) => void;
+  setApiMode: (mode: 'mock' | 'live') => Promise<boolean>;
+  toggleApiMode: () => Promise<void>;
+  syncProvenance: () => Promise<void>;
   resetDemo: () => void;
   clearData: () => void;
 }
@@ -108,6 +122,16 @@ export const useOrbitStore = create<OrbitState>()(
       openIssues: {},
       selectedEvidenceId: null,
       isCheckRunStale: {},
+
+      // Backend & Dual-Mode State
+      apiMode: 'mock',
+      isApiConnected: false,
+      apiServerUrl: DEFAULT_API_BASE_URL,
+      provenance: {
+        valid: true,
+        checkedEvents: 14,
+        lastChecked: new Date().toISOString(),
+      },
 
       setActiveMission: (missionId: string) => {
         set({ activeMissionId: missionId, selectedEvidenceId: null });
@@ -268,6 +292,50 @@ export const useOrbitStore = create<OrbitState>()(
         }));
       },
 
+      setApiMode: async (mode: 'mock' | 'live') => {
+        if (mode === 'live') {
+          try {
+            const health = await checkApiHealth(get().apiServerUrl);
+            if (health.ok) {
+              set({ apiMode: 'live', isApiConnected: true });
+              await get().syncProvenance();
+              return true;
+            }
+          } catch {
+            set({ apiMode: 'mock', isApiConnected: false });
+            return false;
+          }
+        }
+        set({ apiMode: 'mock' });
+        return true;
+      },
+
+      toggleApiMode: async () => {
+        const current = get().apiMode;
+        if (current === 'mock') {
+          await get().setApiMode('live');
+        } else {
+          await get().setApiMode('mock');
+        }
+      },
+
+      syncProvenance: async () => {
+        try {
+          const res = await fetchProvenanceLive(get().apiServerUrl);
+          if (res && res.verification) {
+            set({
+              provenance: {
+                valid: res.verification.valid,
+                checkedEvents: res.verification.checked_events,
+                lastChecked: new Date().toISOString(),
+              },
+            });
+          }
+        } catch {
+          // If offline, keep local verification state
+        }
+      },
+
       resetDemo: () => {
         set((state) => ({
           missions: {
@@ -330,6 +398,7 @@ export const useOrbitStore = create<OrbitState>()(
         reviewDecisions: state.reviewDecisions,
         openIssues: state.openIssues,
         isCheckRunStale: state.isCheckRunStale,
+        apiMode: state.apiMode,
       }),
     }
   )

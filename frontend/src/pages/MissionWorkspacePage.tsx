@@ -13,6 +13,7 @@ import { ReviewDecisionForm } from '../components/workspace/ReviewDecisionForm';
 import { OpenIssuesList } from '../components/workspace/OpenIssuesList';
 import { ExportGateBlocker } from '../components/workspace/ExportGateBlocker';
 import { ExportPacketView } from '../components/workspace/ExportPacketView';
+import { CounterfactualLab } from '../components/workspace/CounterfactualLab';
 import { ASTERIA_3_MISSION } from '../fixtures/asteria-3';
 import styles from './pages.module.css';
 
@@ -225,20 +226,24 @@ export const MissionWorkspacePage: React.FC = () => {
 
         {/* Step 4: Automated Findings */}
         {currentStep === 'findings' && (
-          <FindingsView
-            checkRun={currentCheckRun}
-            decisionsMap={decisionsMap}
-            onNavigateToEvidence={(key) => {
-              setCurrentStep('evidence');
-              const found = currentEvidence.find((e) => e.parameter_key === key);
-              if (found) {
-                selectEvidenceItem(found.id);
-              }
-            }}
-            onProceedToReview={() => setCurrentStep('review')}
-            onBackToGate={() => setCurrentStep('profile')}
-            onReRunChecks={() => runChecks(missionId)}
-          />
+          <div>
+            <FindingsView
+              checkRun={currentCheckRun}
+              decisionsMap={decisionsMap}
+              onNavigateToEvidence={(key) => {
+                setCurrentStep('evidence');
+                const found = currentEvidence.find((e) => e.parameter_key === key);
+                if (found) {
+                  selectEvidenceItem(found.id);
+                }
+              }}
+              onProceedToReview={() => setCurrentStep('review')}
+              onBackToGate={() => setCurrentStep('profile')}
+              onReRunChecks={() => runChecks(missionId)}
+            />
+
+            <CounterfactualLab missionId={missionId} />
+          </div>
         )}
 
         {/* Step 5: Review Decisions & Gating */}

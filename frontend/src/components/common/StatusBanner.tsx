@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { AlertTriangle, Database, Info, Trash2, X } from 'lucide-react';
+import { AlertTriangle, Database, Info, Trash2, X, Radio } from 'lucide-react';
+import { useOrbitStore } from '../../store/useOrbitStore';
 import styles from './StatusBanner.module.css';
 
 interface StatusBannerProps {
@@ -12,6 +13,7 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
   syntheticMissionName = 'Asteria-3',
 }) => {
   const [collapsed, setCollapsed] = useState(false);
+  const { apiMode, toggleApiMode, provenance, apiServerUrl } = useOrbitStore();
 
   return (
     <aside
@@ -21,25 +23,57 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
     >
       <div className={styles.inner}>
         <div className={styles.badgeGroup}>
-          <span className={`${styles.badge} ${styles.badgeMock}`}>
-            <AlertTriangle className={styles.badgeIcon} size={13} aria-hidden="true" />
-            DEMO / MOCK
-          </span>
-          <span className={`${styles.badge} ${styles.badgeSynthetic}`}>
-            <Database className={styles.badgeIcon} size={13} aria-hidden="true" />
-            SYNTHETIC DATA: {syntheticMissionName}
-          </span>
-          <span className={`${styles.badge} ${styles.badgeLocal}`}>
-            <Info className={styles.badgeIcon} size={13} aria-hidden="true" />
-            LOCAL ONLY (not saved)
-          </span>
+          {apiMode === 'live' ? (
+            <>
+              <span className={`${styles.badge} ${styles.badgeLive}`}>
+                <Radio className={styles.badgeIcon} size={13} aria-hidden="true" />
+                LIVE FASTAPI: {apiServerUrl}
+              </span>
+              <span className={`${styles.badge} ${styles.badgeSynthetic}`}>
+                <Database className={styles.badgeIcon} size={13} aria-hidden="true" />
+                SQLITE PERSISTENCE
+              </span>
+              <span className={`${styles.badge} ${styles.badgeLocal}`}>
+                <Info className={styles.badgeIcon} size={13} aria-hidden="true" />
+                PROVENANCE: {provenance.checkedEvents} EVENTS VERIFIED
+              </span>
+            </>
+          ) : (
+            <>
+              <span className={`${styles.badge} ${styles.badgeMock}`}>
+                <AlertTriangle className={styles.badgeIcon} size={13} aria-hidden="true" />
+                DEMO / MOCK
+              </span>
+              <span className={`${styles.badge} ${styles.badgeSynthetic}`}>
+                <Database className={styles.badgeIcon} size={13} aria-hidden="true" />
+                SYNTHETIC DATA: {syntheticMissionName}
+              </span>
+              <span className={`${styles.badge} ${styles.badgeLocal}`}>
+                <Info className={styles.badgeIcon} size={13} aria-hidden="true" />
+                LOCAL ONLY (not saved)
+              </span>
+            </>
+          )}
         </div>
 
         <div className={styles.noticeText}>
-          Stored only in this browser; not durable or private from other users of this device.
+          {apiMode === 'live'
+            ? 'Connected to live FastAPI backend; changes are recorded with SHA-256 provenance in SQLite.'
+            : 'Stored only in this browser; not durable or private from other users of this device.'}
         </div>
 
         <div className={styles.actions}>
+          <button
+            type="button"
+            onClick={() => toggleApiMode()}
+            className={styles.modeToggleBtn}
+            title={apiMode === 'live' ? 'Switch back to Local Mock Mode' : 'Connect to Live FastAPI Server'}
+            aria-label={apiMode === 'live' ? 'Switch to Mock Mode' : 'Connect to Live FastAPI'}
+          >
+            <Radio size={12} aria-hidden="true" />
+            <span>{apiMode === 'live' ? 'Switch to Mock' : 'Connect Live API'}</span>
+          </button>
+
           {onClearData && (
             <button
               type="button"
