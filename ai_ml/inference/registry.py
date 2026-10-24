@@ -88,7 +88,8 @@ def register_trusted_artifact(
 
 def get_registered_artifact(
     artifact_id: str,
-    artifact_dir: Optional[Path] = None
+    artifact_dir: Optional[Path] = None,
+    require_approved: bool = True,
 ) -> Optional[Tuple[ModelArtifactMetadata, Any]]:
     """
     Retrieve an approved model artifact if present in memory or on disk.
@@ -97,7 +98,7 @@ def get_registered_artifact(
     # Check in-memory registry
     if artifact_id in _REGISTRY:
         meta, model_obj, serialized_bytes = _REGISTRY[artifact_id]
-        if not meta.is_approved:
+        if require_approved and not meta.is_approved:
             # Revoked or unapproved: reject immediately
             return None
         # Verify integrity of registered bytes
@@ -116,7 +117,7 @@ def get_registered_artifact(
             with open(meta_file, "r", encoding="utf-8") as f:
                 meta_dict = json.load(f)
             meta = ModelArtifactMetadata(**meta_dict)
-            if not meta.is_approved:
+            if require_approved and not meta.is_approved:
                 return None
 
             with open(bin_file, "rb") as f:

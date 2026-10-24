@@ -34,6 +34,7 @@ def get_configured_reviewer_key() -> str:
     return (
         os.getenv("ORBITSCORE_REVIEWER_KEY")
         or os.getenv("ORBIT_REVIEWER_KEY")
+        or os.getenv("REVIEWER_BEARER_TOKEN")
         or "orbitscore-reviewer-key-2026"
     )
 

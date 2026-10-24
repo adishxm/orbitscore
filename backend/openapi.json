@@ -1331,6 +1331,78 @@
         }
       }
     },
+    "/integrations/celestrak/gp/{norad_id}": {
+      "get": {
+        "summary": "Get Celestrak Gp",
+        "description": "Retrieve General Perturbations (GP) element sets complying with CelesTrak usage policy.\nCached for 2 hours (7200s); halts on errors with circuit breaker; clearly labeled as non-operational.\nSupports modern OMM JSON (handles 6-digit & 9-digit catalog numbers) and legacy TLE formats.",
+        "operationId": "get_celestrak_gp_integrations_celestrak_gp__norad_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "norad_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Norad Id"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Desired GP data format: JSON (OMM, supports >5 digit IDs), TLE, or CSV",
+              "default": "JSON",
+              "title": "Format"
+            },
+            "description": "Desired GP data format: JSON (OMM, supports >5 digit IDs), TLE, or CSV"
+          },
+          {
+            "name": "force_refresh",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Force refresh ignoring local 2-hour cache",
+              "default": false,
+              "title": "Force Refresh"
+            },
+            "description": "Force refresh ignoring local 2-hour cache"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CelesTrakGPResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/missions/{mission_id}/export/odar": {
       "get": {
         "summary": "Export Nasa Odar Report",
@@ -2145,7 +2217,7 @@
         "properties": {
           "file": {
             "type": "string",
-            "format": "binary",
+            "contentMediaType": "application/octet-stream",
             "title": "File"
           }
         },
@@ -2319,6 +2391,183 @@
           "value"
         ],
         "title": "CandidateField"
+      },
+      "CelesTrakGPResult": {
+        "properties": {
+          "norad_cat_id": {
+            "type": "integer",
+            "title": "Norad Cat Id"
+          },
+          "object_name": {
+            "type": "string",
+            "title": "Object Name"
+          },
+          "epoch": {
+            "type": "string",
+            "title": "Epoch"
+          },
+          "format": {
+            "type": "string",
+            "title": "Format"
+          },
+          "inclination_deg": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Inclination Deg"
+          },
+          "eccentricity": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Eccentricity"
+          },
+          "semi_major_axis_km": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Semi Major Axis Km"
+          },
+          "perigee_km": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Perigee Km"
+          },
+          "apogee_km": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Apogee Km"
+          },
+          "period_minutes": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period Minutes"
+          },
+          "raw_data": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Raw Data"
+          },
+          "source_status": {
+            "type": "string",
+            "title": "Source Status"
+          },
+          "provenance": {
+            "type": "string",
+            "title": "Provenance"
+          },
+          "badge": {
+            "type": "string",
+            "title": "Badge"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "cached_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cached At"
+          },
+          "expires_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At"
+          },
+          "cache_age_seconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cache Age Seconds"
+          },
+          "circuit_breaker_active": {
+            "type": "boolean",
+            "title": "Circuit Breaker Active",
+            "default": false
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer",
+            "default": "Contextual element set only. Raw orbital elements do not constitute operational conjunction assessment, collision probability, or regulatory compliance certification."
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "type": "object",
+        "required": [
+          "norad_cat_id",
+          "object_name",
+          "epoch",
+          "format",
+          "source_status",
+          "provenance",
+          "badge",
+          "source"
+        ],
+        "title": "CelesTrakGPResult"
       },
       "CollisionAlertsSummary": {
         "properties": {
@@ -2745,7 +2994,15 @@
             "enum": [
               "APPROVED",
               "REJECTED",
-              "WAIVED_WITH_NOTE"
+              "WAIVED_WITH_NOTE",
+              "accepted_for_packet",
+              "accepted_as_is",
+              "needs_evidence",
+              "disputed",
+              "deferred_to_specialist",
+              "noted_no_action",
+              "mitigation_filed",
+              "action_pending"
             ],
             "title": "Decision"
           },

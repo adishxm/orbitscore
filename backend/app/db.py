@@ -134,6 +134,24 @@ def init_db(db_path: Optional[Path | str] = None) -> None:
                 data_mode TEXT NOT NULL,
                 created_at TEXT NOT NULL
             );
+
+            CREATE TABLE IF NOT EXISTS celestrak_cache (
+                norad_id INTEGER NOT NULL,
+                format TEXT NOT NULL,
+                status_code INTEGER NOT NULL,
+                data_json TEXT NOT NULL,
+                raw_text TEXT NOT NULL,
+                fetched_at TEXT NOT NULL,
+                expires_at TEXT NOT NULL,
+                PRIMARY KEY (norad_id, format)
+            );
+
+            CREATE INDEX IF NOT EXISTS idx_fields_mission ON fields(mission_id);
+            CREATE INDEX IF NOT EXISTS idx_artifacts_mission ON artifacts(mission_id);
+            CREATE INDEX IF NOT EXISTS idx_reviews_mission ON reviews(mission_id);
+            CREATE INDEX IF NOT EXISTS idx_provenance_mission ON provenance(mission_id);
+            CREATE INDEX IF NOT EXISTS idx_tle_snapshots_norad ON tle_snapshots(norad_id);
+            CREATE INDEX IF NOT EXISTS idx_cdm_events_norad ON cdm_events(primary_norad);
         """)
     conn.close()
 
@@ -151,6 +169,7 @@ def reset_db(db_path: Optional[Path | str] = None) -> None:
         conn.execute("DELETE FROM provenance")
         conn.execute("DELETE FROM tle_snapshots")
         conn.execute("DELETE FROM cdm_events")
+        conn.execute("DELETE FROM celestrak_cache")
     conn.close()
 
 
@@ -496,6 +515,75 @@ def get_cdm_events_for_norad(norad_id: int, db_path: Optional[Path | str] = None
     rows = cursor.fetchall()
     conn.close()
     return [dict(r) for r in rows]
+
+
+def get_cached_celestrak(
+    norad_id: int,
+    format: str = "JSON",
+    db_path: Optional[Path | str] = None,
+) -> Optional[dict]:
+    """Retrieve non-expired CelesTrak response from local cache."""
+    conn = get_connection(db_path)
+    cursor = conn.execute(
+        """
+        SELECT * FROM celestrak_cache
+        WHERE norad_id = ? AND format = ?
+        """,
+        (norad_id, format.upper()),
+    )
+    row = cursor.fetchone()
+    conn.close()
+    if not row:
+        return None
+
+    row_dict = dict(row)
+    now_iso = datetime.now(timezone.utc).isoformat()
+    if row_dict["expires_at"] < now_iso:
+        # Expired record: return with is_expired flag
+        row_dict["is_expired"] = True
+    else:
+        row_dict["is_expired"] = False
+
+    try:
+        row_dict["data"] = json.loads(row_dict["data_json"])
+    except Exception:
+        row_dict["data"] = {}
+    return row_dict
+
+
+def save_celestrak_cache(
+    norad_id: int,
+    format: str,
+    status_code: int,
+    data_dict: dict,
+    raw_text: str,
+    ttl_seconds: int = 7200,
+    db_path: Optional[Path | str] = None,
+) -> None:
+    """Save CelesTrak response with a 2-hour TTL (7200s default) complying with usage policy."""
+    now = datetime.now(timezone.utc)
+    from datetime import timedelta
+    expires = now + timedelta(seconds=ttl_seconds)
+
+    conn = get_connection(db_path)
+    with conn:
+        conn.execute(
+            """
+            INSERT OR REPLACE INTO celestrak_cache (
+                norad_id, format, status_code, data_json, raw_text, fetched_at, expires_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                norad_id,
+                format.upper(),
+                status_code,
+                json.dumps(data_dict),
+                raw_text,
+                now.isoformat(),
+                expires.isoformat(),
+            ),
+        )
+    conn.close()
 
 
 if __name__ == "__main__":

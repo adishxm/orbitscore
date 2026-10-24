@@ -40,6 +40,10 @@ export const Header: React.FC = () => {
     { label: 'Overview', to: '/' },
     { label: 'How It Works', to: '/how-it-works' },
     { label: 'Profiles & Rules', to: '/profiles' },
+    { label: 'Missions', to: '/missions' },
+    { label: 'Conjunctions', to: '/conjunctions' },
+    { label: 'Environment', to: '/orbital-environment' },
+    { label: 'Scenarios', to: '/scenarios' },
     { label: 'About Limits', to: '/about-limits' },
     { label: 'System Status', to: '/status' },
   ];

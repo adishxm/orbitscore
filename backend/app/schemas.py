@@ -16,9 +16,16 @@ class MissionProfile(BaseModel):
     fields: list[EvidenceField] = Field(default_factory=list)
     artifacts: list[dict[str, Any]] = Field(default_factory=list)
 
+DecisionType = Literal[
+    "APPROVED", "REJECTED", "WAIVED_WITH_NOTE",
+    "accepted_for_packet", "accepted_as_is", "needs_evidence",
+    "disputed", "deferred_to_specialist", "noted_no_action",
+    "mitigation_filed", "action_pending"
+]
+
 class ReviewDecision(BaseModel):
     finding_id: str
-    decision: Literal["APPROVED", "REJECTED", "WAIVED_WITH_NOTE"]
+    decision: DecisionType
     note: str | None = None
     reviewer: str = "reviewer"
 
@@ -31,7 +38,7 @@ class EvaluateRequest(BaseModel):
     profile_id: str
 
 class DecisionRequest(BaseModel):
-    decision: Literal["APPROVED", "REJECTED", "WAIVED_WITH_NOTE"]
+    decision: DecisionType
     note: str | None = None
     reviewer: str = "reviewer"
 

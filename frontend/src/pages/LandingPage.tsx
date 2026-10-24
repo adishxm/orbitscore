@@ -925,6 +925,85 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
+      {/* 11B. Conceptual Inspiration & Independent Relationship Notice */}
+      <section
+        id="astro-sweepers-notice"
+        className={styles.fixturesSection}
+        style={{ borderTop: '1px solid var(--color-border-subtle)', background: 'rgba(10, 16, 26, 0.65)' }}
+        aria-labelledby="astro-sweepers-heading"
+      >
+        <div className="container">
+          <div className={styles.sectionHeaderCentered}>
+            <div className={styles.kicker}>Problem Space Context &amp; Lineage</div>
+            <h2 id="astro-sweepers-heading" className={styles.sectionTitle}>
+              Inspired by the Astro Sweepers Challenge Space
+            </h2>
+            <p className={styles.sectionLead}>
+              OrbitScore is an orbital-risk and debris-mitigation intelligence concept inspired by the challenge space
+              highlighted by Astro Sweepers, a 2025 NASA Space Apps Challenge Galactic Impact Award project.
+            </p>
+          </div>
+
+          <div
+            style={{
+              maxWidth: '820px',
+              margin: '0 auto',
+              background: 'rgba(15, 23, 42, 0.75)',
+              border: '1px solid var(--color-border-subtle)',
+              borderRadius: 'var(--radius-md)',
+              padding: 'var(--space-6)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+            }}
+          >
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+              <ShieldAlert
+                size={28}
+                style={{ color: 'var(--color-brand-cyan)', flexShrink: 0, marginTop: '4px' }}
+                aria-hidden="true"
+              />
+              <div>
+                <h3
+                  style={{
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: '18px',
+                    fontWeight: 600,
+                    color: 'var(--color-text-primary)',
+                    marginBottom: '10px',
+                  }}
+                >
+                  Independent Concept &amp; Clear Boundaries
+                </h3>
+                <p
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '14px',
+                    lineHeight: 1.6,
+                    color: 'var(--color-text-secondary)',
+                    marginBottom: '12px',
+                  }}
+                >
+                  While inspired by the critical orbital sustainability problem addressed by the Astro Sweepers initiative,
+                  OrbitScore is an independent engineering concept and software codebase. OrbitScore is not the original Astro
+                  Sweepers product, is not affiliated with or endorsed by NASA, and does not claim validated operational safety analysis.
+                </p>
+                <p
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '12px',
+                    lineHeight: 1.5,
+                    color: 'var(--color-text-dim)',
+                  }}
+                >
+                  Despite the name, OrbitScore does not score or certify missions; it organizes evidence for human review.
+                  Its primary purpose is helping academic and smallsat engineering teams consolidate primary technical citations,
+                  benchmark evidence readiness, and prepare verifiable review packets for qualified engineering oversight.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 12. Closing Call to Action (EnduroSat Style) */}
       <section className={styles.closingSection} aria-labelledby="closing-title">
         <div className="container">

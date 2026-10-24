@@ -1,0 +1,241 @@
+/* OrbitalEnvironmentPage.module.css */
+
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: var(--os-space-6) var(--os-space-4) var(--os-space-12);
+}
+
+.header {
+  margin-bottom: var(--os-space-6);
+  padding-bottom: var(--os-space-6);
+  border-bottom: 1px solid var(--os-color-border-subtle);
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--os-space-2);
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
+  color: var(--os-color-accent-cyan);
+  text-transform: uppercase;
+  letter-spacing: var(--os-tracking-wide);
+  font-weight: 600;
+  margin-bottom: var(--os-space-2);
+}
+
+.title {
+  font-family: var(--os-font-display);
+  font-size: var(--os-type-title-1);
+  font-weight: 700;
+  color: var(--os-color-text-white);
+  margin-bottom: var(--os-space-2);
+}
+
+.subtitle {
+  font-family: var(--os-font-sans);
+  font-size: var(--os-type-body-m);
+  color: var(--os-color-text-secondary);
+  max-width: 75ch;
+  line-height: var(--os-lh-relaxed);
+}
+
+.disclaimerBanner {
+  background-color: var(--os-color-surface-sunken);
+  border: 1px solid var(--os-color-border-subtle);
+  border-left: 4px solid var(--os-color-accent-cyan);
+  border-radius: var(--os-radius-sm);
+  padding: var(--os-space-4);
+  margin-bottom: var(--os-space-6);
+  font-family: var(--os-font-sans);
+  font-size: var(--os-type-body-s);
+  color: var(--os-color-text-secondary);
+  line-height: var(--os-lh-normal);
+}
+
+.grid2Col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--os-space-6);
+  margin-bottom: var(--os-space-6);
+}
+
+@media (max-width: 900px) {
+  .grid2Col {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background-color: var(--os-color-surface-card);
+  border: 1px solid var(--os-color-border-subtle);
+  border-radius: var(--os-radius-md);
+  padding: var(--os-space-5);
+  display: flex;
+  flex-direction: column;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--os-space-4);
+  padding-bottom: var(--os-space-3);
+  border-bottom: 1px solid var(--os-color-border-subtle);
+}
+
+.cardTitle {
+  font-family: var(--os-font-display);
+  font-size: var(--os-type-title-3);
+  font-weight: 700;
+  color: var(--os-color-text-white);
+}
+
+.badge {
+  font-family: var(--os-font-mono);
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: var(--os-radius-xs);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.badgeCyan {
+  background-color: rgba(6, 182, 212, 0.15);
+  color: var(--os-color-accent-cyan);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+}
+
+.badgeAmber {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+/* Debris Altitude Bands Table */
+.bandsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--os-font-sans);
+  font-size: var(--os-type-body-s);
+}
+
+.th {
+  background-color: var(--os-color-surface-sunken);
+  border-bottom: 1px solid var(--os-color-border-subtle);
+  padding: var(--os-space-2) var(--os-space-3);
+  font-family: var(--os-font-mono);
+  font-size: 11px;
+  color: var(--os-color-text-muted);
+  text-transform: uppercase;
+  text-align: left;
+}
+
+.td {
+  padding: var(--os-space-2) var(--os-space-3);
+  border-bottom: 1px solid var(--os-color-border-subtle);
+  color: var(--os-color-text-primary);
+  font-family: var(--os-font-mono);
+  font-size: 12px;
+}
+
+.densityBarContainer {
+  width: 100%;
+  height: 6px;
+  background-color: var(--os-color-surface-sunken);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 3px;
+}
+
+.densityBar {
+  height: 100%;
+  border-radius: 3px;
+  background-color: var(--os-color-accent-cyan);
+}
+
+/* Calculator Form */
+.formGroup {
+  margin-bottom: var(--os-space-3);
+}
+
+.label {
+  display: block;
+  font-family: var(--os-font-mono);
+  font-size: 11px;
+  color: var(--os-color-text-muted);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.input {
+  width: 100%;
+  background-color: var(--os-color-surface-sunken);
+  border: 1px solid var(--os-color-border-mid);
+  border-radius: var(--os-radius-xs);
+  padding: var(--os-space-2) var(--os-space-3);
+  color: var(--os-color-text-primary);
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-body-s);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--os-color-accent-cyan);
+}
+
+.btnPrimary {
+  background-color: var(--os-color-accent-cyan);
+  color: #000000;
+  border: none;
+  border-radius: var(--os-radius-xs);
+  padding: 8px 16px;
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity var(--os-duration-fast);
+}
+
+.btnPrimary:hover {
+  opacity: 0.9;
+}
+
+.btnPrimary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.resultBox {
+  background-color: var(--os-color-surface-sunken);
+  border: 1px solid var(--os-color-border-subtle);
+  border-radius: var(--os-radius-sm);
+  padding: var(--os-space-4);
+  margin-top: var(--os-space-4);
+  font-family: var(--os-font-mono);
+  font-size: 12px;
+}
+
+/* Waypoints Table */
+.waypointsWrapper {
+  max-height: 280px;
+  overflow-y: auto;
+  border: 1px solid var(--os-color-border-subtle);
+  border-radius: var(--os-radius-sm);
+}
+
+.waypointRow:hover td {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* CelesTrak GP Box */
+.gpBox {
+  background-color: var(--os-color-surface-sunken);
+  border: 1px solid var(--os-color-border-subtle);
+  border-radius: var(--os-radius-sm);
+  padding: var(--os-space-4);
+  font-family: var(--os-font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+}

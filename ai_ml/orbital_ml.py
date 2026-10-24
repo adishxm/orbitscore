@@ -83,6 +83,12 @@ class OrbitalDecayML:
         self._ensure_fitted()
         if perigee_km < 100.0 or apogee_km < 100.0:
             raise ValueError("Perigee and apogee altitudes must be at or above 100 km LEO threshold.")
+        if mass_kg <= 0.0:
+            raise ValueError("Spacecraft mass must be strictly positive.")
+        if area_m2 <= 0.0:
+            raise ValueError("Spacecraft cross-sectional area must be strictly positive.")
+        if solar_flux_f107 <= 0.0:
+            raise ValueError("Solar radio flux F10.7 must be strictly positive.")
 
         bc_val = mass_kg / max(area_m2, 0.002)
         X_val = np.array([[perigee_km, apogee_km, inclination_deg, mass_kg, area_m2, bc_val, solar_flux_f107]])

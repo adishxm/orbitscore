@@ -410,4 +410,71 @@ def test_esa_dataset_and_benchmark_report_tools():
     assert "Persistence Baseline" in md
 
 
+def test_celestrak_caching_and_policy_compliance():
+    """Verify CelesTrak GP endpoint complies with 2-hour caching policy and non-operational disclosure."""
+    resp = client.get("/integrations/celestrak/gp/25544?format=JSON", headers=AUTH_HEADERS)
+    assert resp.status_code == 200
+    data = resp.json()
+
+    assert data["norad_cat_id"] == 25544
+    assert data["format"] == "JSON"
+    assert data["source_status"] in ("LIVE", "CACHED", "OUTAGE_FALLBACK", "SYNTHETIC")
+    assert "disclaimer" in data
+    assert "Contextual element set only" in data["disclaimer"]
+
+    # Verify cached status on second request (does not hit live API within 2 hours)
+    resp2 = client.get("/integrations/celestrak/gp/25544?format=JSON", headers=AUTH_HEADERS)
+    assert resp2.status_code == 200
+    data2 = resp2.json()
+    assert data2["source_status"] in ("CACHED", "SYNTHETIC")
+
+    # Verify TLE format also supported
+    resp_tle = client.get("/integrations/celestrak/gp/25544?format=TLE", headers=AUTH_HEADERS)
+    assert resp_tle.status_code == 200
+    data_tle = resp_tle.json()
+    assert data_tle["format"] == "TLE"
+
+
+def test_human_review_engineering_decisions_acceptance():
+    """Verify frontend engineering workflow decisions (accepted_for_packet, needs_evidence, etc.) submit without 422 errors."""
+    eval_resp = client.post("/missions/asteria-3/evaluate", json={"profile_id": "india-dfsm-inspired"}, headers=AUTH_HEADERS)
+    assert eval_resp.status_code == 200
+    findings = eval_resp.json().get("findings", [])
+    assert len(findings) > 0
+
+    first_finding = findings[0]["finding_id"]
+
+    # Submit accepted_for_packet decision
+    resp1 = client.post(
+        f"/missions/asteria-3/findings/{first_finding}/decision",
+        json={"decision": "accepted_for_packet", "note": "Verified against ICD-004", "reviewer": "Lead Engineer"},
+        headers=AUTH_HEADERS,
+    )
+    assert resp1.status_code == 200
+    assert resp1.json()["decision"] == "accepted_for_packet"
+
+    # Submit needs_evidence decision
+    resp2 = client.post(
+        f"/missions/asteria-3/findings/{first_finding}/decision",
+        json={"decision": "needs_evidence", "note": "Missing page citation", "reviewer": "Reviewer 2"},
+        headers=AUTH_HEADERS,
+    )
+    assert resp2.status_code == 200
+    assert resp2.json()["decision"] == "needs_evidence"
+
+
+def test_ml_decay_physical_bounds_validation():
+    """Verify physical bounds validation in OrbitalDecayML rejects non-positive mass, area, or flux."""
+    from ai_ml.orbital_ml import decay_ml_engine
+
+    with pytest.raises(ValueError, match="mass must be strictly positive"):
+        decay_ml_engine.predict(mass_kg=-1.0)
+
+    with pytest.raises(ValueError, match="area must be strictly positive"):
+        decay_ml_engine.predict(area_m2=0.0)
+
+    with pytest.raises(ValueError, match="flux F10.7 must be strictly positive"):
+        decay_ml_engine.predict(solar_flux_f107=-50.0)
+
+
 

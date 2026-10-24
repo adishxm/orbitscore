@@ -55,9 +55,26 @@ from .db import (
     save_counterfactual_db, append_provenance_event_db, get_all_provenance_events_db,
     verify_provenance_chain_db
 )
+from .adapters.celestrak import fetch_celestrak_gp, CelesTrakGPResult
 
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURES = ROOT / "fixtures"
+
+# Load local environment configuration safely if present
+try:
+    from dotenv import load_dotenv
+    load_dotenv(ROOT / ".env")
+except ImportError:
+    env_file = ROOT / ".env"
+    if env_file.exists():
+        with open(env_file, encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    k, v = line.split("=", 1)
+                    k, v = k.strip(), v.strip().strip('"').strip("'")
+                    if k not in os.environ:
+                        os.environ[k] = v
 
 # Initialize durable SQLite database on startup
 init_db()
@@ -97,7 +114,7 @@ app = FastAPI(
 )
 
 # Environment-specific CORS configuration - avoids wildcard origins in production/staging
-cors_origins_env = os.getenv("ORBITSCORE_CORS_ORIGINS", "")
+cors_origins_env = os.getenv("ORBITSCORE_CORS_ORIGINS") or os.getenv("CORS_ORIGINS", "")
 if cors_origins_env:
     cors_origins = [o.strip() for o in cors_origins_env.split(",") if o.strip()]
 else:
@@ -706,6 +723,13 @@ def integrations_status():
                 "production_inference_connected": False,
                 "status": "READY"
             },
+            "celestrak": {
+                "role": "Contextual GP Element Sets (2-Hour Policy Cadence)",
+                "policy_doc": "https://celestrak.org/usage-policy.php",
+                "formats": ["OMM/JSON", "TLE", "CSV"],
+                "cache_policy": "7200s (2h) TTL with Circuit Breaker",
+                "status": "READY"
+            },
             "render": {
                 "role": "Application & Static Hosting Infrastructure",
                 "config": "render.yaml",
@@ -824,6 +848,21 @@ async def assess_nasa_spark_flux(
         area_m2=area_m2,
         lifetime_years=lifetime_years,
     )
+
+
+@app.get("/integrations/celestrak/gp/{norad_id}", response_model=CelesTrakGPResult)
+async def get_celestrak_gp(
+    norad_id: int,
+    format: str = Query("JSON", description="Desired GP data format: JSON (OMM, supports >5 digit IDs), TLE, or CSV"),
+    force_refresh: bool = Query(False, description="Force refresh ignoring local 2-hour cache"),
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
+    """
+    Retrieve General Perturbations (GP) element sets complying with CelesTrak usage policy.
+    Cached for 2 hours (7200s); halts on errors with circuit breaker; clearly labeled as non-operational.
+    Supports modern OMM JSON (handles 6-digit & 9-digit catalog numbers) and legacy TLE formats.
+    """
+    return await fetch_celestrak_gp(norad_id, format=format, force_refresh=force_refresh)
 
 
 # --- Automated ODAR & EOMP Export Pipeline Endpoints ---

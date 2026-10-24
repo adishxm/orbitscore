@@ -12,6 +12,9 @@ import { AboutLimitsPage } from './pages/AboutLimitsPage';
 import { StatusPage } from './pages/StatusPage';
 import { MissionsListPage } from './pages/MissionsListPage';
 import { MissionWorkspacePage } from './pages/MissionWorkspacePage';
+import { ConjunctionWorkspacePage } from './pages/ConjunctionWorkspacePage';
+import { OrbitalEnvironmentPage } from './pages/OrbitalEnvironmentPage';
+import { ScenarioComparisonPage } from './pages/ScenarioComparisonPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 export const AppContent: React.FC = () => {
@@ -31,6 +34,11 @@ export const AppContent: React.FC = () => {
           <Route path="/profiles" element={<ProfilesPage />} />
           <Route path="/about-limits" element={<AboutLimitsPage />} />
           <Route path="/status" element={<StatusPage />} />
+
+          {/* Dedicated Spacecraft, Conjunction & Environment Workspaces */}
+          <Route path="/conjunctions" element={<ConjunctionWorkspacePage />} />
+          <Route path="/orbital-environment" element={<OrbitalEnvironmentPage />} />
+          <Route path="/scenarios" element={<ScenarioComparisonPage />} />
 
           {/* Missions listing & workspace routes */}
           <Route path="/missions" element={<MissionsListPage />} />
