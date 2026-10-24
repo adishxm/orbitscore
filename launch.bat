@@ -9,16 +9,48 @@ echo.
 set ROOT_DIR=%~dp0
 cd /d "%ROOT_DIR%"
 
+rem 1. Auto-discover Python if not present in the current process PATH
+where python >nul 2>&1
+if errorlevel 1 (
+    if exist "%LOCALAPPDATA%\Programs\Python\Python313\python.exe" (
+        set "PATH=%LOCALAPPDATA%\Programs\Python\Python313;%LOCALAPPDATA%\Programs\Python\Python313\Scripts;%PATH%"
+    ) else (
+        for /d %%D in ("%LOCALAPPDATA%\Programs\Python\Python3*") do (
+            if exist "%%D\python.exe" set "PATH=%%D;%%D\Scripts;%PATH%"
+        )
+    )
+)
+
+rem 2. Auto-discover Node.js and npm if not present in the current process PATH
+where npm.cmd >nul 2>&1
+if errorlevel 1 (
+    for /d %%D in ("%LOCALAPPDATA%\Microsoft\WinGet\Packages\*Node*") do (
+        for /d %%N in ("%%D\node*") do (
+            if exist "%%N\node.exe" set "PATH=%%N;%PATH%"
+        )
+    )
+    if exist "C:\Program Files\nodejs\node.exe" (
+        set "PATH=C:\Program Files\nodejs;%PATH%"
+    )
+)
+
 echo [*] Checking system prerequisites...
 python --version >nul 2>&1
 if errorlevel 1 (
-    echo [ERROR] Python is not found in PATH!
-    echo Please install Python 3.10+ and make sure it is added to your PATH.
-    pause
-    exit /b 1
+    py -3 --version >nul 2>&1
+    if errorlevel 1 (
+        echo [ERROR] Python is not found in PATH!
+        echo Please install Python 3.10+ and make sure it is added to your PATH.
+        pause
+        exit /b 1
+    ) else (
+        set "PY_CMD=py -3"
+    )
+) else (
+    set "PY_CMD=python"
 )
 
-call npm --version >nul 2>&1
+call npm.cmd --version >nul 2>&1
 if errorlevel 1 (
     echo [ERROR] Node.js / npm is not found in PATH!
     echo Please install Node.js 18+ and make sure it is added to your PATH.
@@ -29,10 +61,10 @@ if errorlevel 1 (
 echo [OK] Prerequisites verified: Python and Node/npm are ready.
 echo.
 echo [1/3] Starting FastAPI Backend on http://127.0.0.1:8000 ...
-start "OrbitScore Backend (FastAPI)" /D "%ROOT_DIR%backend" cmd /k python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+start "OrbitScore Backend (FastAPI)" /D "%ROOT_DIR%backend" cmd /k "set PATH=%PATH% && %PY_CMD% -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload"
 
 echo [2/3] Starting Vite React Frontend on http://localhost:5173 ...
-start "OrbitScore Frontend (Vite)" /D "%ROOT_DIR%frontend" cmd /k npm.cmd run dev
+start "OrbitScore Frontend (Vite)" /D "%ROOT_DIR%frontend" cmd /k "set PATH=%PATH% && npm.cmd run dev"
 
 echo.
 echo [*] Waiting for services to initialize...
