@@ -23,12 +23,13 @@ OrbitScore is a source-linked decision-support/pre-review application. The polic
 
 | Layer | Implemented location | Responsibility | Verification |
 |---|---|---|---|
-| Frontend (Canonical) | `frontend/` | Complete 10-slice orbital review interface, workspace stepper, findings & evidence flow, profile gate, review decision form, export packet view, accessibility | 9 test suites, 63 Vitest tests passed; Axe a11y passed; Vite production build passed |
-| Backend API | `backend/app/main.py` | FastAPI routes, durable SQLite storage, deterministic review/export orchestration, provenance | Exercised with FastAPI `TestClient`, 38 pytest tests passed |
+| Frontend (Canonical) | `frontend/` | Complete 10-slice orbital review interface, workspace stepper, findings & evidence flow, profile gate, review decision form, export packet view, accessibility | 10 test suites, 67 Vitest tests passed; Axe a11y passed; Vite production build passed |
+| Backend API | `backend/app/main.py` | FastAPI routes, durable SQLite storage, deterministic review/export orchestration, provenance, integrations | Exercised with FastAPI `TestClient`, 54 pytest tests passed |
 | Backend Engine | `backend/app/engine.py` | Selected-profile evaluation, confirmed-field handling, conflict detection, capped prioritization band, bounded counterfactual | 12 fixture/profile matrix cases, 100% deterministic |
 | Backend Provenance | `backend/app/provenance.py` | Canonical JSON SHA-256 event chain and first-sequence tamper detection | Verified with `test_provenance_tamper.py` and verification matrix |
-| Backend Export | `backend/app/export.py` | Cited HTML/JSON packet generator with `EXPORT_LOCKED` gate enforcement | Verified with `test_export.py` |
-| AI / ML Adapter | `ai_ml/` | Optional provider extraction adapter with strict JSON schema validation, temperature 0.0, 10.0s timeout, zero-dependency deterministic fallback, unconfirmed-only candidate output | 6 isolated pytest tests in `ai_ml/tests/` passed |
+| Backend Export | `backend/app/export.py` & `backend/app/odar_generator.py` | Cited HTML/JSON packet generator + Automated NASA ODAR / ISRO EOMP generators | Verified with `test_export.py` and `test_extended_capabilities.py` |
+| AI / ML Astrodynamics & Extraction | `ai_ml/` | Scikit-Learn GradientBoostingRegressor (decay lifetime), RandomForestClassifier (collision geometry), Space Credit Index (0-100 rating), and JSON extraction adapter | 13 isolated pytest tests in `ai_ml/tests/` passed |
+| Integrations Adapter Layer | `backend/app/integrations/` | Space-Track TLE/CDM service, NASA SPARK spatial density, Agent37 triage, Browser-Use capture, ElevenLabs audio narration, Render deploy | 6 integration suites + mock fallbacks verified |
 | Legacy Console | `legacy/web/` | Archived review console prototype | 10 Vitest tests passed, builds cleanly |
 | Legacy Client | `legacy/frontend-service/` | Archived client adapter and TypeScript schemas | Consumed by `legacy/web/` |
 | Rules & Profiles | `fixtures/rules_profiles.json` | Four versioned source-linked profiles and rule-level limits | Consumed by backend and injected into frontend |
@@ -50,6 +51,19 @@ OrbitScore is a source-linked decision-support/pre-review application. The polic
 | `POST` | `/artifacts/{artifact_id}/extract` | Candidate field extraction (deterministic parser / optional AI adapter) |
 | `GET` | `/provenance` | Return SHA-256 event chain and verification result |
 | `GET` | `/export/{mission_id}` | Generate cited packet (locked until every finding has a decision) |
+| `GET` | `/missions/{mission_id}/space-credit-index` | Compute 4-pillar Space Credit Index (0–100, AAA/AA/A tier) |
+| `POST` | `/missions/{mission_id}/ml/predict-decay` | Scikit-Learn GradientBoostingRegressor orbital decay lifetime |
+| `POST` | `/missions/{mission_id}/ml/collision-risk` | Scikit-Learn RandomForestClassifier conjunction risk vector |
+| `GET` | `/integrations/space-track/tle/{norad_id}` | Space-Track TLE orbit state vector with offline caching |
+| `GET` | `/integrations/space-track/conjunctions/{norad_id}` | Close encounter CDMs from Space-Track catalog |
+| `GET` | `/integrations/nasa-spark/debris-density` | LEO spatial debris density distribution from NASA SPARK / ORDEM |
+| `GET` | `/integrations/nasa-spark/assess-flux` | Smallsat collision probability against NASA SPARK orbital models |
+| `GET` | `/missions/{mission_id}/export/odar` | Automated NASA-STD-8719.14 ODAR draft markdown generation |
+| `GET` | `/missions/{mission_id}/export/eomp` | Automated ISRO DFSM 2030 / FCC 5-year EOMP markdown generation |
+| `GET` | `/integrations/status` | Status and boundaries of all 6 external integrations |
+| `POST` | `/integrations/agent37/triage` | Pre-submission candidate extractor adapter |
+| `POST` | `/integrations/browser-use/capture` | Public evidence web scraper & crawler adapter |
+| `POST` | `/integrations/elevenlabs/narrate` | Voice synthesis for review packet summaries |
 
 FastAPI interactive OpenAPI docs are served at `/docs`.
 
@@ -62,10 +76,10 @@ FastAPI interactive OpenAPI docs are served at `/docs`.
 
 ## Verified commands
 
-- **Canonical Frontend Tests:** `npm test` (or `npm --prefix frontend test`) — 63 tests passed
+- **Canonical Frontend Tests:** `npm test` (or `npm --prefix frontend test`) — 67 tests passed (10 suites)
 - **Canonical Frontend Typecheck:** `npm run typecheck` (or `npm --prefix frontend run lint`) — passed (0 errors)
 - **Canonical Frontend Build:** `npm run build` (or `npm --prefix frontend run build`) — passed (Vite production bundle)
-- **Backend Tests:** `python -m pytest backend/tests` — 38 passed
-- **AI/ML Adapter Tests:** `python -m pytest ai_ml/tests` — 6 passed
+- **Backend Tests:** `python -m pytest backend/tests` — 54 passed
+- **AI/ML Astrodynamics & Adapter Tests:** `python -m pytest ai_ml/tests` — 13 passed
 - **Backend Verification Matrix:** `python -m app.verification` (from `backend/`) — 12 evaluations, 12 provenance events, valid: true
 - **Legacy Console Tests:** `npm run legacy:web:test` — 10 passed

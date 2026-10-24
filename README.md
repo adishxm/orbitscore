@@ -10,6 +10,10 @@ OrbitScore delivers a polished, responsive mission evidence workspace and synthe
 
 - **Sourced Evidence Register**: Granular parameters mapped to primary source documents, revisions, dates, page/section locators, and human engineering verification status.
 - **Deterministic Check Engine**: 100% deterministic rule verification surfacing missing citations, unconfirmed records, and cross-subsystem numerical discrepancies (e.g. CAD vs interface specifications).
+- **Space Credit Index Engine**: Deterministic, 4-pillar 0–100 readiness index (AAA to C) benchmarking orbital lifetime, spatial footprint, passivation readiness, and primary citation provenance (`GET /missions/{id}/space-credit-index`).
+- **Scikit-Learn Astrodynamics Machine Learning**: Supervised physical decay lifetime regression (`GradientBoostingRegressor`) and conjunction geometry risk classification (`RandomForestClassifier`) (`POST /missions/{id}/ml/...`).
+- **Space-Track & NASA SPARK Ingestion Pipeline**: Ingestion service fetching live or cached Two-Line Elements (TLEs), Conjunction Data Messages (CDMs), and LEO spatial debris density profiles from NASA SPARK/ORDEM baseline (`GET /integrations/...`).
+- **Automated ODAR & EOMP Export Pipeline**: Automated generation of complete, section-compliant draft NASA-STD-8719.14 Orbital Debris Assessment Reports and ISRO DFSM 2030 / FCC 5-year End-of-Mission Plans (`GET /missions/{id}/export/odar`, `/export/eomp`).
 - **Static Synthetic Orbital Context**: Labeled schematic visualization (500 km SSO, 97.4° inclination, natural atmospheric decay ~3.8 yrs) with persistent truth-in-advertising caption.
 - **National-to-Global Scalability Matrix**: Dual evaluation pathways aligning with Tier 1: India ISRO Debris-Free Space Missions (DFSM) 2030 guidelines and Tier 2: Global FCC (FCC-22-74 5-year deorbit rule), NASA STD 8719.14, and ESA Zero Debris standards.
 - **Human Review & Decision Gate**: Explicit separation of software findings from human engineering mitigations, sign-offs, and open issue tracking.
@@ -57,7 +61,7 @@ npm run lint:banned-words
 # Install dependencies including the editable ai_ml package
 pip install -r requirements.txt
 
-# Run backend test suite (48 tests)
+# Run backend test suite (54 tests)
 python -m pytest backend/tests
 
 # Run synthetic verification matrix
@@ -67,10 +71,10 @@ python -m app.verification   # from backend/
 uvicorn app.main:app --host 127.0.0.1 --port 8000   # from backend/
 ```
 
-### AI / ML Adapter (`ai_ml/`)
+### AI / ML Astrodynamics & Adapter (`ai_ml/`)
 
 ```bash
-# Run isolated AI adapter test suite (10 tests)
+# Run isolated AI/ML test suite (13 tests: decay GBR, collision RF, Space Credit Index, and extraction)
 python -m pytest ai_ml/tests
 ```
 

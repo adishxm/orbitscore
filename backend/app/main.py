@@ -5,7 +5,8 @@ import hashlib
 import uuid
 from pathlib import Path
 from datetime import datetime, timezone
-from typing import Optional
+from typing import Optional, List
+from pydantic import BaseModel
 
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Query, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -37,6 +38,14 @@ from .integrations.browser_use import (
 from .integrations.elevenlabs import (
     narrate_reviewed_finding, ElevenLabsNarrateRequest, ElevenLabsNarrateResponse, is_elevenlabs_enabled
 )
+from ai_ml.credit_index import compute_space_credit_index, SpaceCreditIndexResult
+from ai_ml.orbital_ml import (
+    decay_ml_engine, collision_ml_engine,
+    DecayPredictionResult, ConjunctionRiskResult
+)
+from .integrations.space_track import space_track_service, SpaceTrackTLE, ConjunctionAlert
+from .integrations.nasa_spark import nasa_spark_service, DebrisDensityBand, DebrisFluxAssessment
+from .odar_generator import generate_nasa_odar_markdown, generate_eomp_markdown
 from .db import (
     init_db, reset_db, get_connection, save_mission, get_mission_db, list_missions_db,
     save_artifact_db, get_artifact_db, get_artifact_content_db,
@@ -254,12 +263,20 @@ def list_missions(user: AuthenticatedUser = Depends(require_viewer_or_reviewer))
 
 @app.get("/missions/{mission_id}")
 def get_mission(mission_id: str, user: AuthenticatedUser = Depends(require_viewer_or_reviewer)):
-    m = get_mission_db(mission_id)
+    lookup_id = "mission_complete" if mission_id in ("asteria-3", "asteria3") else mission_id
+    m = get_mission_db(lookup_id)
     if not m:
-        fixture = FIXTURES / f"{mission_id}.json"
+        fixture = FIXTURES / f"{lookup_id}.json"
         if fixture.exists():
-            m = _load_fixture(f"{mission_id}.json")
+            m = _load_fixture(f"{lookup_id}.json")
             save_mission(m)
+    if not m and lookup_id != mission_id:
+        m = get_mission_db(mission_id)
+        if not m:
+            fixture = FIXTURES / f"{mission_id}.json"
+            if fixture.exists():
+                m = _load_fixture(f"{mission_id}.json")
+                save_mission(m)
     if not m:
         raise HTTPException(404, "Mission not found")
     return m
@@ -641,4 +658,142 @@ def integrations_status():
         },
         "governance_notice": "External services cannot certify compliance, approve evidence, or make review decisions. Deterministic evaluation and provenance remain authoritative."
     }
+
+
+# --- Space Credit Index Endpoint ---
+
+@app.get("/missions/{mission_id}/space-credit-index", response_model=SpaceCreditIndexResult)
+def get_space_credit_index(
+    mission_id: str,
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
+    """
+    Compute an explainable, 4-pillar Space Credit Index (0 - 100) for a spacecraft mission
+    benchmarking orbit lifetime, collision footprint, passivation, and primary evidence provenance.
+    """
+    m = get_mission(mission_id)
+    fields = m.get("fields", [])
+    return compute_space_credit_index(m, fields)
+
+
+# --- Scikit-Learn Astrodynamics Machine Learning Endpoints ---
+
+class DecayMLRequest(BaseModel):
+    perigee_km: float = 498.8
+    apogee_km: float = 500.2
+    inclination_deg: float = 97.4
+    mass_kg: float = 4.0
+    area_m2: float = 0.03
+    solar_flux_f107: float = 145.0
+
+
+class CollisionMLRequest(BaseModel):
+    miss_distance_m: float = 850.0
+    relative_speed_kms: float = 14.1
+    radial_miss_m: float = 140.0
+    combined_hbr_m: float = 2.5
+
+
+@app.post("/missions/{mission_id}/ml/predict-decay", response_model=DecayPredictionResult)
+def predict_orbital_decay(
+    mission_id: str,
+    req: DecayMLRequest,
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
+    """Predict natural orbital decay lifetime using a trained Scikit-Learn GradientBoostingRegressor."""
+    return decay_ml_engine.predict(
+        perigee_km=req.perigee_km,
+        apogee_km=req.apogee_km,
+        inclination_deg=req.inclination_deg,
+        mass_kg=req.mass_kg,
+        area_m2=req.area_m2,
+        solar_flux_f107=req.solar_flux_f107,
+    )
+
+
+@app.post("/missions/{mission_id}/ml/collision-risk", response_model=ConjunctionRiskResult)
+def classify_conjunction_risk(
+    mission_id: str,
+    req: CollisionMLRequest,
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
+    """Classify conjunction geometry risk vector using a Scikit-Learn RandomForestClassifier."""
+    return collision_ml_engine.evaluate_conjunction(
+        miss_distance_m=req.miss_distance_m,
+        relative_speed_kms=req.relative_speed_kms,
+        radial_miss_m=req.radial_miss_m,
+        combined_hbr_m=req.combined_hbr_m,
+    )
+
+
+# --- Space-Track and NASA SPARK Ingestion Endpoints ---
+
+@app.get("/integrations/space-track/tle/{norad_id}", response_model=SpaceTrackTLE)
+async def get_space_track_tle(
+    norad_id: int,
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
+    """Retrieve Space-Track TLE orbit state vector with offline caching for air-gapped demo."""
+    return await space_track_service.fetch_tle(norad_id)
+
+
+@app.get("/integrations/space-track/conjunctions/{norad_id}", response_model=List[ConjunctionAlert])
+async def get_space_track_conjunctions(
+    norad_id: int,
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
+    """Retrieve Close Encounter Conjunction Data Messages (CDMs) from Space-Track catalog."""
+    return await space_track_service.fetch_conjunctions(norad_id)
+
+
+@app.get("/integrations/nasa-spark/debris-density", response_model=List[DebrisDensityBand])
+async def get_nasa_spark_debris_density(
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
+    """Retrieve LEO spatial debris density distribution from NASA SPARK / ORDEM baseline."""
+    return await nasa_spark_service.get_spatial_density_profile()
+
+
+@app.get("/integrations/nasa-spark/assess-flux", response_model=DebrisFluxAssessment)
+async def assess_nasa_spark_flux(
+    altitude_km: float = 500.0,
+    area_m2: float = 0.03,
+    lifetime_years: float = 3.8,
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
+    """Assess smallsat cumulative collision probability against NASA SPARK orbital models."""
+    return await nasa_spark_service.assess_mission_flux(
+        altitude_km=altitude_km,
+        area_m2=area_m2,
+        lifetime_years=lifetime_years,
+    )
+
+
+# --- Automated ODAR & EOMP Export Pipeline Endpoints ---
+
+@app.get("/missions/{mission_id}/export/odar", response_class=HTMLResponse)
+def export_nasa_odar_report(
+    mission_id: str,
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
+    """Generate a complete NASA-STD-8719.14 compliant draft ODAR markdown document."""
+    m = get_mission(mission_id)
+    fields = m.get("fields", [])
+    revs = list_reviews_db()
+    decisions = [v for v in revs.values() if v.get("mission_id") == m.get("mission_id")]
+    md = generate_nasa_odar_markdown(m, fields, decisions)
+    return HTMLResponse(content=md, media_type="text/markdown; charset=utf-8")
+
+
+@app.get("/missions/{mission_id}/export/eomp", response_class=HTMLResponse)
+def export_isro_fcc_eomp_plan(
+    mission_id: str,
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
+    """Generate an End-of-Mission Plan (EOMP) conforming to ISRO DFSM 2030 and FCC 5-year rules."""
+    m = get_mission(mission_id)
+    fields = m.get("fields", [])
+    md = generate_eomp_markdown(m, fields)
+    return HTMLResponse(content=md, media_type="text/markdown; charset=utf-8")
+
 

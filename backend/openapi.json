@@ -884,6 +884,466 @@
           }
         }
       }
+    },
+    "/missions/{mission_id}/space-credit-index": {
+      "get": {
+        "summary": "Get Space Credit Index",
+        "description": "Compute an explainable, 4-pillar Space Credit Index (0 - 100) for a spacecraft mission\nbenchmarking orbit lifetime, collision footprint, passivation, and primary evidence provenance.",
+        "operationId": "get_space_credit_index_missions__mission_id__space_credit_index_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mission_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mission Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpaceCreditIndexResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/missions/{mission_id}/ml/predict-decay": {
+      "post": {
+        "summary": "Predict Orbital Decay",
+        "description": "Predict natural orbital decay lifetime using a trained Scikit-Learn GradientBoostingRegressor.",
+        "operationId": "predict_orbital_decay_missions__mission_id__ml_predict_decay_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mission_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mission Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecayMLRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecayPredictionResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/missions/{mission_id}/ml/collision-risk": {
+      "post": {
+        "summary": "Classify Conjunction Risk",
+        "description": "Classify conjunction geometry risk vector using a Scikit-Learn RandomForestClassifier.",
+        "operationId": "classify_conjunction_risk_missions__mission_id__ml_collision_risk_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mission_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mission Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollisionMLRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConjunctionRiskResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integrations/space-track/tle/{norad_id}": {
+      "get": {
+        "summary": "Get Space Track Tle",
+        "description": "Retrieve Space-Track TLE orbit state vector with offline caching for air-gapped demo.",
+        "operationId": "get_space_track_tle_integrations_space_track_tle__norad_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "norad_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Norad Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpaceTrackTLE"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integrations/space-track/conjunctions/{norad_id}": {
+      "get": {
+        "summary": "Get Space Track Conjunctions",
+        "description": "Retrieve Close Encounter Conjunction Data Messages (CDMs) from Space-Track catalog.",
+        "operationId": "get_space_track_conjunctions_integrations_space_track_conjunctions__norad_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "norad_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Norad Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ConjunctionAlert"
+                  },
+                  "title": "Response Get Space Track Conjunctions Integrations Space Track Conjunctions  Norad Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integrations/nasa-spark/debris-density": {
+      "get": {
+        "summary": "Get Nasa Spark Debris Density",
+        "description": "Retrieve LEO spatial debris density distribution from NASA SPARK / ORDEM baseline.",
+        "operationId": "get_nasa_spark_debris_density_integrations_nasa_spark_debris_density_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DebrisDensityBand"
+                  },
+                  "type": "array",
+                  "title": "Response Get Nasa Spark Debris Density Integrations Nasa Spark Debris Density Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/integrations/nasa-spark/assess-flux": {
+      "get": {
+        "summary": "Assess Nasa Spark Flux",
+        "description": "Assess smallsat cumulative collision probability against NASA SPARK orbital models.",
+        "operationId": "assess_nasa_spark_flux_integrations_nasa_spark_assess_flux_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "altitude_km",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "default": 500.0,
+              "title": "Altitude Km"
+            }
+          },
+          {
+            "name": "area_m2",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "default": 0.03,
+              "title": "Area M2"
+            }
+          },
+          {
+            "name": "lifetime_years",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "default": 3.8,
+              "title": "Lifetime Years"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DebrisFluxAssessment"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/missions/{mission_id}/export/odar": {
+      "get": {
+        "summary": "Export Nasa Odar Report",
+        "description": "Generate a complete NASA-STD-8719.14 compliant draft ODAR markdown document.",
+        "operationId": "export_nasa_odar_report_missions__mission_id__export_odar_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mission_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mission Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/missions/{mission_id}/export/eomp": {
+      "get": {
+        "summary": "Export Isro Fcc Eomp Plan",
+        "description": "Generate an End-of-Mission Plan (EOMP) conforming to ISRO DFSM 2030 and FCC 5-year rules.",
+        "operationId": "export_isro_fcc_eomp_plan_missions__mission_id__export_eomp_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mission_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mission Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1272,6 +1732,138 @@
         ],
         "title": "CandidateField"
       },
+      "CollisionMLRequest": {
+        "properties": {
+          "miss_distance_m": {
+            "type": "number",
+            "title": "Miss Distance M",
+            "default": 850.0
+          },
+          "relative_speed_kms": {
+            "type": "number",
+            "title": "Relative Speed Kms",
+            "default": 14.1
+          },
+          "radial_miss_m": {
+            "type": "number",
+            "title": "Radial Miss M",
+            "default": 140.0
+          },
+          "combined_hbr_m": {
+            "type": "number",
+            "title": "Combined Hbr M",
+            "default": 2.5
+          }
+        },
+        "type": "object",
+        "title": "CollisionMLRequest"
+      },
+      "ConjunctionAlert": {
+        "properties": {
+          "cdm_id": {
+            "type": "string",
+            "title": "Cdm Id"
+          },
+          "primary_norad": {
+            "type": "integer",
+            "title": "Primary Norad"
+          },
+          "primary_name": {
+            "type": "string",
+            "title": "Primary Name"
+          },
+          "secondary_norad": {
+            "type": "integer",
+            "title": "Secondary Norad"
+          },
+          "secondary_name": {
+            "type": "string",
+            "title": "Secondary Name"
+          },
+          "time_of_closest_approach": {
+            "type": "string",
+            "title": "Time Of Closest Approach"
+          },
+          "miss_distance_meters": {
+            "type": "number",
+            "title": "Miss Distance Meters"
+          },
+          "radial_miss_meters": {
+            "type": "number",
+            "title": "Radial Miss Meters"
+          },
+          "relative_speed_kms": {
+            "type": "number",
+            "title": "Relative Speed Kms"
+          },
+          "collision_probability": {
+            "type": "number",
+            "title": "Collision Probability"
+          },
+          "alert_level": {
+            "type": "string",
+            "title": "Alert Level"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cdm_id",
+          "primary_norad",
+          "primary_name",
+          "secondary_norad",
+          "secondary_name",
+          "time_of_closest_approach",
+          "miss_distance_meters",
+          "radial_miss_meters",
+          "relative_speed_kms",
+          "collision_probability",
+          "alert_level"
+        ],
+        "title": "ConjunctionAlert"
+      },
+      "ConjunctionRiskResult": {
+        "properties": {
+          "risk_tier": {
+            "type": "string",
+            "title": "Risk Tier"
+          },
+          "collision_probability_estimate": {
+            "type": "number",
+            "title": "Collision Probability Estimate"
+          },
+          "miss_distance_meters": {
+            "type": "number",
+            "title": "Miss Distance Meters"
+          },
+          "relative_speed_kms": {
+            "type": "number",
+            "title": "Relative Speed Kms"
+          },
+          "maneuver_recommended": {
+            "type": "boolean",
+            "title": "Maneuver Recommended"
+          },
+          "confidence_score": {
+            "type": "number",
+            "title": "Confidence Score"
+          },
+          "model_version": {
+            "type": "string",
+            "title": "Model Version",
+            "default": "CollisionVector-RF-v1.0"
+          }
+        },
+        "type": "object",
+        "required": [
+          "risk_tier",
+          "collision_probability_estimate",
+          "miss_distance_meters",
+          "relative_speed_kms",
+          "maneuver_recommended",
+          "confidence_score"
+        ],
+        "title": "ConjunctionRiskResult"
+      },
       "CounterfactualRequest": {
         "properties": {
           "finding_id": {
@@ -1293,6 +1885,179 @@
           "proposed_value"
         ],
         "title": "CounterfactualRequest"
+      },
+      "CreditIndexBreakdown": {
+        "properties": {
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "points_awarded": {
+            "type": "number",
+            "title": "Points Awarded"
+          },
+          "max_points": {
+            "type": "number",
+            "title": "Max Points"
+          },
+          "percentage": {
+            "type": "number",
+            "title": "Percentage"
+          },
+          "notes": {
+            "type": "string",
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "category",
+          "points_awarded",
+          "max_points",
+          "percentage",
+          "notes"
+        ],
+        "title": "CreditIndexBreakdown"
+      },
+      "DebrisDensityBand": {
+        "properties": {
+          "altitude_km": {
+            "type": "integer",
+            "title": "Altitude Km"
+          },
+          "spatial_density_objects_per_km3": {
+            "type": "number",
+            "title": "Spatial Density Objects Per Km3"
+          },
+          "flux_annual_1cm_plus": {
+            "type": "number",
+            "title": "Flux Annual 1Cm Plus"
+          },
+          "risk_level": {
+            "type": "string",
+            "title": "Risk Level"
+          }
+        },
+        "type": "object",
+        "required": [
+          "altitude_km",
+          "spatial_density_objects_per_km3",
+          "flux_annual_1cm_plus",
+          "risk_level"
+        ],
+        "title": "DebrisDensityBand"
+      },
+      "DebrisFluxAssessment": {
+        "properties": {
+          "altitude_band_km": {
+            "type": "string",
+            "title": "Altitude Band Km"
+          },
+          "effective_flux_rate": {
+            "type": "number",
+            "title": "Effective Flux Rate"
+          },
+          "estimated_cumulative_impacts_lifetime": {
+            "type": "number",
+            "title": "Estimated Cumulative Impacts Lifetime"
+          },
+          "shielding_adequate": {
+            "type": "boolean",
+            "title": "Shielding Adequate"
+          },
+          "source_model": {
+            "type": "string",
+            "title": "Source Model",
+            "default": "NASA ORDEM 3.2 / NASA SPARK Spatial Catalog"
+          }
+        },
+        "type": "object",
+        "required": [
+          "altitude_band_km",
+          "effective_flux_rate",
+          "estimated_cumulative_impacts_lifetime",
+          "shielding_adequate"
+        ],
+        "title": "DebrisFluxAssessment"
+      },
+      "DecayMLRequest": {
+        "properties": {
+          "perigee_km": {
+            "type": "number",
+            "title": "Perigee Km",
+            "default": 498.8
+          },
+          "apogee_km": {
+            "type": "number",
+            "title": "Apogee Km",
+            "default": 500.2
+          },
+          "inclination_deg": {
+            "type": "number",
+            "title": "Inclination Deg",
+            "default": 97.4
+          },
+          "mass_kg": {
+            "type": "number",
+            "title": "Mass Kg",
+            "default": 4.0
+          },
+          "area_m2": {
+            "type": "number",
+            "title": "Area M2",
+            "default": 0.03
+          },
+          "solar_flux_f107": {
+            "type": "number",
+            "title": "Solar Flux F107",
+            "default": 145.0
+          }
+        },
+        "type": "object",
+        "title": "DecayMLRequest"
+      },
+      "DecayPredictionResult": {
+        "properties": {
+          "predicted_lifetime_years": {
+            "type": "number",
+            "title": "Predicted Lifetime Years",
+            "description": "Estimated orbital lifetime in years"
+          },
+          "confidence_interval_95": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Confidence Interval 95",
+            "description": "[lower_bound_years, upper_bound_years]"
+          },
+          "fcc_5yr_compliant": {
+            "type": "boolean",
+            "title": "Fcc 5Yr Compliant"
+          },
+          "isro_dfsm_compliant": {
+            "type": "boolean",
+            "title": "Isro Dfsm Compliant"
+          },
+          "ballistic_coefficient_kg_m2": {
+            "type": "number",
+            "title": "Ballistic Coefficient Kg M2"
+          },
+          "model_version": {
+            "type": "string",
+            "title": "Model Version",
+            "default": "OrbitalDecay-GBR-v1.0"
+          }
+        },
+        "type": "object",
+        "required": [
+          "predicted_lifetime_years",
+          "confidence_interval_95",
+          "fcc_5yr_compliant",
+          "isro_dfsm_compliant",
+          "ballistic_coefficient_kg_m2"
+        ],
+        "title": "DecayPredictionResult"
       },
       "DecisionRequest": {
         "properties": {
@@ -1615,6 +2380,125 @@
           "name"
         ],
         "title": "MissionProfile"
+      },
+      "SpaceCreditIndexResult": {
+        "properties": {
+          "overall_score": {
+            "type": "number",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Overall Score"
+          },
+          "rating_tier": {
+            "type": "string",
+            "title": "Rating Tier"
+          },
+          "isro_dfsm_aligned": {
+            "type": "boolean",
+            "title": "Isro Dfsm Aligned"
+          },
+          "fcc_5yr_aligned": {
+            "type": "boolean",
+            "title": "Fcc 5Yr Aligned"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          },
+          "breakdowns": {
+            "items": {
+              "$ref": "#/components/schemas/CreditIndexBreakdown"
+            },
+            "type": "array",
+            "title": "Breakdowns"
+          },
+          "recommendations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Recommendations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "overall_score",
+          "rating_tier",
+          "isro_dfsm_aligned",
+          "fcc_5yr_aligned",
+          "summary",
+          "breakdowns",
+          "recommendations"
+        ],
+        "title": "SpaceCreditIndexResult"
+      },
+      "SpaceTrackTLE": {
+        "properties": {
+          "norad_cat_id": {
+            "type": "integer",
+            "title": "Norad Cat Id"
+          },
+          "object_name": {
+            "type": "string",
+            "title": "Object Name"
+          },
+          "epoch": {
+            "type": "string",
+            "title": "Epoch"
+          },
+          "line1": {
+            "type": "string",
+            "title": "Line1"
+          },
+          "line2": {
+            "type": "string",
+            "title": "Line2"
+          },
+          "inclination_deg": {
+            "type": "number",
+            "title": "Inclination Deg"
+          },
+          "eccentricity": {
+            "type": "number",
+            "title": "Eccentricity"
+          },
+          "semi_major_axis_km": {
+            "type": "number",
+            "title": "Semi Major Axis Km"
+          },
+          "perigee_km": {
+            "type": "number",
+            "title": "Perigee Km"
+          },
+          "apogee_km": {
+            "type": "number",
+            "title": "Apogee Km"
+          },
+          "period_minutes": {
+            "type": "number",
+            "title": "Period Minutes"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source",
+            "default": "Space-Track.org / 18th Space Defense Squadron"
+          }
+        },
+        "type": "object",
+        "required": [
+          "norad_cat_id",
+          "object_name",
+          "epoch",
+          "line1",
+          "line2",
+          "inclination_deg",
+          "eccentricity",
+          "semi_major_axis_km",
+          "perigee_km",
+          "apogee_km",
+          "period_minutes"
+        ],
+        "title": "SpaceTrackTLE"
       },
       "ValidationError": {
         "properties": {
