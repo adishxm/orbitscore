@@ -10,11 +10,21 @@ requires-python = ">=3.10"
 dependencies = [
     "pydantic>=2.6,<3",
     "httpx>=0.24.0",
+    "numpy>=1.24.0",
+    "scikit-learn>=1.3.0",
+    "pyyaml>=6.0",
 ]
 
 [tool.setuptools]
 package-dir = {"ai_ml" = "."}
-packages = ["ai_ml"]
+packages = [
+    "ai_ml",
+    "ai_ml.datasets",
+    "ai_ml.evaluation",
+    "ai_ml.extraction",
+    "ai_ml.inference",
+    "ai_ml.training",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

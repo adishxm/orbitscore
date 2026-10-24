@@ -90,7 +90,7 @@ def main() -> int:
         else:
             item["report"] = str(report_path.relative_to(ROOT))
             item["report_started_at_utc"] = metadata(report_text, "Started UTC")
-            acceptance_value = metadata(report_text, "Task-specific acceptance checks complete").lower().split(",", 1)[0].strip()
+            acceptance_value = metadata(report_text, "Task-specific acceptance checks complete").lower().split(",", 1)[0].split("(", 1)[0].strip()
             if acceptance_value not in {"yes", "true", "complete", "completed"}:
                 item["blockers"].append("Task report does not mark task-specific acceptance checks complete.")
             if metadata(report_text, "Reviewer decision (PENDING/APPROVED/REJECTED)").upper() != "APPROVED":
@@ -189,7 +189,14 @@ def main() -> int:
         if recorded != expected:
             blockers.append(f"Final project sign-off disposition for optional task {task_id} does not match project-scope.json.")
 
-    validation = subprocess.run([sys.executable, str(BRAIN / "scripts" / "validate_brain.py")], cwd=ROOT, text=True, capture_output=True)
+    validation = subprocess.run(
+        [sys.executable, str(BRAIN / "scripts" / "validate_brain.py")],
+        cwd=ROOT,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True
+    )
     if validation.returncode:
         blockers.append(f"Brain metadata validation failed: {(validation.stderr or validation.stdout).strip()}")
     else:

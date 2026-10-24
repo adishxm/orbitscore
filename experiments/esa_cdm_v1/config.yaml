@@ -1,0 +1,28 @@
+experiment_id: esa_cdm_v1
+purpose: "Leakage-safe historical conjunction risk forecasting at 2-day pre-TCA cutoff"
+owner: Aditya
+dataset:
+  name: "ESA Collision Avoidance Challenge (Kelvins/Zenodo 4463683)"
+  license: "CC-BY-4.0"
+  log_risk_units: "log10"
+  prediction_cutoff_days: 2.0
+split:
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+  split_by: event_id
+model:
+  type: "GradientBoostingRegressor"
+  n_estimators: 40
+  max_depth: 3
+  learning_rate: 0.1
+  random_state: 42
+baselines:
+  - LastObservedRiskBaseline
+  - DummyRiskBaseline
+metrics:
+  - mae
+  - rmse
+  - max_error
+  - skill_vs_persistence
+research_disclaimer: "OFFLINE RESEARCH ONLY - FORECAST OF REPORTED LOG-RISK, NOT OPERATIONAL COLLISION PROBABILITY OR FLIGHT SAFETY ACTION"

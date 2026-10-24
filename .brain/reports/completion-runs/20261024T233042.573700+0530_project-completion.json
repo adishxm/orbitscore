@@ -1,0 +1,135 @@
+{
+  "report_type": "tracked_mvp_completion_gate",
+  "created_at_utc": "2026-10-24T18:00:42.573700Z",
+  "created_at_local": "2026-10-24T23:30:42.573700+05:30",
+  "timezone": "Asia/Kolkata",
+  "timestamp_source": "host system clock",
+  "eligible_for_human_completion_signoff": false,
+  "status": "NOT_ELIGIBLE",
+  "scope_name": "OrbitScore MVP deliverables",
+  "warning": "This defines tracked MVP scope only; it cannot prove every possible product requirement, domain correctness, market success, regulatory fitness, or production readiness.",
+  "required_task_count": 8,
+  "required_tasks_done": 5,
+  "latest_full_suite_baseline": {
+    "path": ".brain\\reports\\task-runs\\20261024T232329.832907+0530_T009_verification.json",
+    "task_id": "T009",
+    "completed_at_utc": "2026-10-24T17:53:29.832907Z",
+    "completed_at_local": "2026-10-24T23:23:29.832907+05:30",
+    "passed": true,
+    "all_checks_passed": true
+  },
+  "optional_task_dispositions": {
+    "T008": "complete"
+  },
+  "tasks": [
+    {
+      "task_id": "T001",
+      "task_status": "done",
+      "state_status": "done",
+      "report": ".brain\\reports\\task-runs\\20261024T145629.461888+0530_T001_live-api-integration_finished_20261024T171530.411318+0530.md",
+      "report_started_at_utc": "2026-10-24T09:26:29.461888Z",
+      "verification_report": ".brain\\reports\\task-runs\\20261024T163603.350524+0530_T001_verification.json",
+      "blockers": []
+    },
+    {
+      "task_id": "T002",
+      "task_status": "done",
+      "state_status": "done",
+      "report": ".brain\\reports\\task-runs\\20261024T172624.078910+0530_T002_evidence-upload-and-extraction-fallback_finished_20261024T173620.969163+0530.md",
+      "report_started_at_utc": "2026-10-24T11:56:24.078910Z",
+      "verification_report": ".brain\\reports\\task-runs\\20261024T173450.138242+0530_T002_verification.json",
+      "blockers": []
+    },
+    {
+      "task_id": "T003",
+      "task_status": "done",
+      "state_status": "done",
+      "report": ".brain\\reports\\task-runs\\20261024T175109.348610+0530_T003_durable-local-state_finished_20261024T180700.md",
+      "report_started_at_utc": "2026-10-24T12:21:09.348610Z",
+      "verification_report": ".brain\\reports\\task-runs\\20261024T180630.751738+0530_T003_verification.json",
+      "blockers": []
+    },
+    {
+      "task_id": "T004",
+      "task_status": "done",
+      "state_status": "done",
+      "report": ".brain\\reports\\task-runs\\20261024T175120.858422+0530_T004_durable-provenance-chain_finished_20261024T180730.md",
+      "report_started_at_utc": "2026-10-24T12:21:20.858422Z",
+      "verification_report": ".brain\\reports\\task-runs\\20261024T180712.527304+0530_T004_verification.json",
+      "blockers": []
+    },
+    {
+      "task_id": "T005",
+      "task_status": "done",
+      "state_status": "done",
+      "report": ".brain\\reports\\task-runs\\20261024T180900.000000+0530_T005_cited-review-packet_finished_20261024T180900.md",
+      "report_started_at_utc": "2026-10-24T12:38:00.000000Z",
+      "verification_report": ".brain\\reports\\task-runs\\20261024T180854.379871+0530_T005_verification.json",
+      "blockers": []
+    },
+    {
+      "task_id": "T006",
+      "task_status": "ready",
+      "state_status": "ready",
+      "report": null,
+      "report_started_at_utc": null,
+      "verification_report": null,
+      "blockers": [
+        "Required task is not marked done after review.",
+        "No finished, timestamped task report found.",
+        "No passing timestamped baseline verification report found after the task report start time."
+      ]
+    },
+    {
+      "task_id": "T007",
+      "task_status": "ready",
+      "state_status": "ready",
+      "report": null,
+      "report_started_at_utc": null,
+      "verification_report": null,
+      "blockers": [
+        "Required task is not marked done after review.",
+        "No finished, timestamped task report found.",
+        "No passing timestamped baseline verification report found after the task report start time."
+      ]
+    },
+    {
+      "task_id": "T009",
+      "task_status": "verifying",
+      "state_status": "verifying",
+      "report": ".brain\\reports\\task-runs\\20261022T014549.297360+0530_T009_timestamped-reporting-and-completion-gate_finished_20261022T015312.086700+0530.md",
+      "report_started_at_utc": "2026-10-21T20:15:49.297360Z",
+      "verification_report": ".brain\\reports\\task-runs\\20261024T232329.832907+0530_T009_verification.json",
+      "blockers": [
+        "Required task is not marked done after review.",
+        "Task report lacks explicit reviewer APPROVED decision.",
+        "Task report has no reviewer identity.",
+        "Task report needs parseable reviewer sign-off timestamps in UTC and Asia/Kolkata (+05:30).",
+        "Task report has no reviewer evidence path/notes."
+      ]
+    }
+  ],
+  "blockers": [
+    "T006: Required task is not marked done after review.",
+    "T006: No finished, timestamped task report found.",
+    "T006: No passing timestamped baseline verification report found after the task report start time.",
+    "T007: Required task is not marked done after review.",
+    "T007: No finished, timestamped task report found.",
+    "T007: No passing timestamped baseline verification report found after the task report start time.",
+    "T009: Required task is not marked done after review.",
+    "T009: Task report lacks explicit reviewer APPROVED decision.",
+    "T009: Task report has no reviewer identity.",
+    "T009: Task report needs parseable reviewer sign-off timestamps in UTC and Asia/Kolkata (+05:30).",
+    "T009: Task report has no reviewer evidence path/notes.",
+    "Final human project sign-off is not APPROVED.",
+    "Final project sign-off has no reviewer identity.",
+    "Final project sign-off requires valid UTC and Asia/Kolkata timestamps.",
+    "Final project sign-off does not identify the completion evidence report.",
+    "Final project sign-off must document rationale and remaining limitations.",
+    "Final project sign-off disposition for optional task T008 does not match project-scope.json."
+  ],
+  "notes": [
+    ".brain valid: 9 tasks; statuses synchronized; dependencies known and acyclic; project-scope IDs and required research/reporting guides present."
+  ],
+  "does_not_claim": "This report does not score overall product quality, domain validity, regulatory compliance, commercial success, or all possible future work."
+}

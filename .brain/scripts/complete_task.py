@@ -25,7 +25,16 @@ def run(label: str, command: list[str], cwd: Path) -> dict:
     started = now_pair()
     monotonic_started = time.monotonic()
     try:
-        proc = subprocess.run(command, cwd=cwd, text=True, capture_output=True, timeout=600, shell=(sys.platform == "win32"))
+        proc = subprocess.run(
+            command,
+            cwd=cwd,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            capture_output=True,
+            timeout=600,
+            shell=(sys.platform == "win32")
+        )
         finished = now_pair()
         return {"label": label, "command": " ".join(command),
                 "started_utc": started["utc"], "started_local": started["local"],

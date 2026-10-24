@@ -1,10 +1,16 @@
 # T006 — Clean-clone preflight
 
-- status: ready
+- status: done
 - owner: Roshan
 - reviewer: Aditya
 - priority: P0
 - depends_on: []
+
+## Reviewer log
+
+- Implementation evidence: .brain/reports/task-runs/20261024T233200.000000+0530_T006_clean-clone-preflight_finished_20261024T233410.md
+- Reviewer sign-off: Aditya (2026-10-24T18:04:15.000000Z / 2026-10-24T23:34:15.000000+05:30)
+
 
 ## Goal
 

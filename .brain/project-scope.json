@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "scope_name": "OrbitReady MVP deliverables",
+  "scope_name": "OrbitScore MVP deliverables",
   "required_tasks": [
     "T001",
     "T002",
@@ -17,6 +17,54 @@
       "allowed_dispositions": ["complete", "deferred_by_owner"],
       "current_disposition": "complete",
       "note": "The product is intentionally designed to remain useful with AI disabled. A deferred disposition requires an explicit owner/reviewer rationale and does not count as delivering the AI adapter."
+    },
+    "T010": {
+      "title": "AI roadmap adoption and claims reconciliation",
+      "allowed_dispositions": ["complete", "deferred_by_owner"],
+      "current_disposition": "complete",
+      "note": "Adoption of comprehensive AI/ML roadmap (v02) with clear separation of evidence-based assistance and research tracks."
+    },
+    "T011": {
+      "title": "Safety containment and honest exports",
+      "allowed_dispositions": ["complete", "deferred_by_owner"],
+      "current_disposition": "complete",
+      "note": "Deterministic collision proxy, lazy model fitting, empty-mission fail-safe defaults, and ODAR draft non-conformance detection."
+    },
+    "T012": {
+      "title": "Canonical dependency hardening",
+      "allowed_dispositions": ["complete", "deferred_by_owner"],
+      "current_disposition": "complete",
+      "note": "Explicit declaration of numpy and scikit-learn in canonical packaging."
+    },
+    "T013": {
+      "title": "Candidate schema, normalization, and validation",
+      "allowed_dispositions": ["complete", "deferred_by_owner"],
+      "current_disposition": "complete",
+      "note": "Domain normalizers, quote-to-text evidence validation, and rigorous extraction metrics."
+    },
+    "T014": {
+      "title": "ESA CDM event processing and baseline forecasting",
+      "allowed_dispositions": ["complete", "deferred_by_owner"],
+      "current_disposition": "complete",
+      "note": "Cutoff-safe event assembly, disjoint event partitioning, persistence baseline, and CLI subcommands."
+    },
+    "T015": {
+      "title": "Document processing, grouped family splits, and bounded extraction",
+      "allowed_dispositions": ["complete", "deferred_by_owner"],
+      "current_disposition": "complete",
+      "note": "Page-aware document parsing, mission family train/val/test partitioning, and bounded candidate extractor."
+    },
+    "T016": {
+      "title": "Offline CDM scikit-learn training pipeline and experiment reporting",
+      "allowed_dispositions": ["complete", "deferred_by_owner"],
+      "current_disposition": "complete",
+      "note": "GradientBoosting regressor pipeline, experiment report generator, and configuration definitions."
+    },
+    "T017": {
+      "title": "Trusted artifact registry and research forecast serving",
+      "allowed_dispositions": ["complete", "deferred_by_owner"],
+      "current_disposition": "complete",
+      "note": "Cryptographic model registry, research inference runner, and isolated /research/cdm-forecast endpoint."
     }
   },
   "completion_scope_warning": "This defines tracked MVP scope only; it cannot prove every possible product requirement, domain correctness, market success, regulatory fitness, or production readiness."

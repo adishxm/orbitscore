@@ -1,8 +1,9 @@
 """
 Scikit-Learn Machine Learning module for orbital decay timeline prediction
 and conjunction vector risk classification.
+Provides deterministic, explainable surrogate heuristics clearly labeled as research-only.
 """
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 import numpy as np
 from sklearn.ensemble import GradientBoostingRegressor, RandomForestClassifier
 from pydantic import BaseModel, Field
@@ -15,6 +16,11 @@ class DecayPredictionResult(BaseModel):
     isro_dfsm_compliant: bool
     ballistic_coefficient_kg_m2: float
     model_version: str = "OrbitalDecay-GBR-v1.0"
+    research_only: bool = True
+    disclaimer: str = (
+        "RESEARCH DEMONSTRATION ONLY: Semi-empirical surrogate model based on King-Hele formulation. "
+        "Flight compliance verification requires formal numerical propagation (e.g. NASA DAS 3.x)."
+    )
 
 
 class ConjunctionRiskResult(BaseModel):
@@ -25,17 +31,23 @@ class ConjunctionRiskResult(BaseModel):
     maneuver_recommended: bool
     confidence_score: float
     model_version: str = "CollisionVector-RF-v1.0"
+    research_only: bool = True
+    disclaimer: str = (
+        "RESEARCH DEMONSTRATION ONLY: Deterministic 2D encounter geometry scaling proxy. "
+        "Does not constitute operational maneuver guidance or agency collision avoidance certification."
+    )
 
 
 class OrbitalDecayML:
     """GradientBoostingRegressor trained on physical drag & atmospheric density models."""
 
     def __init__(self):
-        self.model = GradientBoostingRegressor(n_estimators=80, max_depth=4, random_state=42)
-        self._fit_synthetic_astrodynamics_dataset()
+        self.model: Optional[GradientBoostingRegressor] = None
 
-    def _fit_synthetic_astrodynamics_dataset(self):
-        # Generate physically calibrated training data based on King-Hele atmospheric decay formulation
+    def _ensure_fitted(self):
+        if self.model is not None:
+            return
+        clf = GradientBoostingRegressor(n_estimators=80, max_depth=4, random_state=42)
         np.random.seed(42)
         n_samples = 1000
 
@@ -52,12 +64,12 @@ class OrbitalDecayML:
 
         # Semi-empirical lifetime approximation: scales exponentially with altitude, inversely with area/mass
         alt_avg = (perigee + apogee) / 2.0
-        # Calibrated for smallsats: at 500 km SSO ~3.5-4.2 years; at 400 km < 1 yr; at 650 km > 15 yrs
         base_decay = np.exp((alt_avg - 475.0) / 48.0) * (bc / 100.0) * (140.0 / f107) * 2.2
         noise = np.random.normal(1.0, 0.03, n_samples)
         y = np.clip(base_decay * noise, 0.1, 50.0)
 
-        self.model.fit(X, y)
+        clf.fit(X, y)
+        self.model = clf
 
     def predict(
         self,
@@ -68,12 +80,16 @@ class OrbitalDecayML:
         area_m2: float = 0.03,
         solar_flux_f107: float = 145.0,
     ) -> DecayPredictionResult:
+        self._ensure_fitted()
+        if perigee_km < 100.0 or apogee_km < 100.0:
+            raise ValueError("Perigee and apogee altitudes must be at or above 100 km LEO threshold.")
+
         bc_val = mass_kg / max(area_m2, 0.002)
         X_val = np.array([[perigee_km, apogee_km, inclination_deg, mass_kg, area_m2, bc_val, solar_flux_f107]])
         pred_lifetime = float(self.model.predict(X_val)[0])
         pred_lifetime = round(max(0.1, pred_lifetime), 2)
 
-        # 95% confidence interval bound (estimated standard error ~10%)
+        # Estimated empirical dispersion bound (~12%)
         lower_bound = round(max(0.05, pred_lifetime * 0.88), 2)
         upper_bound = round(pred_lifetime * 1.12, 2)
         bc = round(bc_val, 2)
@@ -91,10 +107,12 @@ class CollisionRiskClassifierML:
     """RandomForestClassifier trained to identify elevated conjunction geometry vectors."""
 
     def __init__(self):
-        self.clf = RandomForestClassifier(n_estimators=50, max_depth=4, random_state=42)
-        self._fit_conjunction_dataset()
+        self.clf: Optional[RandomForestClassifier] = None
 
-    def _fit_conjunction_dataset(self):
+    def _ensure_fitted(self):
+        if self.clf is not None:
+            return
+        clf = RandomForestClassifier(n_estimators=50, max_depth=4, random_state=42)
         np.random.seed(42)
         n_samples = 300
 
@@ -116,7 +134,8 @@ class CollisionRiskClassifierML:
             else:
                 y[i] = 0  # LOW
 
-        self.clf.fit(X, y)
+        clf.fit(X, y)
+        self.clf = clf
 
     def evaluate_conjunction(
         self,
@@ -125,6 +144,7 @@ class CollisionRiskClassifierML:
         radial_miss_m: float = 140.0,
         combined_hbr_m: float = 2.5,
     ) -> ConjunctionRiskResult:
+        self._ensure_fitted()
         X_val = np.array([[miss_distance_m, relative_speed_kms, radial_miss_m, combined_hbr_m]])
         pred_class = int(self.clf.predict(X_val)[0])
         probs = self.clf.predict_proba(X_val)[0]
@@ -133,15 +153,22 @@ class CollisionRiskClassifierML:
         tier_map = {0: "LOW", 1: "MODERATE", 2: "ELEVATED"}
         tier = tier_map.get(pred_class, "LOW")
 
-        # Conjunction Collision Probability (Foster-1992 2D scaling proxy)
+        # Deterministic Foster-1992 2D Gaussian B-plane proxy (reproducible, non-random)
+        sigma = max(float(radial_miss_m) * 1.5, 45.0)
+        hbr = max(float(combined_hbr_m), 0.5)
+        dist = max(float(miss_distance_m), 0.0)
+        exponent = -(dist ** 2) / (2.0 * (sigma ** 2))
+        scale = (hbr ** 2) / (2.0 * (sigma ** 2))
+        raw_pc = scale * np.exp(exponent)
+
         if tier == "ELEVATED":
-            pc_est = round(float(np.random.uniform(1e-4, 5e-3)), 6)
+            pc_est = round(float(np.clip(raw_pc * 2.5, 1e-4, 5e-3)), 6)
             recommend_maneuver = True
         elif tier == "MODERATE":
-            pc_est = round(float(np.random.uniform(1e-6, 9.9e-5)), 7)
+            pc_est = round(float(np.clip(raw_pc, 1e-6, 9.9e-5)), 7)
             recommend_maneuver = False
         else:
-            pc_est = round(float(np.random.uniform(1e-9, 9.9e-7)), 8)
+            pc_est = round(float(np.clip(raw_pc * 0.1, 1e-9, 9.9e-7)), 8)
             recommend_maneuver = False
 
         return ConjunctionRiskResult(
@@ -154,6 +181,6 @@ class CollisionRiskClassifierML:
         )
 
 
-# Global singleton instances for low-latency inference
+# Global singleton instances with lazy initialization
 decay_ml_engine = OrbitalDecayML()
 collision_ml_engine = CollisionRiskClassifierML()

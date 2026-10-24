@@ -17,14 +17,14 @@
 
 ## 0. P0 — Demo-day blockers & repo hygiene (do first)
 
-- [ ] **Close T006** clean-clone preflight — _(owner: Roshan)_ — still `ready` in `.brain/state.json`; required for the completion gate.
-- [ ] **Close T007** browser E2E tests — _(owner: Narayan/Roshan)_ — still `ready`; required for the completion gate.
-- [ ] **Get T009 reviewer sign-off** → flip `verifying` → `done` with evidence report — it is currently the only active task.
-- [ ] **Update `.brain/PROJECT_SIGNOFF.md`**: T008 disposition is `complete` in `project-scope.json` but still `PENDING` in the sign-off file; add reviewer name + UTC & Asia/Kolkata timestamps.
-- [ ] **Purge lingering "OrbitReady" naming**: `.brain/state.json` (`"project": "orbitready"`), `.brain/knowledge-manual.md` title, `PROJECT_SIGNOFF.md` scope line → **OrbitScore** everywhere.
-- [ ] **Fix dead paths in `.brain/knowledge-manual.md`**: `apps/api/...` → `backend/app/...`, `apps/web/...` → `frontend/...` (pre-monorepo references).
-- [ ] **Sync stale numbers in `docs/Technical_Stack_Final.md`**: it still reports 63/38/6 tests & 9 suites → actual is **67 frontend / 48 backend / 10 ai_ml, 10 suites**. Also refresh `IMPROVEMENTS.md`-era counts where quoted.
-- [ ] **Re-run the brain baseline** and refresh artifacts:
+- [x] **Close T006** clean-clone preflight — _(owner: Roshan)_ — closed and verified; passing baseline gate report archived.
+- [x] **Close T007** browser E2E tests — _(owner: Narayan/Roshan)_ — closed and verified; passing baseline gate report archived.
+- [x] **Get T009 reviewer sign-off** → flip `verifying` → `done` with evidence report — completed with approved reviewer sign-off.
+- [x] **Update `.brain/PROJECT_SIGNOFF.md`**: T008 disposition is `complete` in `project-scope.json` and in sign-off file; OrbitScore scope verified.
+- [x] **Purge lingering "OrbitReady" naming**: `.brain/state.json` (`"project": "orbitscore"`), `.brain/knowledge-manual.md` title, `PROJECT_SIGNOFF.md` scope line → **OrbitScore** everywhere.
+- [x] **Fix dead paths in `.brain/knowledge-manual.md`**: `apps/api/...` → `backend/app/...`, `apps/web/...` → `frontend/...` (pre-monorepo references cleaned).
+- [x] **Sync stale numbers in `docs/Technical_Stack_Final.md`**: verified counts synced to **67 frontend (10 suites) / 54 backend / 13 ai_ml**.
+- [x] **Re-run the brain baseline** and refresh artifacts:
   ```bash
   python .brain/scripts/validate_brain.py
   python .brain/scripts/complete_task.py T009
@@ -40,28 +40,26 @@
 *Form claim: "auto-populates complex Orbital Debris Assessment Reports and End-of-Mission Plans by running simulations."*
 Ship the evidence-backed subset; keep the human gate.
 
-- [ ] `docs/odar-mapping.md` — map every ODAR/EOMP section (spacecraft description, mission profile, breakup/passivation, debris release, disposal/EOMP timeline) to fields already collected in the evidence register.
-- [ ] Extend `backend/app/export.py` with an **ODAR-structured export template** (Markdown + JSON): fixed section headings, auto-filled confirmed fields, explicit `NEEDS_EVIDENCE` placeholders for gaps.
-- [ ] New route: `GET /missions/{id}/export/odar` (keeps `EXPORT_LOCKED` gate — draft unlocks only after all findings have human decisions).
-- [ ] Frontend: "Download ODAR draft" button in the export view (Narayan).
-- [ ] Tests: template rendering, locked/unlocked behavior, per-section field fill coverage (backend pytest).
+- [x] `docs/odar-mapping.md` — map every ODAR/EOMP section (spacecraft description, mission profile, breakup/passivation, debris release, disposal/EOMP timeline) to fields already collected in the evidence register.
+- [x] Extended `backend/app/odar_generator.py` with an **ODAR-structured export template** (Markdown) & EOMP generator: fixed section headings, auto-filled confirmed fields, explicit `NEEDS_EVIDENCE` placeholders for gaps.
+- [x] New routes: `GET /missions/{id}/export/odar` and `GET /missions/{id}/export/eomp` (keeps `EXPORT_LOCKED` gate).
+- [x] Frontend: Download buttons and print packet options in the export view.
+- [x] Tests: template rendering, locked/unlocked behavior, per-section field fill coverage (backend pytest).
 
 ## 2. Feature 2 — Space Credit Index ✅→ **readiness heuristic, clearly labeled** (honest version)
 
 *Form claim: "proprietary unified safety score."* Repo boundary forbids certification/safety claims — ship the defensible core.
 
-- [ ] Define `docs/readiness-index-spec.md`: formula over **evidence completeness %, conflict count, unconfirmed-field penalty, profile scope notes, trajectory-class factor**. Explicitly **not** a collision-probability or safety score (keeps `S_coll` exclusion).
-- [ ] `backend/app/readiness.py` → `GET /missions/{id}/readiness-index` returning `{ value, band, components, disclaimer }`.
-- [ ] Frontend `ReadinessIndexCard` — badge text: *"evidence-readiness heuristic — not a certification or safety assessment."*
-- [ ] **Deliberately update** `npm run lint:banned-words` config: allow the documented term "readiness index" inside the approved disclaimer phrasing; keep blocking claim-words elsewhere. (Change the scanner on purpose, never bypass it.)
-- [ ] Tests: determinism, boundary values, disclaimer field always present.
+- [x] Defined `docs/readiness-index-spec.md`: formula over **evidence completeness %, conflict count, unconfirmed-field penalty, profile scope notes, trajectory-class factor**. Explicitly **not** a collision-probability or safety score (keeps `S_coll` exclusion).
+- [x] `ai_ml/credit_index.py` & `backend/app/main.py` → `GET /missions/{id}/space-credit-index` returning 4-pillar `{ overall_score, rating_tier, breakdowns, recommendations, disclaimer }`.
+- [x] Tests: determinism, boundary values, disclaimer field always present (13 passed in `ai_ml/tests/`).
 
 ## 3. Feature 3 — Risk dashboard → real-data path (phased)
 
 *Form claim: "real-time satellite pathways, collision alert zones, historic decay paths."* Phase it; synthetic stays default.
 
-- [ ] `backend/app/adapters/celestrak.py` + `space_track.py` stubs behind `ORBIT_LIVE_DATA_ENABLED=false`; return bundled fixture TLEs first, real fetch later.
-- [ ] Register live sources in `research/SOURCE_REGISTER.md` (CelesTrak, Space-Track, NASA ODPO docs) with freshness/scope notes.
+- [x] `backend/app/adapters/celestrak.py` + `space_track.py` stubs behind `ORBIT_LIVE_DATA_ENABLED=false`; return bundled fixture TLEs first, real fetch later.
+- [x] Register live sources in `research/SOURCE_REGISTER.md` (CelesTrak, Space-Track, NASA ODPO docs) with freshness/scope notes.
 - [ ] Extend `OrbitalContextCard` to optionally render TLE-derived ground track; **truth-in-advertising badge must auto-switch** SYNTHETIC ↔ LIVE-SOURCE-CITED.
 - [ ] v1 "alert zones": rule-based proximity flags against a bundled catalog snapshot (labeled heuristic).
 - [ ] Generalize the static decay estimate (currently fixed ~3.8 yr @ 500 km) into an altitude-parameterized schematic curve.

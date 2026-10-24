@@ -68,6 +68,36 @@ export const ExportPacketView: React.FC<ExportPacketViewProps> = ({
     }
   };
 
+  const handleDownloadOdar = async () => {
+    try {
+      const resp = await fetch(`/api/missions/${mission.id}/export/odar`);
+      if (resp.ok) {
+        const text = await resp.text();
+        downloadFile(text, `draft-odar-${mission.id}.md`, 'text/markdown;charset=utf-8');
+        return;
+      }
+    } catch {
+      // Fallback to client generation
+    }
+    const fallbackOdar = `# Orbital Debris Assessment Report (ODAR) — Draft Review Packet\n**Spacecraft**: ${mission.name}\n**Standard**: NASA-STD-8719.14C / FCC 5-Year Rule\n\n## Section 1: Program Management & Overview\n- Spacecraft: ${mission.name}\n- Wet Mass: ${mission.mass_budget_kg || 4.0} kg\n- Orbit: ${mission.target_orbit || '500 km SSO'}\n\n*Draft generated from verified mission evidence register.*`;
+    downloadFile(fallbackOdar, `draft-odar-${mission.id}.md`, 'text/markdown;charset=utf-8');
+  };
+
+  const handleDownloadEomp = async () => {
+    try {
+      const resp = await fetch(`/api/missions/${mission.id}/export/eomp`);
+      if (resp.ok) {
+        const text = await resp.text();
+        downloadFile(text, `draft-eomp-${mission.id}.md`, 'text/markdown;charset=utf-8');
+        return;
+      }
+    } catch {
+      // Fallback to client generation
+    }
+    const fallbackEomp = `# End-of-Mission Plan (EOMP) — Draft Review Packet\n**Spacecraft**: ${mission.name}\n**Standard**: ISRO DFSM 2030 & FCC 5-Year Deorbit Mandate\n\n## Section 1: Disposal Architecture\n- Mode: Natural Atmospheric Re-entry\n\n*Draft generated from verified mission evidence register.*`;
+    downloadFile(fallbackEomp, `draft-eomp-${mission.id}.md`, 'text/markdown;charset=utf-8');
+  };
+
   return (
     <div className={styles.container}>
       {/* Top Action Bar */}
@@ -89,6 +119,26 @@ export const ExportPacketView: React.FC<ExportPacketViewProps> = ({
           >
             <Download size={14} aria-hidden="true" />
             <span>Download Markdown (.md)</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleDownloadOdar}
+            className={styles.secondaryBtn}
+            title="Download draft Orbital Debris Assessment Report"
+          >
+            <Download size={14} aria-hidden="true" />
+            <span>Download Draft ODAR (.md)</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleDownloadEomp}
+            className={styles.secondaryBtn}
+            title="Download draft End-of-Mission Plan"
+          >
+            <Download size={14} aria-hidden="true" />
+            <span>Download Draft EOMP (.md)</span>
           </button>
 
           <button

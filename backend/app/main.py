@@ -6,7 +6,7 @@ import uuid
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import Optional, List
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Query, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -791,16 +791,25 @@ async def assess_nasa_spark_flux(
 
 # --- Automated ODAR & EOMP Export Pipeline Endpoints ---
 
+# --- Automated ODAR & EOMP Export Pipeline Endpoints ---
+
 @app.get("/missions/{mission_id}/export/odar", response_class=HTMLResponse)
 def export_nasa_odar_report(
     mission_id: str,
     user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
 ):
-    """Generate a complete NASA-STD-8719.14 compliant draft ODAR markdown document."""
+    """Generate a complete NASA-STD-8719.14 compliant draft ODAR markdown document. Returns 423 if locked."""
+    evaluation = get_evaluation_db(mission_id)
+    if not evaluation:
+        raise HTTPException(423, detail={"code": "EXPORT_LOCKED", "message": "Mission must be evaluated before export", "pending_decisions": 1})
+    reviews = list_reviews_db()
+    missing = [f["finding_id"] for f in evaluation.get("findings", []) if f["finding_id"] not in reviews]
+    if missing:
+        raise HTTPException(423, detail={"code": "EXPORT_LOCKED", "unreviewed_findings": missing, "pending_decisions": len(missing)})
+
     m = get_mission(mission_id)
     fields = m.get("fields", [])
-    revs = list_reviews_db()
-    decisions = [v for v in revs.values() if v.get("mission_id") == m.get("mission_id")]
+    decisions = [v for v in reviews.values() if v.get("mission_id") == m.get("mission_id")]
     md = generate_nasa_odar_markdown(m, fields, decisions)
     return HTMLResponse(content=md, media_type="text/markdown; charset=utf-8")
 
@@ -810,10 +819,410 @@ def export_isro_fcc_eomp_plan(
     mission_id: str,
     user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
 ):
-    """Generate an End-of-Mission Plan (EOMP) conforming to ISRO DFSM 2030 and FCC 5-year rules."""
+    """Generate an End-of-Mission Plan (EOMP) conforming to ISRO DFSM 2030 and FCC 5-year rules. Returns 423 if locked."""
+    evaluation = get_evaluation_db(mission_id)
+    if not evaluation:
+        raise HTTPException(423, detail={"code": "EXPORT_LOCKED", "message": "Mission must be evaluated before export", "pending_decisions": 1})
+    reviews = list_reviews_db()
+    missing = [f["finding_id"] for f in evaluation.get("findings", []) if f["finding_id"] not in reviews]
+    if missing:
+        raise HTTPException(423, detail={"code": "EXPORT_LOCKED", "unreviewed_findings": missing, "pending_decisions": len(missing)})
+
     m = get_mission(mission_id)
     fields = m.get("fields", [])
     md = generate_eomp_markdown(m, fields)
     return HTMLResponse(content=md, media_type="text/markdown; charset=utf-8")
+
+
+# --- Offline Research Demonstration Endpoints ---
+
+try:
+    from ai_ml.inference.cdm_forecast import run_cdm_forecast, CDMMakeForecastResult
+except ImportError:
+    run_cdm_forecast = None
+    CDMMakeForecastResult = dict
+
+
+class ResearchCDMForecastRequest(BaseModel):
+    event_id: str
+    time_to_tca_days: float = Field(2.5, ge=2.0, description="Pre-TCA horizon (must be >= 2.0 days)")
+    miss_distance_m: float = Field(8500.0, ge=0.0, description="Encounter miss distance in meters")
+    relative_speed_m_s: float = Field(14200.0, ge=0.0, description="Encounter relative speed in m/s")
+    latest_early_risk: float = Field(-5.8, le=0.0, description="Reported log10 risk (must be <= 0.0)")
+    artifact_id: Optional[str] = None
+
+
+@app.post("/research/cdm-forecast")
+def execute_research_cdm_forecast(
+    req: ResearchCDMForecastRequest,
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
+    """
+    Offline research-only forecast of reported log-risk for a close approach event.
+    Explicitly labeled as research benchmark, not operational collision probability or maneuver advice.
+    """
+    if run_cdm_forecast is None:
+        raise HTTPException(503, "AI/ML research inference module unavailable.")
+    try:
+        result = run_cdm_forecast(
+            event_id=req.event_id,
+            time_to_tca_days=req.time_to_tca_days,
+            miss_distance_m=req.miss_distance_m,
+            relative_speed_m_s=req.relative_speed_m_s,
+            latest_early_risk=req.latest_early_risk,
+            artifact_id=req.artifact_id,
+        )
+        return result.model_dump()
+    except LookupError as exc:
+        raise HTTPException(404, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(400, detail=str(exc))
+
+
+# --- Orbital Intelligence & Space Credit Index Explanation Endpoints (P2 & P3) ---
+
+class PathwayPoint(BaseModel):
+    step: int
+    time_offset_seconds: float
+    latitude: float
+    longitude: float
+    altitude_km: float
+
+
+class MissionPathwayResponse(BaseModel):
+    mission_id: str
+    epoch: str
+    period_minutes: float
+    inclination_deg: float
+    altitude_km: float
+    pathway_points: List[PathwayPoint]
+    data_mode: str = "SYNTHETIC_PROPAGATION"
+    disclaimer: str = (
+        "HEURISTIC SCHEMATIC PATHWAY - FOR VISUALIZATION ONLY, NOT FOR FLIGHT NAVIGATION"
+    )
+
+
+class CollisionAlertsSummary(BaseModel):
+    critical_sub_1km: int
+    advisory_1_to_5km: int
+    wide_above_5km: int
+
+
+class MissionCollisionAlertsResponse(BaseModel):
+    mission_id: str
+    norad_cat_id: int
+    total_alerts: int
+    highest_severity: str
+    bands: CollisionAlertsSummary
+    alerts: List[ConjunctionAlert]
+    data_mode: str = "SYNTHETIC_SCREENING"
+    disclaimer: str = (
+        "HEURISTIC SCREENING ONLY - NOT AN OPERATIONAL CONJUNCTION ASSESSMENT SERVICE, NO REAL-TIME Pc COMPUTED"
+    )
+
+
+class DecayPoint(BaseModel):
+    year: float
+    altitude_km: float
+
+
+class MissionDecayPathResponse(BaseModel):
+    mission_id: str
+    initial_altitude_km: float
+    reentry_altitude_km: float
+    estimated_lifetime_years: float
+    model_status: str
+    decay_series: List[DecayPoint]
+    data_mode: str = "SYNTHETIC_SCHEMATIC"
+    disclaimer: str = (
+        "SCHEMATIC ATMOSPHERIC DECAY PROFILE - FOR COARSE ESTIMATION ONLY, NOT AN ACCREDITED PROPAGATOR"
+    )
+
+
+class PillarExplanation(BaseModel):
+    category: str
+    points_awarded: float
+    max_points: float
+    percentage: float
+    status: str
+    notes: str
+
+
+class SpaceCreditIndexExplainResponse(BaseModel):
+    mission_id: str
+    overall_score: float
+    rating_tier: str
+    isro_dfsm_aligned: bool
+    fcc_5yr_aligned: bool
+    summary: str
+    pillars: List[PillarExplanation]
+    missing_pillars: List[str]
+    recommendations: List[str]
+    data_mode: str
+    disclaimer: str
+
+
+@app.get("/missions/{mission_id}/pathway", response_model=MissionPathwayResponse)
+def get_mission_pathway(
+    mission_id: str,
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
+    """
+    Generate a deterministic SGP4-style Keplerian pathway for mission orbital context.
+    Bounded series of latitude, longitude, and altitude waypoints across one full orbit.
+    """
+    import math
+    m = get_mission(mission_id)
+    if not m:
+        raise HTTPException(404, "Mission not found")
+
+    # Extract orbital elements
+    alt = 500.0
+    inc = 97.4
+    for f in m.get("fields", []):
+        fn = f.get("field_name")
+        val = f.get("value")
+        if fn in ("altitude_km", "perigee_altitude_km", "apogee_altitude_km") and val is not None:
+            try:
+                alt = float(val)
+            except (ValueError, TypeError):
+                pass
+        elif fn == "inclination_deg" and val is not None:
+            try:
+                inc = float(val)
+            except (ValueError, TypeError):
+                pass
+
+    # Earth physics
+    R_earth = 6378.137  # km
+    mu = 398600.4418  # km^3/s^2
+    a = R_earth + alt
+    period_seconds = 2.0 * math.pi * math.sqrt((a ** 3) / mu)
+    period_min = round(period_seconds / 60.0, 1)
+
+    steps = 16
+    dt = period_seconds / float(steps - 1)
+    omega_earth = 360.0 / 86400.0  # deg/sec
+    mean_motion = 2.0 * math.pi / period_seconds
+
+    inc_rad = math.radians(inc)
+    points: List[PathwayPoint] = []
+    for step in range(steps):
+        t = step * dt
+        # True spherical sub-satellite latitude: sin(lat) = sin(i) * sin(u)
+        sin_lat = math.sin(inc_rad) * math.sin(mean_motion * t)
+        lat = round(math.degrees(math.asin(max(-1.0, min(1.0, sin_lat)))), 4)
+        lon_deg = (mean_motion * t * (180.0 / math.pi)) - (omega_earth * t)
+        lon = round(((lon_deg + 180.0) % 360.0) - 180.0, 4)
+
+        points.append(
+            PathwayPoint(
+                step=step,
+                time_offset_seconds=round(t, 1),
+                latitude=lat,
+                longitude=lon,
+                altitude_km=round(alt, 1),
+            )
+        )
+
+    return MissionPathwayResponse(
+        mission_id=mission_id,
+        epoch="2026-10-25T00:00:00Z",
+        period_minutes=period_min,
+        inclination_deg=inc,
+        altitude_km=round(alt, 1),
+        pathway_points=points,
+        data_mode="SYNTHETIC_PROPAGATION",
+        disclaimer="HEURISTIC SCHEMATIC PATHWAY - FOR VISUALIZATION ONLY, NOT FOR FLIGHT NAVIGATION"
+    )
+
+
+@app.get("/missions/{mission_id}/collision-alerts", response_model=MissionCollisionAlertsResponse)
+async def get_mission_collision_alerts(
+    mission_id: str,
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
+    """
+    Retrieve proximity screening collision alerts for mission's operational altitude.
+    Labeled as heuristic screening, not an operational conjunction assessment or collision probability.
+    """
+    m = get_mission(mission_id)
+    if not m:
+        raise HTTPException(404, "Mission not found")
+
+    norad_id = 99999
+    # Check DB stored CDMs first
+    from .db import get_cdm_events_for_norad
+    stored_cdms = get_cdm_events_for_norad(norad_id)
+
+    alerts: List[ConjunctionAlert] = []
+    if stored_cdms:
+        for c in stored_cdms:
+            alerts.append(
+                ConjunctionAlert(
+                    cdm_id=c["cdm_id"],
+                    primary_norad=c["primary_norad"],
+                    primary_name=c["primary_name"],
+                    secondary_norad=c["secondary_norad"],
+                    secondary_name=c["secondary_name"],
+                    time_of_closest_approach=c["tca"],
+                    miss_distance_meters=c["miss_distance_m"],
+                    radial_miss_meters=round(c["miss_distance_m"] * 0.15, 1),
+                    relative_speed_kms=14.1,
+                    collision_probability=c["collision_probability"],
+                    alert_level=c["alert_level"],
+                    data_mode="SNAPSHOT",
+                )
+            )
+    else:
+        alerts = await space_track_service.fetch_conjunctions(norad_id)
+
+    crit = sum(1 for a in alerts if a.miss_distance_meters < 1000.0)
+    adv = sum(1 for a in alerts if 1000.0 <= a.miss_distance_meters <= 5000.0)
+    wide = sum(1 for a in alerts if a.miss_distance_meters > 5000.0)
+
+    highest = "NOMINAL"
+    if crit > 0:
+        highest = "CRITICAL"
+    elif adv > 0:
+        highest = "ADVISORY"
+
+    return MissionCollisionAlertsResponse(
+        mission_id=mission_id,
+        norad_cat_id=norad_id,
+        total_alerts=len(alerts),
+        highest_severity=highest,
+        bands=CollisionAlertsSummary(
+            critical_sub_1km=crit,
+            advisory_1_to_5km=adv,
+            wide_above_5km=wide,
+        ),
+        alerts=alerts,
+        data_mode="SYNTHETIC_SCREENING",
+        disclaimer="HEURISTIC SCREENING ONLY - NOT AN OPERATIONAL CONJUNCTION ASSESSMENT SERVICE, NO REAL-TIME Pc COMPUTED"
+    )
+
+
+@app.get("/missions/{mission_id}/decay-path", response_model=MissionDecayPathResponse)
+def get_mission_decay_path(
+    mission_id: str,
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
+    """
+    Retrieve altitude-parameterized schematic decay curve for the mission.
+    Distinguishes SCHEMATIC vs approved RESEARCH models from trusted registry.
+    """
+    import math
+    m = get_mission(mission_id)
+    if not m:
+        raise HTTPException(404, "Mission not found")
+
+    init_alt = 500.0
+    lifetime_yrs = 3.8
+
+    for f in m.get("fields", []):
+        fn = f.get("field_name")
+        val = f.get("value")
+        if fn in ("altitude_km", "perigee_altitude_km", "apogee_altitude_km") and val is not None:
+            try:
+                init_alt = float(val)
+            except (ValueError, TypeError):
+                pass
+        elif fn in ("remaining_orbital_life_years", "disposal_duration_years", "debris_decay_years") and val is not None:
+            try:
+                lifetime_yrs = float(val)
+            except (ValueError, TypeError):
+                pass
+
+    # Model status check via trusted registry
+    model_status = "SCHEMATIC"
+    try:
+        from ai_ml.inference.registry import get_registered_artifact
+        artifact = get_registered_artifact("decay_regressor_approved", require_approved=True)
+        if artifact:
+            model_status = "RESEARCH"
+    except Exception:
+        model_status = "SCHEMATIC"
+
+    reentry_alt = 100.0
+    steps = 10
+    curve: List[DecayPoint] = []
+    for step in range(steps):
+        frac = step / float(steps - 1)
+        yr = round(frac * lifetime_yrs, 2)
+        # Quadratic atmospheric braking model
+        current_alt = reentry_alt + (init_alt - reentry_alt) * math.sqrt(max(0.0, 1.0 - frac))
+        curve.append(DecayPoint(year=yr, altitude_km=round(current_alt, 1)))
+
+    return MissionDecayPathResponse(
+        mission_id=mission_id,
+        initial_altitude_km=round(init_alt, 1),
+        reentry_altitude_km=reentry_alt,
+        estimated_lifetime_years=round(lifetime_yrs, 2),
+        model_status=model_status,
+        decay_series=curve,
+        data_mode="SYNTHETIC_SCHEMATIC",
+        disclaimer="SCHEMATIC ATMOSPHERIC DECAY PROFILE - FOR COARSE ESTIMATION ONLY, NOT AN ACCREDITED PROPAGATOR"
+    )
+
+
+@app.get("/missions/{mission_id}/space-credit-index/explain", response_model=SpaceCreditIndexExplainResponse)
+def explain_space_credit_index(
+    mission_id: str,
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
+    """
+    Provide per-pillar explainability breakdown for Space Credit Index.
+    Discloses missing evidence pillars, data mode, and explicit pre-review disclaimer.
+    """
+    m = get_mission(mission_id)
+    if not m:
+        raise HTTPException(404, "Mission not found")
+
+    fields = m.get("fields", [])
+    index_res = compute_space_credit_index(m, fields)
+
+    pillars: List[PillarExplanation] = []
+    missing_pillars: List[str] = []
+
+    for b in index_res.breakdowns:
+        awarded = b.points_awarded
+        pct = b.percentage
+        if awarded == 0.0:
+            status = "MISSING_EVIDENCE"
+            missing_pillars.append(b.category)
+        elif pct >= 80.0:
+            status = "SATISFIED"
+        else:
+            status = "PARTIAL"
+
+        pillars.append(
+            PillarExplanation(
+                category=b.category,
+                points_awarded=awarded,
+                max_points=b.max_points,
+                percentage=pct,
+                status=status,
+                notes=b.notes,
+            )
+        )
+
+    has_confirmed = any(f.get("human_confirmed") for f in fields)
+    data_mode = "SNAPSHOT" if has_confirmed else "SYNTHETIC"
+
+    return SpaceCreditIndexExplainResponse(
+        mission_id=mission_id,
+        overall_score=index_res.overall_score,
+        rating_tier=index_res.rating_tier,
+        isro_dfsm_aligned=index_res.isro_dfsm_aligned,
+        fcc_5yr_aligned=index_res.fcc_5yr_aligned,
+        summary=index_res.summary,
+        pillars=pillars,
+        missing_pillars=missing_pillars,
+        recommendations=index_res.recommendations,
+        data_mode=data_mode,
+        disclaimer=index_res.disclaimer,
+    )
+
 
 

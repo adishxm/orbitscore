@@ -1,0 +1,106 @@
+{
+  "task_id": "T009",
+  "task_file": ".brain\\tasks\\T009-timestamped-reporting-and-completion-gate.md",
+  "owner": "Project agent",
+  "started_at_utc": "2026-10-24T18:05:27.887863Z",
+  "started_at_local": "2026-10-24T23:35:27.887863+05:30",
+  "completed_at_utc": "2026-10-24T18:06:21.235477Z",
+  "completed_at_local": "2026-10-24T23:36:21.235477+05:30",
+  "timezone": "Asia/Kolkata",
+  "timestamp_source": "host system clock",
+  "passed": true,
+  "status": "awaiting_reviewer",
+  "reviewer_action_required": true,
+  "note": "This gate never stages, commits, pushes, or marks a task done. A reviewer must inspect this report, complete task-specific checks, record sign-off, and update task/state explicitly.",
+  "checks": [
+    {
+      "label": "brain validation",
+      "command": "C:\\Users\\adity\\AppData\\Local\\Programs\\Python\\Python310\\python.exe .brain/scripts/validate_brain.py",
+      "started_utc": "2026-10-24T18:05:27.887863Z",
+      "started_local": "2026-10-24T23:35:27.887863+05:30",
+      "completed_utc": "2026-10-24T18:05:28.147088Z",
+      "completed_local": "2026-10-24T23:35:28.147088+05:30",
+      "duration_seconds": 0.25,
+      "returncode": 0,
+      "passed": true
+    },
+    {
+      "label": "brain reporting tests",
+      "command": "C:\\Users\\adity\\AppData\\Local\\Programs\\Python\\Python310\\python.exe -m unittest discover -s .brain/tests -v",
+      "started_utc": "2026-10-24T18:05:28.147088Z",
+      "started_local": "2026-10-24T23:35:28.147088+05:30",
+      "completed_utc": "2026-10-24T18:05:30.477128Z",
+      "completed_local": "2026-10-24T23:35:30.477128+05:30",
+      "duration_seconds": 2.344,
+      "returncode": 0,
+      "passed": true
+    },
+    {
+      "label": "backend tests",
+      "command": "C:\\Users\\adity\\AppData\\Local\\Programs\\Python\\Python310\\python.exe -m pytest -q",
+      "started_utc": "2026-10-24T18:05:30.477128Z",
+      "started_local": "2026-10-24T23:35:30.477128+05:30",
+      "completed_utc": "2026-10-24T18:05:40.614583Z",
+      "completed_local": "2026-10-24T23:35:40.614583+05:30",
+      "duration_seconds": 10.125,
+      "returncode": 0,
+      "passed": true
+    },
+    {
+      "label": "ai adapter tests",
+      "command": "C:\\Users\\adity\\AppData\\Local\\Programs\\Python\\Python310\\python.exe -m pytest -q",
+      "started_utc": "2026-10-24T18:05:40.614583Z",
+      "started_local": "2026-10-24T23:35:40.614583+05:30",
+      "completed_utc": "2026-10-24T18:05:48.785408Z",
+      "completed_local": "2026-10-24T23:35:48.785408+05:30",
+      "duration_seconds": 8.172,
+      "returncode": 0,
+      "passed": true
+    },
+    {
+      "label": "verification matrix",
+      "command": "C:\\Users\\adity\\AppData\\Local\\Programs\\Python\\Python310\\python.exe -m app.verification",
+      "started_utc": "2026-10-24T18:05:48.786406Z",
+      "started_local": "2026-10-24T23:35:48.786406+05:30",
+      "completed_utc": "2026-10-24T18:05:48.977630Z",
+      "completed_local": "2026-10-24T23:35:48.977630+05:30",
+      "duration_seconds": 0.203,
+      "returncode": 0,
+      "passed": true
+    },
+    {
+      "label": "frontend tests",
+      "command": "npm test",
+      "started_utc": "2026-10-24T18:05:48.977630Z",
+      "started_local": "2026-10-24T23:35:48.977630+05:30",
+      "completed_utc": "2026-10-24T18:05:59.867505Z",
+      "completed_local": "2026-10-24T23:35:59.867505+05:30",
+      "duration_seconds": 10.891,
+      "returncode": 0,
+      "passed": true
+    },
+    {
+      "label": "frontend typecheck",
+      "command": "npm run typecheck",
+      "started_utc": "2026-10-24T18:05:59.867505Z",
+      "started_local": "2026-10-24T23:35:59.867505+05:30",
+      "completed_utc": "2026-10-24T18:06:06.658706Z",
+      "completed_local": "2026-10-24T23:36:06.658706+05:30",
+      "duration_seconds": 6.781,
+      "returncode": 0,
+      "passed": true
+    },
+    {
+      "label": "frontend production build",
+      "command": "npm run build",
+      "started_utc": "2026-10-24T18:06:06.659705Z",
+      "started_local": "2026-10-24T23:36:06.659705+05:30",
+      "completed_utc": "2026-10-24T18:06:21.235477Z",
+      "completed_local": "2026-10-24T23:36:21.235477+05:30",
+      "duration_seconds": 14.578,
+      "returncode": 0,
+      "passed": true
+    }
+  ],
+  "detailed_local_log": ".brain\\local-reports\\20261024T233621.235477+0530_T009_verification.json"
+}

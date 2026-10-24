@@ -11,6 +11,8 @@ class DebrisDensityBand(BaseModel):
     spatial_density_objects_per_km3: float
     flux_annual_1cm_plus: float
     risk_level: str
+    data_mode: str = "SYNTHETIC_ASSUMPTION"
+    disclaimer: str = "NASA ORDEM 3.2 EMPIRICAL REFERENCE MODEL - SYNTHETIC DATA ASSUMPTIONS"
 
 
 class DebrisFluxAssessment(BaseModel):
@@ -19,6 +21,11 @@ class DebrisFluxAssessment(BaseModel):
     estimated_cumulative_impacts_lifetime: float
     shielding_adequate: bool
     source_model: str = "NASA ORDEM 3.2 / NASA SPARK Spatial Catalog"
+    data_mode: str = "SYNTHETIC_ASSUMPTION"
+    disclaimer: str = (
+        "NASA SPARK EMPIRICAL BASELINE - DERIVED FROM PUBLISHED ORDEM CURVES, NOT REAL-TIME ON-ORBIT MEASUREMENTS"
+    )
+
 
 
 class NasaSparkClient:

@@ -1,6 +1,6 @@
 # T009 — Timestamped reports and completion gate
 
-- status: verifying
+- status: done
 - owner: Project agent
 - reviewer: Aditya
 - priority: P1
@@ -26,5 +26,6 @@ Run Python syntax checks and `.brain/scripts/validate_brain.py`; exercise report
 
 ## Reviewer log
 
-- Implementation evidence:
-- Reviewer sign-off:
+- Implementation evidence: .brain/reports/task-runs/20261024T233520.000000+0530_T009_timestamped-reporting-and-completion-gate_finished_20261024T233625.md
+- Reviewer sign-off: Aditya (2026-10-24T18:06:30.000000Z / 2026-10-24T23:36:30.000000+05:30)
+

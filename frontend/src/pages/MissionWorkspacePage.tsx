@@ -5,6 +5,7 @@ import { useOrbitStore } from '../store/useOrbitStore';
 import { Stepper, WorkspaceStep } from '../components/workspace/Stepper';
 import { MissionContextCard } from '../components/workspace/MissionContextCard';
 import { OrbitalContextCard } from '../components/workspace/OrbitalContextCard';
+import { ReadinessIndexCard } from '../components/workspace/ReadinessIndexCard';
 import { DataTable } from '../components/workspace/DataTable';
 import { SidePanel } from '../components/workspace/SidePanel';
 import { AddEvidenceModal } from '../components/workspace/AddEvidenceModal';
@@ -210,6 +211,8 @@ export const MissionWorkspacePage: React.FC = () => {
             />
 
             <OrbitalContextCard mission={currentMission} />
+
+            <ReadinessIndexCard mission={currentMission} evidence={currentEvidence} />
 
             <div className={styles.buttonGroupEnd}>
               <button

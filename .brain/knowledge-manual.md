@@ -1,8 +1,8 @@
-# OrbitReady team knowledge manual
+# OrbitScore team knowledge manual
 
 This is the project’s practical reading syllabus and explain-back guide. Read the shared product boundary first, then complete the common foundation and role path. It is intentionally focused on this prototype—not a general spacecraft engineering or regulatory certification course.
 
-For product, policy, market, or domain research, start with `research/README.md`, then read `research/PRODUCT_RESEARCH.md` and `research/SOURCE_REGISTER.md`. The underlying source archive is in `research/OrbitReady_Research_Library/`; its catalog is an index, not an independent verification of source correctness or freshness.
+For product, policy, market, or domain research, start with `research/README.md`, then read `research/PRODUCT_RESEARCH.md` and `research/SOURCE_REGISTER.md`. The underlying source archive is in `research/`; its catalog is an index, not an independent verification of source correctness or freshness.
 
 ## How to use this manual
 
@@ -22,7 +22,7 @@ For each topic, read the listed project files and reference material, try the sm
 ### 1.1 Product purpose, scope, and claims
 
 **Read:** `.brain/context.md`, `.brain/AGENT.md`, `.brain/reports/package-audit.md`, `README.md`.  
-**Understand:** OrbitReady/OrbitScore is a pre-review evidence organization and decision-support prototype. It is not certification, legal advice, operational conjunction screening, collision prediction, orbit propagation, maneuver guidance, regulator filing, or a universal compliance score.  
+**Understand:** OrbitScore is a pre-review evidence organization and decision-support prototype. It is not certification, legal advice, operational conjunction screening, collision prediction, orbit propagation, maneuver guidance, regulator filing, or a universal compliance score.  
 **Practice:** Give a 30-second description of a user problem, the workflow, and three explicit non-capabilities.  
 **Check:** Never describe a configured profile as an agency approval or a passing state as proof of mission safety.
 
@@ -35,21 +35,21 @@ For each topic, read the listed project files and reference material, try the sm
 
 ### 1.3 Deterministic decision flow and human review
 
-**Read:** `apps/api/app/engine.py`, `.brain/checklists/demo.md`, `apps/api/app/main.py`, `apps/api/app/export.py`.  
+**Read:** `backend/app/engine.py`, `.brain/checklists/demo.md`, `backend/app/main.py`, `backend/app/export.py`.  
 **Understand:** In the intended design AI may suggest fields or explanations, but deterministic code evaluates confirmed inputs under a selected versioned profile. A human checks evidence and makes review decisions. Export stays locked until all findings have decisions.  
 **Practice:** Explain the sequence: select mission/profile → inspect evidence → confirm/correct fields → evaluate → inspect findings → review each finding → unlock export.  
 **Check:** A model-generated extraction remains a candidate, not confirmed evidence; do not skip human review.
 
 ### 1.4 Five finding states and failure meanings
 
-**Read:** `.brain/contracts/api-contract.md`, `apps/api/app/engine.py`, `apps/api/tests/test_evaluator.py`.  
+**Read:** `.brain/contracts/api-contract.md`, `backend/app/engine.py`, `backend/tests/test_evaluator.py`.  
 **Understand:** `PASS_UNDER_PROFILE`, `WARNING`, `NEEDS_EVIDENCE`, `CONFLICT`, and `NOT_EVALUATED` communicate different configured evaluation outcomes. `NOT_EVALUATED` is not a pass; missing data should not be invented; a conflict is not resolved by silently choosing a value.  
 **Practice:** For each state, name one fixture or test that demonstrates it and the next safe reviewer action.  
 **Check:** Never collapse all non-pass states into one generic red status or claim a status outside the selected profile’s scope.
 
 ### 1.5 Verification versus validation
 
-**Read:** `.brain/reports/package-audit.md`, `.brain/checklists/acceptance.md`, `apps/api/app/verification.py`, `apps/api/tests/test_evaluator.py`, `apps/web/tests/api.test.ts`.  
+**Read:** `.brain/reports/package-audit.md`, `.brain/checklists/acceptance.md`, `backend/app/verification.py`, `backend/tests/test_evaluator.py`, `frontend/src/test/workspace-flow.test.tsx`.  
 **Understand:** Tests can show that code behaves consistently with implemented rules. They do not prove the rules are scientifically, legally, or operationally correct. The 12-case matrix is a reproducibility check, not independent domain validation.  
 **Practice:** State separately: “what the test established” and “what remains unvalidated.”  
 **Check:** Avoid “validated/compliant/certified” unless supported by an appropriate independent process.
@@ -57,7 +57,7 @@ For each topic, read the listed project files and reference material, try the sm
 ### 1.6 Local setup, test commands, and Git hygiene
 
 **Read:** root `README.md`, `.brain/prompts/git-sync.md`, `.gitignore`, `.brain/scripts/validate_brain.py`.  
-**Run:** `python .brain/scripts/validate_brain.py`; in `apps/api`, `python -m pytest -q` and `python -m app.verification`; at root, `npm ci --prefix apps/web`, `npm test`, `npm run typecheck`, and `npm run build`.  
+**Run:** `python .brain/scripts/validate_brain.py`; in `backend`, `python -m pytest -q` and `python -m app.verification`; in `frontend`, `npm test`, `npm run typecheck`, and `npm run build`.  
 **Understand:** `.brain/` is shared and version-controlled; generated reports and runtime caches are local. The completion script is report-only. Review `git status` and `git diff` before manually staging intended files.  
 **Practice:** On a clean clone, follow the README and record exact commands and results.  
 **Check:** Never add `.env`, credentials, private documents, local databases, dependency directories, or generated reports to a commit.
@@ -68,7 +68,7 @@ Complete the common foundation, then study these topics in order.
 
 ### 2.1 HTTP, FastAPI, and request/response contracts
 
-**Read:** `apps/api/app/main.py`, `apps/api/app/schemas.py`, `.brain/contracts/api-contract.md`.  
+**Read:** `backend/app/main.py`, `backend/app/schemas.py`, `.brain/contracts/api-contract.md`.  
 **Reference:** [FastAPI tutorial](https://fastapi.tiangolo.com/tutorial/), [Pydantic models](https://docs.pydantic.dev/latest/concepts/models/).  
 **Learn:** HTTP methods and status codes, request validation, response shape, path/query/body parameters, API errors, and why the frontend and backend contract must agree.  
 **Practice:** Trace one mission evaluation request through its schema, route, engine call, and response. Compare actual fields with the contract example.  
@@ -76,7 +76,7 @@ Complete the common foundation, then study these topics in order.
 
 ### 2.2 Pure deterministic rule functions
 
-**Read:** `apps/api/app/engine.py`, `fixtures/rules_profiles.json`, `apps/api/tests/test_evaluator.py`.  
+**Read:** `backend/app/engine.py`, `fixtures/rules_profiles.json`, `backend/tests/test_evaluator.py`.  
 **Learn:** Pure functions, explicit inputs/outputs, profile scope, unit/type validation, missing values, conflicting sources, boundary conditions, and stable rule versions.  
 **Practice:** Add a small test case before changing any rule logic; test a normal, missing, conflict, and out-of-scope input.  
 **Explain:** Why should evaluation not depend on an LLM answer or hidden mutable state?
@@ -90,7 +90,7 @@ Complete the common foundation, then study these topics in order.
 
 ### 2.4 Hashes and event-chain provenance
 
-**Read:** `apps/api/app/provenance.py`, matching tests, and `.brain/tasks/T004-durable-provenance.md`.  
+**Read:** `backend/app/provenance.py`, matching tests, and `.brain/tasks/T004-durable-provenance.md`.  
 **Learn:** SHA-256 hashes bytes; canonical serialization matters; a chain links each event to the preceding event; integrity checking detects certain edits but does not authenticate who created data or prevent deletion.  
 **Practice:** Change one event payload in a copy and locate the first broken sequence.  
 **Explain:** Difference between checksum, tamper evidence, digital signature, and immutable storage.
@@ -115,27 +115,27 @@ Complete the common foundation, then study these topics.
 
 ### 3.1 React state and component flow
 
-**Read:** `apps/web/src/App.tsx`, `apps/web/src/main.tsx`, `apps/web/src/styles.css`.  
+**Read:** `frontend/src/App.tsx`, `frontend/src/main.tsx`, `frontend/src/styles/index.css`.  
 **Reference:** [React Learn](https://react.dev/learn).  
 **Learn:** Component state, props, event handlers, derived UI, loading/empty/error states, controlled inputs, and avoiding stale or duplicate state.  
 **Practice:** Trace the profile selector, evidence mutation, finding list, decision button, and export action to their state changes.
 
 ### 3.2 TypeScript contracts and API adapter
 
-**Read:** `frontend-service/schemas.ts`, `frontend-service/api.ts`, `apps/web/tests/api.test.ts`, `.brain/contracts/api-contract.md`.  
+**Read:** `frontend/src/types/domain.ts`, `frontend/src/api/backend.ts`, `frontend/src/test/workspace-flow.test.tsx`, `.brain/contracts/api-contract.md`.  
 **Reference:** [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html).  
 **Learn:** Interfaces/types, discriminated unions, runtime validation versus compile-time checking, API adapters, local/mock versus live behavior, and visible network failures.  
 **Practice:** Compare one backend response with its frontend type. Identify any type that is asserted but not runtime-checked.
 
 ### 3.3 Human confirmation and accessible status design
 
-**Read:** `.brain/agents/narayan.md`, `.brain/checklists/acceptance.md`, `.brain/checklists/demo.md`, `apps/web/src/App.tsx`, `apps/web/src/styles.css`.  
+**Read:** `.brain/agents/narayan.md`, `.brain/checklists/acceptance.md`, `.brain/checklists/demo.md`, `frontend/src/App.tsx`, `frontend/src/styles/index.css`.  
 **Learn:** Do not use color alone; make `CONFLICT`, `NEEDS_EVIDENCE`, and `NOT_EVALUATED` visible text; show source and limitation near the claim; make confirmation and review actions explicit.  
 **Practice:** Walk the demo using keyboard only; check focus, labels, visible error text, and small-screen layout.
 
 ### 3.4 Export gate and live/mock distinction
 
-**Read:** `apps/api/app/export.py`, `.brain/tasks/T001-live-api-integration.md`, `.brain/tasks/T005-export-packet.md`, `.brain/tasks/T007-browser-tests.md`.  
+**Read:** `backend/app/export.py`, `.brain/tasks/T001-live-api-integration.md`, `.brain/tasks/T005-export-packet.md`, `.brain/tasks/T007-browser-tests.md`.  
 **Learn:** A local mock export is not proof that the API generated or stored a packet. UI text must distinguish requested, locked, generated, downloaded, and failed states.  
 **Practice:** Verify both locked and unlocked paths in the actual user interface; inspect the produced HTML/JSON rather than only reading a toast message.  
 **Boundary:** Live end-to-end UI/API integration is a planned task until demonstrated in browser acceptance tests.
@@ -146,7 +146,7 @@ Complete the common foundation, then study these topics.
 
 ### 4.1 Test design and reproducible bug reports
 
-**Read:** `.brain/checklists/acceptance.md`, `.brain/checklists/preflight.md`, `apps/api/tests/test_evaluator.py`, `apps/web/tests/api.test.ts`.  
+**Read:** `.brain/checklists/acceptance.md`, `.brain/checklists/preflight.md`, `backend/tests/test_evaluator.py`, `frontend/src/test/workspace-flow.test.tsx`.  
 **Learn:** Arrange/act/assert, positive/negative/boundary cases, deterministic fixtures, regression tests, expected versus actual result, environment details, and reproducibility.  
 **Practice:** Write a bug report with exact steps, expected result, actual result, command/browser state, and sanitized screenshot/path.
 
