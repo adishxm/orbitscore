@@ -2,7 +2,7 @@
 
 > **Engineering Review Boundary Notice**: Despite the name, OrbitScore does not score or certify missions; it organizes evidence for human review.
 >
-> *OrbitScore helps small-spacecraft teams organize cited mission information, identify missing or inconsistent evidence, and prepare material for qualified human review. Its demo orbital data is synthetic and is not a safety or compliance assessment.*
+> *OrbitScore helps small-spacecraft teams organize cited mission information, identify missing or inconsistent evidence, and prepare material for qualified human review. Its demo orbital data is synthetic and is not a safety or compliance assessment. The Space Credit Index is an evidence-readiness benchmark, not a safety certification.*
 
 OrbitScore delivers a polished, responsive mission evidence workspace and synthetic orbital context dashboard for student, university, and small spacecraft engineering teams.
 
@@ -10,7 +10,8 @@ OrbitScore delivers a polished, responsive mission evidence workspace and synthe
 
 - **Sourced Evidence Register**: Granular parameters mapped to primary source documents, revisions, dates, page/section locators, and human engineering verification status.
 - **Deterministic Check Engine**: 100% deterministic rule verification surfacing missing citations, unconfirmed records, and cross-subsystem numerical discrepancies (e.g. CAD vs interface specifications).
-- **Space Credit Index Engine**: Deterministic, 4-pillar 0–100 readiness index (AAA to C) benchmarking orbital lifetime, spatial footprint, passivation readiness, and primary citation provenance (`GET /missions/{id}/space-credit-index`).
+- **Space Credit Index Engine**: Deterministic, 4-pillar 0–100 readiness index (AAA to D) benchmarking orbital lifetime, spatial footprint, passivation readiness, and primary citation provenance (`GET /missions/{id}/space-credit-index`).
+- **Offline ML Training, Document Extraction Pipeline & Trusted Registry**: Modular document ingest with mission-family disjoint holdouts, ESA Conjunction Data Message (CDM) training pipeline (`ai_ml.training.train_cdm`), magnitude-aware precision/recall/F1 metrics, and cryptographically verified model artifact registry (`ai_ml.inference.registry`) with CLI (`python -m ai_ml.cli`).
 - **Scikit-Learn Astrodynamics Machine Learning**: Supervised physical decay lifetime regression (`GradientBoostingRegressor`) and conjunction geometry risk classification (`RandomForestClassifier`) (`POST /missions/{id}/ml/...`).
 - **Space-Track & NASA SPARK Ingestion Pipeline**: Ingestion service fetching live or cached Two-Line Elements (TLEs), Conjunction Data Messages (CDMs), and LEO spatial debris density profiles from NASA SPARK/ORDEM baseline (`GET /integrations/...`).
 - **Automated ODAR & EOMP Export Pipeline**: Automated generation of complete, section-compliant draft NASA-STD-8719.14 Orbital Debris Assessment Reports and ISRO DFSM 2030 / FCC 5-year End-of-Mission Plans (`GET /missions/{id}/export/odar`, `/export/eomp`).
@@ -18,6 +19,7 @@ OrbitScore delivers a polished, responsive mission evidence workspace and synthe
 - **National-to-Global Scalability Matrix**: Dual evaluation pathways aligning with Tier 1: India ISRO Debris-Free Space Missions (DFSM) 2030 guidelines and Tier 2: Global FCC (FCC-22-74 5-year deorbit rule), NASA STD 8719.14, and ESA Zero Debris standards.
 - **Human Review & Decision Gate**: Explicit separation of software findings from human engineering mitigations, sign-offs, and open issue tracking.
 - **Synthetic Demo Review Packets**: Exportable review packets (Markdown and JSON) with cryptographic SHA-256 provenance hashes and prominent review boundary notices.
+
 
 ## Repository layout
 
@@ -61,7 +63,7 @@ npm run lint:banned-words
 # Install dependencies including the editable ai_ml package
 pip install -r requirements.txt
 
-# Run backend test suite (54 tests)
+# Run backend test suite (55 tests)
 python -m pytest backend/tests
 
 # Run synthetic verification matrix
@@ -74,7 +76,7 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000   # from backend/
 ### AI / ML Astrodynamics & Adapter (`ai_ml/`)
 
 ```bash
-# Run isolated AI/ML test suite (13 tests: decay GBR, collision RF, Space Credit Index, and extraction)
+# Run isolated AI/ML test suite (33 tests: training, evaluation, inference registry, adapter, and baselines)
 python -m pytest ai_ml/tests
 ```
 

@@ -1389,6 +1389,198 @@
           }
         ]
       }
+    },
+    "/missions/{mission_id}/pathway": {
+      "get": {
+        "summary": "Get Mission Pathway",
+        "description": "Generate a deterministic SGP4-style Keplerian pathway for mission orbital context.\nBounded series of latitude, longitude, and altitude waypoints across one full orbit.",
+        "operationId": "get_mission_pathway_missions__mission_id__pathway_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mission_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mission Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MissionPathwayResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/missions/{mission_id}/collision-alerts": {
+      "get": {
+        "summary": "Get Mission Collision Alerts",
+        "description": "Retrieve proximity screening collision alerts for mission's operational altitude.\nLabeled as heuristic screening, not an operational conjunction assessment or collision probability.",
+        "operationId": "get_mission_collision_alerts_missions__mission_id__collision_alerts_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mission_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mission Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MissionCollisionAlertsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/missions/{mission_id}/decay-path": {
+      "get": {
+        "summary": "Get Mission Decay Path",
+        "description": "Retrieve altitude-parameterized schematic decay curve for the mission.\nDistinguishes SCHEMATIC vs approved RESEARCH models from trusted registry.",
+        "operationId": "get_mission_decay_path_missions__mission_id__decay_path_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mission_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mission Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MissionDecayPathResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/missions/{mission_id}/space-credit-index/explain": {
+      "get": {
+        "summary": "Explain Space Credit Index",
+        "description": "Provide per-pillar explainability breakdown for Space Credit Index.\nDiscloses missing evidence pillars, data mode, and explicit pre-review disclaimer.",
+        "operationId": "explain_space_credit_index_missions__mission_id__space_credit_index_explain_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mission_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mission Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpaceCreditIndexExplainResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1777,6 +1969,29 @@
         ],
         "title": "CandidateField"
       },
+      "CollisionAlertsSummary": {
+        "properties": {
+          "critical_sub_1km": {
+            "type": "integer",
+            "title": "Critical Sub 1Km"
+          },
+          "advisory_1_to_5km": {
+            "type": "integer",
+            "title": "Advisory 1 To 5Km"
+          },
+          "wide_above_5km": {
+            "type": "integer",
+            "title": "Wide Above 5Km"
+          }
+        },
+        "type": "object",
+        "required": [
+          "critical_sub_1km",
+          "advisory_1_to_5km",
+          "wide_above_5km"
+        ],
+        "title": "CollisionAlertsSummary"
+      },
       "CollisionMLRequest": {
         "properties": {
           "miss_distance_m": {
@@ -1848,6 +2063,16 @@
           "alert_level": {
             "type": "string",
             "title": "Alert Level"
+          },
+          "data_mode": {
+            "type": "string",
+            "title": "Data Mode",
+            "default": "SYNTHETIC_SCREENING"
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer",
+            "default": "HEURISTIC SCREENING ONLY - NOT AN OPERATIONAL CONJUNCTION ASSESSMENT SERVICE, NO REAL-TIME Pc COMPUTED"
           }
         },
         "type": "object",
@@ -1991,6 +2216,16 @@
           "risk_level": {
             "type": "string",
             "title": "Risk Level"
+          },
+          "data_mode": {
+            "type": "string",
+            "title": "Data Mode",
+            "default": "SYNTHETIC_ASSUMPTION"
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer",
+            "default": "NASA ORDEM 3.2 EMPIRICAL REFERENCE MODEL - SYNTHETIC DATA ASSUMPTIONS"
           }
         },
         "type": "object",
@@ -2024,6 +2259,16 @@
             "type": "string",
             "title": "Source Model",
             "default": "NASA ORDEM 3.2 / NASA SPARK Spatial Catalog"
+          },
+          "data_mode": {
+            "type": "string",
+            "title": "Data Mode",
+            "default": "SYNTHETIC_ASSUMPTION"
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer",
+            "default": "NASA SPARK EMPIRICAL BASELINE - DERIVED FROM PUBLISHED ORDEM CURVES, NOT REAL-TIME ON-ORBIT MEASUREMENTS"
           }
         },
         "type": "object",
@@ -2070,6 +2315,24 @@
         },
         "type": "object",
         "title": "DecayMLRequest"
+      },
+      "DecayPoint": {
+        "properties": {
+          "year": {
+            "type": "number",
+            "title": "Year"
+          },
+          "altitude_km": {
+            "type": "number",
+            "title": "Altitude Km"
+          }
+        },
+        "type": "object",
+        "required": [
+          "year",
+          "altitude_km"
+        ],
+        "title": "DecayPoint"
       },
       "DecayPredictionResult": {
         "properties": {
@@ -2413,6 +2676,158 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
+      "MissionCollisionAlertsResponse": {
+        "properties": {
+          "mission_id": {
+            "type": "string",
+            "title": "Mission Id"
+          },
+          "norad_cat_id": {
+            "type": "integer",
+            "title": "Norad Cat Id"
+          },
+          "total_alerts": {
+            "type": "integer",
+            "title": "Total Alerts"
+          },
+          "highest_severity": {
+            "type": "string",
+            "title": "Highest Severity"
+          },
+          "bands": {
+            "$ref": "#/components/schemas/CollisionAlertsSummary"
+          },
+          "alerts": {
+            "items": {
+              "$ref": "#/components/schemas/ConjunctionAlert"
+            },
+            "type": "array",
+            "title": "Alerts"
+          },
+          "data_mode": {
+            "type": "string",
+            "title": "Data Mode",
+            "default": "SYNTHETIC_SCREENING"
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer",
+            "default": "HEURISTIC SCREENING ONLY - NOT AN OPERATIONAL CONJUNCTION ASSESSMENT SERVICE, NO REAL-TIME Pc COMPUTED"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mission_id",
+          "norad_cat_id",
+          "total_alerts",
+          "highest_severity",
+          "bands",
+          "alerts"
+        ],
+        "title": "MissionCollisionAlertsResponse"
+      },
+      "MissionDecayPathResponse": {
+        "properties": {
+          "mission_id": {
+            "type": "string",
+            "title": "Mission Id"
+          },
+          "initial_altitude_km": {
+            "type": "number",
+            "title": "Initial Altitude Km"
+          },
+          "reentry_altitude_km": {
+            "type": "number",
+            "title": "Reentry Altitude Km"
+          },
+          "estimated_lifetime_years": {
+            "type": "number",
+            "title": "Estimated Lifetime Years"
+          },
+          "model_status": {
+            "type": "string",
+            "title": "Model Status"
+          },
+          "decay_series": {
+            "items": {
+              "$ref": "#/components/schemas/DecayPoint"
+            },
+            "type": "array",
+            "title": "Decay Series"
+          },
+          "data_mode": {
+            "type": "string",
+            "title": "Data Mode",
+            "default": "SYNTHETIC_SCHEMATIC"
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer",
+            "default": "SCHEMATIC ATMOSPHERIC DECAY PROFILE - FOR COARSE ESTIMATION ONLY, NOT AN ACCREDITED PROPAGATOR"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mission_id",
+          "initial_altitude_km",
+          "reentry_altitude_km",
+          "estimated_lifetime_years",
+          "model_status",
+          "decay_series"
+        ],
+        "title": "MissionDecayPathResponse"
+      },
+      "MissionPathwayResponse": {
+        "properties": {
+          "mission_id": {
+            "type": "string",
+            "title": "Mission Id"
+          },
+          "epoch": {
+            "type": "string",
+            "title": "Epoch"
+          },
+          "period_minutes": {
+            "type": "number",
+            "title": "Period Minutes"
+          },
+          "inclination_deg": {
+            "type": "number",
+            "title": "Inclination Deg"
+          },
+          "altitude_km": {
+            "type": "number",
+            "title": "Altitude Km"
+          },
+          "pathway_points": {
+            "items": {
+              "$ref": "#/components/schemas/PathwayPoint"
+            },
+            "type": "array",
+            "title": "Pathway Points"
+          },
+          "data_mode": {
+            "type": "string",
+            "title": "Data Mode",
+            "default": "SYNTHETIC_PROPAGATION"
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer",
+            "default": "HEURISTIC SCHEMATIC PATHWAY - FOR VISUALIZATION ONLY, NOT FOR FLIGHT NAVIGATION"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mission_id",
+          "epoch",
+          "period_minutes",
+          "inclination_deg",
+          "altitude_km",
+          "pathway_points"
+        ],
+        "title": "MissionPathwayResponse"
+      },
       "MissionProfile": {
         "properties": {
           "mission_id": {
@@ -2445,6 +2860,77 @@
           "name"
         ],
         "title": "MissionProfile"
+      },
+      "PathwayPoint": {
+        "properties": {
+          "step": {
+            "type": "integer",
+            "title": "Step"
+          },
+          "time_offset_seconds": {
+            "type": "number",
+            "title": "Time Offset Seconds"
+          },
+          "latitude": {
+            "type": "number",
+            "title": "Latitude"
+          },
+          "longitude": {
+            "type": "number",
+            "title": "Longitude"
+          },
+          "altitude_km": {
+            "type": "number",
+            "title": "Altitude Km"
+          }
+        },
+        "type": "object",
+        "required": [
+          "step",
+          "time_offset_seconds",
+          "latitude",
+          "longitude",
+          "altitude_km"
+        ],
+        "title": "PathwayPoint"
+      },
+      "PillarExplanation": {
+        "properties": {
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "points_awarded": {
+            "type": "number",
+            "title": "Points Awarded"
+          },
+          "max_points": {
+            "type": "number",
+            "title": "Max Points"
+          },
+          "percentage": {
+            "type": "number",
+            "title": "Percentage"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "notes": {
+            "type": "string",
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "category",
+          "points_awarded",
+          "max_points",
+          "percentage",
+          "status",
+          "notes"
+        ],
+        "title": "PillarExplanation"
       },
       "ResearchCDMForecastRequest": {
         "properties": {
@@ -2497,6 +2983,78 @@
           "event_id"
         ],
         "title": "ResearchCDMForecastRequest"
+      },
+      "SpaceCreditIndexExplainResponse": {
+        "properties": {
+          "mission_id": {
+            "type": "string",
+            "title": "Mission Id"
+          },
+          "overall_score": {
+            "type": "number",
+            "title": "Overall Score"
+          },
+          "rating_tier": {
+            "type": "string",
+            "title": "Rating Tier"
+          },
+          "isro_dfsm_aligned": {
+            "type": "boolean",
+            "title": "Isro Dfsm Aligned"
+          },
+          "fcc_5yr_aligned": {
+            "type": "boolean",
+            "title": "Fcc 5Yr Aligned"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          },
+          "pillars": {
+            "items": {
+              "$ref": "#/components/schemas/PillarExplanation"
+            },
+            "type": "array",
+            "title": "Pillars"
+          },
+          "missing_pillars": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Missing Pillars"
+          },
+          "recommendations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Recommendations"
+          },
+          "data_mode": {
+            "type": "string",
+            "title": "Data Mode"
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mission_id",
+          "overall_score",
+          "rating_tier",
+          "isro_dfsm_aligned",
+          "fcc_5yr_aligned",
+          "summary",
+          "pillars",
+          "missing_pillars",
+          "recommendations",
+          "data_mode",
+          "disclaimer"
+        ],
+        "title": "SpaceCreditIndexExplainResponse"
       },
       "SpaceCreditIndexResult": {
         "properties": {
@@ -2604,6 +3162,49 @@
             "type": "string",
             "title": "Source",
             "default": "Space-Track.org / 18th Space Defense Squadron"
+          },
+          "data_mode": {
+            "type": "string",
+            "enum": [
+              "LIVE",
+              "SNAPSHOT",
+              "SYNTHETIC"
+            ],
+            "title": "Data Mode",
+            "default": "SYNTHETIC"
+          },
+          "fetched_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fetched At"
+          },
+          "sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sha256"
+          },
+          "disclaimer": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Disclaimer"
           }
         },
         "type": "object",

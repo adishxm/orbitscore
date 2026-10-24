@@ -98,6 +98,32 @@ def init_db(db_path: Optional[Path | str] = None) -> None:
                 hash TEXT NOT NULL,
                 created_at TEXT NOT NULL
             );
+
+            CREATE TABLE IF NOT EXISTS tle_snapshots (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                norad_id INTEGER NOT NULL,
+                epoch TEXT NOT NULL,
+                line1 TEXT NOT NULL,
+                line2 TEXT NOT NULL,
+                source TEXT NOT NULL,
+                fetched_at TEXT NOT NULL,
+                sha256 TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS cdm_events (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                cdm_id TEXT UNIQUE NOT NULL,
+                primary_norad INTEGER NOT NULL,
+                primary_name TEXT NOT NULL,
+                secondary_norad INTEGER NOT NULL,
+                secondary_name TEXT NOT NULL,
+                tca TEXT NOT NULL,
+                miss_distance_m REAL NOT NULL,
+                collision_probability REAL NOT NULL,
+                alert_level TEXT NOT NULL,
+                data_mode TEXT NOT NULL,
+                created_at TEXT NOT NULL
+            );
         """)
     conn.close()
 
@@ -113,7 +139,10 @@ def reset_db(db_path: Optional[Path | str] = None) -> None:
         conn.execute("DELETE FROM reviews")
         conn.execute("DELETE FROM counterfactuals")
         conn.execute("DELETE FROM provenance")
+        conn.execute("DELETE FROM tle_snapshots")
+        conn.execute("DELETE FROM cdm_events")
     conn.close()
+
 
 
 # --- Mission persistence ---
@@ -363,6 +392,92 @@ def verify_provenance_chain_db(db_path: Optional[Path | str] = None) -> dict:
     return {"valid": True, "count": len(events), "head": previous}
 
 
+# --- Spatio-Temporal TLE and CDM event snapshot persistence ---
+
+def save_tle_snapshot(
+    norad_id: int,
+    epoch: str,
+    line1: str,
+    line2: str,
+    source: str,
+    fetched_at: str,
+    sha256: str,
+    db_path: Optional[Path | str] = None,
+) -> int:
+    conn = get_connection(db_path)
+    with conn:
+        cursor = conn.execute(
+            """
+            INSERT INTO tle_snapshots (norad_id, epoch, line1, line2, source, fetched_at, sha256)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (norad_id, epoch, line1, line2, source, fetched_at, sha256),
+        )
+        row_id = cursor.lastrowid
+    conn.close()
+    return row_id
+
+
+def get_latest_tle_snapshot(norad_id: int, db_path: Optional[Path | str] = None) -> Optional[dict]:
+    conn = get_connection(db_path)
+    cursor = conn.execute(
+        """
+        SELECT * FROM tle_snapshots
+        WHERE norad_id = ?
+        ORDER BY id DESC LIMIT 1
+        """,
+        (norad_id,),
+    )
+    row = cursor.fetchone()
+    conn.close()
+    if not row:
+        return None
+    return dict(row)
+
+
+def save_cdm_event(cdm: dict, db_path: Optional[Path | str] = None) -> None:
+    conn = get_connection(db_path)
+    with conn:
+        conn.execute(
+            """
+            INSERT OR REPLACE INTO cdm_events (
+                cdm_id, primary_norad, primary_name, secondary_norad, secondary_name,
+                tca, miss_distance_m, collision_probability, alert_level, data_mode, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                cdm["cdm_id"],
+                cdm["primary_norad"],
+                cdm.get("primary_name", "UNKNOWN"),
+                cdm["secondary_norad"],
+                cdm.get("secondary_name", "DEBRIS"),
+                cdm["tca"],
+                float(cdm["miss_distance_m"]),
+                float(cdm["collision_probability"]),
+                cdm.get("alert_level", "ADVISORY"),
+                cdm.get("data_mode", "SNAPSHOT"),
+                cdm.get("created_at", datetime.now(timezone.utc).isoformat()),
+            ),
+        )
+    conn.close()
+
+
+def get_cdm_events_for_norad(norad_id: int, db_path: Optional[Path | str] = None) -> list[dict]:
+    conn = get_connection(db_path)
+    cursor = conn.execute(
+        """
+        SELECT * FROM cdm_events
+        WHERE primary_norad = ? OR secondary_norad = ?
+        ORDER BY id DESC
+        """,
+        (norad_id, norad_id),
+    )
+    rows = cursor.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
 if __name__ == "__main__":
     init_db()
     print(f"Initialized database at {get_db_path()}")
+

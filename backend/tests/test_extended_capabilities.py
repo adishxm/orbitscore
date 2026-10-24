@@ -119,6 +119,12 @@ def test_nasa_spark_debris_density_and_flux():
 
 def test_nasa_odar_and_isro_eomp_generation():
     """Verify automated ODAR and EOMP markdown report generators enforce review gate and populate sections."""
+    from app.main import reviews
+    from app.db import get_connection
+    reviews.clear()
+    with get_connection() as conn:
+        conn.execute("DELETE FROM reviews WHERE mission_id = 'asteria-3'")
+
     # 1. Verify locked gate when unevaluated or unreviewed
     eval_resp = client.post("/missions/asteria-3/evaluate", json={"profile_id": "fcc-22-74-inspired"}, headers=AUTH_HEADERS)
     assert eval_resp.status_code == 200
@@ -129,6 +135,7 @@ def test_nasa_odar_and_isro_eomp_generation():
         resp_locked = client.get("/missions/asteria-3/export/odar", headers=AUTH_HEADERS)
         assert resp_locked.status_code == 423
         assert resp_locked.json()["detail"]["code"] == "EXPORT_LOCKED"
+
 
         # Complete review decisions for all findings
         for idx, f in enumerate(findings):
@@ -174,4 +181,128 @@ def test_odar_excessive_lifetime_and_missing_evidence_fail_safe():
     assert "UNVERIFIED" in md
     assert "NEEDS_EVIDENCE" in md
     assert "Draft Review Packet" in md
+
+
+def test_orbital_intelligence_endpoints_pathway_alerts_decay():
+    """Verify P2 endpoints: /pathway, /collision-alerts, and /decay-path enforce boundaries and determinism."""
+    # 1. Pathway endpoint
+    resp_path = client.get("/missions/asteria-3/pathway", headers=AUTH_HEADERS)
+    assert resp_path.status_code == 200
+    path_data = resp_path.json()
+    assert path_data["mission_id"] == "asteria-3"
+    assert path_data["period_minutes"] > 80.0
+    assert len(path_data["pathway_points"]) == 16
+    assert path_data["data_mode"] == "SYNTHETIC_PROPAGATION"
+    assert "HEURISTIC SCHEMATIC PATHWAY" in path_data["disclaimer"]
+
+    # Verify waypoint lat/lon ranges
+    for pt in path_data["pathway_points"]:
+        assert -90.0 <= pt["latitude"] <= 90.0
+        assert -180.0 <= pt["longitude"] <= 180.0
+        assert pt["altitude_km"] > 0.0
+
+    # 2. Collision alerts endpoint
+    resp_alerts = client.get("/missions/asteria-3/collision-alerts", headers=AUTH_HEADERS)
+    assert resp_alerts.status_code == 200
+    alerts_data = resp_alerts.json()
+    assert alerts_data["mission_id"] == "asteria-3"
+    assert alerts_data["total_alerts"] >= 1
+    assert "bands" in alerts_data
+    assert alerts_data["bands"]["critical_sub_1km"] >= 0
+    assert "HEURISTIC SCREENING ONLY" in alerts_data["disclaimer"]
+
+    # 3. Decay path endpoint
+    resp_decay = client.get("/missions/asteria-3/decay-path", headers=AUTH_HEADERS)
+    assert resp_decay.status_code == 200
+    decay_data = resp_decay.json()
+    assert decay_data["initial_altitude_km"] >= 100.0
+    assert decay_data["reentry_altitude_km"] == 100.0
+    assert decay_data["model_status"] in ("SCHEMATIC", "RESEARCH")
+    series = decay_data["decay_series"]
+    assert len(series) == 10
+    # Verify monotonic decay
+    for i in range(len(series) - 1):
+        assert series[i]["altitude_km"] >= series[i + 1]["altitude_km"]
+    assert series[-1]["altitude_km"] == 100.0
+
+    # 4. Unknown mission returns 404
+    resp_404 = client.get("/missions/unknown-sat-xyz/pathway", headers=AUTH_HEADERS)
+    assert resp_404.status_code == 404
+
+
+def test_space_credit_index_explain_endpoint():
+    """Verify P3 endpoint: /space-credit-index/explain provides per-pillar breakdown and discloses missing evidence."""
+    resp = client.get("/missions/asteria-3/space-credit-index/explain", headers=AUTH_HEADERS)
+    assert resp.status_code == 200
+    data = resp.json()
+
+    assert data["mission_id"] == "asteria-3"
+    assert 0.0 <= data["overall_score"] <= 100.0
+    assert data["rating_tier"] in ("AAA", "AA", "A", "BBB", "BB", "C", "D")
+    assert isinstance(data["pillars"], list)
+    assert len(data["pillars"]) == 4
+
+    # Verify every pillar has valid point bounds and category
+    for p in data["pillars"]:
+        assert 0.0 <= p["points_awarded"] <= p["max_points"]
+        assert p["status"] in ("SATISFIED", "PARTIAL", "MISSING_EVIDENCE")
+        assert p["category"] in (
+            "Trajectory & Orbital Lifetime",
+            "Collision Footprint & Form Factor",
+            "Disposal & Passivation Readiness",
+            "Sourced Evidence Provenance"
+        )
+
+    assert "missing_pillars" in data
+    assert "recommendations" in data
+    assert data["data_mode"] in ("SNAPSHOT", "SYNTHETIC")
+    assert "PRE-REVIEW HEURISTIC" in data["disclaimer"]
+
+    # 404 on missing mission
+    resp_404 = client.get("/missions/unknown-sat-xyz/space-credit-index/explain", headers=AUTH_HEADERS)
+    assert resp_404.status_code == 404
+
+
+def test_telemetry_mode_separation_and_db_persistence():
+    """Verify P1: Spatio-temporal persistence and strict data mode separation (LIVE/SNAPSHOT/SYNTHETIC)."""
+    from app.db import save_tle_snapshot, get_latest_tle_snapshot, save_cdm_event, get_cdm_events_for_norad
+    import hashlib
+
+    # 1. Save and retrieve TLE snapshot
+    digest = hashlib.sha256(b"line1\nline2").hexdigest()
+    row_id = save_tle_snapshot(
+        norad_id=12345,
+        epoch="2026-10-25T01:00:00Z",
+        line1="1 12345U ...",
+        line2="2 12345 ...",
+        source="Test Satellite Snapshot",
+        fetched_at="2026-10-25T01:00:00Z",
+        sha256=digest,
+    )
+    assert row_id > 0
+
+    snap = get_latest_tle_snapshot(12345)
+    assert snap is not None
+    assert snap["norad_id"] == 12345
+    assert snap["sha256"] == digest
+
+    # 2. Save and query CDM events
+    save_cdm_event({
+        "cdm_id": "CDM-TEST-001",
+        "primary_norad": 12345,
+        "primary_name": "TEST-SAT-1",
+        "secondary_norad": 99991,
+        "secondary_name": "SPACE-DEBRIS",
+        "tca": "2026-10-25T04:00:00Z",
+        "miss_distance_m": 450.0,
+        "collision_probability": 2.5e-5,
+        "alert_level": "WARNING",
+        "data_mode": "SNAPSHOT",
+    })
+
+    cdms = get_cdm_events_for_norad(12345)
+    assert len(cdms) >= 1
+    assert cdms[0]["cdm_id"] == "CDM-TEST-001"
+    assert cdms[0]["miss_distance_m"] == 450.0
+
 
