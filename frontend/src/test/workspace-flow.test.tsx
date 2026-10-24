@@ -75,6 +75,7 @@ describe('Slice 5: Workspace Flow, Context & Evidence Register', () => {
       expect(screen.getByText('3U')).toBeInTheDocument();
       expect(screen.getByText('4.00 kg')).toBeInTheDocument();
       expect(screen.getByText(/REGISTERED EVIDENCE:/i)).toBeInTheDocument();
+      expect(screen.getByText('SYNTHETIC DEMO DATA')).toBeInTheDocument();
     });
 
     it('allows editing mission parameters when onUpdateMission is provided', () => {
@@ -230,6 +231,21 @@ describe('Slice 5: Workspace Flow, Context & Evidence Register', () => {
 
       expect(storeItem?.state).toBe('confirmed');
       expect(storeItem?.human_confirmed_by).toBe('Lead Flight Director');
+    });
+
+    it('restores clean synthetic demo data when Reset Demo Data is clicked', () => {
+      render(
+        <MemoryRouter initialEntries={['/missions/asteria-3']}>
+          <MissionWorkspacePage />
+        </MemoryRouter>
+      );
+
+      const resetBtn = screen.getByRole('button', { name: /Reset Demo Data/i });
+      expect(resetBtn).toBeInTheDocument();
+      fireEvent.click(resetBtn);
+
+      const items = useOrbitStore.getState().evidence['asteria-3'] || [];
+      expect(items.length).toBeGreaterThan(0);
     });
 
     it('passes axe accessibility audit on workspace layout', async () => {

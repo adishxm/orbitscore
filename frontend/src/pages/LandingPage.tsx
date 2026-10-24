@@ -157,14 +157,12 @@ export const LandingPage: React.FC = () => {
             </h1>
 
             <p className={styles.heroLead}>
-              A source-linked workspace for student, university, and small spacecraft teams.
-              Consolidate technical parameters, track exact primary document citations, detect engineering conflicts,
-              and export review-ready dossiers for qualified flight directors and safety engineers.
+              OrbitScore helps small-spacecraft teams organize cited mission information, identify missing or inconsistent evidence, and prepare material for qualified human review. Its demo orbital data is synthetic and is not a safety or compliance assessment.
             </p>
 
             <div className={styles.ctaRow}>
               <Link to="/missions/asteria-3" className={styles.primaryCta}>
-                <span>Open Asteria-3 Demo</span>
+                <span>Open demo workspace</span>
                 <ArrowRight size={16} aria-hidden="true" />
               </Link>
               <Link to="/how-it-works" className={styles.secondaryCta}>
@@ -179,117 +177,128 @@ export const LandingPage: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Aerospace Orbital Schematic Visual */}
-          <div className={styles.orbitalGraphicWrap} aria-hidden="true">
-            <svg
-              className={styles.orbitalSvg}
-              viewBox="0 0 440 320"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {/* Planetary Horizon Arc */}
-              <circle
-                cx="220"
-                cy="540"
-                r="360"
-                stroke="var(--color-border-subtle)"
-                strokeWidth="1.5"
+          {/* Aerospace Orbital Schematic Visual with Honesty Badges & Persistent Caption */}
+          <div className={styles.orbitalContainer}>
+            <div className={styles.orbitalBadgeRow}>
+              <span className={styles.syntheticBadge}>SYNTHETIC DEMO DATA</span>
+              <span className={styles.demoOnlyBadge}>DEMO ONLY — NOT LIVE TRACKING</span>
+            </div>
+
+            <div className={styles.orbitalGraphicWrap} aria-hidden="true">
+              <svg
+                className={styles.orbitalSvg}
+                viewBox="0 0 440 320"
                 fill="none"
-              />
-              <path
-                d="M-20 280 C 120 260, 320 260, 460 280"
-                stroke="var(--color-border-subtle)"
-                strokeWidth="1"
-                strokeDasharray="4 4"
-              />
-
-              {/* Orbital Trajectory Ellipse */}
-              <ellipse
-                cx="220"
-                cy="170"
-                rx="180"
-                ry="90"
-                transform="rotate(-15 220 170)"
-                stroke="var(--color-brand-cyan)"
-                strokeWidth="1.5"
-                className={styles.orbitPath}
-              />
-
-              {/* Reference Grid & Line of Nodes */}
-              <line
-                x1="40"
-                y1="190"
-                x2="400"
-                y2="150"
-                stroke="var(--color-border-subtle)"
-                strokeWidth="1"
-                strokeDasharray="2 4"
-              />
-
-              {/* CubeSat Satellite Icon along Trajectory */}
-              <g transform="translate(290, 115)">
-                {/* CubeSat Chassis */}
-                <rect
-                  x="-12"
-                  y="-12"
-                  width="24"
-                  height="24"
-                  fill="var(--color-surface-card)"
-                  stroke="var(--color-brand-cyan)"
-                  strokeWidth="2"
-                  rx="2"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                {/* Planetary Horizon Arc */}
+                <circle
+                  cx="220"
+                  cy="540"
+                  r="360"
+                  stroke="var(--color-border-subtle)"
+                  strokeWidth="1.5"
+                  fill="none"
                 />
-                {/* Solar Panels */}
-                <line
-                  x1="-30"
-                  y1="0"
-                  x2="-12"
-                  y2="0"
-                  stroke="var(--color-brand-cyan)"
-                  strokeWidth="2.5"
-                />
-                <line
-                  x1="12"
-                  y1="0"
-                  x2="30"
-                  y2="0"
-                  stroke="var(--color-brand-cyan)"
-                  strokeWidth="2.5"
-                />
-                {/* Antenna */}
-                <line
-                  x1="0"
-                  y1="-12"
-                  x2="-8"
-                  y2="-26"
-                  stroke="var(--color-brand-cyan)"
+                <path
+                  d="M-20 280 C 120 260, 320 260, 460 280"
+                  stroke="var(--color-border-subtle)"
                   strokeWidth="1"
+                  strokeDasharray="4 4"
                 />
-                {/* Ping Beacon */}
-                <circle cx="0" cy="0" r="3" fill="var(--color-brand-cyan)" />
-              </g>
 
-              {/* Orbit Altitude & Inclination Annotation */}
-              <text
-                x="20"
-                y="50"
-                fill="var(--color-brand-cyan)"
-                fontFamily="var(--font-mono)"
-                fontSize="11"
-                letterSpacing="1"
-              >
-                TARGET ORBIT: 500 KM SSO • INCLINATION: 97.4°
-              </text>
-              <text
-                x="20"
-                y="70"
-                fill="var(--color-text-muted)"
-                fontFamily="var(--font-mono)"
-                fontSize="10"
-              >
-                APPLICABILITY PROFILE: DEMO-EVIDENCE-COMPLETENESS
-              </text>
-            </svg>
+                {/* Orbital Trajectory Ellipse */}
+                <ellipse
+                  cx="220"
+                  cy="170"
+                  rx="180"
+                  ry="90"
+                  transform="rotate(-15 220 170)"
+                  stroke="var(--color-brand-cyan)"
+                  strokeWidth="1.5"
+                  className={styles.orbitPath}
+                />
+
+                {/* Reference Grid & Line of Nodes */}
+                <line
+                  x1="40"
+                  y1="190"
+                  x2="400"
+                  y2="150"
+                  stroke="var(--color-border-subtle)"
+                  strokeWidth="1"
+                  strokeDasharray="2 4"
+                />
+
+                {/* CubeSat Satellite Icon along Trajectory */}
+                <g transform="translate(290, 115)">
+                  {/* CubeSat Chassis */}
+                  <rect
+                    x="-12"
+                    y="-12"
+                    width="24"
+                    height="24"
+                    fill="var(--color-surface-card)"
+                    stroke="var(--color-brand-cyan)"
+                    strokeWidth="2"
+                    rx="2"
+                  />
+                  {/* Solar Panels */}
+                  <line
+                    x1="-30"
+                    y1="0"
+                    x2="-12"
+                    y2="0"
+                    stroke="var(--color-brand-cyan)"
+                    strokeWidth="2.5"
+                  />
+                  <line
+                    x1="12"
+                    y1="0"
+                    x2="30"
+                    y2="0"
+                    stroke="var(--color-brand-cyan)"
+                    strokeWidth="2.5"
+                  />
+                  {/* Antenna */}
+                  <line
+                    x1="0"
+                    y1="-12"
+                    x2="-8"
+                    y2="-26"
+                    stroke="var(--color-brand-cyan)"
+                    strokeWidth="1"
+                  />
+                  {/* Ping Beacon */}
+                  <circle cx="0" cy="0" r="3" fill="var(--color-brand-cyan)" />
+                </g>
+
+                {/* Orbit Altitude & Inclination Annotation */}
+                <text
+                  x="20"
+                  y="50"
+                  fill="var(--color-brand-cyan)"
+                  fontFamily="var(--font-mono)"
+                  fontSize="11"
+                  letterSpacing="1"
+                >
+                  TARGET ORBIT: 500 KM SSO • INCLINATION: 97.4°
+                </text>
+                <text
+                  x="20"
+                  y="70"
+                  fill="var(--color-text-muted)"
+                  fontFamily="var(--font-mono)"
+                  fontSize="10"
+                >
+                  APPLICABILITY PROFILE: DEMO-EVIDENCE-COMPLETENESS
+                </text>
+              </svg>
+            </div>
+
+            <p className={styles.persistentCaption} role="note">
+              Illustrative synthetic data — not live tracking, collision prediction, or operational guidance.
+            </p>
           </div>
         </section>
 

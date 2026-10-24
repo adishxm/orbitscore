@@ -12,8 +12,9 @@ export const MANDATORY_DISCLAIMER =
 
 export const STANDARD_DISCLAIMERS: string[] = [
   MANDATORY_DISCLAIMER,
-  'This cited evidence dossier is compiled for qualified engineering review prior to formal mission milestones.',
-  'Automated findings reflect deterministic consistency checks against declared profile boundaries only.',
+  'SYNTHETIC DEMO DATA: All parameters, measurements, documents, and orbital data in this review packet are synthetic fixture data for demonstration purposes only.',
+  'This cited evidence review packet is compiled for qualified engineering review prior to formal mission milestones.',
+  'Automated findings reflect deterministic consistency checks against declared profile boundaries only, not a safety or compliance assessment.',
   'Technical decisions, waivers, and mitigations are the sole authority of designated human reviewers.',
 ];
 
@@ -56,10 +57,13 @@ export function exportPacketToMarkdown(packet: ExportPacket): string {
   const lines: string[] = [];
 
   // Title and Header
-  lines.push(`# OrbitScore Cited Evidence Review Dossier`);
+  lines.push(`# Synthetic Demo Review Packet: ${packet.mission.name}`);
+  lines.push(``);
+  lines.push(`**CLASSIFICATION**: SYNTHETIC DEMO DATA — DRAFT EVIDENCE SUMMARY FOR HUMAN REVIEW`);
   lines.push(``);
   lines.push(`> [!NOTE]`);
   lines.push(`> **Review Boundary Notice**: ${packet.disclaimers[0]}`);
+  lines.push(`> **Demonstration Boundary**: ${packet.disclaimers[1]}`);
   lines.push(``);
 
   // Metadata Table

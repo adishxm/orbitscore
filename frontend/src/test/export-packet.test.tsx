@@ -98,7 +98,7 @@ describe('Slice 8: Cited Export Packet Generator & Print Stylesheet', () => {
     const md = exportPacketToMarkdown(packet);
 
     // Verify sections
-    expect(md).toContain('# OrbitScore Cited Evidence Review Dossier');
+    expect(md).toContain('# Synthetic Demo Review Packet: Asteria-3');
     expect(md).toContain('## 1. Dossier Metadata');
     expect(md).toContain('## 2. Mission Context Baseline');
     expect(md).toContain('## 3. Applied Evaluation Profile');
@@ -110,6 +110,7 @@ describe('Slice 8: Cited Export Packet Generator & Print Stylesheet', () => {
 
     // Verify mandatory disclaimer
     expect(md).toContain(MANDATORY_DISCLAIMER);
+    expect(md).toContain('SYNTHETIC DEMO DATA');
 
     // Verify cited primary documents
     expect(md).toContain('Asteria-3 Master Interface Control Document');
@@ -131,11 +132,12 @@ describe('Slice 8: Cited Export Packet Generator & Print Stylesheet', () => {
       />
     );
 
-    // Verify metrics
+    // Verify metrics and synthetic demo badges
     expect(screen.getByText('Primary Evidence Items')).toBeInTheDocument();
     expect(screen.getByText('Automated Findings')).toBeInTheDocument();
     expect(screen.getByText('Human Sign-Offs')).toBeInTheDocument();
     expect(screen.getByText('Open Action Items')).toBeInTheDocument();
+    expect(screen.getByText('SYNTHETIC DEMO DATA')).toBeInTheDocument();
 
     // Verify back navigation
     const backBtn = screen.getByRole('button', { name: /Back to Human Review/i });
@@ -143,7 +145,7 @@ describe('Slice 8: Cited Export Packet Generator & Print Stylesheet', () => {
     expect(handleBack).toHaveBeenCalledTimes(1);
 
     // Verify print call
-    const printBtn = screen.getByRole('button', { name: /Print Dossier/i });
+    const printBtn = screen.getByRole('button', { name: /Print Review Packet/i });
     fireEvent.click(printBtn);
     expect(printSpy).toHaveBeenCalledTimes(1);
 

@@ -19,7 +19,7 @@ describe('Slice 9: Reference Landing Page & Motion Layer', () => {
     expect(screen.getByText(/Evidence Preparation System/i)).toBeInTheDocument();
 
     // CTAs
-    const demoCta = screen.getByRole('link', { name: /Open Asteria-3 Demo/i });
+    const demoCta = screen.getByRole('link', { name: /Open demo workspace/i });
     expect(demoCta).toBeInTheDocument();
     expect(demoCta).toHaveAttribute('href', '/missions/asteria-3');
 
@@ -27,9 +27,13 @@ describe('Slice 9: Reference Landing Page & Motion Layer', () => {
     expect(howCta).toBeInTheDocument();
     expect(howCta).toHaveAttribute('href', '/how-it-works');
 
-    // Metrics pills
+    // Metrics pills & Synthetic badges
     expect(screen.getByText('100% Deterministic Engine')).toBeInTheDocument();
     expect(screen.getByText('Zero Flight Safety Claims')).toBeInTheDocument();
+    expect(screen.getAllByText('SYNTHETIC DEMO DATA').length).toBeGreaterThan(0);
+    expect(
+      screen.getByText(/Illustrative synthetic data — not live tracking, collision prediction, or operational guidance\./i)
+    ).toBeInTheDocument();
   });
 
   it('renders truth-in-advertising section with What It Is vs What It Is Not', () => {

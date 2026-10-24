@@ -68,9 +68,12 @@ export const MissionContextCard: React.FC<MissionContextCardProps> = ({
           <span className={styles.missionIdBadge}>
             MISSION CONTEXT • {mission.id.toUpperCase()}
           </span>
-          <h2 id="context-heading" className={styles.missionName}>
-            {mission.name}
-          </h2>
+          <div className={styles.titleRow}>
+            <h2 id="context-heading" className={styles.missionName}>
+              {mission.name}
+            </h2>
+            <span className={styles.syntheticDataBadge}>SYNTHETIC DEMO DATA</span>
+          </div>
         </div>
 
         {onUpdateMission && (

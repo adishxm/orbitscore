@@ -49,7 +49,7 @@ export const ExportPacketView: React.FC<ExportPacketViewProps> = ({
   const handleDownloadMarkdown = () => {
     downloadFile(
       markdownContent,
-      `orbitscore-dossier-${mission.id}.md`,
+      `synthetic-review-packet-${mission.id}.md`,
       'text/markdown;charset=utf-8'
     );
   };
@@ -57,7 +57,7 @@ export const ExportPacketView: React.FC<ExportPacketViewProps> = ({
   const handleDownloadJson = () => {
     downloadFile(
       jsonContent,
-      `orbitscore-dossier-${mission.id}.json`,
+      `synthetic-review-packet-${mission.id}.json`,
       'application/json;charset=utf-8'
     );
   };
@@ -106,20 +106,40 @@ export const ExportPacketView: React.FC<ExportPacketViewProps> = ({
             className={styles.primaryBtn}
           >
             <Printer size={16} aria-hidden="true" />
-            <span>Print Dossier</span>
+            <span>Print Review Packet</span>
           </button>
         </div>
       </div>
 
       {/* Main Dossier Card */}
       <section className={styles.card} aria-labelledby="dossier-title">
-        <div className={styles.kicker}>Stage 6 • Complete Cited Evidence Dossier</div>
+        <div className={styles.kicker}>Stage 6 • Synthetic Demo Review Packet</div>
         <div className={styles.titleRow}>
           <div>
-            <h2 id="dossier-title" className={styles.title}>
-              {mission.name} Review Dossier
-            </h2>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--font-size-xs)', color: 'var(--color-text-secondary)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
+              <h2 id="dossier-title" className={styles.title}>
+                Synthetic Demo Review Packet: {mission.name}
+              </h2>
+              <span
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  padding: '2px 8px',
+                  background: 'rgba(245, 158, 11, 0.12)',
+                  border: '1px solid rgba(245, 158, 11, 0.4)',
+                  borderRadius: 'var(--radius-full)',
+                  color: '#fbbf24',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                SYNTHETIC DEMO DATA
+              </span>
+            </div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--font-size-xs)', color: 'var(--color-text-secondary)', marginTop: '4px' }}>
               Export ID: <code>{packet.metadata.export_id}</code> • Generated: {new Date(packet.exported_at).toLocaleString()}
             </div>
           </div>

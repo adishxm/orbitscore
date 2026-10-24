@@ -1,8 +1,19 @@
 # OrbitScore
 
 > **Engineering Review Boundary Notice**: Despite the name, OrbitScore does not score or certify missions; it organizes evidence for human review.
+>
+> *OrbitScore helps small-spacecraft teams organize cited mission information, identify missing or inconsistent evidence, and prepare material for qualified human review. Its demo orbital data is synthetic and is not a safety or compliance assessment.*
 
-OrbitScore is a source-linked mission evidence organization and pre-review decision-support system for student, university, and small spacecraft engineering teams.
+OrbitScore delivers a polished, responsive mission evidence workspace and synthetic orbital context dashboard for student, university, and small spacecraft engineering teams.
+
+## Key Capabilities & Safety Architecture
+
+- **Sourced Evidence Register**: Granular parameters mapped to primary source documents, revisions, dates, page/section locators, and human engineering verification status.
+- **Deterministic Check Engine**: 100% deterministic rule verification surfacing missing citations, unconfirmed records, and cross-subsystem numerical discrepancies (e.g. CAD vs interface specifications).
+- **Static Synthetic Orbital Context**: Labeled schematic visualization (500 km SSO, 97.4° inclination, natural atmospheric decay ~3.8 yrs) with persistent truth-in-advertising caption.
+- **National-to-Global Scalability Matrix**: Dual evaluation pathways aligning with Tier 1: India ISRO Debris-Free Space Missions (DFSM) 2030 guidelines and Tier 2: Global FCC (FCC-22-74 5-year deorbit rule), NASA STD 8719.14, and ESA Zero Debris standards.
+- **Human Review & Decision Gate**: Explicit separation of software findings from human engineering mitigations, sign-offs, and open issue tracking.
+- **Synthetic Demo Review Packets**: Exportable review packets (Markdown and JSON) with cryptographic SHA-256 provenance hashes and prominent review boundary notices.
 
 ## Repository layout
 
@@ -24,7 +35,7 @@ OrbitScore is a source-linked mission evidence organization and pre-review decis
 ### Canonical Frontend (`frontend/`)
 
 ```bash
-# Run tests (63 tests across 9 suites)
+# Run tests (67 tests across 10 suites)
 npm test
 
 # Typecheck
@@ -46,7 +57,7 @@ npm run lint:banned-words
 # Install dependencies including the editable ai_ml package
 pip install -r requirements.txt
 
-# Run backend test suite (38 tests)
+# Run backend test suite (48 tests)
 python -m pytest backend/tests
 
 # Run synthetic verification matrix
@@ -59,7 +70,7 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000   # from backend/
 ### AI / ML Adapter (`ai_ml/`)
 
 ```bash
-# Run isolated AI adapter test suite (6 tests)
+# Run isolated AI adapter test suite (10 tests)
 python -m pytest ai_ml/tests
 ```
 

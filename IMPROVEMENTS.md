@@ -1,4 +1,4 @@
-# OrbitReady localbrain refresh — change summary
+# OrbitScore localbrain refresh — change summary
 
 This refresh addresses the concrete quality issues identified in the prior package review. It raises the project’s clarity, safety, and handoff quality; it does not make the prototype production-ready or establish a literal objective 10/10 score.
 

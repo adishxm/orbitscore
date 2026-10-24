@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ShieldAlert, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ShieldAlert, ArrowRight, RotateCcw } from 'lucide-react';
 import { useOrbitStore } from '../store/useOrbitStore';
 import { Stepper, WorkspaceStep } from '../components/workspace/Stepper';
 import { MissionContextCard } from '../components/workspace/MissionContextCard';
+import { OrbitalContextCard } from '../components/workspace/OrbitalContextCard';
 import { DataTable } from '../components/workspace/DataTable';
 import { SidePanel } from '../components/workspace/SidePanel';
 import { AddEvidenceModal } from '../components/workspace/AddEvidenceModal';
@@ -40,6 +41,7 @@ export const MissionWorkspacePage: React.FC = () => {
     recordDecision,
     addOpenIssue,
     updateOpenIssueStatus,
+    resetDemo,
   } = useOrbitStore();
 
   const [currentStep, setCurrentStep] = useState<WorkspaceStep>('evidence');
@@ -91,8 +93,17 @@ export const MissionWorkspacePage: React.FC = () => {
   return (
     <div className={styles.pageRoot}>
       <div className="container">
-        {/* Navigation Breadcrumb */}
-        <div style={{ marginBottom: 'var(--space-4)' }}>
+        {/* Navigation Breadcrumb and Actions */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 'var(--space-4)',
+            flexWrap: 'wrap',
+            gap: 'var(--space-2)',
+          }}
+        >
           <Link
             to="/missions"
             style={{
@@ -108,6 +119,28 @@ export const MissionWorkspacePage: React.FC = () => {
             <ArrowLeft size={14} aria-hidden="true" />
             <span>Back to Mission Registry</span>
           </Link>
+
+          <button
+            type="button"
+            onClick={() => resetDemo()}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: 'transparent',
+              border: '1px solid var(--color-border-subtle)',
+              borderRadius: 'var(--radius-sm)',
+              padding: '4px 10px',
+              color: 'var(--color-text-secondary)',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '11px',
+              cursor: 'pointer',
+            }}
+            title="Restore pristine Asteria-3 synthetic fixture data"
+          >
+            <RotateCcw size={12} aria-hidden="true" />
+            <span>Reset Demo Data</span>
+          </button>
         </div>
 
         {/* Stepper Workflow Header */}
@@ -129,7 +162,7 @@ export const MissionWorkspacePage: React.FC = () => {
           </div>
         </div>
 
-        {/* Step 1: Mission Context */}
+        {/* Step 1: Mission Context & Orbital Visual */}
         {currentStep === 'context' && (
           <div>
             <MissionContextCard
@@ -145,6 +178,8 @@ export const MissionWorkspacePage: React.FC = () => {
                 }));
               }}
             />
+
+            <OrbitalContextCard mission={currentMission} />
 
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 'var(--space-6)' }}>
               <button
