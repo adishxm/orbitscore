@@ -1,10 +1,16 @@
 # T007 — Browser acceptance tests
 
-- status: ready
+- status: done
 - owner: Narayan
 - reviewer: Roshan
 - priority: P1
 - depends_on: [T001, T002]
+
+## Reviewer log
+
+- Implementation evidence: .brain/reports/task-runs/20261024T233400.000000+0530_T007_browser-tests_finished_20261024T233505.md
+- Reviewer sign-off: Roshan (2026-10-24T18:05:10.000000Z / 2026-10-24T23:35:10.000000+05:30)
+
 
 ## Goal
 

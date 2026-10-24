@@ -38,3 +38,12 @@ The event pages are time-sensitive and should not be used as current status with
 ## Source types must not be conflated
 
 A regulation/order, a voluntary standard, an agency guideline, a software manual, an academic model, an API description, a vendor product page, and an internal interpretation have different authority and purposes. Preserve those labels in the product and research notes. “Official” describes who issued a source, not whether it applies to a given mission or proves a product implementation correct.
+
+## Live Telemetry & Ephemeris Sources Register
+
+| Source Identifier | Issuing Body | Access Endpoint / Document | Scope & Freshness Notes | Product Usage |
+|---|---|---|---|---|
+| **Space-Track.org** | 18th Space Defense Squadron (USSPACECOM) | `https://www.space-track.org/basicspacedata/query/` | Ephemeris / TLE catalog and Conjunction Data Messages (CDMs). Freshness: ~8-hour update cycle for operational objects. Requires registered agency credentials. | Conjunction analysis & operational orbit verification (`backend/app/adapters/space_track.py`). Gated behind `ORBIT_LIVE_DATA_ENABLED=false` with high-fidelity Asteria-3 fixture. |
+| **CelesTrak GP API** | Dr. T.S. Kelso / CelesTrak | `https://celestrak.org/NORAD/elements/gp.php` | General Perturbations (GP) element sets derived from Space-Track catalog. Publicly queryable via NORAD Cat ID. Updated every few hours. | Public TLE verification and ground track calculation (`backend/app/adapters/celestrak.py`). |
+| **NASA ODPO DAS 3.x** | NASA Orbital Debris Program Office | NASA-STD-8719.14C / Debris Assessment Software (DAS) | Controlling engineering manual for orbital decay and casualty area modeling. Empirical atmospheric density (J70/MSIS) tables. | Referenced in `docs/odar-mapping.md` and baseline decay heuristic calibration (`ai_ml/orbital_ml.py`). |
+

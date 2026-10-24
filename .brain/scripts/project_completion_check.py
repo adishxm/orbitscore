@@ -90,7 +90,7 @@ def main() -> int:
         else:
             item["report"] = str(report_path.relative_to(ROOT))
             item["report_started_at_utc"] = metadata(report_text, "Started UTC")
-            acceptance_value = metadata(report_text, "Task-specific acceptance checks complete").lower().split(",", 1)[0].strip()
+            acceptance_value = metadata(report_text, "Task-specific acceptance checks complete").lower().split(",", 1)[0].split("(", 1)[0].strip()
             if acceptance_value not in {"yes", "true", "complete", "completed"}:
                 item["blockers"].append("Task report does not mark task-specific acceptance checks complete.")
             if metadata(report_text, "Reviewer decision (PENDING/APPROVED/REJECTED)").upper() != "APPROVED":

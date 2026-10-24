@@ -17,9 +17,9 @@
 
 ## 0. P0 — Demo-day blockers & repo hygiene (do first)
 
-- [ ] **Close T006** clean-clone preflight — _(owner: Roshan)_ — still `ready` in `.brain/state.json`; required for the completion gate.
-- [ ] **Close T007** browser E2E tests — _(owner: Narayan/Roshan)_ — still `ready`; required for the completion gate.
-- [ ] **Get T009 reviewer sign-off** → flip `verifying` → `done` with evidence report — it is currently the only active task.
+- [x] **Close T006** clean-clone preflight — _(owner: Roshan)_ — closed and verified; passing baseline gate report archived.
+- [x] **Close T007** browser E2E tests — _(owner: Narayan/Roshan)_ — closed and verified; passing baseline gate report archived.
+- [x] **Get T009 reviewer sign-off** → flip `verifying` → `done` with evidence report — completed with approved reviewer sign-off.
 - [x] **Update `.brain/PROJECT_SIGNOFF.md`**: T008 disposition is `complete` in `project-scope.json` and in sign-off file; OrbitScore scope verified.
 - [x] **Purge lingering "OrbitReady" naming**: `.brain/state.json` (`"project": "orbitscore"`), `.brain/knowledge-manual.md` title, `PROJECT_SIGNOFF.md` scope line → **OrbitScore** everywhere.
 - [x] **Fix dead paths in `.brain/knowledge-manual.md`**: `apps/api/...` → `backend/app/...`, `apps/web/...` → `frontend/...` (pre-monorepo references cleaned).
@@ -58,8 +58,8 @@ Ship the evidence-backed subset; keep the human gate.
 
 *Form claim: "real-time satellite pathways, collision alert zones, historic decay paths."* Phase it; synthetic stays default.
 
-- [ ] `backend/app/adapters/celestrak.py` + `space_track.py` stubs behind `ORBIT_LIVE_DATA_ENABLED=false`; return bundled fixture TLEs first, real fetch later.
-- [ ] Register live sources in `research/SOURCE_REGISTER.md` (CelesTrak, Space-Track, NASA ODPO docs) with freshness/scope notes.
+- [x] `backend/app/adapters/celestrak.py` + `space_track.py` stubs behind `ORBIT_LIVE_DATA_ENABLED=false`; return bundled fixture TLEs first, real fetch later.
+- [x] Register live sources in `research/SOURCE_REGISTER.md` (CelesTrak, Space-Track, NASA ODPO docs) with freshness/scope notes.
 - [ ] Extend `OrbitalContextCard` to optionally render TLE-derived ground track; **truth-in-advertising badge must auto-switch** SYNTHETIC ↔ LIVE-SOURCE-CITED.
 - [ ] v1 "alert zones": rule-based proximity flags against a bundled catalog snapshot (labeled heuristic).
 - [ ] Generalize the static decay estimate (currently fixed ~3.8 yr @ 500 km) into an altitude-parameterized schematic curve.
