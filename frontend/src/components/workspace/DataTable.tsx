@@ -270,13 +270,13 @@ export const DataTable: React.FC<DataTableProps> = ({
                       </div>
                     </td>
                     <td className={styles.td}>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--font-size-xs)', textTransform: 'capitalize' }}>
+                      <span className={styles.categoryBadge}>
                         {item.category.replace('_', ' ')}
                       </span>
                     </td>
                     <td className={styles.td}>
                       <div className={styles.valueCell}>
-                        {item.value !== null ? String(item.value) : <span style={{ color: 'var(--color-text-muted)' }}>—</span>}
+                        {item.value !== null ? String(item.value) : <span className={styles.emptyValue}>—</span>}
                         {item.unit ? ` ${item.unit}` : ''}
                       </div>
                     </td>
@@ -334,7 +334,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                   <StateChip state={item.state} />
                 </div>
 
-                <div style={{ margin: 'var(--space-2) 0', fontFamily: 'var(--font-mono)', fontSize: 'var(--font-size-sm)' }}>
+                <div className={styles.cardValue}>
                   Value: <strong>{item.value !== null ? String(item.value) : '—'} {item.unit || ''}</strong>
                 </div>
 

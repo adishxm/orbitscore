@@ -60,7 +60,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
             <h2 id="drawer-title" className={styles.itemLabel}>
               {item.label}
             </h2>
-            <div style={{ marginTop: 'var(--space-2)' }}>
+            <div className={styles.sectionTitle}>
               <StateChip state={item.state} />
             </div>
           </div>
@@ -90,8 +90,8 @@ export const SidePanel: React.FC<SidePanelProps> = ({
           <div className={styles.section}>
             <div className={styles.sectionTitle}>Primary Source Document Citation</div>
             <div className={styles.citationCard}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
-                <FileText size={16} color="var(--color-brand-cyan)" aria-hidden="true" />
+              <div className={styles.verifiedRow}>
+                <FileText size={16} color="var(--os-color-accent-cyan)" aria-hidden="true" />
                 <span className={styles.citationTitle}>
                   {item.source_doc_title || 'Unspecified Document Title'}
                 </span>
@@ -114,7 +114,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
                 )}
               </div>
               {item.locator && (
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--font-size-xs)', color: 'var(--color-brand-cyan)', marginTop: '4px' }}>
+                <div className={styles.fullLocator}>
                   Full Locator: {item.locator}
                 </div>
               )}
@@ -125,24 +125,16 @@ export const SidePanel: React.FC<SidePanelProps> = ({
           {item.conflicting_values && item.conflicting_values.length > 0 && (
             <div className={styles.conflictAlert} role="alert">
               <div className={styles.conflictTitle}>
-                <AlertTriangle size={15} style={{ display: 'inline', marginRight: '6px' }} />
+                <AlertTriangle size={15} className={styles.iconInline} />
                 Discrepancy: Diverging Values Detected Across Records
               </div>
-              <p style={{ margin: '0 0 var(--space-3) 0', fontSize: 'var(--font-size-xs)', color: 'var(--color-text-secondary)' }}>
+              <p className={styles.formHelper}>
                 The parameter recorded here diverges from other engineering documentation:
               </p>
               {item.conflicting_values.map((conf, idx) => (
                 <div
                   key={idx}
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: 'var(--font-size-xs)',
-                    background: 'var(--color-surface-sunken)',
-                    padding: 'var(--space-2) var(--space-3)',
-                    borderRadius: 'var(--radius-sm)',
-                    marginBottom: 'var(--space-2)',
-                    color: 'var(--color-state-conflicting)',
-                  }}
+                  className={styles.conflictItem}
                 >
                   <strong>{String(conf.value)}</strong> from <em>{conf.source}</em> ({conf.ref})
                 </div>
@@ -154,7 +146,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
           {item.notes && (
             <div className={styles.section}>
               <div className={styles.sectionTitle}>Engineering Context & Notes</div>
-              <p style={{ margin: 0, fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)', lineHeight: 'var(--line-height-relaxed)' }}>
+              <p className={styles.formHelper}>
                 {item.notes}
               </p>
             </div>
@@ -164,19 +156,12 @@ export const SidePanel: React.FC<SidePanelProps> = ({
           <div className={styles.section}>
             <div className={styles.sectionTitle}>Human Verification Status</div>
             {item.state === 'confirmed' && item.human_confirmed_by ? (
-              <div
-                style={{
-                  background: 'var(--color-state-confirmed-bg)',
-                  border: '1px solid rgba(16, 185, 129, 0.3)',
-                  borderRadius: 'var(--radius-sm)',
-                  padding: 'var(--space-4)',
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', color: 'var(--color-state-confirmed)', fontWeight: 600, fontSize: 'var(--font-size-sm)' }}>
+              <div className={styles.verifiedCard}>
+                <div className={styles.verifiedRow}>
                   <CheckCircle2 size={16} />
                   <span>Verified by Designated Human Reviewer</span>
                 </div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--font-size-xs)', color: 'var(--color-text-secondary)', marginTop: 'var(--space-2)' }}>
+                <div className={styles.verifiedMeta}>
                   Reviewer: <strong>{item.human_confirmed_by}</strong>
                   <br />
                   Timestamp: {item.human_confirmed_at ? new Date(item.human_confirmed_at).toLocaleString() : 'Recorded'}
@@ -184,13 +169,13 @@ export const SidePanel: React.FC<SidePanelProps> = ({
               </div>
             ) : (
               <form onSubmit={handleConfirmSubmit} className={styles.confirmBox}>
-                <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-secondary)' }}>
+                <div className={styles.formHelper}>
                   This parameter is currently <strong>{item.state}</strong>. Human verification is required
                   to advance this entry to confirmed status for the review dossier.
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
-                  <label htmlFor="reviewer-name-input" style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)' }}>
+                <div className={styles.section}>
+                  <label htmlFor="reviewer-name-input" className={styles.label}>
                     Your Name & Technical Role:
                   </label>
                   <input
@@ -202,7 +187,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
                     onChange={(e) => setReviewerName(e.target.value)}
                   />
                   {confirmError && (
-                    <span style={{ color: 'var(--color-state-conflicting)', fontSize: 'var(--font-size-xs)' }}>
+                    <span className={styles.formError}>
                       {confirmError}
                     </span>
                   )}

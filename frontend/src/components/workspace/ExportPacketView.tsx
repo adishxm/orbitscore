@@ -148,20 +148,10 @@ export const ExportPacketView: React.FC<ExportPacketViewProps> = ({
         {/* Mandatory Scope Callout */}
         <div
           role="note"
-          style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            gap: 'var(--space-3)',
-            background: 'var(--color-surface-sunken)',
-            border: '1px solid var(--color-border-subtle)',
-            borderLeft: '3px solid var(--color-brand-cyan)',
-            borderRadius: 'var(--radius-sm)',
-            padding: 'var(--space-3) var(--space-4)',
-            marginBottom: 'var(--space-6)',
-          }}
+          className="scopeNotice"
         >
-          <ShieldAlert size={20} color="var(--color-brand-cyan)" aria-hidden="true" />
-          <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-secondary)' }}>
+          <ShieldAlert size={20} color="var(--os-color-accent-amber)" aria-hidden="true" className={styles.iconShield} />
+          <div className={styles.subText}>
             <strong>Review Boundary Notice</strong>: Despite the name, OrbitScore does not score or certify missions; it organizes evidence for human review.
           </div>
         </div>
@@ -202,7 +192,7 @@ export const ExportPacketView: React.FC<ExportPacketViewProps> = ({
             className={`${styles.tabBtn} ${activeTab === 'preview' ? styles.tabBtnActive : ''}`}
             onClick={() => setActiveTab('preview')}
           >
-            <FileText size={14} style={{ verticalAlign: 'middle', marginRight: 4 }} aria-hidden="true" />
+            <FileText size={14} className={styles.iconInline} aria-hidden="true" />
             <span>Formatted Dossier View</span>
           </button>
 
@@ -213,7 +203,7 @@ export const ExportPacketView: React.FC<ExportPacketViewProps> = ({
             className={`${styles.tabBtn} ${activeTab === 'markdown' ? styles.tabBtnActive : ''}`}
             onClick={() => setActiveTab('markdown')}
           >
-            <Code2 size={14} style={{ verticalAlign: 'middle', marginRight: 4 }} aria-hidden="true" />
+            <Code2 size={14} className={styles.iconInline} aria-hidden="true" />
             <span>Raw Markdown (.md)</span>
           </button>
 
@@ -224,7 +214,7 @@ export const ExportPacketView: React.FC<ExportPacketViewProps> = ({
             className={`${styles.tabBtn} ${activeTab === 'json' ? styles.tabBtnActive : ''}`}
             onClick={() => setActiveTab('json')}
           >
-            <Code2 size={14} style={{ verticalAlign: 'middle', marginRight: 4 }} aria-hidden="true" />
+            <Code2 size={14} className={styles.iconInline} aria-hidden="true" />
             <span>Raw JSON (.json)</span>
           </button>
         </div>
@@ -239,23 +229,23 @@ export const ExportPacketView: React.FC<ExportPacketViewProps> = ({
                 <table className={styles.table} aria-label="Mission context baseline">
                   <tbody>
                     <tr>
-                      <td className={styles.td} style={{ width: '240px', fontWeight: 600 }}>Vehicle Class / Form Factor</td>
+                      <td className={`${styles.td} ${styles.tdLabel}`}>Vehicle Class / Form Factor</td>
                       <td className={styles.td}>{mission.object_type} ({mission.form_factor})</td>
                     </tr>
                     <tr>
-                      <td className={styles.td} style={{ fontWeight: 600 }}>Target Orbit</td>
+                      <td className={`${styles.td} ${styles.tdLabel}`}>Target Orbit</td>
                       <td className={styles.td}>{mission.target_orbit}</td>
                     </tr>
                     <tr>
-                      <td className={styles.td} style={{ fontWeight: 600 }}>Baseline Mass Budget</td>
+                      <td className={`${styles.td} ${styles.tdLabel}`}>Baseline Mass Budget</td>
                       <td className={styles.td}>{mission.mass_budget_kg} kg</td>
                     </tr>
                     <tr>
-                      <td className={styles.td} style={{ fontWeight: 600 }}>Applied Inspection Profile</td>
+                      <td className={`${styles.td} ${styles.tdLabel}`}>Applied Inspection Profile</td>
                       <td className={styles.td}>{profile.title} ({profile.id} {profile.version})</td>
                     </tr>
                     <tr>
-                      <td className={styles.td} style={{ fontWeight: 600 }}>Input Snapshot Hash</td>
+                      <td className={`${styles.td} ${styles.tdLabel}`}>Input Snapshot Hash</td>
                       <td className={styles.td}><code>{checkRun.input_snapshot_hash}</code></td>
                     </tr>
                   </tbody>
@@ -313,7 +303,7 @@ export const ExportPacketView: React.FC<ExportPacketViewProps> = ({
                         <td className={styles.td}><strong>{item.value}</strong> {item.unit || ''}</td>
                         <td className={styles.td}>
                           {item.source_doc_title}
-                          {item.source_doc_ref && <div><code style={{ fontSize: '10px' }}>{item.source_doc_ref}</code></div>}
+                          {item.source_doc_ref && <div><code className={styles.refCode}>{item.source_doc_ref}</code></div>}
                         </td>
                         <td className={styles.td}>{item.locator || (item.page_number ? `p. ${item.page_number}` : '—')}</td>
                         <td className={styles.td}>{item.state}</td>
@@ -353,7 +343,7 @@ export const ExportPacketView: React.FC<ExportPacketViewProps> = ({
                   </table>
                 </div>
               ) : (
-                <div style={{ color: 'var(--color-text-muted)', fontSize: 'var(--font-size-xs)' }}>
+                <div className={styles.subText}>
                   No human review decisions recorded.
                 </div>
               )}
@@ -386,7 +376,7 @@ export const ExportPacketView: React.FC<ExportPacketViewProps> = ({
                   </table>
                 </div>
               ) : (
-                <div style={{ color: 'var(--color-text-muted)', fontSize: 'var(--font-size-xs)' }}>
+                <div className={styles.subText}>
                   No open issues recorded.
                 </div>
               )}
@@ -397,7 +387,7 @@ export const ExportPacketView: React.FC<ExportPacketViewProps> = ({
         {/* Tab 2: Raw Markdown */}
         {activeTab === 'markdown' && (
           <div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 'var(--space-2)' }}>
+            <div className={styles.actionGroupRight}>
               <button
                 type="button"
                 onClick={handleDownloadMarkdown}
@@ -416,7 +406,7 @@ export const ExportPacketView: React.FC<ExportPacketViewProps> = ({
         {/* Tab 3: Raw JSON */}
         {activeTab === 'json' && (
           <div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 'var(--space-2)' }}>
+            <div className={styles.actionGroupRight}>
               <button
                 type="button"
                 onClick={handleDownloadJson}

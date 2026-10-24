@@ -36,7 +36,7 @@ export const ReviewDecisionForm: React.FC<ReviewDecisionFormProps> = ({
 
   // Form states
   const [decisionType, setDecisionType] = useState<ReviewDecisionType>(
-    existingDecision?.decision || 'accepted_as_is'
+    existingDecision?.decision || 'accepted_for_packet'
   );
   const [rationale, setRationale] = useState<string>(
     existingDecision?.rationale || ''
@@ -56,7 +56,7 @@ export const ReviewDecisionForm: React.FC<ReviewDecisionFormProps> = ({
       setReviewerName(existingDecision.reviewer_name);
       setReviewerRole(existingDecision.reviewer_role);
     } else {
-      setDecisionType('accepted_as_is');
+      setDecisionType('accepted_for_packet');
       setRationale('');
       setReviewerName('');
       setReviewerRole('');
@@ -147,13 +147,7 @@ export const ReviewDecisionForm: React.FC<ReviewDecisionFormProps> = ({
               <h3 className={styles.contextTitle}>
                 {activeFinding.check_id} — {activeFinding.check_title}
               </h3>
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: 'var(--font-size-xs)',
-                  color: 'var(--color-text-secondary)',
-                }}
-              >
+              <span className={styles.severityBadge}>
                 Severity: {activeFinding.severity.toUpperCase()}
               </span>
             </div>
@@ -164,20 +158,14 @@ export const ReviewDecisionForm: React.FC<ReviewDecisionFormProps> = ({
           {/* Existing Decision Alert if present */}
           {existingDecision && (
             <div className={styles.recordedSignoffBox} role="status">
-              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
-                <CheckCircle2 size={16} color="var(--color-state-confirmed)" aria-hidden="true" />
+              <div className={styles.recordedStatusGroup}>
+                <CheckCircle2 size={16} color="var(--os-color-accent-green)" aria-hidden="true" />
                 <span className={styles.recordedText}>
                   Decision Recorded: <strong>{existingDecision.decision.replace(/_/g, ' ').toUpperCase()}</strong> by {existingDecision.reviewer_name} ({existingDecision.reviewer_role})
                 </span>
               </div>
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '11px',
-                  color: 'var(--color-text-muted)',
-                }}
-              >
-                <Clock size={12} style={{ verticalAlign: 'middle', marginRight: 4 }} aria-hidden="true" />
+              <span className={styles.timestampBadge}>
+                <Clock size={12} aria-hidden="true" />
                 {new Date(existingDecision.recorded_at).toLocaleString()}
               </span>
             </div>
@@ -197,17 +185,29 @@ export const ReviewDecisionForm: React.FC<ReviewDecisionFormProps> = ({
                   onChange={(e) => setDecisionType(e.target.value as ReviewDecisionType)}
                   required
                 >
-                  <option value="accepted_as_is">
-                    Accepted As-Is (Deviation Documented)
+                  <option value="accepted_for_packet">
+                    Accepted for packet
                   </option>
-                  <option value="mitigation_filed">
-                    Mitigation Filed (Action Item Created)
+                  <option value="accepted_as_is">
+                    Accepted as-is
                   </option>
                   <option value="waiver_granted">
-                    Waiver Recorded (Authorized Deviation)
+                    Waiver granted / Authorized deviation
                   </option>
-                  <option value="action_pending">
-                    Action Pending (Review Incomplete)
+                  <option value="mitigation_filed">
+                    Mitigation filed
+                  </option>
+                  <option value="needs_more_evidence">
+                    Needs more evidence
+                  </option>
+                  <option value="disputed">
+                    Disputed
+                  </option>
+                  <option value="deferred_to_specialist">
+                    Deferred to specialist
+                  </option>
+                  <option value="noted_no_action">
+                    Noted – no action
                   </option>
                 </select>
               </div>
@@ -268,7 +268,7 @@ export const ReviewDecisionForm: React.FC<ReviewDecisionFormProps> = ({
           </form>
         </div>
       ) : (
-        <div style={{ color: 'var(--color-text-muted)', fontSize: 'var(--font-size-sm)' }}>
+        <div className={styles.emptyFindingsText}>
           No findings available to review. Run automated checks first.
         </div>
       )}

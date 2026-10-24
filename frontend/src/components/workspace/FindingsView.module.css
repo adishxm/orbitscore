@@ -1,75 +1,153 @@
+/* FindingsView.module.css */
 .container {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
-  margin-bottom: var(--space-8);
+  gap: var(--os-space-6);
+  margin-bottom: var(--os-space-8);
 }
 
 .controlsBar {
-  background: var(--color-surface-glass);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-md);
-  padding: var(--space-4) var(--space-6);
+  background-color: var(--os-color-surface-card);
+  border: 1px solid var(--os-color-border-subtle);
+  border-radius: var(--os-radius-md);
+  padding: var(--os-space-4) var(--os-space-6);
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--space-4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  gap: var(--os-space-4);
 }
 
 .summaryGroup {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--os-space-4);
   flex-wrap: wrap;
 }
 
 .summaryBadge {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
   display: flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--os-space-1);
+  color: var(--os-color-text-secondary);
 }
 
 .filterGroup {
   display: flex;
-  gap: var(--space-3);
+  gap: var(--os-space-3);
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .select {
-  background: var(--color-surface-sunken);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-sm);
-  color: var(--color-text-primary);
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  padding: var(--space-2) var(--space-3);
+  background-color: var(--os-color-surface-sunken);
+  border: 1px solid var(--os-color-border-mid);
+  border-radius: var(--os-radius-sm);
+  color: var(--os-color-text-primary);
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
+  padding: var(--os-space-2) var(--os-space-3);
   cursor: pointer;
+  min-height: 38px;
 }
 
 .select:focus {
-  outline: none;
-  border-color: var(--color-brand-cyan);
+  outline: 2px solid var(--os-color-accent-cyan);
+  outline-offset: 1px;
+  border-color: var(--os-color-accent-cyan);
 }
 
 .emptyCard {
-  background: var(--color-surface-glass);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-md);
-  padding: var(--space-12) var(--space-6);
+  background-color: var(--os-color-surface-card);
+  border: 1px solid var(--os-color-border-subtle);
+  border-radius: var(--os-radius-md);
+  padding: var(--os-space-12) var(--os-space-6);
   text-align: center;
-  color: var(--color-text-muted);
-  font-family: var(--font-mono);
-  font-size: var(--font-size-sm);
+  color: var(--os-color-text-muted);
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-body-s);
 }
 
 .actionsRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: var(--space-6);
+  margin-top: var(--os-space-6);
+  flex-wrap: wrap;
+  gap: var(--os-space-4);
 }
+
+.actionRequiredBadge {
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
+  color: var(--os-color-state-conflicting);
+}
+
+.advisoryBadge {
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
+  color: var(--os-color-accent-amber);
+}
+
+.documentedBadge {
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
+  color: var(--os-color-state-confirmed);
+}
+
+.btnSecondary {
+  background: transparent;
+  border: 1px solid var(--os-color-border-mid);
+  color: var(--os-color-text-secondary);
+  border-radius: var(--os-radius-sm);
+  padding: var(--os-space-2) var(--os-space-4);
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--os-space-2);
+  min-height: 40px;
+  transition: all var(--os-duration-fast) var(--os-ease-standard);
+}
+
+.btnSecondary:hover {
+  border-color: var(--os-color-accent-cyan);
+  color: var(--os-color-accent-cyan);
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--os-space-2);
+  background-color: var(--os-color-accent-cyan);
+  color: #000000;
+  border: none;
+  border-radius: var(--os-radius-sm);
+  padding: var(--os-space-2) var(--os-space-5);
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-body-s);
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 40px;
+  transition: opacity var(--os-duration-fast) var(--os-ease-standard);
+}
+
+.btnPrimary:hover {
+  opacity: 0.9;
+}
+
+.emptyIcon {
+  color: var(--os-color-accent-cyan);
+  margin: 0 auto var(--os-space-4);
+}
+
+.emptyLead {
+  max-width: 50ch;
+  margin: var(--os-space-2) auto var(--os-space-6);
+  font-family: var(--os-font-sans);
+  color: var(--os-color-text-secondary);
+}
+

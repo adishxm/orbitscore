@@ -97,7 +97,7 @@ export const CounterfactualLab: React.FC<CounterfactualLabProps> = ({
       <div className={styles.header}>
         <div className={styles.titleGroup}>
           <span className={styles.eyebrow}>
-            <Sparkles size={13} style={{ display: 'inline', marginRight: 4 }} aria-hidden="true" />
+            <Sparkles size={13} className={styles.eyebrowIcon} aria-hidden="true" />
             Counterfactual Lab
           </span>
           <h3 id="counterfactual-heading" className={styles.title}>

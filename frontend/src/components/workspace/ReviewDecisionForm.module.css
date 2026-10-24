@@ -1,106 +1,109 @@
 .card {
-  background: var(--color-surface-card);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-md);
-  padding: var(--space-6);
-  margin-bottom: var(--space-6);
+  background-color: var(--os-color-surface-card);
+  border: 1px solid var(--os-color-border-subtle);
+  border-radius: var(--os-radius-md);
+  padding: var(--os-space-6);
+  margin-bottom: var(--os-space-6);
 }
 
 .kicker {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  color: var(--color-brand-cyan);
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
+  color: var(--os-color-accent-cyan);
   text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-wide);
-  margin-bottom: var(--space-1);
+  letter-spacing: var(--os-tracking-wide);
+  margin-bottom: var(--os-space-1);
+  font-weight: 600;
 }
 
 .title {
-  font-family: var(--font-heading);
-  font-size: var(--font-size-xl);
+  font-family: var(--os-font-display);
+  font-size: var(--os-type-title-2);
   font-weight: 700;
-  color: var(--color-text-primary);
-  margin: 0 0 var(--space-2) 0;
+  color: var(--os-color-text-white);
+  margin: 0 0 var(--os-space-2) 0;
 }
 
 .authorityCallout {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-3);
-  background: var(--color-surface-sunken);
-  border: 1px solid var(--color-border-subtle);
-  border-left: 3px solid var(--color-brand-cyan);
-  border-radius: var(--radius-sm);
-  padding: var(--space-3) var(--space-4);
-  margin-bottom: var(--space-6);
+  gap: var(--os-space-3);
+  background-color: var(--os-color-surface-sunken);
+  border: 1px solid var(--os-color-border-subtle);
+  border-left: 3px solid var(--os-color-accent-cyan);
+  border-radius: var(--os-radius-sm);
+  padding: var(--os-space-3) var(--os-space-4);
+  margin-bottom: var(--os-space-6);
 }
 
 .authorityTitle {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  color: var(--color-brand-cyan);
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
+  font-weight: 700;
+  color: var(--os-color-accent-cyan);
   text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-wide);
-  margin-bottom: var(--space-1);
+  letter-spacing: var(--os-tracking-wide);
+  margin-bottom: var(--os-space-1);
 }
 
 .authorityText {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-secondary);
-  line-height: var(--line-height-normal);
+  font-size: var(--os-type-caption);
+  color: var(--os-color-text-secondary);
+  line-height: var(--os-lh-normal);
   margin: 0;
 }
 
 .selectorSection {
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--os-space-6);
 }
 
 .selectorLabel {
   display: block;
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
+  color: var(--os-color-text-muted);
   text-transform: uppercase;
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--os-space-2);
+  font-weight: 600;
 }
 
 .findingTabs {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
-  margin-bottom: var(--space-4);
+  gap: var(--os-space-2);
+  margin-bottom: var(--os-space-4);
 }
 
 .findingTab {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
-  background: var(--color-surface-sunken);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-sm);
-  color: var(--color-text-secondary);
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
+  gap: var(--os-space-2);
+  padding: var(--os-space-2) var(--os-space-3);
+  background-color: var(--os-color-surface-sunken);
+  border: 1px solid var(--os-color-border-subtle);
+  border-radius: var(--os-radius-sm);
+  color: var(--os-color-text-secondary);
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
   cursor: pointer;
-  transition: all var(--duration-fast) var(--ease-default);
+  min-height: 38px;
+  transition: all var(--os-duration-fast) var(--os-ease-standard);
 }
 
 .findingTab:hover {
-  border-color: var(--color-border-interactive);
-  color: var(--color-text-primary);
+  border-color: var(--os-color-border-bright);
+  color: var(--os-color-text-primary);
 }
 
 .findingTabActive {
-  background: rgba(0, 229, 255, 0.08);
-  border-color: var(--color-brand-cyan);
-  color: var(--color-brand-cyan);
+  background-color: rgba(0, 161, 255, 0.08);
+  border-color: var(--os-color-accent-cyan);
+  color: var(--os-color-accent-cyan);
   font-weight: 600;
 }
 
 .findingTabSigned {
-  border-color: rgba(16, 185, 129, 0.4);
+  border-color: rgba(52, 211, 153, 0.4);
 }
 
 .signIndicator {
@@ -108,7 +111,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--color-state-confirmed);
+  background-color: var(--os-state-confirmed-text);
 }
 
 .signIndicatorPending {
@@ -116,53 +119,84 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--color-state-conflicting);
+  background-color: var(--os-state-conflicting-text);
 }
 
 .findingContextBox {
-  background: var(--color-surface-sunken);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-sm);
-  padding: var(--space-4);
-  margin-bottom: var(--space-6);
+  background-color: var(--os-color-surface-sunken);
+  border: 1px solid var(--os-color-border-subtle);
+  border-radius: var(--os-radius-sm);
+  padding: var(--os-space-4);
+  margin-bottom: var(--os-space-6);
 }
 
 .contextHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--os-space-2);
   flex-wrap: wrap;
-  gap: var(--space-2);
+  gap: var(--os-space-2);
 }
 
 .contextTitle {
-  font-family: var(--font-heading);
-  font-size: var(--font-size-base);
-  font-weight: 600;
-  color: var(--color-text-primary);
+  font-family: var(--os-font-display);
+  font-size: var(--os-type-body);
+  font-weight: 700;
+  color: var(--os-color-text-white);
   margin: 0;
 }
 
 .contextSummary {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-  margin-bottom: var(--space-2);
+  font-size: var(--os-type-body-s);
+  color: var(--os-color-text-secondary);
+  margin-bottom: var(--os-space-2);
 }
 
 .contextDetails {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-  font-family: var(--font-mono);
+  font-size: var(--os-type-caption);
+  color: var(--os-color-text-muted);
+  font-family: var(--os-font-mono);
   margin: 0;
   white-space: pre-wrap;
+  line-height: var(--os-lh-normal);
 }
+
+.severityBadge {
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
+  color: var(--os-color-text-secondary);
+}
+
+.recordedStatusGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--os-space-2);
+}
+
+.timestampBadge {
+  font-family: var(--os-font-mono);
+  font-size: 11px;
+  color: var(--os-color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.emptyFindingsText {
+  color: var(--os-color-text-muted);
+  font-size: var(--os-type-body-s);
+  font-family: var(--os-font-mono);
+  padding: var(--os-space-6);
+  text-align: center;
+}
+
 
 .formGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-4);
-  margin-bottom: var(--space-4);
+  gap: var(--os-space-4);
+  margin-bottom: var(--os-space-4);
 }
 
 @media (max-width: 768px) {
@@ -174,41 +208,42 @@
 .formGroup {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--os-space-1);
 }
 
 .label {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  color: var(--color-text-secondary);
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
+  color: var(--os-color-text-secondary);
   font-weight: 600;
 }
 
 .input,
 .select,
 .textarea {
-  background: var(--color-surface-sunken);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-sm);
-  padding: var(--space-2) var(--space-3);
-  font-family: var(--font-sans);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-primary);
-  transition: border-color var(--duration-fast) var(--ease-default);
+  background-color: var(--os-color-surface-sunken);
+  border: 1px solid var(--os-color-border-mid);
+  border-radius: var(--os-radius-sm);
+  padding: var(--os-space-2) var(--os-space-3);
+  font-family: var(--os-font-sans);
+  font-size: var(--os-type-body-s);
+  color: var(--os-color-text-primary);
+  min-height: 42px;
+  transition: border-color var(--os-duration-fast) var(--os-ease-standard);
 }
 
 .input:focus,
 .select:focus,
 .textarea:focus {
-  outline: none;
-  border-color: var(--color-brand-cyan);
-  box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.15);
+  outline: 2px solid var(--os-color-accent-cyan);
+  outline-offset: 1px;
+  border-color: var(--os-color-accent-cyan);
 }
 
 .textarea {
   min-height: 90px;
   resize: vertical;
-  line-height: var(--line-height-normal);
+  line-height: var(--os-lh-normal);
 }
 
 .fullWidth {
@@ -216,38 +251,40 @@
 }
 
 .recordedSignoffBox {
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  border-radius: var(--radius-sm);
-  padding: var(--space-3) var(--space-4);
-  margin-bottom: var(--space-4);
+  background-color: rgba(52, 211, 153, 0.08);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  border-radius: var(--os-radius-sm);
+  padding: var(--os-space-3) var(--os-space-4);
+  margin-bottom: var(--os-space-4);
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  gap: var(--os-space-2);
 }
 
 .recordedText {
-  font-size: var(--font-size-xs);
-  color: var(--color-state-confirmed);
-  font-family: var(--font-mono);
+  font-size: var(--os-type-caption);
+  color: var(--os-state-confirmed-text);
+  font-family: var(--os-font-mono);
 }
 
 .saveButton {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  background: var(--color-brand-cyan);
-  color: var(--color-surface-base);
+  justify-content: center;
+  gap: var(--os-space-2);
+  background-color: var(--os-color-accent-cyan);
+  color: #000000;
   border: none;
-  border-radius: var(--radius-sm);
-  padding: var(--space-2) var(--space-4);
-  font-family: var(--font-mono);
-  font-size: var(--font-size-sm);
-  font-weight: 600;
+  border-radius: var(--os-radius-xs);
+  padding: var(--os-space-2) var(--os-space-4);
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-body-s);
+  font-weight: 700;
   cursor: pointer;
-  transition: opacity var(--duration-fast) var(--ease-default);
+  min-height: 42px;
+  transition: opacity var(--os-duration-fast) var(--os-ease-standard);
 }
 
 .saveButton:hover {

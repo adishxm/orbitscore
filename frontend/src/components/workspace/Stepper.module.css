@@ -1,11 +1,10 @@
+/* Stepper.module.css */
 .stepperWrap {
-  margin-bottom: var(--space-8);
-  background: var(--color-surface-glass);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-md);
-  padding: var(--space-3);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  margin-bottom: var(--os-space-8);
+  background-color: var(--os-color-surface-card);
+  border: 1px solid var(--os-color-border-subtle);
+  border-radius: var(--os-radius-md);
+  padding: var(--os-space-3);
 }
 
 .stepList {
@@ -16,7 +15,8 @@
   padding: 0;
   margin: 0;
   overflow-x: auto;
-  gap: var(--space-2);
+  gap: var(--os-space-2);
+  -webkit-overflow-scrolling: touch;
 }
 
 .stepItem {
@@ -28,20 +28,21 @@
   width: 100%;
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
+  gap: var(--os-space-3);
+  padding: var(--os-space-3) var(--os-space-4);
   background: transparent;
   border: 1px solid transparent;
-  border-radius: var(--radius-sm);
+  border-radius: var(--os-radius-sm);
   cursor: pointer;
   text-align: left;
-  transition: all var(--transition-fast) var(--ease-out-quad);
-  color: var(--color-text-secondary);
+  min-height: 44px;
+  transition: all var(--os-duration-fast) var(--os-ease-standard);
+  color: var(--os-color-text-secondary);
 }
 
 .stepButton:hover {
-  background: rgba(255, 255, 255, 0.03);
-  color: var(--color-text-primary);
+  background-color: var(--os-color-surface-hover);
+  color: var(--os-color-text-white);
 }
 
 .stepNumber {
@@ -50,15 +51,15 @@
   justify-content: center;
   width: 24px;
   height: 24px;
-  border-radius: var(--radius-full);
-  background: var(--color-surface-sunken);
-  border: 1px solid var(--color-border-subtle);
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  color: var(--color-text-muted);
+  border-radius: var(--os-radius-pill);
+  background-color: var(--os-color-surface-sunken);
+  border: 1px solid var(--os-color-border-subtle);
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
+  font-weight: 700;
+  color: var(--os-color-text-muted);
   flex-shrink: 0;
-  transition: all var(--transition-fast) var(--ease-out-quad);
+  transition: all var(--os-duration-fast) var(--os-ease-standard);
 }
 
 .stepContent {
@@ -68,44 +69,44 @@
 }
 
 .stepLabel {
-  font-family: var(--font-display);
-  font-size: var(--font-size-sm);
-  font-weight: 600;
+  font-family: var(--os-font-display);
+  font-size: var(--os-type-body-s);
+  font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .stepSubtext {
-  font-family: var(--font-mono);
+  font-family: var(--os-font-mono);
   font-size: 10px;
-  color: var(--color-text-muted);
+  color: var(--os-color-text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--os-tracking-wide);
 }
 
 /* Active Step */
 .active .stepButton {
-  background: rgba(0, 161, 255, 0.08);
-  border-color: rgba(0, 161, 255, 0.4);
-  color: var(--color-text-primary);
+  background-color: rgba(0, 161, 255, 0.08);
+  border-color: var(--os-color-accent-cyan);
+  color: var(--os-color-text-white);
 }
 
 .active .stepNumber {
-  background: var(--color-brand-cyan);
-  border-color: var(--color-brand-cyan);
-  color: var(--color-surface-base);
+  background-color: var(--os-color-accent-cyan);
+  border-color: var(--os-color-accent-cyan);
+  color: #000000;
 }
 
 .active .stepSubtext {
-  color: var(--color-brand-cyan);
+  color: var(--os-color-accent-cyan);
 }
 
 /* Completed Step */
 .completed .stepNumber {
-  background: rgba(16, 185, 129, 0.15);
-  border-color: var(--color-state-confirmed);
-  color: var(--color-state-confirmed);
+  background-color: var(--os-state-confirmed-bg);
+  border-color: var(--os-state-confirmed-border);
+  color: var(--os-state-confirmed-text);
 }
 
 @media (max-width: 768px) {
@@ -114,14 +115,14 @@
   }
 
   .stepItem {
-    min-width: auto;
+    min-width: 110px;
   }
 
   .stepButton {
-    padding: var(--space-2) var(--space-3);
+    padding: var(--os-space-2) var(--os-space-3);
   }
 
   .stepLabel {
-    font-size: var(--font-size-xs);
+    font-size: var(--os-type-caption);
   }
 }

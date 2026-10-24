@@ -1,11 +1,10 @@
+/* MissionContextCard.module.css */
 .card {
-  background: var(--color-surface-glass);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-md);
-  padding: var(--space-6);
-  margin-bottom: var(--space-8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background-color: var(--os-color-surface-card);
+  border: 1px solid var(--os-color-border-subtle);
+  border-radius: var(--os-radius-md);
+  padding: var(--os-space-6);
+  margin-bottom: var(--os-space-8);
 }
 
 .headerRow {
@@ -13,30 +12,30 @@
   justify-content: space-between;
   align-items: flex-start;
   flex-wrap: wrap;
-  gap: var(--space-4);
-  margin-bottom: var(--space-6);
-  padding-bottom: var(--space-4);
-  border-bottom: 1px solid var(--color-border-subtle);
+  gap: var(--os-space-4);
+  margin-bottom: var(--os-space-6);
+  padding-bottom: var(--os-space-4);
+  border-bottom: 1px solid var(--os-color-border-subtle);
 }
 
 .titleArea {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--os-space-1);
 }
 
 .missionName {
-  font-family: var(--font-display);
-  font-size: var(--font-size-2xl);
+  font-family: var(--os-font-display);
+  font-size: var(--os-type-title-2);
   font-weight: 700;
-  color: var(--color-text-primary);
+  color: var(--os-color-text-white);
   margin: 0;
 }
 
 .missionIdBadge {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
+  color: var(--os-color-text-muted);
 }
 
 .titleRow {
@@ -64,31 +63,32 @@
 .metaGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: var(--space-4);
-  margin-bottom: var(--space-6);
+  gap: var(--os-space-4);
+  margin-bottom: var(--os-space-6);
 }
 
 .metaItem {
-  background: var(--color-surface-sunken);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-sm);
-  padding: var(--space-3) var(--space-4);
+  background-color: var(--os-color-surface-sunken);
+  border: 1px solid var(--os-color-border-subtle);
+  border-radius: var(--os-radius-sm);
+  padding: var(--os-space-3) var(--os-space-4);
 }
 
 .metaLabel {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
+  color: var(--os-color-text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: var(--space-1);
+  letter-spacing: var(--os-tracking-wide);
+  margin-bottom: var(--os-space-1);
+  font-weight: 600;
 }
 
 .metaValue {
-  font-family: var(--font-body);
-  font-size: var(--font-size-base);
+  font-family: var(--os-font-sans);
+  font-size: var(--os-type-body);
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: var(--os-color-text-white);
 }
 
 .summaryRow {
@@ -96,67 +96,126 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: var(--space-4);
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--color-border-subtle);
+  gap: var(--os-space-4);
+  padding-top: var(--os-space-4);
+  border-top: 1px solid var(--os-color-border-subtle);
 }
 
 .badgeCluster {
   display: flex;
-  gap: var(--space-2);
+  gap: var(--os-space-2);
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .editButton {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  background: transparent;
-  color: var(--color-text-secondary);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-sm);
-  padding: var(--space-2) var(--space-3);
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
+  gap: var(--os-space-2);
+  background-color: transparent;
+  color: var(--os-color-text-secondary);
+  border: 1px solid var(--os-color-border-mid);
+  border-radius: var(--os-radius-xs);
+  padding: var(--os-space-2) var(--os-space-3);
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
   cursor: pointer;
-  transition: all var(--transition-fast) var(--ease-out-quad);
+  min-height: 38px;
+  transition: all var(--os-duration-fast) var(--os-ease-standard);
 }
 
 .editButton:hover {
-  color: var(--color-text-primary);
-  border-color: var(--color-border-hover);
+  color: var(--os-color-text-white);
+  border-color: var(--os-color-accent-cyan);
 }
 
 .formGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: var(--space-4);
-  margin-bottom: var(--space-4);
+  gap: var(--os-space-4);
+  margin-bottom: var(--os-space-4);
 }
 
 .formGroup {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--os-space-1);
 }
 
 .formLabel {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  color: var(--color-text-secondary);
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
+  color: var(--os-color-text-secondary);
+  font-weight: 600;
 }
 
 .formInput {
-  background: var(--color-surface-sunken);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-sm);
-  padding: var(--space-2) var(--space-3);
-  color: var(--color-text-primary);
-  font-family: var(--font-body);
-  font-size: var(--font-size-sm);
+  background-color: var(--os-color-surface-sunken);
+  border: 1px solid var(--os-color-border-mid);
+  border-radius: var(--os-radius-sm);
+  padding: var(--os-space-2) var(--os-space-3);
+  color: var(--os-color-text-primary);
+  font-family: var(--os-font-sans);
+  font-size: var(--os-type-body-s);
+  min-height: 40px;
 }
 
 .formInput:focus {
-  outline: none;
-  border-color: var(--color-brand-cyan);
+  outline: 2px solid var(--os-color-accent-cyan);
+  outline-offset: 1px;
+  border-color: var(--os-color-accent-cyan);
 }
+
+.registeredLabel {
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
+  color: var(--os-color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: var(--os-tracking-wide);
+}
+
+.statConfirmed {
+  font-size: var(--os-type-caption);
+  font-family: var(--os-font-mono);
+  color: var(--os-color-state-confirmed);
+}
+
+.statUnconfirmed {
+  font-size: var(--os-type-caption);
+  font-family: var(--os-font-mono);
+  color: var(--os-color-state-unconfirmed);
+}
+
+.statConflicting {
+  font-size: var(--os-type-caption);
+  font-family: var(--os-font-mono);
+  color: var(--os-color-state-conflicting);
+}
+
+.statMissing {
+  font-size: var(--os-type-caption);
+  font-family: var(--os-font-mono);
+  color: var(--os-color-state-missing);
+}
+
+.statOutOfScope {
+  font-size: var(--os-type-caption);
+  font-family: var(--os-font-mono);
+  color: var(--os-color-state-oos);
+}
+
+.statStale {
+  font-size: var(--os-type-caption);
+  font-family: var(--os-font-mono);
+  color: var(--os-color-accent-amber);
+  background-color: rgba(255, 171, 0, 0.1);
+  padding: 2px 6px;
+  border-radius: var(--os-radius-sm);
+  border: 1px solid rgba(255, 171, 0, 0.25);
+}
+
+.saveButton {
+  border-color: var(--os-color-accent-green);
+  color: var(--os-color-accent-green);
+}
+

@@ -100,18 +100,8 @@ export const FindingCard: React.FC<FindingCardProps> = ({
             <span>{outcomeInfo.label}</span>
           </span>
           {decisionRecorded && (
-            <span
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '11px',
-                padding: '3px 8px',
-                borderRadius: 'var(--radius-sm)',
-                background: 'rgba(16, 185, 129, 0.12)',
-                color: 'var(--color-state-confirmed)',
-                border: '1px solid rgba(16, 185, 129, 0.3)',
-              }}
-            >
-              Sign-Off Recorded
+            <span className={styles.decisionBadge}>
+              Decision Recorded
             </span>
           )}
         </div>

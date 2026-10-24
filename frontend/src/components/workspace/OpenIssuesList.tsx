@@ -51,8 +51,8 @@ export const OpenIssuesList: React.FC<OpenIssuesListProps> = ({
           <h2 id="issues-heading" className={styles.title}>
             Open Engineering Issues & Action Items
           </h2>
-          <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-secondary)', marginTop: 'var(--space-1)' }}>
-            Track assigned mitigations, pending lab tests, and technical waivers.
+          <div className={styles.headerSubtitle}>
+            Track assigned mitigations, pending lab tests, and documented technical actions.
           </div>
         </div>
 
@@ -125,7 +125,7 @@ export const OpenIssuesList: React.FC<OpenIssuesListProps> = ({
           </div>
 
           {findings.length > 0 && (
-            <div style={{ marginTop: 'var(--space-3)' }}>
+            <div className={styles.findingSelectGroup}>
               <label htmlFor="linked-finding" className={styles.label}>
                 Link to Automated Finding (Optional)
               </label>
@@ -157,7 +157,7 @@ export const OpenIssuesList: React.FC<OpenIssuesListProps> = ({
                 <th className={styles.th}>Linked Finding</th>
                 <th className={styles.th}>Assignee</th>
                 <th className={styles.th}>Target Date</th>
-                <th className={styles.th} style={{ textAlign: 'right' }}>Actions</th>
+                <th className={`${styles.th} ${styles.thRight}`}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -178,22 +178,22 @@ export const OpenIssuesList: React.FC<OpenIssuesListProps> = ({
                         </span>
                       )}
                     </td>
-                    <td className={styles.td} style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>
+                    <td className={`${styles.td} ${styles.tdTitle}`}>
                       {issue.title}
                     </td>
                     <td className={styles.td}>
                       {linked ? (
                         <code>{linked.check_id}</code>
                       ) : (
-                        <span style={{ color: 'var(--color-text-muted)' }}>—</span>
+                        <span className={styles.emptyPlaceholder}>—</span>
                       )}
                     </td>
                     <td className={styles.td}>{issue.assigned_to}</td>
                     <td className={styles.td}>
-                      <Clock size={12} style={{ verticalAlign: 'middle', marginRight: 4 }} aria-hidden="true" />
+                      <Clock size={12} className={styles.iconInline} aria-hidden="true" />
                       {issue.due_date}
                     </td>
-                    <td className={styles.td} style={{ textAlign: 'right' }}>
+                    <td className={`${styles.td} ${styles.tdRight}`}>
                       <button
                         type="button"
                         className={styles.toggleBtn}
@@ -215,25 +215,17 @@ export const OpenIssuesList: React.FC<OpenIssuesListProps> = ({
         </div>
       ) : (
         <div className={styles.emptyState}>
-          No action items or open issues recorded. Add one above if mitigations or waivers are required.
+          No action items or open issues recorded. Add one above if mitigations or follow-up actions are required.
         </div>
       )}
 
       {issues.length > 0 && (
-        <div
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: 'var(--font-size-xs)',
-            color: 'var(--color-text-muted)',
-            display: 'flex',
-            gap: 'var(--space-4)',
-          }}
-        >
+        <div className={styles.summaryBar}>
           <span>TOTAL: {issues.length}</span>
-          <span style={{ color: openCount > 0 ? 'var(--color-state-conflicting)' : 'var(--color-state-confirmed)' }}>
+          <span className={openCount > 0 ? styles.statOpen : styles.statAddressed}>
             ● {openCount} Open Action Item(s)
           </span>
-          <span style={{ color: 'var(--color-state-confirmed)' }}>
+          <span className={styles.statAddressed}>
             ● {issues.length - openCount} Addressed
           </span>
         </div>

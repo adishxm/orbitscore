@@ -61,25 +61,15 @@ export const FindingsView: React.FC<FindingsViewProps> = ({
   if (!checkRun) {
     return (
       <div className={styles.emptyCard}>
-        <Layers size={36} style={{ color: 'var(--color-brand-cyan)', margin: '0 auto var(--space-4)' }} />
+        <Layers size={36} className={styles.emptyIcon} aria-hidden="true" />
         <h3>No Check Run Evaluated Yet</h3>
-        <p style={{ maxWidth: '50ch', margin: 'var(--space-2) auto var(--space-6)' }}>
+        <p className={styles.emptyLead}>
           Please execute the evaluation profile gate to inspect consistency rules across registered evidence items.
         </p>
         <button
           type="button"
           onClick={onBackToGate}
-          style={{
-            background: 'var(--color-brand-cyan)',
-            color: 'var(--color-surface-base)',
-            border: 'none',
-            borderRadius: 'var(--radius-sm)',
-            padding: 'var(--space-2) var(--space-4)',
-            fontFamily: 'var(--font-mono)',
-            fontSize: 'var(--font-size-xs)',
-            fontWeight: 600,
-            cursor: 'pointer',
-          }}
+          className={styles.btnPrimary}
         >
           Return to Profile Gate
         </button>
@@ -95,22 +85,13 @@ export const FindingsView: React.FC<FindingsViewProps> = ({
           <span className={styles.summaryBadge}>
             TOTAL: <strong>{counts.total}</strong>
           </span>
-          <span
-            className={styles.summaryBadge}
-            style={{ color: 'var(--color-state-conflicting)' }}
-          >
+          <span className={`${styles.summaryBadge} ${styles.actionRequiredBadge}`}>
             ● {counts.actionRequired} Action Required
           </span>
-          <span
-            className={styles.summaryBadge}
-            style={{ color: 'var(--color-state-stale)' }}
-          >
+          <span className={`${styles.summaryBadge} ${styles.advisoryBadge}`}>
             ● {counts.advisory} Advisory
           </span>
-          <span
-            className={styles.summaryBadge}
-            style={{ color: 'var(--color-state-confirmed)' }}
-          >
+          <span className={`${styles.summaryBadge} ${styles.documentedBadge}`}>
             ● {counts.documented} Documented
           </span>
         </div>
@@ -143,19 +124,7 @@ export const FindingsView: React.FC<FindingsViewProps> = ({
             <button
               type="button"
               onClick={onReRunChecks}
-              style={{
-                background: 'transparent',
-                border: '1px solid var(--color-border-subtle)',
-                color: 'var(--color-text-secondary)',
-                borderRadius: 'var(--radius-sm)',
-                padding: 'var(--space-2) var(--space-3)',
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                fontFamily: 'var(--font-mono)',
-                fontSize: 'var(--font-size-xs)',
-              }}
+              className={styles.btnSecondary}
               title="Re-run deterministic checks"
             >
               <RefreshCw size={12} aria-hidden="true" />
@@ -188,16 +157,7 @@ export const FindingsView: React.FC<FindingsViewProps> = ({
         <button
           type="button"
           onClick={onBackToGate}
-          style={{
-            background: 'transparent',
-            border: '1px solid var(--color-border-subtle)',
-            color: 'var(--color-text-secondary)',
-            borderRadius: 'var(--radius-sm)',
-            padding: 'var(--space-3) var(--space-4)',
-            fontFamily: 'var(--font-mono)',
-            fontSize: 'var(--font-size-xs)',
-            cursor: 'pointer',
-          }}
+          className={styles.btnSecondary}
         >
           <ArrowLeft size={16} aria-hidden="true" />
           <span>Back to Profile Gate</span>
@@ -206,20 +166,7 @@ export const FindingsView: React.FC<FindingsViewProps> = ({
         <button
           type="button"
           onClick={onProceedToReview}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 'var(--space-2)',
-            background: 'var(--color-brand-cyan)',
-            color: 'var(--color-surface-base)',
-            border: 'none',
-            borderRadius: 'var(--radius-sm)',
-            padding: 'var(--space-3) var(--space-5)',
-            fontFamily: 'var(--font-mono)',
-            fontSize: 'var(--font-size-sm)',
-            fontWeight: 600,
-            cursor: 'pointer',
-          }}
+          className={styles.btnPrimary}
         >
           <span>Proceed to Human Review</span>
           <ArrowRight size={16} aria-hidden="true" />

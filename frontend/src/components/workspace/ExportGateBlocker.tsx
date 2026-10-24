@@ -16,12 +16,11 @@ export const ExportGateBlocker: React.FC<ExportGateBlockerProps> = ({
   onSelectFinding,
   onProceedToExport,
 }) => {
-  // Find all findings with severity 'action_required'
+  // Gating rule: All findings with severity 'action_required' must have a recorded review decision
   const actionRequiredFindings = findings.filter(
     (f) => f.severity === 'action_required'
   );
 
-  // Check which action-required findings lack a valid human decision
   const pendingFindings = actionRequiredFindings.filter((finding) => {
     const dec = decisions.find((d) => d.finding_id === finding.id);
     return !dec || dec.decision === 'action_pending';
@@ -31,36 +30,24 @@ export const ExportGateBlocker: React.FC<ExportGateBlockerProps> = ({
 
   return (
     <section
-      className={`${styles.card} ${
-        isGateBlocked ? styles.cardBlocked : styles.cardReady
-      }`}
+      className={`${styles.card} ${isGateBlocked ? styles.cardBlocked : styles.cardReady}`}
       aria-labelledby="export-gate-title"
     >
       <div className={styles.headerRow}>
         {isGateBlocked ? (
-          <ShieldAlert size={32} color="var(--color-state-conflicting)" aria-hidden="true" />
+          <ShieldAlert size={32} color="var(--os-color-accent-red)" aria-hidden="true" className={styles.iconShield} />
         ) : (
-          <ShieldCheck size={32} color="var(--color-state-confirmed)" aria-hidden="true" />
+          <ShieldCheck size={32} color="var(--os-color-accent-green)" aria-hidden="true" className={styles.iconShield} />
         )}
-        <div style={{ flex: 1 }}>
+        <div className={styles.headerInfo}>
           <div
-            className={styles.kicker}
-            style={{
-              color: isGateBlocked
-                ? 'var(--color-state-conflicting)'
-                : 'var(--color-state-confirmed)',
-            }}
+            className={`${styles.kicker} ${isGateBlocked ? styles.kickerBlocked : styles.kickerReady}`}
           >
             Phase Gate Verification
           </div>
           <h2
             id="export-gate-title"
-            className={styles.title}
-            style={{
-              color: isGateBlocked
-                ? 'var(--color-state-conflicting)'
-                : 'var(--color-state-confirmed)',
-            }}
+            className={`${styles.title} ${isGateBlocked ? styles.titleBlocked : styles.titleReady}`}
           >
             {isGateBlocked
               ? 'Export Dossier Gate: Sign-Off Pending'
@@ -68,26 +55,15 @@ export const ExportGateBlocker: React.FC<ExportGateBlockerProps> = ({
           </h2>
           <p className={styles.desc}>
             {isGateBlocked
-              ? `Formal cited evidence packet generation is gated. There are ${pendingFindings.length} finding(s) with required actions that need documented engineering decisions by a qualified reviewer before generating the final export.`
-              : 'All action-required findings have documented engineering sign-offs. You may now generate and export the complete cited review dossier.'}
+              ? `Formal cited evidence packet generation is gated. There are ${pendingFindings.length} finding(s) with required actions that need documented engineering decisions before generating the review export.`
+              : 'All action-required findings have documented engineering review decisions. You may now generate and export the complete cited review packet.'}
           </p>
         </div>
       </div>
 
       {isGateBlocked ? (
         <div className={styles.pendingList}>
-          <div
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: 'var(--font-size-xs)',
-              color: 'var(--color-state-conflicting)',
-              textTransform: 'uppercase',
-              marginBottom: 'var(--space-2)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 'var(--space-1)',
-            }}
-          >
+          <div className={styles.pendingTitle}>
             <AlertTriangle size={14} aria-hidden="true" />
             <span>Pending Findings Requiring Human Review Decision ({pendingFindings.length})</span>
           </div>
@@ -96,7 +72,7 @@ export const ExportGateBlocker: React.FC<ExportGateBlockerProps> = ({
             <div key={finding.id} className={styles.pendingItem}>
               <div>
                 <strong>{finding.check_id}</strong>: {finding.check_title}
-                <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)' }}>
+                <div className={styles.pendingSummary}>
                   {finding.summary}
                 </div>
               </div>
@@ -111,22 +87,13 @@ export const ExportGateBlocker: React.FC<ExportGateBlockerProps> = ({
           ))}
         </div>
       ) : (
-        <div
-          style={{
-            background: 'var(--color-surface-sunken)',
-            borderRadius: 'var(--radius-sm)',
-            padding: 'var(--space-3) var(--space-4)',
-            fontFamily: 'var(--font-mono)',
-            fontSize: 'var(--font-size-xs)',
-            color: 'var(--color-state-confirmed)',
-          }}
-        >
+        <div className={styles.readyBanner}>
           ✓ {actionRequiredFindings.length} of {actionRequiredFindings.length} action-required items evaluated and signed off by engineering authority.
         </div>
       )}
 
       <div className={styles.actionsRow}>
-        <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)' }}>
+        <div className={styles.footerHint}>
           {isGateBlocked
             ? 'Complete all required sign-offs above to unlock export generation.'
             : 'Proceed to export generation to download JSON, Markdown, or print packet.'}

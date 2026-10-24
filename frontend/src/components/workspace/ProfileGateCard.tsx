@@ -41,27 +41,17 @@ export const ProfileGateCard: React.FC<ProfileGateCardProps> = ({
           </div>
         </div>
 
-        <span
-          style={{
-            background: 'var(--color-surface-sunken)',
-            border: '1px solid var(--color-border-subtle)',
-            padding: 'var(--space-2) var(--space-3)',
-            borderRadius: 'var(--radius-sm)',
-            fontFamily: 'var(--font-mono)',
-            fontSize: 'var(--font-size-xs)',
-            color: 'var(--color-brand-cyan)',
-          }}
-        >
+        <span className={styles.versionBadge}>
           {profile.version} STABLE
         </span>
       </div>
 
       {/* Profile Boundary Declaration */}
       <div className={styles.boundaryBox}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>
+        <div className={styles.boundaryHeading}>
           Calibrated Vehicle Classes
         </div>
-        <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)' }}>
+        <div className={styles.boundaryDetail}>
           Object Types: <strong>{profile.applicability.object_types.join(', ')}</strong> • Form Factors: <strong>{profile.applicability.form_factors.join(', ')}</strong>
         </div>
       </div>
@@ -69,9 +59,9 @@ export const ProfileGateCard: React.FC<ProfileGateCardProps> = ({
       {/* Applicability Evaluation Banner */}
       {isApplicable ? (
         <div className={styles.gateAlertSuccess} role="status">
-          <CheckCircle2 size={20} color="var(--color-state-confirmed)" aria-hidden="true" />
+          <CheckCircle2 size={20} color="var(--os-color-accent-green)" aria-hidden="true" className={styles.gateIcon} />
           <div>
-            <div className={styles.alertTitle} style={{ color: 'var(--color-state-confirmed)' }}>
+            <div className={`${styles.alertTitle} ${styles.alertTitleSuccess}`}>
               Applicability Gate: APPLICABLE
             </div>
             <p className={styles.alertDesc}>
@@ -82,9 +72,9 @@ export const ProfileGateCard: React.FC<ProfileGateCardProps> = ({
         </div>
       ) : (
         <div className={styles.gateAlertError} role="alert">
-          <AlertTriangle size={20} color="var(--color-state-conflicting)" aria-hidden="true" />
+          <AlertTriangle size={20} color="var(--os-color-accent-red)" aria-hidden="true" className={styles.gateIcon} />
           <div>
-            <div className={styles.alertTitle} style={{ color: 'var(--color-state-conflicting)' }}>
+            <div className={`${styles.alertTitle} ${styles.alertTitleError}`}>
               Applicability Gate: NOT APPLICABLE (Out of Profile Scope)
             </div>
             <p className={styles.alertDesc}>
@@ -132,7 +122,7 @@ export const ProfileGateCard: React.FC<ProfileGateCardProps> = ({
       )}
 
       {/* Actions */}
-      <div style={{ display: 'flex', gap: 'var(--space-4)', flexWrap: 'wrap', alignItems: 'center' }}>
+      <div className={styles.actionsRow}>
         <button
           type="button"
           onClick={onRunChecks}
@@ -156,16 +146,7 @@ export const ProfileGateCard: React.FC<ProfileGateCardProps> = ({
           <button
             type="button"
             onClick={onProceedToFindings}
-            style={{
-              background: 'transparent',
-              color: 'var(--color-text-primary)',
-              border: '1px solid var(--color-border-subtle)',
-              borderRadius: 'var(--radius-sm)',
-              padding: 'var(--space-3) var(--space-4)',
-              fontFamily: 'var(--font-mono)',
-              fontSize: 'var(--font-size-sm)',
-              cursor: 'pointer',
-            }}
+            className={styles.actionButtonSecondary}
           >
             <span>View {checkRun.findings.length} Findings</span>
           </button>

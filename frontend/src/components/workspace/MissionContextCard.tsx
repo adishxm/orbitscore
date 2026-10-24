@@ -79,12 +79,11 @@ export const MissionContextCard: React.FC<MissionContextCardProps> = ({
         {onUpdateMission && (
           <div>
             {isEditing ? (
-              <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+              <div className={styles.badgeCluster}>
                 <button
                   type="button"
                   onClick={handleSave}
-                  className={styles.editButton}
-                  style={{ borderColor: 'var(--color-state-confirmed)', color: 'var(--color-state-confirmed)' }}
+                  className={`${styles.editButton} ${styles.saveButton}`}
                 >
                   <Check size={13} aria-hidden="true" />
                   <span>Save Context</span>
@@ -212,22 +211,32 @@ export const MissionContextCard: React.FC<MissionContextCardProps> = ({
 
       {/* Summary Evidence Count Bar */}
       <div className={styles.summaryRow}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'var(--font-size-xs)', color: 'var(--color-text-secondary)' }}>
+        <div className={styles.registeredLabel}>
           REGISTERED EVIDENCE: <strong>{evidence.length} ITEMS</strong>
         </div>
         <div className={styles.badgeCluster}>
-          <span style={{ fontSize: 'var(--font-size-xs)', fontFamily: 'var(--font-mono)', color: 'var(--color-state-confirmed)' }}>
+          <span className={styles.statConfirmed}>
             ● {stateCounts.confirmed || 0} Confirmed
           </span>
-          <span style={{ fontSize: 'var(--font-size-xs)', fontFamily: 'var(--font-mono)', color: 'var(--color-state-unconfirmed)' }}>
+          <span className={styles.statUnconfirmed}>
             ● {stateCounts.unconfirmed || 0} Unconfirmed
           </span>
-          <span style={{ fontSize: 'var(--font-size-xs)', fontFamily: 'var(--font-mono)', color: 'var(--color-state-conflicting)' }}>
+          <span className={styles.statMissing}>
+            ● {stateCounts.missing || 0} Missing
+          </span>
+          <span className={styles.statConflicting}>
             ● {stateCounts.conflicting || 0} Conflicting
           </span>
-          <span style={{ fontSize: 'var(--font-size-xs)', fontFamily: 'var(--font-mono)', color: 'var(--color-state-stale)' }}>
-            ● {stateCounts.stale || 0} Stale
-          </span>
+          {(stateCounts['out-of-scope'] || stateCounts.out_of_scope) ? (
+            <span className={styles.statOutOfScope}>
+              ● {(stateCounts['out-of-scope'] || 0) + (stateCounts.out_of_scope || 0)} Out of Scope
+            </span>
+          ) : null}
+          {(stateCounts.stale || 0) > 0 && (
+            <span className={styles.statStale}>
+              ⚠ {stateCounts.stale} Stale
+            </span>
+          )}
         </div>
       </div>
     </section>

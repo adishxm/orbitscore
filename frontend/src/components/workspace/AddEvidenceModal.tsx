@@ -68,7 +68,7 @@ export const AddEvidenceModal: React.FC<AddEvidenceModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            style={{ background: 'transparent', border: 'none', color: 'var(--color-text-secondary)', cursor: 'pointer' }}
+            className={styles.closeBtn}
             aria-label="Close modal"
           >
             <X size={18} />
