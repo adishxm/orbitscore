@@ -1,0 +1,244 @@
+{
+  "mission_id": "mission_conflict",
+  "name": "Asteria-3 Conflicting Evidence Scenario",
+  "description": "Synthetic review case; spreadsheet and datasheet disagree on propulsion and disposal lifetime.",
+  "orbit": {
+    "altitude_km": 510,
+    "inclination_deg": 97.4
+  },
+  "artifacts": [
+    {
+      "artifact_id": "a1",
+      "filename": "asteria3_mission_datasheet_synthetic.pdf",
+      "media_type": "application/pdf",
+      "sha256": "synthetic-fixture-hash-a1",
+      "uploaded_at": "2026-10-19T12:00:00Z",
+      "locator": {
+        "page": 1,
+        "span": "1-12"
+      }
+    },
+    {
+      "artifact_id": "a2",
+      "filename": "asteria3_design_review_synthetic.xlsx",
+      "media_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "sha256": "synthetic-fixture-hash-a2",
+      "uploaded_at": "2026-10-19T12:00:00Z",
+      "locator": {
+        "sheet": "Mission Summary",
+        "cell_range": "B2:F24"
+      }
+    },
+    {
+      "artifact_id": "a3",
+      "filename": "asteria3_propulsion_datasheet_synthetic.txt",
+      "media_type": "text/plain",
+      "sha256": "synthetic-fixture-hash-a3",
+      "uploaded_at": "2026-10-19T12:00:00Z",
+      "locator": {
+        "page": null,
+        "span": "lines 4-11"
+      }
+    }
+  ],
+  "fields": [
+    {
+      "field": "owner",
+      "value": "TwinForge Student Mission",
+      "human_confirmed": true,
+      "artifact_id": "a1",
+      "locator": {
+        "page": 1,
+        "span": "title block",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "reentry_mode",
+      "value": "uncontrolled",
+      "human_confirmed": true,
+      "artifact_id": "a1",
+      "locator": {
+        "page": 8,
+        "span": "§11.1",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "disposal_lifetime_years",
+      "value": 8.4,
+      "human_confirmed": true,
+      "artifact_id": "a1",
+      "locator": {
+        "page": 4,
+        "span": "§7.2",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "remaining_orbital_life_years",
+      "value": 8.4,
+      "human_confirmed": true,
+      "artifact_id": "a1",
+      "locator": {
+        "page": 4,
+        "span": "§7.2",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "pmd_probability",
+      "value": 0.985,
+      "human_confirmed": true,
+      "artifact_id": "a1",
+      "locator": {
+        "page": 5,
+        "span": "Table 5-1",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "operational_altitude_km",
+      "value": 510,
+      "human_confirmed": true,
+      "artifact_id": "a1",
+      "locator": {
+        "page": 2,
+        "span": "§2.1",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "trackable",
+      "value": true,
+      "human_confirmed": true,
+      "artifact_id": "a1",
+      "locator": {
+        "page": 6,
+        "span": "§9.1",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "identifiable",
+      "value": true,
+      "human_confirmed": true,
+      "artifact_id": "a1",
+      "locator": {
+        "page": 6,
+        "span": "§9.2",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "maneuverable",
+      "value": true,
+      "human_confirmed": true,
+      "artifact_id": "a1",
+      "locator": {
+        "page": 6,
+        "span": "§9.3",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "passivated",
+      "value": true,
+      "human_confirmed": true,
+      "artifact_id": "a1",
+      "locator": {
+        "page": 7,
+        "span": "§10.1",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "disposal_reliability",
+      "value": 0.94,
+      "human_confirmed": true,
+      "artifact_id": "a1",
+      "locator": {
+        "page": 5,
+        "span": "Table 5-1",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "accidental_collision_probability",
+      "value": 0.0008,
+      "human_confirmed": true,
+      "artifact_id": "a1",
+      "locator": {
+        "page": 5,
+        "span": "Table 5-2",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "casualty_expectation",
+      "value": 8e-05,
+      "human_confirmed": true,
+      "artifact_id": "a1",
+      "locator": {
+        "page": 8,
+        "span": "§11.1",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "debris_decay_years",
+      "value": 20,
+      "human_confirmed": true,
+      "artifact_id": "a1",
+      "locator": {
+        "page": 8,
+        "span": "§11.2",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "debris_object_years",
+      "value": 70,
+      "human_confirmed": true,
+      "artifact_id": "a1",
+      "locator": {
+        "page": 8,
+        "span": "§11.2",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "propulsion_type",
+      "value": "green monopropellant",
+      "human_confirmed": true,
+      "artifact_id": "a1",
+      "locator": {
+        "page": 3,
+        "span": "§3.2",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "disposal_lifetime_years",
+      "value": 3.2,
+      "human_confirmed": true,
+      "artifact_id": "a2",
+      "locator": {
+        "page": null,
+        "span": "Mission Summary!D18",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "propulsion_type",
+      "value": "hydrazine monopropellant",
+      "human_confirmed": true,
+      "artifact_id": "a2",
+      "locator": {
+        "page": null,
+        "span": "Mission Summary!B8",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    }
+  ]
+}

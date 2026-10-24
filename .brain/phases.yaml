@@ -1,0 +1,27 @@
+version: 1
+project: orbitready
+phases:
+  - id: P0
+    name: Verified baseline and live contract
+    tasks: [T001, T006]
+    outcome: React and FastAPI agree on one live, testable contract; clean setup is documented.
+  - id: P1
+    name: Evidence intake and extraction
+    tasks: [T002]
+    outcome: Synthetic TXT/PDF evidence can be uploaded, hashed, parsed, and human-confirmed.
+  - id: P2
+    name: Durable review system
+    tasks: [T003, T004]
+    outcome: Mission, findings, decisions, and provenance survive restart and remain verifiable.
+  - id: P3
+    name: Review packet and browser acceptance
+    tasks: [T005, T007]
+    outcome: Human-gated cited export works through the actual UI.
+  - id: P4
+    name: Optional AI assist and final freeze
+    tasks: [T008]
+    outcome: AI can suggest fields safely, but the app remains complete with AI disabled.
+  - id: P5
+    name: Submission freeze
+    tasks: []
+    outcome: Demo, repository, deck, and two-minute video are frozen by the event deadline.

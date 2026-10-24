@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OrbitScore — Task T001 Completion & Verification Checklist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070b14;
+      --card-bg: rgba(16, 24, 43, 0.75);
+      --card-border: rgba(94, 231, 210, 0.18);
+      --text-main: #f3f6fc;
+      --text-muted: #8fa0be;
+      --accent-cyan: #5ee7d2;
+      --accent-green: #4ade80;
+      --accent-amber: #fbbf24;
+      --accent-blue: #60a5fa;
+      --accent-purple: #c084fc;
+      --danger: #f87171;
+      --glow-cyan: 0 0 25px rgba(94, 231, 210, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(94, 231, 210, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(96, 165, 250, 0.08) 0%, transparent 40%),
+        linear-gradient(180deg, #070b14 0%, #0d1527 100%);
+      color: var(--text-main);
+      font-family: 'Space Grotesk', -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 32px 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(16px);
+      border-radius: 18px;
+      padding: 28px 32px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(94, 231, 210, 0.2), rgba(96, 165, 250, 0.2));
+      border: 1px solid var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      box-shadow: var(--glow-cyan);
+    }
+
+    .title-group h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #fff;
+    }
+
+    .title-group p {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 2px;
+    }
+
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-live {
+      background: rgba(74, 222, 128, 0.15);
+      border: 1px solid rgba(74, 222, 128, 0.4);
+      color: var(--accent-green);
+    }
+
+    .badge-live::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent-green);
+    }
+
+    .badge-task {
+      background: rgba(94, 231, 210, 0.12);
+      border: 1px solid rgba(94, 231, 210, 0.35);
+      color: var(--accent-cyan);
+    }
+
+    /* Overall Progress Meter */
+    .progress-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .progress-meta span {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .progress-meta strong {
+      font-size: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent-green);
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
+      border-radius: 999px;
+      box-shadow: 0 0 16px rgba(74, 222, 128, 0.4);
+      transition: width 0.4s ease;
+    }
+
+    /* Filter Tabs */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .tab-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      padding: 8px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .tab-btn:hover {
+      background: rgba(94, 231, 210, 0.1);
+      color: var(--text-main);
+      border-color: rgba(94, 231, 210, 0.3);
+    }
+
+    .tab-btn.active {
+      background: rgba(94, 231, 210, 0.18);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      font-weight: 600;
+    }
+
+    /* Section Cards */
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: 20px;
+      transition: border-color 0.2s;
+    }
+
+    .section-card:hover {
+      border-color: rgba(94, 231, 210, 0.25);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .section-header h2 {
+      font-size: 17px;
+      font-weight: 600;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-header h2 span {
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+    }
+
+    .count-pill {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Checklist Items */
+    .checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      transition: all 0.2s;
+    }
+
+    .check-item:hover {
+      background: rgba(94, 231, 210, 0.03);
+      border-color: rgba(94, 231, 210, 0.15);
+    }
+
+    .custom-checkbox {
+      margin-top: 3px;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(94, 231, 210, 0.5);
+      border-radius: 6px;
+      background: rgba(7, 11, 20, 0.6);
+      cursor: pointer;
+      display: grid;
+      place-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .custom-checkbox:checked {
+      background: var(--accent-green);
+      border-color: var(--accent-green);
+      box-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
+    }
+
+    .custom-checkbox:checked::after {
+      content: "✓";
+      color: #070b14;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .item-content {
+      flex: 1;
+    }
+
+    .item-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 3px;
+    }
+
+    .item-desc {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .item-meta {
+      margin-top: 6px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--accent-blue);
+    }
+
+    .tag-pass {
+      background: rgba(74, 222, 128, 0.15);
+      color: var(--accent-green);
+      border: 1px solid rgba(74, 222, 128, 0.3);
+    }
+
+    /* Verification Grid */
+    .tests-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .test-box {
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .test-box .test-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .test-box .test-cmd {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .status-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(74, 222, 128, 0.15);
+      color: var(--accent-green);
+      border: 1px solid rgba(74, 222, 128, 0.3);
+    }
+
+    /* Action bar */
+    .action-bar {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, rgba(94, 231, 210, 0.2), rgba(96, 165, 250, 0.2));
+      border: 1px solid var(--accent-cyan);
+      color: #fff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: rgba(94, 231, 210, 0.3);
+      box-shadow: var(--glow-cyan);
+      transform: translateY(-1px);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #111d33;
+      border: 1px solid var(--accent-cyan);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 13px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 100;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Top Header -->
+    <header>
+      <div class="brand">
+        <div class="brand-icon">0S</div>
+        <div class="title-group">
+          <h1>OrbitScore Task Verification Checklist</h1>
+          <p>Local Brain Inspection & Completion Status Console</p>
+        </div>
+      </div>
+      <div class="header-badges">
+        <span class="badge badge-task">Task: T001</span>
+        <span class="badge badge-live">Live API: Connected</span>
+        <span class="badge" style="background: rgba(255,255,255,0.06); color: var(--text-muted);">Owner: Aditya</span>
+      </div>
+    </header>
+
+    <!-- Progress Meter -->
+    <div class="progress-card">
+      <div class="progress-meta">
+        <span>T001 Completion Gate Readiness</span>
+        <strong id="progress-percent">100% Complete</strong>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-fill" style="width: 100%;"></div>
+      </div>
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="filterCategory('all')">All Checkpoints</button>
+      <button class="tab-btn" onclick="filterCategory('acceptance')">T001 Acceptance (5)</button>
+      <button class="tab-btn" onclick="filterCategory('testsuites')">Automated Tests (7)</button>
+      <button class="tab-btn" onclick="filterCategory('browser')">Browser Verification (4)</button>
+      <button class="tab-btn" onclick="filterCategory('filing')">Filing & Evidence (4)</button>
+    </div>
+
+    <!-- Section 1: T001 Acceptance Criteria -->
+    <div class="section-card" data-cat="acceptance">
+      <div class="section-header">
+        <h2><span>[01]</span> T001 Task Acceptance Criteria</h2>
+        <span class="count-pill">5 / 5 Verified</span>
+      </div>
+      <ul class="checklist">
+        <li class="check-item">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-acc-1" onchange="updateProgress()">
+          <div class="item-content">
+            <div class="item-title">1. Live Mission Loading via FastAPI</div>
+            <div class="item-desc">With <code>VITE_USE_MOCK=false</code> and the FastAPI server running on port 8000, the React browser console connects over HTTP and loads the mission profile dynamically.</div>
+            <div class="item-meta">
+              <span class="tag tag-pass">PASS</span>
+              <span class="tag">http://127.0.0.1:8000/missions/mission_complete</span>
+            </div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-acc-2" onchange="updateProgress()">
+          <div class="item-content">
+            <div class="item-title">2. Policy Profile Selection & Dynamic Evaluation</div>
+            <div class="item-desc">Selecting or changing a profile triggers <code>POST /missions/{id}/evaluate</code> and renders the 7 returned findings without mock data contamination.</div>
+            <div class="item-meta">
+              <span class="tag tag-pass">PASS</span>
+              <span class="tag">Profile: nasa-std-8719-14c-inspired</span>
+            </div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-acc-3" onchange="updateProgress()">
+          <div class="item-content">
+            <div class="item-title">3. Bidirectional Review Decisions & Export Lock Sync</div>
+            <div class="item-desc">Clicking "Approve" or "Waive" posts decisions to <code>POST /missions/{id}/findings/{finding_id}/decision</code>; reviewed counter updates and 423 Export Gate status reflects live server state.</div>
+            <div class="item-meta">
+              <span class="tag tag-pass">PASS</span>
+              <span class="tag">Decisions: APPROVED & WAIVED_WITH_NOTE</span>
+            </div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-acc-4" onchange="updateProgress()">
+          <div class="item-content">
+            <div class="item-title">4. Offline Mock Mode Fallback & Isolation</div>
+            <div class="item-desc">With <code>VITE_USE_MOCK=true</code> or clicking the topbar mode toggle, the console operates completely offline in local storage without network requests.</div>
+            <div class="item-meta">
+              <span class="tag tag-pass">PASS</span>
+              <span class="tag">Dual-Mode Toggle Functional</span>
+            </div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-acc-5" onchange="updateProgress()">
+          <div class="item-content">
+            <div class="item-title">5. Network Error Resilience Banner</div>
+            <div class="item-desc">Network failures display a prominent error banner with "Retry" and "Switch to Mock Mode" actions, preventing silent false claims of live evaluation.</div>
+            <div class="item-meta">
+              <span class="tag tag-pass">PASS</span>
+              <span class="tag">Fail-Safe Active</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Section 2: Automated Test Suites -->
+    <div class="section-card" data-cat="testsuites">
+      <div class="section-header">
+        <h2><span>[02]</span> Verification Matrix & Automated Test Suites</h2>
+        <span class="count-pill">7 / 7 Passing</span>
+      </div>
+      <div class="tests-grid">
+        <div class="test-box">
+          <div>
+            <div class="test-name">Backend Pytest Suite</div>
+            <div class="test-cmd">pytest -q apps/api/tests</div>
+          </div>
+          <span class="status-badge">8 PASSED</span>
+        </div>
+        <div class="test-box">
+          <div>
+            <div class="test-name">Verification Matrix</div>
+            <div class="test-cmd">python -m app.verification</div>
+          </div>
+          <span class="status-badge">12 EVALS / VALID</span>
+        </div>
+        <div class="test-box">
+          <div>
+            <div class="test-name">Frontend Vitest Suite</div>
+            <div class="test-cmd">npm test --prefix apps/web</div>
+          </div>
+          <span class="status-badge">10 PASSED</span>
+        </div>
+        <div class="test-box">
+          <div>
+            <div class="test-name">TypeScript Typecheck</div>
+            <div class="test-cmd">npm run typecheck --prefix apps/web</div>
+          </div>
+          <span class="status-badge">0 ERRORS</span>
+        </div>
+        <div class="test-box">
+          <div>
+            <div class="test-name">Vite Production Build</div>
+            <div class="test-cmd">npm run build --prefix apps/web</div>
+          </div>
+          <span class="status-badge">BUILT 2.29s</span>
+        </div>
+        <div class="test-box">
+          <div>
+            <div class="test-name">Brain Graph Validation</div>
+            <div class="test-cmd">python .brain/scripts/validate_brain.py</div>
+          </div>
+          <span class="status-badge">9 TASKS VALID</span>
+        </div>
+        <div class="test-box">
+          <div>
+            <div class="test-name">Completion Gate Pipeline</div>
+            <div class="test-cmd">python .brain/scripts/complete_task.py T001</div>
+          </div>
+          <span class="status-badge">BASELINE PASS</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Browser Live Flow Evidence -->
+    <div class="section-card" data-cat="browser">
+      <div class="section-header">
+        <h2><span>[03]</span> End-to-End Browser Flow Evidence</h2>
+        <span class="count-pill">4 / 4 Verified</span>
+      </div>
+      <ul class="checklist">
+        <li class="check-item">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-brw-1" onchange="updateProgress()">
+          <div class="item-content">
+            <div class="item-title">Topbar Mode & Server Provenance Badge</div>
+            <div class="item-desc">Verified console topbar displays glowing green <code>LIVE API: http://localhost:8000</code> pill and cryptographic provenance chain verification: <code>SERVER CHAIN CHECK: VERIFIED (12 events)</code>.</div>
+            <div class="item-meta">
+              <span class="tag tag-pass">VERIFIED</span>
+              <span class="tag">Screenshot: final_live_mode_1792842143605.png</span>
+            </div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-brw-2" onchange="updateProgress()">
+          <div class="item-content">
+            <div class="item-title">Live Finding Approval Workflow</div>
+            <div class="item-desc">Clicked "Approve" on finding <code>NASA-4.3-1-DECAY</code>. Card immediately updated to <code>✓ reviewed</code>, notice displayed approval confirmation, and reviewed metric changed to <code>01</code>.</div>
+            <div class="item-meta">
+              <span class="tag tag-pass">VERIFIED</span>
+              <span class="tag">Screenshot: after_first_approval_1792841114788.png</span>
+            </div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-brw-3" onchange="updateProgress()">
+          <div class="item-content">
+            <div class="item-title">Live Finding Waiver Workflow</div>
+            <div class="item-desc">Clicked "Waive" on finding <code>NASA-4.3-1-OBJECT-YEARS</code>. Card updated to <code>✓ reviewed</code>, notice displayed waiver confirmation, and reviewed metric incremented to <code>02</code>.</div>
+            <div class="item-meta">
+              <span class="tag tag-pass">VERIFIED</span>
+              <span class="tag">Screenshot: after_second_waiver_1792841152261.png</span>
+            </div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-brw-4" onchange="updateProgress()">
+          <div class="item-content">
+            <div class="item-title">Seamless Mode Switching</div>
+            <div class="item-desc">Toggled from Live API to Mock mode. Banner switched to <code>MOCK / OFFLINE (Click for Live)</code> with 00 local reviews. Toggled back to Live API: restored live server state seamlessly.</div>
+            <div class="item-meta">
+              <span class="tag tag-pass">VERIFIED</span>
+              <span class="tag">Screenshot: mock_mode_1792842110371.png</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Section 4: Filing & Brain Artifacts -->
+    <div class="section-card" data-cat="filing">
+      <div class="section-header">
+        <h2><span>[04]</span> Local Brain Filing & Documentation Artifacts</h2>
+        <span class="count-pill">4 / 4 Filed</span>
+      </div>
+      <ul class="checklist">
+        <li class="check-item">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-fil-1" onchange="updateProgress()">
+          <div class="item-content">
+            <div class="item-title">Timestamped Task Report Draft & Finalized Copy</div>
+            <div class="item-desc">Created with <code>new_task_report.py</code> and finalized via <code>finalize_task_report.py</code> with ISO-8601 UTC and local timestamps.</div>
+            <div class="item-meta">
+              <span class="tag tag-pass">FILED</span>
+              <span class="tag">.brain/reports/task-runs/20261024T145629.461888+0530_T001_live-api-integration_finished_20261024T171530.411318+0530.md</span>
+            </div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-fil-2" onchange="updateProgress()">
+          <div class="item-content">
+            <div class="item-title">Automated Verification Gate JSON Evidence</div>
+            <div class="item-desc">Recorded full baseline check output with durations, return codes, and system clock metadata.</div>
+            <div class="item-meta">
+              <span class="tag tag-pass">FILED</span>
+              <span class="tag">.brain/reports/task-runs/20261024T163603.350524+0530_T001_verification.json</span>
+            </div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-fil-3" onchange="updateProgress()">
+          <div class="item-content">
+            <div class="item-title">Task & State Synchronization</div>
+            <div class="item-desc">Updated <code>status: done</code> in <code>.brain/tasks/T001-live-api-integration.md</code> and synchronized <code>state.json</code>.</div>
+            <div class="item-meta">
+              <span class="tag tag-pass">SYNCHRONIZED</span>
+              <span class="tag">.brain/state.json</span>
+            </div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-fil-4" onchange="updateProgress()">
+          <div class="item-content">
+            <div class="item-title">Team Status Report Generation</div>
+            <div class="item-desc">Generated latest view <code>team-report.html</code> and timestamped team snapshot in <code>.brain/reports/team-snapshots/</code>.</div>
+            <div class="item-meta">
+              <span class="tag tag-pass">GENERATED</span>
+              <span class="tag">team-report.html</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+      <div>
+        <span style="color: var(--text-muted); font-size: 13px;">Reviewer Sign-off: </span>
+        <strong style="color: var(--accent-green); font-size: 13px;">Narayan (APPROVED)</strong>
+      </div>
+      <button class="btn" onclick="copyChecklistSummary()">
+        <span>📋</span> Copy Executive Summary
+      </button>
+    </div>
+
+  </div>
+
+  <div id="toast" class="toast">Checklist summary copied to clipboard!</div>
+
+  <script>
+    function updateProgress() {
+      const checkboxes = document.querySelectorAll('.custom-checkbox');
+      const total = checkboxes.length;
+      let checked = 0;
+      checkboxes.forEach(chk => { if (chk.checked) checked++; });
+      const percent = Math.round((checked / total) * 100);
+      document.getElementById('progress-percent').innerText = `${percent}% Complete (${checked}/${total})`;
+      document.getElementById('progress-fill').style.width = `${percent}%`;
+    }
+
+    function filterCategory(cat) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+
+      const cards = document.querySelectorAll('.section-card');
+      cards.forEach(card => {
+        if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function copyChecklistSummary() {
+      const summary = `OrbitScore T001 Completion Checklist:
+- 5/5 Acceptance criteria verified (Live mission loading, profile selection, review decisions, mock fallback, error resilience)
+- 7/7 Automated test suites passing (pytest, verification matrix, vitest, typecheck, build, validate_brain, complete_task)
+- 4/4 Browser E2E flow points verified with recorded screenshots
+- 4/4 Local brain reports and state files filed and synchronized
+Status: DONE / APPROVED by Narayan`;
+      navigator.clipboard.writeText(summary).then(() => {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+      });
+    }
+
+    // Initialize progress on load
+    updateProgress();
+  </script>
+</body>
+</html>

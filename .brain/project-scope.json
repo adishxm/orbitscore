@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "scope_name": "OrbitReady MVP deliverables",
+  "required_tasks": [
+    "T001",
+    "T002",
+    "T003",
+    "T004",
+    "T005",
+    "T006",
+    "T007",
+    "T009"
+  ],
+  "optional_tasks": {
+    "T008": {
+      "title": "Optional structured AI extraction",
+      "allowed_dispositions": ["complete", "deferred_by_owner"],
+      "current_disposition": "pending",
+      "note": "The product is intentionally designed to remain useful with AI disabled. A deferred disposition requires an explicit owner/reviewer rationale and does not count as delivering the AI adapter."
+    }
+  },
+  "completion_scope_warning": "This defines tracked MVP scope only; it cannot prove every possible product requirement, domain correctness, market success, regulatory fitness, or production readiness."
+}

@@ -1,0 +1,236 @@
+NASA Debris Assessment Software (DAS) version 3.2.7 (5 December 2025)
+======================================================================
+https://orbitaldebris.jsc.nasa.gov/mitigation/das.html
+
+Version 3.2.7 provides access to a new Python API for the Fortran DLL.
+
+Installation
+-------------------------------------------
+- Download and run the new DAS installer.
+   -- DAS is optimized for Windows 10.
+   -- DAS must be installed in a location to which the user has both
+      read and write permissions.
+   -- If Windows prevents the installer from running, the user may need
+      to select the "Unblock" option in the installer file’s Windows file
+      properties dialog.
+- The default installation type for DAS is for the "Current User" only.
+  If the user needs to install DAS for "All Users", then the installer 
+  must be run as Administrator (Right-click on installer file, select
+  "Run as Administrator") to avoid any run-time errors or crashes.
+- If necessary, download the latest update of the solar flux data file
+  from the DAS web page and replace the version in the DAS data\ folder.
+- The orbital debris population files needed for ORDEM runs for the years
+  2016-2030 are included with the installer. To analyze the debris flux
+  on a spacecraft of rocket body for years 2031 or beyond, users must 
+  download the additional ZIP files included in the Software 
+  Catalog and extract them into the /data/ folder where DAS was installed.
+
+Changes and fixes in DAS 3.2.7 (2025-12-05)
+-------------------------------------------
+1. Added Python API to access subroutines in the Fortran DLL
+2. Added feature to re-use previous ORDEM runs to improve runtime
+3. Remove the limit on component tree depth from the assessment of
+   casualty risk from reentry debris.
+4. Add a collision area enhancement when calculating the probability of
+   collision with large objects (Requirement 4.5-1).  The new calculation
+   considers the size of colliding objects rather than simply the debris
+   environmental flux.
+
+Changes and fixes in DAS 3.2.6 (2024-02-05)
+-------------------------------------------
+1. Fixed bug where some shapes were not read in during cross-sectional
+   area calculation
+2. Fixed bug where number of layers was incorrectly implemented in 
+   Requirement 4.5-2 assessment
+3. Fixed mismatched drag coefficients in Apogee-Perigee History tool,
+   which caused apparent fast reentries from high altitudes
+
+Changes and fixes in DAS 3.2.5 (2023-06-07)
+-------------------------------------------
+1. Fixed computation of large object flux in Req. 4.5-1 assessment
+
+Changes and fixes in DAS 3.2.4 (2023-04-04)
+-------------------------------------------
+1. Added ability to use linearly-varying specific heat and emissivity for
+   user-defined materials in Req. 4.7-1 assessments and the reentry 
+   survivability Science and Engineering utility
+2. Upgraded Fortran routines to F95 standard
+3. Improved PMD "suggested altitude" routines
+4. Improved contour calculations for Science and Engineering utilities
+5. Added project file upgrader to automatically convert old DAS projects
+   to v3.2.4 standard format (i.e., number and name of columns)
+6. Removed "delete after run" feature for Req. 4.5-1 and 4.5-2
+7. Removed "fail early" feature for missions with multiple payloads; if 
+   one of the payloads fails Req. 4.5-1 or 4.5-2, the others will still run
+8. Fixed bug where ORDEMext model was not called at the correct intervals
+   during Req. 4.6-3 assessment (long term reentry)
+9. Fixed assessment for MEO objects with PMD orbit lying entirely within
+   SSO region (20182 +/- 300km altitude)
+
+Changes and fixes in DAS 3.2.3 (2022-09-08)
+-------------------------------------------
+1. Fixed bug where DAS would enter an infinite loop when analyzing 
+   certain Graphite Epoxy 1 or Graphite Epoxy 2 components.
+
+Changes and fixes in DAS 3.2.2 (2022-07-20)
+-------------------------------------------
+1. Fixed bug where DAS crashed when project folder path contained spaces
+   when running Requirement 4.5-1 or 4.5-2 assessments.
+2. Added temperature-varying specific heats
+3. Added temperature-varying emissivity values
+4. Updated drag and heating models for cylinders and flat plates
+5. Updated timestep from 2 days to 1 day in internal orbit propagators
+
+Changes and fixes in DAS 3.2.1 (2022-02-28)
+-------------------------------------------
+1. Updated ORDEM files to version 3.2.
+
+Changes and fixes in DAS 3.2 (2021-12-03)
+-------------------------------------------
+1. Added long-term reentry option for postmission disposal
+2. Updated requirement 4.6 to align with new Standard 8719.14 Revision C.
+3. Corrected inclination for rocket body reentries
+4. Corrected error in atmospheric density calculation in PROP3D
+
+Changes and fixes in DAS 3.1.2 (2021-01-27)
+-------------------------------------------
+1. Fixed erroneous 'incomplete' result returned when 4.5-1 flux exceeded 0.001
+
+Changes and fixes in DAS 3.1.1 (2020-12-31)
+-------------------------------------------
+1. Added error handling for users with ORDEM 3.1.0 installed 
+   -(DAS 3.1 uses ORDEM 3.1.2)
+2. Fixed errors where DAS would sometimes crash when adding lines to a grid.
+3. Added limits to Cross-Sectional Area tool number of facets and 
+   additional guards in backend code to prevent memory leaks.
+4. Fixed error where DAS would sometimes crash when cancelling ORDEM run.
+
+
+Changes and fixes in DAS 3.1 (2020-04-30)
+-------------------------------------------
+1. Updated the orbital debris environment model from ORDEM 3.0 
+   to ORDEM 3.1.
+2. Removed calls to obsolete Gruen meteoroid flux model from the
+   assessment of small-object penetration probability (Req. 4.5-2).
+   - Probability of small-object penetration must be assessed outside
+     DAS at this time.
+3. Fixed logic error in Fortran subroutine that produced invalid
+   probability of collision calculation for Requirement 4.5-1 under
+   certain conditions of launch date, mission duration, and PMD.
+4. Fixed a bug in the cross-sectional area estimation tool that caused
+   the tool to fail for large inputs.
+5. Minor readability and usability changes to the GUI and Help system.
+
+
+Changes and fixes in DAS 3.0.1 (2020-01-31)
+-------------------------------------------
+1. Fixed two issues that prevented the GUI from saving and using new data
+   in GUI grid boxes.  Now the "Run" and "Save" buttons record the new
+   data, save it to the project files, and pass it to the computational
+   routines.
+2. Fixed a multi-thread memory limit that caused DAS to crash on certain
+   PC configurations.
+
+
+Changes and fixes in DAS 3.0 (2019-02-01)
+-------------------------------------------
+1. Improved support for Microsoft Windows 10.
+2. Updated the Help files to current format.
+3. Updated assessment to address the revised NASA Standard 8719.14B.
+   - New MEO protection zone, removed limit on operational lifetime.
+4. Updated reentry material model to reflect recent research.
+   - Increased survivability of carbon-fiber material.
+5. Increased number of unique hardware components that can be modeled in 
+   the reentry survivability module from 200 to 1500.
+6. Removed assessment of intentional breakups:  There has been no demand
+   for assessment of this discouraged practice, and cases that can be 
+   well predicted are so narrowly defined as to be useless to the 
+   general user.
+7. Removed assessment of tether systems:  Due to the complicated 
+   dynamics of tether systems, cases that can be well predicted are so 
+   narrowly defined as to be useless to the general user.
+8. Removed ORDEM-intensive Science & Engineering Tools:  Run-times of 
+   days to weeks made several of the tools impractical at this time.
+9. Updated User’s Guide with expanded technical appendices and 
+   references to latest NASA Standard 8719.14B.
+
+
+Changes and fixes in DAS 2.1.1 (2017-01-18)
+-------------------------------------------
+1. Fixed logic error in Fortran subroutine that produced invalid
+   probability of collision calculation for Requirement 4.5-1.
+2. Updated Help file to reflect version 2.1.1.
+
+
+Changes and fixes in DAS 2.1 (2016-03-31)
+-------------------------------------------
+1. Updated the orbital debris environment model from ORDEM2000
+   (a.k.a. ORDEM 2) to ORDEM 3.0.
+2. Increased the precision of the cross-sectional area estimation tool.
+3. Fixed a typographical error in the list of built-in materials used in
+   reentry survivability calculations.
+   NOTE:  Old (DAS 2.0.1, DAS 2.0.2) projects that use the updated
+          materials will need to be updated with the new material names.
+      Old material name       New material name
+      ----------------------  ----------------------
+      Polyamide               Polyimide
+4. Updated the DAS User's Guide to address the inclusion of ORDEM 3.0
+   and emphasize the affects and limitations of that change.
+5. Updated the software packager/installer (NSIS) and script to be
+   compatible with multi-user Windows machines and with and non-
+   privileged user accounts.
+
+
+Changes and fixes in DAS 2.0.2 (2011-12-01)
+-------------------------------------------
+1. Fixed a logic error in the ORDEM2000-derived routines that produced 
+   incorrect collision risk results for missions that began and/or ended 
+   in the second half of a given year.  The error was most obvious in 
+   missions with short durations.
+2. For collision risk assessments, moved the ORDEM sample date to mid-
+   year (except for first and last years) to remove debris flux 
+   inconsistencies caused by fractional-year-contribution calculations.
+3. Fixed a logic error that caused DAS to skip processing collision risk 
+   at altitudes above 2000 km.
+4. Fixed a formatting error in the ORDEM2000-derived routines that 
+   yielded a bad intermediate file, causing the collision risk 
+   assessment to crash at high altitudes.
+5. Changed orbit propagator time-step to 2 days.  Different modules were 
+   using various time-steps, including small steps that could produce 
+   singularities in the calculations.
+6. Fixed naming and typographical errors in the list of built-in 
+   materials used in reentry survivability calculations, and reordered 
+   some lines.
+   NOTE:  Old (DAS 2.0.1) projects that use the updated materials will 
+          need to be updated with the new material names.
+      Old material name       New material name
+      ----------------------  ----------------------
+      Brass- Munthz           Brass- Muntz
+      CU/Be (1.9% Beryllium)  Cu/Be (1.9% Beryllium)
+      Mag. AZ31               Magnesium AZ31
+      Mag. HK31A              Magnesium HK31A
+      Niobium (columbium)     Niobium (Columbium)
+      Polymide                Polyamide
+      Stainless Steel 304L    Steel AISI 304
+      Stainless Steel 347L    Steel AISI 347
+      Steel 410               Steel AISI 410
+      Uzrh                    Uranium Zirconium Hydride
+7. Moved to a new software packager/installer (NSIS) compatible with 
+   current Microsoft Windows operating systems (both 32- and 64-bit).
+8. Removed an unused input ("Retraction Year") from the GUI for 
+   assessment of Requirement 4.8-1.
+9. Updated the software User's Guide to reflect the new installation/
+   removal procedures, and to clearly state the assumptions of the 
+   assessment of tethers (Requirement 4.8-1).
+10. Included the current solar flux data file, dated 04 April 2012.
+
+
+Changes and fixes in DAS 2.0.1 (2008-02-05)
+-------------------------------------------
+1. Fixed a bug that resulted in incorrect rocket body mass and A/M data 
+   being transferred from the Mission Editor to the assessment routines 
+   for Requirements 4.7-1 and 4.8-1.
+2. Fixed a bug in the material properties of Nickel and mp35n which 
+   resulted in an incorrect specific heat (Cp) value in one temperature 
+   range.
+

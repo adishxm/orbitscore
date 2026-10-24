@@ -1,0 +1,148 @@
+{
+  "report_type": "tracked_mvp_completion_gate",
+  "created_at_utc": "2026-10-21T20:17:56.630903Z",
+  "created_at_local": "2026-10-22T01:47:56.630903+05:30",
+  "timezone": "Asia/Kolkata",
+  "timestamp_source": "host system clock",
+  "eligible_for_human_completion_signoff": false,
+  "status": "NOT_ELIGIBLE",
+  "scope_name": "OrbitReady MVP deliverables",
+  "warning": "This defines tracked MVP scope only; it cannot prove every possible product requirement, domain correctness, market success, regulatory fitness, or production readiness.",
+  "required_task_count": 8,
+  "required_tasks_done": 0,
+  "optional_task_dispositions": {
+    "T008": "pending"
+  },
+  "tasks": [
+    {
+      "task_id": "T001",
+      "task_status": "ready",
+      "state_status": "ready",
+      "report": null,
+      "verification_report": null,
+      "blockers": [
+        "Required task is not marked done after review.",
+        "No finished, timestamped task report found.",
+        "No passing timestamped baseline verification report found after the task report start time."
+      ]
+    },
+    {
+      "task_id": "T002",
+      "task_status": "ready",
+      "state_status": "ready",
+      "report": null,
+      "verification_report": null,
+      "blockers": [
+        "Required task is not marked done after review.",
+        "No finished, timestamped task report found.",
+        "No passing timestamped baseline verification report found after the task report start time."
+      ]
+    },
+    {
+      "task_id": "T003",
+      "task_status": "blocked-by-T002",
+      "state_status": "blocked-by-T002",
+      "report": null,
+      "verification_report": null,
+      "blockers": [
+        "Required task is not marked done after review.",
+        "No finished, timestamped task report found.",
+        "No passing timestamped baseline verification report found after the task report start time."
+      ]
+    },
+    {
+      "task_id": "T004",
+      "task_status": "blocked-by-T002",
+      "state_status": "blocked-by-T002",
+      "report": null,
+      "verification_report": null,
+      "blockers": [
+        "Required task is not marked done after review.",
+        "No finished, timestamped task report found.",
+        "No passing timestamped baseline verification report found after the task report start time."
+      ]
+    },
+    {
+      "task_id": "T005",
+      "task_status": "blocked-by-T003",
+      "state_status": "blocked-by-T003",
+      "report": null,
+      "verification_report": null,
+      "blockers": [
+        "Required task is not marked done after review.",
+        "No finished, timestamped task report found.",
+        "No passing timestamped baseline verification report found after the task report start time."
+      ]
+    },
+    {
+      "task_id": "T006",
+      "task_status": "ready",
+      "state_status": "ready",
+      "report": null,
+      "verification_report": null,
+      "blockers": [
+        "Required task is not marked done after review.",
+        "No finished, timestamped task report found.",
+        "No passing timestamped baseline verification report found after the task report start time."
+      ]
+    },
+    {
+      "task_id": "T007",
+      "task_status": "blocked-by-T002",
+      "state_status": "blocked-by-T002",
+      "report": null,
+      "verification_report": null,
+      "blockers": [
+        "Required task is not marked done after review.",
+        "No finished, timestamped task report found.",
+        "No passing timestamped baseline verification report found after the task report start time."
+      ]
+    },
+    {
+      "task_id": "T009",
+      "task_status": "testing",
+      "state_status": "testing",
+      "report": null,
+      "verification_report": ".brain/reports/task-runs/20261022T014633.915379+0530_T009_verification.json",
+      "blockers": [
+        "Required task is not marked done after review.",
+        "No finished, timestamped task report found."
+      ]
+    }
+  ],
+  "blockers": [
+    "T001: Required task is not marked done after review.",
+    "T001: No finished, timestamped task report found.",
+    "T001: No passing timestamped baseline verification report found after the task report start time.",
+    "T002: Required task is not marked done after review.",
+    "T002: No finished, timestamped task report found.",
+    "T002: No passing timestamped baseline verification report found after the task report start time.",
+    "T003: Required task is not marked done after review.",
+    "T003: No finished, timestamped task report found.",
+    "T003: No passing timestamped baseline verification report found after the task report start time.",
+    "T004: Required task is not marked done after review.",
+    "T004: No finished, timestamped task report found.",
+    "T004: No passing timestamped baseline verification report found after the task report start time.",
+    "T005: Required task is not marked done after review.",
+    "T005: No finished, timestamped task report found.",
+    "T005: No passing timestamped baseline verification report found after the task report start time.",
+    "T006: Required task is not marked done after review.",
+    "T006: No finished, timestamped task report found.",
+    "T006: No passing timestamped baseline verification report found after the task report start time.",
+    "T007: Required task is not marked done after review.",
+    "T007: No finished, timestamped task report found.",
+    "T007: No passing timestamped baseline verification report found after the task report start time.",
+    "T009: Required task is not marked done after review.",
+    "T009: No finished, timestamped task report found.",
+    "Optional task T008 needs an explicit owner disposition (complete or deferred_by_owner).",
+    "Final human project sign-off is not APPROVED.",
+    "Final project sign-off has no reviewer identity.",
+    "Final project sign-off requires valid UTC and Asia/Kolkata timestamps.",
+    "Final project sign-off does not identify the completion evidence report.",
+    "Final project sign-off must document rationale and remaining limitations."
+  ],
+  "notes": [
+    ".brain valid: 9 tasks; statuses synchronized; dependencies known and acyclic; project-scope IDs and required research/reporting guides present."
+  ],
+  "does_not_claim": "This report does not score overall product quality, domain validity, regulatory compliance, commercial success, or all possible future work."
+}

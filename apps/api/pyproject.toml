@@ -1,0 +1,10 @@
+[project]
+name = "orbitscore-api"
+version = "1.0.0"
+description = "Source-linked debris-mitigation evidence pre-review API"
+requires-python = ">=3.10"
+dependencies = ["fastapi>=0.110,<1", "uvicorn[standard]>=0.27,<1", "pydantic>=2.6,<3"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

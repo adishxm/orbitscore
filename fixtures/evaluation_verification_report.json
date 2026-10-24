@@ -1,0 +1,445 @@
+{
+  "verification_date": "2026-10-20",
+  "method": "Executed deterministic Python engine on each supplied mission fixture under each selectable profile; no fixture expected_statuses are consumed.",
+  "matrix": [
+    {
+      "mission_id": "mission_complete",
+      "profile_id": "india-dfsm-inspired",
+      "msri_band": "RED",
+      "findings": {
+        "IN-DFSM-PMD-PROB": "WARNING",
+        "IN-DFSM-ORBIT-LIFE": "WARNING",
+        "IN-DFSM-HSF-BAND": "PASS_UNDER_PROFILE",
+        "IN-DFSM-TRACK": "PASS_UNDER_PROFILE",
+        "IN-DFSM-ID": "PASS_UNDER_PROFILE",
+        "IN-DFSM-MANEUVER": "PASS_UNDER_PROFILE",
+        "IN-DFSM-PASSIVATION": "PASS_UNDER_PROFILE"
+      }
+    },
+    {
+      "mission_id": "mission_complete",
+      "profile_id": "nasa-std-8719-14c-inspired",
+      "msri_band": "GREEN",
+      "findings": {
+        "NASA-4.3-1-DECAY": "PASS_UNDER_PROFILE",
+        "NASA-4.3-1-OBJECT-YEARS": "PASS_UNDER_PROFILE",
+        "NASA-4.4-2-PASSIVATION": "PASS_UNDER_PROFILE",
+        "NASA-4.5-1-COLLISION": "PASS_UNDER_PROFILE",
+        "NASA-4.6-LIFETIME": "PASS_UNDER_PROFILE",
+        "NASA-4.6-RELIABILITY": "PASS_UNDER_PROFILE",
+        "NASA-4.7-1-CASUALTY": "PASS_UNDER_PROFILE"
+      }
+    },
+    {
+      "mission_id": "mission_complete",
+      "profile_id": "fcc-22-74-inspired",
+      "msri_band": "RED",
+      "findings": {
+        "FCC-22-74-5YR": "WARNING",
+        "FCC-22-74-TRACKABILITY": "PASS_UNDER_PROFILE",
+        "FCC-22-74-MANEUVERABILITY": "PASS_UNDER_PROFILE"
+      }
+    },
+    {
+      "mission_id": "mission_complete",
+      "profile_id": "internal-pre-review",
+      "msri_band": "AMBER",
+      "findings": {
+        "INT-MISSION_OWNER": "PASS_UNDER_PROFILE",
+        "INT-DISPOSAL_LIFETIME": "PASS_UNDER_PROFILE",
+        "INT-PASSIVATION": "PASS_UNDER_PROFILE",
+        "INT-TRACKABILITY": "PASS_UNDER_PROFILE",
+        "INT-PROPULSION": "PASS_UNDER_PROFILE",
+        "INT-REENTRY": "PASS_UNDER_PROFILE",
+        "INT-EVIDENCE": "NEEDS_EVIDENCE"
+      }
+    },
+    {
+      "mission_id": "mission_gap_heavy",
+      "profile_id": "india-dfsm-inspired",
+      "msri_band": "RED",
+      "findings": {
+        "IN-DFSM-PMD-PROB": "NEEDS_EVIDENCE",
+        "IN-DFSM-ORBIT-LIFE": "NEEDS_EVIDENCE",
+        "IN-DFSM-HSF-BAND": "NEEDS_EVIDENCE",
+        "IN-DFSM-TRACK": "PASS_UNDER_PROFILE",
+        "IN-DFSM-ID": "NEEDS_EVIDENCE",
+        "IN-DFSM-MANEUVER": "NEEDS_EVIDENCE",
+        "IN-DFSM-PASSIVATION": "NEEDS_EVIDENCE"
+      }
+    },
+    {
+      "mission_id": "mission_gap_heavy",
+      "profile_id": "nasa-std-8719-14c-inspired",
+      "msri_band": "RED",
+      "findings": {
+        "NASA-4.3-1-DECAY": "NEEDS_EVIDENCE",
+        "NASA-4.3-1-OBJECT-YEARS": "NEEDS_EVIDENCE",
+        "NASA-4.4-2-PASSIVATION": "NEEDS_EVIDENCE",
+        "NASA-4.5-1-COLLISION": "NEEDS_EVIDENCE",
+        "NASA-4.6-LIFETIME": "NEEDS_EVIDENCE",
+        "NASA-4.6-RELIABILITY": "NEEDS_EVIDENCE",
+        "NASA-4.7-1-CASUALTY": "NEEDS_EVIDENCE"
+      }
+    },
+    {
+      "mission_id": "mission_gap_heavy",
+      "profile_id": "fcc-22-74-inspired",
+      "msri_band": "RED",
+      "findings": {
+        "FCC-22-74-5YR": "NEEDS_EVIDENCE",
+        "FCC-22-74-TRACKABILITY": "PASS_UNDER_PROFILE",
+        "FCC-22-74-MANEUVERABILITY": "NEEDS_EVIDENCE"
+      }
+    },
+    {
+      "mission_id": "mission_gap_heavy",
+      "profile_id": "internal-pre-review",
+      "msri_band": "RED",
+      "findings": {
+        "INT-MISSION_OWNER": "PASS_UNDER_PROFILE",
+        "INT-DISPOSAL_LIFETIME": "NEEDS_EVIDENCE",
+        "INT-PASSIVATION": "NEEDS_EVIDENCE",
+        "INT-TRACKABILITY": "PASS_UNDER_PROFILE",
+        "INT-PROPULSION": "NEEDS_EVIDENCE",
+        "INT-REENTRY": "NEEDS_EVIDENCE",
+        "INT-EVIDENCE": "NEEDS_EVIDENCE"
+      }
+    },
+    {
+      "mission_id": "mission_conflict",
+      "profile_id": "india-dfsm-inspired",
+      "msri_band": "RED",
+      "findings": {
+        "IN-DFSM-PMD-PROB": "WARNING",
+        "IN-DFSM-ORBIT-LIFE": "WARNING",
+        "IN-DFSM-HSF-BAND": "PASS_UNDER_PROFILE",
+        "IN-DFSM-TRACK": "PASS_UNDER_PROFILE",
+        "IN-DFSM-ID": "PASS_UNDER_PROFILE",
+        "IN-DFSM-MANEUVER": "PASS_UNDER_PROFILE",
+        "IN-DFSM-PASSIVATION": "PASS_UNDER_PROFILE"
+      }
+    },
+    {
+      "mission_id": "mission_conflict",
+      "profile_id": "nasa-std-8719-14c-inspired",
+      "msri_band": "RED",
+      "findings": {
+        "NASA-4.3-1-DECAY": "PASS_UNDER_PROFILE",
+        "NASA-4.3-1-OBJECT-YEARS": "PASS_UNDER_PROFILE",
+        "NASA-4.4-2-PASSIVATION": "PASS_UNDER_PROFILE",
+        "NASA-4.5-1-COLLISION": "PASS_UNDER_PROFILE",
+        "NASA-4.6-LIFETIME": "CONFLICT",
+        "NASA-4.6-RELIABILITY": "PASS_UNDER_PROFILE",
+        "NASA-4.7-1-CASUALTY": "PASS_UNDER_PROFILE"
+      }
+    },
+    {
+      "mission_id": "mission_conflict",
+      "profile_id": "fcc-22-74-inspired",
+      "msri_band": "RED",
+      "findings": {
+        "FCC-22-74-5YR": "CONFLICT",
+        "FCC-22-74-TRACKABILITY": "PASS_UNDER_PROFILE",
+        "FCC-22-74-MANEUVERABILITY": "PASS_UNDER_PROFILE"
+      }
+    },
+    {
+      "mission_id": "mission_conflict",
+      "profile_id": "internal-pre-review",
+      "msri_band": "RED",
+      "findings": {
+        "INT-MISSION_OWNER": "PASS_UNDER_PROFILE",
+        "INT-DISPOSAL_LIFETIME": "CONFLICT",
+        "INT-PASSIVATION": "PASS_UNDER_PROFILE",
+        "INT-TRACKABILITY": "PASS_UNDER_PROFILE",
+        "INT-PROPULSION": "CONFLICT",
+        "INT-REENTRY": "PASS_UNDER_PROFILE",
+        "INT-EVIDENCE": "NEEDS_EVIDENCE"
+      }
+    }
+  ],
+  "provenance": [
+    {
+      "sequence": 1,
+      "event_type": "fixture_evaluated",
+      "payload": {
+        "mission_id": "mission_complete",
+        "profile_id": "india-dfsm-inspired",
+        "result": {
+          "mission_id": "mission_complete",
+          "profile_id": "india-dfsm-inspired",
+          "msri_band": "RED",
+          "findings": {
+            "IN-DFSM-PMD-PROB": "WARNING",
+            "IN-DFSM-ORBIT-LIFE": "WARNING",
+            "IN-DFSM-HSF-BAND": "PASS_UNDER_PROFILE",
+            "IN-DFSM-TRACK": "PASS_UNDER_PROFILE",
+            "IN-DFSM-ID": "PASS_UNDER_PROFILE",
+            "IN-DFSM-MANEUVER": "PASS_UNDER_PROFILE",
+            "IN-DFSM-PASSIVATION": "PASS_UNDER_PROFILE"
+          }
+        }
+      },
+      "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "hash": "d277e28866d9eeb1a8b88a2b6c7069fa6388b6559a6e2d545aba25b5c7066fbf"
+    },
+    {
+      "sequence": 2,
+      "event_type": "fixture_evaluated",
+      "payload": {
+        "mission_id": "mission_complete",
+        "profile_id": "nasa-std-8719-14c-inspired",
+        "result": {
+          "mission_id": "mission_complete",
+          "profile_id": "nasa-std-8719-14c-inspired",
+          "msri_band": "GREEN",
+          "findings": {
+            "NASA-4.3-1-DECAY": "PASS_UNDER_PROFILE",
+            "NASA-4.3-1-OBJECT-YEARS": "PASS_UNDER_PROFILE",
+            "NASA-4.4-2-PASSIVATION": "PASS_UNDER_PROFILE",
+            "NASA-4.5-1-COLLISION": "PASS_UNDER_PROFILE",
+            "NASA-4.6-LIFETIME": "PASS_UNDER_PROFILE",
+            "NASA-4.6-RELIABILITY": "PASS_UNDER_PROFILE",
+            "NASA-4.7-1-CASUALTY": "PASS_UNDER_PROFILE"
+          }
+        }
+      },
+      "previous_hash": "d277e28866d9eeb1a8b88a2b6c7069fa6388b6559a6e2d545aba25b5c7066fbf",
+      "hash": "f1b663fa5cbc611edf49b916c15956c1dadfd1c4f863e44d723fd04a5a9faf52"
+    },
+    {
+      "sequence": 3,
+      "event_type": "fixture_evaluated",
+      "payload": {
+        "mission_id": "mission_complete",
+        "profile_id": "fcc-22-74-inspired",
+        "result": {
+          "mission_id": "mission_complete",
+          "profile_id": "fcc-22-74-inspired",
+          "msri_band": "RED",
+          "findings": {
+            "FCC-22-74-5YR": "WARNING",
+            "FCC-22-74-TRACKABILITY": "PASS_UNDER_PROFILE",
+            "FCC-22-74-MANEUVERABILITY": "PASS_UNDER_PROFILE"
+          }
+        }
+      },
+      "previous_hash": "f1b663fa5cbc611edf49b916c15956c1dadfd1c4f863e44d723fd04a5a9faf52",
+      "hash": "ce97b87f04d21ce47b4caa3eb3a7f838c44d7701618f492f6e5a91d9bcd673b5"
+    },
+    {
+      "sequence": 4,
+      "event_type": "fixture_evaluated",
+      "payload": {
+        "mission_id": "mission_complete",
+        "profile_id": "internal-pre-review",
+        "result": {
+          "mission_id": "mission_complete",
+          "profile_id": "internal-pre-review",
+          "msri_band": "AMBER",
+          "findings": {
+            "INT-MISSION_OWNER": "PASS_UNDER_PROFILE",
+            "INT-DISPOSAL_LIFETIME": "PASS_UNDER_PROFILE",
+            "INT-PASSIVATION": "PASS_UNDER_PROFILE",
+            "INT-TRACKABILITY": "PASS_UNDER_PROFILE",
+            "INT-PROPULSION": "PASS_UNDER_PROFILE",
+            "INT-REENTRY": "PASS_UNDER_PROFILE",
+            "INT-EVIDENCE": "NEEDS_EVIDENCE"
+          }
+        }
+      },
+      "previous_hash": "ce97b87f04d21ce47b4caa3eb3a7f838c44d7701618f492f6e5a91d9bcd673b5",
+      "hash": "11a14683fe7e0c912803e96808cd27c86188b0f672bc6bb0c8bc7436a997a600"
+    },
+    {
+      "sequence": 5,
+      "event_type": "fixture_evaluated",
+      "payload": {
+        "mission_id": "mission_gap_heavy",
+        "profile_id": "india-dfsm-inspired",
+        "result": {
+          "mission_id": "mission_gap_heavy",
+          "profile_id": "india-dfsm-inspired",
+          "msri_band": "RED",
+          "findings": {
+            "IN-DFSM-PMD-PROB": "NEEDS_EVIDENCE",
+            "IN-DFSM-ORBIT-LIFE": "NEEDS_EVIDENCE",
+            "IN-DFSM-HSF-BAND": "NEEDS_EVIDENCE",
+            "IN-DFSM-TRACK": "PASS_UNDER_PROFILE",
+            "IN-DFSM-ID": "NEEDS_EVIDENCE",
+            "IN-DFSM-MANEUVER": "NEEDS_EVIDENCE",
+            "IN-DFSM-PASSIVATION": "NEEDS_EVIDENCE"
+          }
+        }
+      },
+      "previous_hash": "11a14683fe7e0c912803e96808cd27c86188b0f672bc6bb0c8bc7436a997a600",
+      "hash": "4db3959e7ac4fc7e4009e89a5c86ce9da4c7111dffda2cf1cb8afdfd72b03534"
+    },
+    {
+      "sequence": 6,
+      "event_type": "fixture_evaluated",
+      "payload": {
+        "mission_id": "mission_gap_heavy",
+        "profile_id": "nasa-std-8719-14c-inspired",
+        "result": {
+          "mission_id": "mission_gap_heavy",
+          "profile_id": "nasa-std-8719-14c-inspired",
+          "msri_band": "RED",
+          "findings": {
+            "NASA-4.3-1-DECAY": "NEEDS_EVIDENCE",
+            "NASA-4.3-1-OBJECT-YEARS": "NEEDS_EVIDENCE",
+            "NASA-4.4-2-PASSIVATION": "NEEDS_EVIDENCE",
+            "NASA-4.5-1-COLLISION": "NEEDS_EVIDENCE",
+            "NASA-4.6-LIFETIME": "NEEDS_EVIDENCE",
+            "NASA-4.6-RELIABILITY": "NEEDS_EVIDENCE",
+            "NASA-4.7-1-CASUALTY": "NEEDS_EVIDENCE"
+          }
+        }
+      },
+      "previous_hash": "4db3959e7ac4fc7e4009e89a5c86ce9da4c7111dffda2cf1cb8afdfd72b03534",
+      "hash": "71f1cfdc81a26084c42d7c676c7cb23f08af3ba9b700c3b6d7252b8fe3f1c1dd"
+    },
+    {
+      "sequence": 7,
+      "event_type": "fixture_evaluated",
+      "payload": {
+        "mission_id": "mission_gap_heavy",
+        "profile_id": "fcc-22-74-inspired",
+        "result": {
+          "mission_id": "mission_gap_heavy",
+          "profile_id": "fcc-22-74-inspired",
+          "msri_band": "RED",
+          "findings": {
+            "FCC-22-74-5YR": "NEEDS_EVIDENCE",
+            "FCC-22-74-TRACKABILITY": "PASS_UNDER_PROFILE",
+            "FCC-22-74-MANEUVERABILITY": "NEEDS_EVIDENCE"
+          }
+        }
+      },
+      "previous_hash": "71f1cfdc81a26084c42d7c676c7cb23f08af3ba9b700c3b6d7252b8fe3f1c1dd",
+      "hash": "42bbede3426c9c7623e85ec145f93f425c3564ac57342c07c760a354d13c1b73"
+    },
+    {
+      "sequence": 8,
+      "event_type": "fixture_evaluated",
+      "payload": {
+        "mission_id": "mission_gap_heavy",
+        "profile_id": "internal-pre-review",
+        "result": {
+          "mission_id": "mission_gap_heavy",
+          "profile_id": "internal-pre-review",
+          "msri_band": "RED",
+          "findings": {
+            "INT-MISSION_OWNER": "PASS_UNDER_PROFILE",
+            "INT-DISPOSAL_LIFETIME": "NEEDS_EVIDENCE",
+            "INT-PASSIVATION": "NEEDS_EVIDENCE",
+            "INT-TRACKABILITY": "PASS_UNDER_PROFILE",
+            "INT-PROPULSION": "NEEDS_EVIDENCE",
+            "INT-REENTRY": "NEEDS_EVIDENCE",
+            "INT-EVIDENCE": "NEEDS_EVIDENCE"
+          }
+        }
+      },
+      "previous_hash": "42bbede3426c9c7623e85ec145f93f425c3564ac57342c07c760a354d13c1b73",
+      "hash": "b445b672ca236f69d773eed0ab5fced36c5297071b3426485680bbcd29c14698"
+    },
+    {
+      "sequence": 9,
+      "event_type": "fixture_evaluated",
+      "payload": {
+        "mission_id": "mission_conflict",
+        "profile_id": "india-dfsm-inspired",
+        "result": {
+          "mission_id": "mission_conflict",
+          "profile_id": "india-dfsm-inspired",
+          "msri_band": "RED",
+          "findings": {
+            "IN-DFSM-PMD-PROB": "WARNING",
+            "IN-DFSM-ORBIT-LIFE": "WARNING",
+            "IN-DFSM-HSF-BAND": "PASS_UNDER_PROFILE",
+            "IN-DFSM-TRACK": "PASS_UNDER_PROFILE",
+            "IN-DFSM-ID": "PASS_UNDER_PROFILE",
+            "IN-DFSM-MANEUVER": "PASS_UNDER_PROFILE",
+            "IN-DFSM-PASSIVATION": "PASS_UNDER_PROFILE"
+          }
+        }
+      },
+      "previous_hash": "b445b672ca236f69d773eed0ab5fced36c5297071b3426485680bbcd29c14698",
+      "hash": "89980460b30007d03c3d1661727480b1045b6bb89dd73d554dc27c86e3d4b2ee"
+    },
+    {
+      "sequence": 10,
+      "event_type": "fixture_evaluated",
+      "payload": {
+        "mission_id": "mission_conflict",
+        "profile_id": "nasa-std-8719-14c-inspired",
+        "result": {
+          "mission_id": "mission_conflict",
+          "profile_id": "nasa-std-8719-14c-inspired",
+          "msri_band": "RED",
+          "findings": {
+            "NASA-4.3-1-DECAY": "PASS_UNDER_PROFILE",
+            "NASA-4.3-1-OBJECT-YEARS": "PASS_UNDER_PROFILE",
+            "NASA-4.4-2-PASSIVATION": "PASS_UNDER_PROFILE",
+            "NASA-4.5-1-COLLISION": "PASS_UNDER_PROFILE",
+            "NASA-4.6-LIFETIME": "CONFLICT",
+            "NASA-4.6-RELIABILITY": "PASS_UNDER_PROFILE",
+            "NASA-4.7-1-CASUALTY": "PASS_UNDER_PROFILE"
+          }
+        }
+      },
+      "previous_hash": "89980460b30007d03c3d1661727480b1045b6bb89dd73d554dc27c86e3d4b2ee",
+      "hash": "a6215b9fe88a8343fa9c6771e445cdb9df6863cd2aaf882a50be0065ea49de83"
+    },
+    {
+      "sequence": 11,
+      "event_type": "fixture_evaluated",
+      "payload": {
+        "mission_id": "mission_conflict",
+        "profile_id": "fcc-22-74-inspired",
+        "result": {
+          "mission_id": "mission_conflict",
+          "profile_id": "fcc-22-74-inspired",
+          "msri_band": "RED",
+          "findings": {
+            "FCC-22-74-5YR": "CONFLICT",
+            "FCC-22-74-TRACKABILITY": "PASS_UNDER_PROFILE",
+            "FCC-22-74-MANEUVERABILITY": "PASS_UNDER_PROFILE"
+          }
+        }
+      },
+      "previous_hash": "a6215b9fe88a8343fa9c6771e445cdb9df6863cd2aaf882a50be0065ea49de83",
+      "hash": "29919c7b473c561cab789d209847490fb58137b3aa2ffdc359ae158681c33c85"
+    },
+    {
+      "sequence": 12,
+      "event_type": "fixture_evaluated",
+      "payload": {
+        "mission_id": "mission_conflict",
+        "profile_id": "internal-pre-review",
+        "result": {
+          "mission_id": "mission_conflict",
+          "profile_id": "internal-pre-review",
+          "msri_band": "RED",
+          "findings": {
+            "INT-MISSION_OWNER": "PASS_UNDER_PROFILE",
+            "INT-DISPOSAL_LIFETIME": "CONFLICT",
+            "INT-PASSIVATION": "PASS_UNDER_PROFILE",
+            "INT-TRACKABILITY": "PASS_UNDER_PROFILE",
+            "INT-PROPULSION": "CONFLICT",
+            "INT-REENTRY": "PASS_UNDER_PROFILE",
+            "INT-EVIDENCE": "NEEDS_EVIDENCE"
+          }
+        }
+      },
+      "previous_hash": "29919c7b473c561cab789d209847490fb58137b3aa2ffdc359ae158681c33c85",
+      "hash": "e4288b6115abd8bb45622c8163bcc4612853bb489b08da4d8adf6c80a0b5cff9"
+    }
+  ],
+  "provenance_verification": {
+    "valid": true,
+    "count": 12,
+    "head": "e4288b6115abd8bb45622c8163bcc4612853bb489b08da4d8adf6c80a0b5cff9"
+  }
+}

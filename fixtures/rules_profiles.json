@@ -1,0 +1,706 @@
+{
+  "catalog_version": "1.0.0",
+  "generated_date": "2026-10-20",
+  "profiles": {
+    "india-dfsm-inspired": {
+      "version": "1.0.0",
+      "label": "India Dfsm Inspired",
+      "rules": [
+        {
+          "rule_id": "IN-DFSM-PMD-PROB",
+          "version": "1.0.0",
+          "profile_id": "india-dfsm-inspired",
+          "title": "Post-mission disposal probability exceeds 99%",
+          "jurisdiction_scope": "Always in this configured review profile.",
+          "source_citation": {
+            "document": "ISRO Debris-Free Space Missions initiative (2024)",
+            "clause": "DFSM initiative",
+            "url": "https://www.isro.gov.in/DFSM.html",
+            "published_date": "2024-03-01",
+            "interpretation_type": "inspired_policy_summary"
+          },
+          "required_fields": [
+            "pmd_probability"
+          ],
+          "scope_condition": "Always in this configured review profile.",
+          "evaluation_logic": {
+            "field": "pmd_probability",
+            "operator": ">",
+            "threshold": 0.99,
+            "unit": "probability"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": true,
+          "remediation_lever": "Improve disposal reliability and provide validated probability evidence.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        },
+        {
+          "rule_id": "IN-DFSM-ORBIT-LIFE",
+          "version": "1.0.0",
+          "profile_id": "india-dfsm-inspired",
+          "title": "Remaining orbital life below five years",
+          "jurisdiction_scope": "Always in this configured review profile.",
+          "source_citation": {
+            "document": "ISRO Debris-Free Space Missions initiative (2024)",
+            "clause": "DFSM initiative",
+            "url": "https://www.isro.gov.in/DFSM.html",
+            "published_date": "2024-03-01",
+            "interpretation_type": "inspired_policy_summary"
+          },
+          "required_fields": [
+            "remaining_orbital_life_years"
+          ],
+          "scope_condition": "Always in this configured review profile.",
+          "evaluation_logic": {
+            "field": "remaining_orbital_life_years",
+            "operator": "<",
+            "threshold": 5,
+            "unit": "years"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": true,
+          "remediation_lever": "Reduce orbital lifetime through disposal design or orbit selection.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        },
+        {
+          "rule_id": "IN-DFSM-HSF-BAND",
+          "version": "1.0.0",
+          "profile_id": "india-dfsm-inspired",
+          "title": "Avoid 370–430 km human-spaceflight altitude band",
+          "jurisdiction_scope": "Always in this configured review profile.",
+          "source_citation": {
+            "document": "ISRO Debris-Free Space Missions initiative (2024)",
+            "clause": "DFSM initiative",
+            "url": "https://www.isro.gov.in/DFSM.html",
+            "published_date": "2024-03-01",
+            "interpretation_type": "inspired_policy_summary"
+          },
+          "required_fields": [
+            "operational_altitude_km"
+          ],
+          "scope_condition": "Always in this configured review profile.",
+          "evaluation_logic": {
+            "field": "operational_altitude_km",
+            "operator": "outside_band",
+            "threshold": [
+              370,
+              430
+            ],
+            "unit": "km"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": true,
+          "remediation_lever": "Select orbit outside the configured 400±30 km screening band.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        },
+        {
+          "rule_id": "IN-DFSM-TRACK",
+          "version": "1.0.0",
+          "profile_id": "india-dfsm-inspired",
+          "title": "Object trackability evidence",
+          "jurisdiction_scope": "Always in this configured review profile.",
+          "source_citation": {
+            "document": "ISRO Debris-Free Space Missions initiative (2024)",
+            "clause": "DFSM initiative",
+            "url": "https://www.isro.gov.in/DFSM.html",
+            "published_date": "2024-03-01",
+            "interpretation_type": "inspired_policy_summary"
+          },
+          "required_fields": [
+            "trackable"
+          ],
+          "scope_condition": "Always in this configured review profile.",
+          "evaluation_logic": {
+            "field": "trackable",
+            "operator": "is_true",
+            "threshold": true,
+            "unit": "boolean"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": false,
+          "remediation_lever": "Provide and review evidence for trackable.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        },
+        {
+          "rule_id": "IN-DFSM-ID",
+          "version": "1.0.0",
+          "profile_id": "india-dfsm-inspired",
+          "title": "Object identifiability evidence",
+          "jurisdiction_scope": "Always in this configured review profile.",
+          "source_citation": {
+            "document": "ISRO Debris-Free Space Missions initiative (2024)",
+            "clause": "DFSM initiative",
+            "url": "https://www.isro.gov.in/DFSM.html",
+            "published_date": "2024-03-01",
+            "interpretation_type": "inspired_policy_summary"
+          },
+          "required_fields": [
+            "identifiable"
+          ],
+          "scope_condition": "Always in this configured review profile.",
+          "evaluation_logic": {
+            "field": "identifiable",
+            "operator": "is_true",
+            "threshold": true,
+            "unit": "boolean"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": false,
+          "remediation_lever": "Provide and review evidence for identifiable.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        },
+        {
+          "rule_id": "IN-DFSM-MANEUVER",
+          "version": "1.0.0",
+          "profile_id": "india-dfsm-inspired",
+          "title": "Maneuverability evidence",
+          "jurisdiction_scope": "Always in this configured review profile.",
+          "source_citation": {
+            "document": "ISRO Debris-Free Space Missions initiative (2024)",
+            "clause": "DFSM initiative",
+            "url": "https://www.isro.gov.in/DFSM.html",
+            "published_date": "2024-03-01",
+            "interpretation_type": "inspired_policy_summary"
+          },
+          "required_fields": [
+            "maneuverable"
+          ],
+          "scope_condition": "Always in this configured review profile.",
+          "evaluation_logic": {
+            "field": "maneuverable",
+            "operator": "is_true",
+            "threshold": true,
+            "unit": "boolean"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": false,
+          "remediation_lever": "Provide and review evidence for maneuverable.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        },
+        {
+          "rule_id": "IN-DFSM-PASSIVATION",
+          "version": "1.0.0",
+          "profile_id": "india-dfsm-inspired",
+          "title": "Post-mission passivation evidence",
+          "jurisdiction_scope": "Always in this configured review profile.",
+          "source_citation": {
+            "document": "ISRO Debris-Free Space Missions initiative (2024)",
+            "clause": "DFSM initiative",
+            "url": "https://www.isro.gov.in/DFSM.html",
+            "published_date": "2024-03-01",
+            "interpretation_type": "inspired_policy_summary"
+          },
+          "required_fields": [
+            "passivated"
+          ],
+          "scope_condition": "Always in this configured review profile.",
+          "evaluation_logic": {
+            "field": "passivated",
+            "operator": "is_true",
+            "threshold": true,
+            "unit": "boolean"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": false,
+          "remediation_lever": "Provide and review evidence for passivated.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        }
+      ]
+    },
+    "nasa-std-8719-14c-inspired": {
+      "version": "1.0.0",
+      "label": "Nasa Std 8719 14C Inspired",
+      "rules": [
+        {
+          "rule_id": "NASA-4.3-1-DECAY",
+          "version": "1.0.0",
+          "profile_id": "nasa-std-8719-14c-inspired",
+          "title": "Planned debris ≥1 mm passing through LEO: decay time <25 years",
+          "jurisdiction_scope": "NASA-STD-8719.14C Req. 4.3-1 planned-debris pathway; only if debris ≥1 mm is released into/through LEO.",
+          "source_citation": {
+            "document": "NASA-STD-8719.14C, Process for Limiting Orbital Debris",
+            "clause": "Req. 4.3-1",
+            "url": "https://standards.nasa.gov/standard/NASA/NASA-STD-871914",
+            "published_date": "2022-05-24",
+            "interpretation_type": "standard_requirement_interpretation"
+          },
+          "required_fields": [
+            "debris_decay_years"
+          ],
+          "scope_condition": "NASA-STD-8719.14C Req. 4.3-1 planned-debris pathway; only if debris ≥1 mm is released into/through LEO.",
+          "evaluation_logic": {
+            "field": "debris_decay_years",
+            "operator": "<",
+            "threshold": 25,
+            "unit": "years"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": true,
+          "remediation_lever": "Provide and review evidence for debris_decay_years.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        },
+        {
+          "rule_id": "NASA-4.3-1-OBJECT-YEARS",
+          "version": "1.0.0",
+          "profile_id": "nasa-std-8719-14c-inspired",
+          "title": "Planned debris ≥1 mm: cumulative exposure <100 object-years",
+          "jurisdiction_scope": "NASA-STD-8719.14C Req. 4.3-1 planned-debris pathway; conditional applicability.",
+          "source_citation": {
+            "document": "NASA-STD-8719.14C, Process for Limiting Orbital Debris",
+            "clause": "Req. 4.3-1",
+            "url": "https://standards.nasa.gov/standard/NASA/NASA-STD-871914",
+            "published_date": "2022-05-24",
+            "interpretation_type": "standard_requirement_interpretation"
+          },
+          "required_fields": [
+            "debris_object_years"
+          ],
+          "scope_condition": "NASA-STD-8719.14C Req. 4.3-1 planned-debris pathway; conditional applicability.",
+          "evaluation_logic": {
+            "field": "debris_object_years",
+            "operator": "<",
+            "threshold": 100,
+            "unit": "object-years"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": true,
+          "remediation_lever": "Provide and review evidence for debris_object_years.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        },
+        {
+          "rule_id": "NASA-4.4-2-PASSIVATION",
+          "version": "1.0.0",
+          "profile_id": "nasa-std-8719-14c-inspired",
+          "title": "Post-mission passivation plan",
+          "jurisdiction_scope": "Always in this configured review profile.",
+          "source_citation": {
+            "document": "NASA-STD-8719.14C, Process for Limiting Orbital Debris",
+            "clause": "Req. 4.4-2",
+            "url": "https://standards.nasa.gov/standard/NASA/NASA-STD-871914",
+            "published_date": "2022-05-24",
+            "interpretation_type": "standard_requirement_interpretation"
+          },
+          "required_fields": [
+            "passivated"
+          ],
+          "scope_condition": "Always in this configured review profile.",
+          "evaluation_logic": {
+            "field": "passivated",
+            "operator": "is_true",
+            "threshold": true,
+            "unit": "boolean"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": true,
+          "remediation_lever": "Provide and review evidence for passivated.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        },
+        {
+          "rule_id": "NASA-4.5-1-COLLISION",
+          "version": "1.0.0",
+          "profile_id": "nasa-std-8719-14c-inspired",
+          "title": "Accidental collision probability below 0.001",
+          "jurisdiction_scope": "Always in this configured review profile.",
+          "source_citation": {
+            "document": "NASA-STD-8719.14C, Process for Limiting Orbital Debris",
+            "clause": "Req. 4.5-1",
+            "url": "https://standards.nasa.gov/standard/NASA/NASA-STD-871914",
+            "published_date": "2022-05-24",
+            "interpretation_type": "standard_requirement_interpretation"
+          },
+          "required_fields": [
+            "accidental_collision_probability"
+          ],
+          "scope_condition": "Always in this configured review profile.",
+          "evaluation_logic": {
+            "field": "accidental_collision_probability",
+            "operator": "<",
+            "threshold": 0.001,
+            "unit": "probability"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": true,
+          "remediation_lever": "Provide and review evidence for accidental_collision_probability.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        },
+        {
+          "rule_id": "NASA-4.6-LIFETIME",
+          "version": "1.0.0",
+          "profile_id": "nasa-std-8719-14c-inspired",
+          "title": "PMD lifetime ≤25 years",
+          "jurisdiction_scope": "Always in this configured review profile.",
+          "source_citation": {
+            "document": "NASA-STD-8719.14C, Process for Limiting Orbital Debris",
+            "clause": "Req. 4.6",
+            "url": "https://standards.nasa.gov/standard/NASA/NASA-STD-871914",
+            "published_date": "2022-05-24",
+            "interpretation_type": "standard_requirement_interpretation"
+          },
+          "required_fields": [
+            "disposal_lifetime_years"
+          ],
+          "scope_condition": "Always in this configured review profile.",
+          "evaluation_logic": {
+            "field": "disposal_lifetime_years",
+            "operator": "<=",
+            "threshold": 25,
+            "unit": "years"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": true,
+          "remediation_lever": "Provide and review evidence for disposal_lifetime_years.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        },
+        {
+          "rule_id": "NASA-4.6-RELIABILITY",
+          "version": "1.0.0",
+          "profile_id": "nasa-std-8719-14c-inspired",
+          "title": "Disposal reliability ≥0.90",
+          "jurisdiction_scope": "Always in this configured review profile.",
+          "source_citation": {
+            "document": "NASA-STD-8719.14C, Process for Limiting Orbital Debris",
+            "clause": "Req. 4.6",
+            "url": "https://standards.nasa.gov/standard/NASA/NASA-STD-871914",
+            "published_date": "2022-05-24",
+            "interpretation_type": "standard_requirement_interpretation"
+          },
+          "required_fields": [
+            "disposal_reliability"
+          ],
+          "scope_condition": "Always in this configured review profile.",
+          "evaluation_logic": {
+            "field": "disposal_reliability",
+            "operator": ">=",
+            "threshold": 0.9,
+            "unit": "probability"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": true,
+          "remediation_lever": "Provide and review evidence for disposal_reliability.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        },
+        {
+          "rule_id": "NASA-4.7-1-CASUALTY",
+          "version": "1.0.0",
+          "profile_id": "nasa-std-8719-14c-inspired",
+          "title": "Uncontrolled reentry casualty expectation <1×10⁻⁴",
+          "jurisdiction_scope": "Always in this configured review profile.",
+          "source_citation": {
+            "document": "NASA-STD-8719.14C, Process for Limiting Orbital Debris",
+            "clause": "Req. 4.7-1",
+            "url": "https://standards.nasa.gov/standard/NASA/NASA-STD-871914",
+            "published_date": "2022-05-24",
+            "interpretation_type": "standard_requirement_interpretation"
+          },
+          "required_fields": [
+            "casualty_expectation"
+          ],
+          "scope_condition": "Always in this configured review profile.",
+          "evaluation_logic": {
+            "field": "casualty_expectation",
+            "operator": "<",
+            "threshold": 0.0001,
+            "unit": "expected casualties"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": true,
+          "remediation_lever": "Provide and review evidence for casualty_expectation.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        }
+      ]
+    },
+    "fcc-22-74-inspired": {
+      "version": "1.0.0",
+      "label": "Fcc 22 74 Inspired",
+      "rules": [
+        {
+          "rule_id": "FCC-22-74-5YR",
+          "version": "1.0.0",
+          "profile_id": "fcc-22-74-inspired",
+          "title": "Post-mission disposal within five years",
+          "jurisdiction_scope": "Only covered LEO space stations with orbital altitude <2,000 km and planned uncontrolled atmospheric reentry; out-of-scope missions are NOT_EVALUATED by a production legal engine (this demo reports scope-aware findings).",
+          "source_citation": {
+            "document": "FCC 22-74, Second Report and Order",
+            "clause": "FCC 22-74; 47 CFR §25.114(d)(14)(iv)",
+            "url": "https://docs.fcc.gov/public/attachments/FCC-22-74A1.pdf",
+            "published_date": "2022-09-29",
+            "interpretation_type": "regulatory_scope_interpretation"
+          },
+          "required_fields": [
+            "disposal_lifetime_years"
+          ],
+          "scope_condition": "Only covered LEO space stations with orbital altitude <2,000 km and planned uncontrolled atmospheric reentry; out-of-scope missions are NOT_EVALUATED by a production legal engine (this demo reports scope-aware findings).",
+          "evaluation_logic": {
+            "field": "disposal_lifetime_years",
+            "operator": "<=",
+            "threshold": 5,
+            "unit": "years"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": true,
+          "remediation_lever": "Provide and review evidence for disposal_lifetime_years.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        },
+        {
+          "rule_id": "FCC-22-74-TRACKABILITY",
+          "version": "1.0.0",
+          "profile_id": "fcc-22-74-inspired",
+          "title": "Disclose trackability",
+          "jurisdiction_scope": "Only covered LEO space stations with orbital altitude <2,000 km and planned uncontrolled atmospheric reentry; out-of-scope missions are NOT_EVALUATED by a production legal engine (this demo reports scope-aware findings).",
+          "source_citation": {
+            "document": "FCC 22-74, Second Report and Order",
+            "clause": "FCC 22-74 disclosure discussion",
+            "url": "https://docs.fcc.gov/public/attachments/FCC-22-74A1.pdf",
+            "published_date": "2022-09-29",
+            "interpretation_type": "regulatory_scope_interpretation"
+          },
+          "required_fields": [
+            "trackable"
+          ],
+          "scope_condition": "Only covered LEO space stations with orbital altitude <2,000 km and planned uncontrolled atmospheric reentry; out-of-scope missions are NOT_EVALUATED by a production legal engine (this demo reports scope-aware findings).",
+          "evaluation_logic": {
+            "field": "trackable",
+            "operator": "exists",
+            "threshold": null,
+            "unit": "boolean"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": false,
+          "remediation_lever": "Provide and review evidence for trackable.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        },
+        {
+          "rule_id": "FCC-22-74-MANEUVERABILITY",
+          "version": "1.0.0",
+          "profile_id": "fcc-22-74-inspired",
+          "title": "Disclose maneuverability",
+          "jurisdiction_scope": "Only covered LEO space stations with orbital altitude <2,000 km and planned uncontrolled atmospheric reentry; out-of-scope missions are NOT_EVALUATED by a production legal engine (this demo reports scope-aware findings).",
+          "source_citation": {
+            "document": "FCC 22-74, Second Report and Order",
+            "clause": "FCC 22-74 disclosure discussion",
+            "url": "https://docs.fcc.gov/public/attachments/FCC-22-74A1.pdf",
+            "published_date": "2022-09-29",
+            "interpretation_type": "regulatory_scope_interpretation"
+          },
+          "required_fields": [
+            "maneuverable"
+          ],
+          "scope_condition": "Only covered LEO space stations with orbital altitude <2,000 km and planned uncontrolled atmospheric reentry; out-of-scope missions are NOT_EVALUATED by a production legal engine (this demo reports scope-aware findings).",
+          "evaluation_logic": {
+            "field": "maneuverable",
+            "operator": "exists",
+            "threshold": null,
+            "unit": "boolean"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": false,
+          "remediation_lever": "Provide and review evidence for maneuverable.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        }
+      ]
+    },
+    "internal-pre-review": {
+      "version": "1.0.0",
+      "label": "Internal Pre Review",
+      "rules": [
+        {
+          "rule_id": "INT-MISSION_OWNER",
+          "version": "1.0.0",
+          "profile_id": "internal-pre-review",
+          "title": "Mission owner identified",
+          "jurisdiction_scope": "Always in this configured review profile.",
+          "source_citation": {
+            "document": "Team TwinForge internal engineering evidence checklist",
+            "clause": "Internal design-review baseline",
+            "url": "https://example.invalid/orbitscore/internal-pre-review",
+            "published_date": "2026-10-20",
+            "interpretation_type": "internal_checklist"
+          },
+          "required_fields": [
+            "owner"
+          ],
+          "scope_condition": "Always in this configured review profile.",
+          "evaluation_logic": {
+            "field": "owner",
+            "operator": "exists",
+            "threshold": null,
+            "unit": "evidence"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": false,
+          "remediation_lever": "Provide and review evidence for owner.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        },
+        {
+          "rule_id": "INT-DISPOSAL_LIFETIME",
+          "version": "1.0.0",
+          "profile_id": "internal-pre-review",
+          "title": "Disposal lifetime documented",
+          "jurisdiction_scope": "Always in this configured review profile.",
+          "source_citation": {
+            "document": "Team TwinForge internal engineering evidence checklist",
+            "clause": "Internal design-review baseline",
+            "url": "https://example.invalid/orbitscore/internal-pre-review",
+            "published_date": "2026-10-20",
+            "interpretation_type": "internal_checklist"
+          },
+          "required_fields": [
+            "disposal_lifetime_years"
+          ],
+          "scope_condition": "Always in this configured review profile.",
+          "evaluation_logic": {
+            "field": "disposal_lifetime_years",
+            "operator": "exists",
+            "threshold": null,
+            "unit": "evidence"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": true,
+          "remediation_lever": "Provide and review evidence for disposal_lifetime_years.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        },
+        {
+          "rule_id": "INT-PASSIVATION",
+          "version": "1.0.0",
+          "profile_id": "internal-pre-review",
+          "title": "Passivation approach documented",
+          "jurisdiction_scope": "Always in this configured review profile.",
+          "source_citation": {
+            "document": "Team TwinForge internal engineering evidence checklist",
+            "clause": "Internal design-review baseline",
+            "url": "https://example.invalid/orbitscore/internal-pre-review",
+            "published_date": "2026-10-20",
+            "interpretation_type": "internal_checklist"
+          },
+          "required_fields": [
+            "passivated"
+          ],
+          "scope_condition": "Always in this configured review profile.",
+          "evaluation_logic": {
+            "field": "passivated",
+            "operator": "exists",
+            "threshold": null,
+            "unit": "evidence"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": true,
+          "remediation_lever": "Provide and review evidence for passivated.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        },
+        {
+          "rule_id": "INT-TRACKABILITY",
+          "version": "1.0.0",
+          "profile_id": "internal-pre-review",
+          "title": "Tracking assumptions documented",
+          "jurisdiction_scope": "Always in this configured review profile.",
+          "source_citation": {
+            "document": "Team TwinForge internal engineering evidence checklist",
+            "clause": "Internal design-review baseline",
+            "url": "https://example.invalid/orbitscore/internal-pre-review",
+            "published_date": "2026-10-20",
+            "interpretation_type": "internal_checklist"
+          },
+          "required_fields": [
+            "trackable"
+          ],
+          "scope_condition": "Always in this configured review profile.",
+          "evaluation_logic": {
+            "field": "trackable",
+            "operator": "exists",
+            "threshold": null,
+            "unit": "evidence"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": false,
+          "remediation_lever": "Provide and review evidence for trackable.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        },
+        {
+          "rule_id": "INT-PROPULSION",
+          "version": "1.0.0",
+          "profile_id": "internal-pre-review",
+          "title": "Propulsion system documented",
+          "jurisdiction_scope": "Always in this configured review profile.",
+          "source_citation": {
+            "document": "Team TwinForge internal engineering evidence checklist",
+            "clause": "Internal design-review baseline",
+            "url": "https://example.invalid/orbitscore/internal-pre-review",
+            "published_date": "2026-10-20",
+            "interpretation_type": "internal_checklist"
+          },
+          "required_fields": [
+            "propulsion_type"
+          ],
+          "scope_condition": "Always in this configured review profile.",
+          "evaluation_logic": {
+            "field": "propulsion_type",
+            "operator": "exists",
+            "threshold": null,
+            "unit": "evidence"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": false,
+          "remediation_lever": "Provide and review evidence for propulsion_type.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        },
+        {
+          "rule_id": "INT-REENTRY",
+          "version": "1.0.0",
+          "profile_id": "internal-pre-review",
+          "title": "Reentry casualty assessment documented",
+          "jurisdiction_scope": "Always in this configured review profile.",
+          "source_citation": {
+            "document": "Team TwinForge internal engineering evidence checklist",
+            "clause": "Internal design-review baseline",
+            "url": "https://example.invalid/orbitscore/internal-pre-review",
+            "published_date": "2026-10-20",
+            "interpretation_type": "internal_checklist"
+          },
+          "required_fields": [
+            "casualty_expectation"
+          ],
+          "scope_condition": "Always in this configured review profile.",
+          "evaluation_logic": {
+            "field": "casualty_expectation",
+            "operator": "exists",
+            "threshold": null,
+            "unit": "evidence"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": false,
+          "remediation_lever": "Provide and review evidence for casualty_expectation.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        },
+        {
+          "rule_id": "INT-EVIDENCE",
+          "version": "1.0.0",
+          "profile_id": "internal-pre-review",
+          "title": "Evidence provenance locators present",
+          "jurisdiction_scope": "Always in this configured review profile.",
+          "source_citation": {
+            "document": "Team TwinForge internal engineering evidence checklist",
+            "clause": "Internal design-review baseline",
+            "url": "https://example.invalid/orbitscore/internal-pre-review",
+            "published_date": "2026-10-20",
+            "interpretation_type": "internal_checklist"
+          },
+          "required_fields": [
+            "evidence_locator"
+          ],
+          "scope_condition": "Always in this configured review profile.",
+          "evaluation_logic": {
+            "field": "evidence_locator",
+            "operator": "exists",
+            "threshold": null,
+            "unit": "evidence"
+          },
+          "require_confirmed_evidence": true,
+          "critical_gap": false,
+          "remediation_lever": "Provide and review evidence for evidence_locator.",
+          "limitation_notice": "Inspired/configured pre-review logic only; confirm controlling text, applicability, definitions, and mission-specific legal interpretation with qualified reviewers."
+        }
+      ]
+    }
+  },
+  "notice": "Demonstration profiles are simplified, source-linked screening interpretations. They are not authoritative legal opinions, compliance determinations, or certification."
+}

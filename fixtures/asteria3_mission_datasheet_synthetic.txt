@@ -1,0 +1,14 @@
+ASTERIA-3 MISSION DATASHEET (SYNTHETIC TEST EVIDENCE)
+
+This document is fabricated solely for OrbitScore demonstration and software testing. It is not a real spacecraft record.
+
+1. Mission: Asteria-3 6U technology demonstration
+2. Orbit: 510 km nominal altitude; 97.4 deg inclination; near-circular
+3. Propulsion: green monopropellant demonstration unit
+4. Post-mission disposal: estimated 8.4 years remaining orbital lifetime (illustrative)
+5. Disposal reliability: 0.94 (illustrative design estimate)
+6. PMD probability: 0.985 (illustrative)
+7. Passivation: planned; stored energy and pressure sources addressed in synthetic §10.1
+8. Tracking/identification/maneuverability: declared yes for illustrative test purposes
+9. Reentry casualty expectation: 0.00008 (illustrative estimate)
+10. Data are not verified engineering evidence and must not be used for flight decisions.

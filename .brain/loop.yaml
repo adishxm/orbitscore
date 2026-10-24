@@ -1,0 +1,39 @@
+version: 2
+name: orbitready-local-antigravity-loop
+max_repair_attempts: 3
+states:
+  - ready
+  - planning
+  - implementing
+  - testing
+  - verifying
+  - repairing
+  - blocked
+  - done
+transition:
+  ready: planning
+  planning: implementing
+  implementing: testing
+  testing: verifying
+  verifying: done
+  verifying_on_failure: repairing
+  repairing: testing
+  repairing_after_limit: blocked
+required_evidence:
+  - task_plan
+  - changed_files
+  - commands_run
+  - test_results
+  - verification_observation
+  - html_team_report
+  - limitation_note
+post_task_gate:
+  command: python .brain/scripts/complete_task.py <TASK_ID>
+  order: [test, verify, generate_report, reviewer_signoff, manual_state_update, inspect_diff, manual_commit]
+rules:
+  - Never skip from implementing to done.
+  - Commit .brain source/tasks/state with the application; never commit generated local reports or team-report.html.
+  - A passing unit test is not sufficient when the task changes UI, API integration, export, or persistence.
+  - A task with unmet dependencies remains ready but cannot start.
+  - A blocked task must include the exact error and the smallest next decision.
+  - Only the assigned reviewer may approve completion; record sign-off before setting done.

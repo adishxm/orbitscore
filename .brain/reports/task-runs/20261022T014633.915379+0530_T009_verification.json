@@ -1,0 +1,95 @@
+{
+  "task_id": "T009",
+  "task_file": ".brain/tasks/T009-timestamped-reporting-and-completion-gate.md",
+  "owner": "Project agent",
+  "started_at_utc": "2026-10-21T20:16:25.153786Z",
+  "started_at_local": "2026-10-22T01:46:25.153786+05:30",
+  "completed_at_utc": "2026-10-21T20:16:33.915379Z",
+  "completed_at_local": "2026-10-22T01:46:33.915379+05:30",
+  "timezone": "Asia/Kolkata",
+  "timestamp_source": "host system clock",
+  "passed": true,
+  "status": "awaiting_reviewer",
+  "reviewer_action_required": true,
+  "note": "This gate never stages, commits, pushes, or marks a task done. A reviewer must inspect this report, complete task-specific checks, record sign-off, and update task/state explicitly.",
+  "checks": [
+    {
+      "label": "brain validation",
+      "command": "/usr/bin/python .brain/scripts/validate_brain.py",
+      "started_utc": "2026-10-21T20:16:25.153818Z",
+      "started_local": "2026-10-22T01:46:25.153818+05:30",
+      "completed_utc": "2026-10-21T20:16:25.208262Z",
+      "completed_local": "2026-10-22T01:46:25.208262+05:30",
+      "duration_seconds": 0.054,
+      "returncode": 0,
+      "passed": true
+    },
+    {
+      "label": "brain reporting tests",
+      "command": "/usr/bin/python -m unittest discover -s .brain/tests -v",
+      "started_utc": "2026-10-21T20:16:25.208321Z",
+      "started_local": "2026-10-22T01:46:25.208321+05:30",
+      "completed_utc": "2026-10-21T20:16:25.633008Z",
+      "completed_local": "2026-10-22T01:46:25.633008+05:30",
+      "duration_seconds": 0.425,
+      "returncode": 0,
+      "passed": true
+    },
+    {
+      "label": "backend tests",
+      "command": "/usr/bin/python -m pytest -q",
+      "started_utc": "2026-10-21T20:16:25.633052Z",
+      "started_local": "2026-10-22T01:46:25.633052+05:30",
+      "completed_utc": "2026-10-21T20:16:27.550957Z",
+      "completed_local": "2026-10-22T01:46:27.550957+05:30",
+      "duration_seconds": 1.918,
+      "returncode": 0,
+      "passed": true
+    },
+    {
+      "label": "verification matrix",
+      "command": "/usr/bin/python -m app.verification",
+      "started_utc": "2026-10-21T20:16:27.551083Z",
+      "started_local": "2026-10-22T01:46:27.551083+05:30",
+      "completed_utc": "2026-10-21T20:16:27.605572Z",
+      "completed_local": "2026-10-22T01:46:27.605572+05:30",
+      "duration_seconds": 0.055,
+      "returncode": 0,
+      "passed": true
+    },
+    {
+      "label": "frontend tests",
+      "command": "npm test",
+      "started_utc": "2026-10-21T20:16:27.605617Z",
+      "started_local": "2026-10-22T01:46:27.605617+05:30",
+      "completed_utc": "2026-10-21T20:16:28.803167Z",
+      "completed_local": "2026-10-22T01:46:28.803167+05:30",
+      "duration_seconds": 1.198,
+      "returncode": 0,
+      "passed": true
+    },
+    {
+      "label": "frontend typecheck",
+      "command": "npm run typecheck",
+      "started_utc": "2026-10-21T20:16:28.803209Z",
+      "started_local": "2026-10-22T01:46:28.803209+05:30",
+      "completed_utc": "2026-10-21T20:16:30.667233Z",
+      "completed_local": "2026-10-22T01:46:30.667233+05:30",
+      "duration_seconds": 1.864,
+      "returncode": 0,
+      "passed": true
+    },
+    {
+      "label": "frontend production build",
+      "command": "npm run build",
+      "started_utc": "2026-10-21T20:16:30.667286Z",
+      "started_local": "2026-10-22T01:46:30.667286+05:30",
+      "completed_utc": "2026-10-21T20:16:33.915201Z",
+      "completed_local": "2026-10-22T01:46:33.915201+05:30",
+      "duration_seconds": 3.248,
+      "returncode": 0,
+      "passed": true
+    }
+  ],
+  "detailed_local_log": ".brain/local-reports/20261022T014633.915379+0530_T009_verification.json"
+}

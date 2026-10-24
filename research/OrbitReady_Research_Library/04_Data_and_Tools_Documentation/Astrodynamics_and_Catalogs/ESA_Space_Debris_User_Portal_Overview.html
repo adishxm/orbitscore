@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+>
+  <head>
+  
+    <title>Home · Space Debris User Portal</title>
+  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="IjA5Y2Y4ZGY3MTg5M2RkYjdkMjNjNDEzMDZhNzQ1N2Y0NmY2Mzg3ZTMi.atMi7w.x-NTlze0iRkUFKaEpMrgnD1iYL0">
+
+  
+  <style>
+    /*
+SPDX-License-Identifier: LicenseRef-ESA-Community-Weak
+SPDX-FileCopyrightText: 2022 European Space Agency
+*/
+
+/* by default, components in the navbar get styling so that they fit well
+   in the collapsed section of the nav. Let's override this so it is always
+   styled correctly.
+*/
+.navbar-brand-dropdown .navbar-nav {
+  float: left;
+  margin: 0;
+}
+
+/* this matches the bootstrap selector we're overriding */
+.navbar-brand-dropdown .navbar-nav > li > a {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+/* we need to fix the alignment of our navbar-brand replacement */
+.navbar-brand-dropdown .dropdown-toggle.navbar-brand {
+  /* we use negative margin because there is a shaded rectangle which would
+     look wrong if we instead altered the padding.
+  */
+  margin-left: -15px;
+}
+
+.dropdown-menu-brand {
+  margin-left: -15px;
+}
+  </style>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+  <link rel="manifest" href="/static/site.webmanifest">
+  <link rel="mask-icon" href="/static/safari-pinned-tab.svg" color="#142755">
+  <link rel="shortcut icon" href="/static/favicon.ico">
+  <meta name="apple-mobile-web-app-title" content="SDUP">
+  <meta name="application-name" content="SDUP">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="msapplication-config" content="/static/browserconfig.xml">
+  <meta name="theme-color" content="#142755">
+  
+  <link rel="stylesheet" href="/static/dist/assets/main-D-oH977j.css" />
+  <script type="module" src="/static/dist/assets/main-BDt4rvxw.js"></script>
+<link rel="modulepreload" href="/static/dist/assets/bootstrap-C2LBgF1Q.js" />
+
+  </head>
+  <body
+  style="margin-bottom: 70px;"
+>
+    
+  
+  <nav class="navbar navbar-default">
+    <div class="navbar-container">
+      <div class="navbar-header">
+        <button
+          type="button"
+          class="navbar-toggle collapsed"
+          data-toggle="collapse"
+          data-target="#nav-collapse"
+          aria-expanded="false"
+        >
+          <span class="sr-only">Toggle nagivation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        
+  <div class="container-fluid navbar-brand-dropdown">
+    <ul class="nav navbar-nav">
+      <li class="dropdown">
+        <a
+          class="dropdown-toggle navbar-brand"
+          href="#"
+          data-toggle="dropdown"
+          role="button"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          Space Debris User Portal
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-brand">
+          
+            
+          
+            
+              <li><a href="https://discosweb.esoc.esa.int">DISCOSweb</a></li>
+            
+          
+            
+              <li><a href="https://fragmentation.esoc.esa.int">Fragmentation Database</a></li>
+            
+          
+            
+              <li><a href="https://reentry.esoc.esa.int">Re-entry Predictions</a></li>
+            
+          
+            
+              <li><a href="https://debris-forum.sdo.esoc.esa.int">Space Debris Forum</a></li>
+            
+          
+            
+              <li><a href="https://account.sdo.esoc.esa.int">User Account</a></li>
+            
+          
+            
+              <li><a href="https://www.esa.int/debris">Space Debris @ ESA</a></li>
+            
+          
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+      </div>
+
+      <div class="collapse navbar-collapse" id="nav-collapse">
+        <ul class="nav navbar-nav">
+          
+  <li class="active">
+    <a  href="/">
+      
+        Home
+      
+      <span class="sr-only">current</span>
+    </a>
+  </li>
+
+          <li class="dropdown ">
+            <a
+              href="#"
+              class="dropdown-toggle"
+              data-toggle="dropdown"
+              role="button"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Tools <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              
+  <li class="">
+    <a  href="/drama/">
+      
+        DRAMA
+      
+      
+    </a>
+  </li>
+
+              
+  <li class="">
+    <a  href="/master/">
+      
+        MASTER
+      
+      
+    </a>
+  </li>
+
+              
+  <li class="">
+    <a  href="/oriundo/">
+      
+        ORIUNDO
+      
+      
+    </a>
+  </li>
+
+              
+  <li class="">
+    <a  href="/proof/">
+      
+        PROOF
+      
+      
+    </a>
+  </li>
+
+              
+  <li class="">
+    <a  href="/solmag/">
+      
+        SOLMAG
+      
+      
+    </a>
+  </li>
+
+              
+  <li class="">
+    <a  href="/iota/">
+      
+        iOTA
+      
+      
+    </a>
+  </li>
+
+              
+                
+  <li class="">
+    <a  href="/lca/">
+      
+        LCA Database
+      
+      
+    </a>
+  </li>
+
+              
+            </ul>
+          </li>
+          
+  <li class="">
+    <a  href="/documents/">
+      
+        Documents
+      
+      
+    </a>
+  </li>
+
+          
+  <li class="">
+    <a  href="/discosweb/statistics/">
+      
+        Space Environment Statistics
+      
+      
+    </a>
+  </li>
+
+          
+  <li class="">
+    <a  href="/contact">
+      
+        Contact Us
+      
+      
+    </a>
+  </li>
+
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          
+            <li>
+              <a id="nav-register" href="/register">
+                <i class="fas fa-user-plus"></i> Register
+              </a>
+            </li>
+            <li>
+              <a id="nav-sign-in" href="/login">
+                <i class="fas fa-sign-in-alt"></i> Sign in
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+    
+  <div class="container">
+    
+    
+  <div class="row">
+    <div class="page-content">
+      
+  
+    
+  
+
+      <p>This portal addresses the user community of ESA's Space Debris Software. It
+serves as entry gate for software licence applications and for the retrieval of
+the software. Registered users may retrieve updated data and software patches
+and may raise support requests.</p>
+<div style="clear: both;"></div>
+<h3>MASTER</h3>
+<p><img
+alt="MASTER logo"
+src="/static/images/master_logo.png"
+style="margin: 10px; max-width: 135px;"
+class="img-responsive pull-right"></p>
+<p><strong>MASTER</strong> (Meteoroid and Space Debris Terrestrial
+Environment Reference) allows to assess the debris or meteoroid flux
+imparted on a spacecraft on an arbitrary earth orbit. MASTER also
+provides the necessary computational and data reference for DRAMA and
+needs to be installed before DRAMA is installed.</p>
+<div style="clear: both;"></div>
+<h3>DRAMA</h3>
+<p><img
+alt="DRAMA logo"
+src="/static/images/drama_logo.png"
+style="margin: 10px; max-width: 135px;"
+class="img-responsive pull-right"></p>
+<p><strong>DRAMA</strong> (Debris Risk Assessment and Mitigation Analysis) is a
+comprehensive tool for the compliance analysis of a space mission with
+space debris mitigation standards. For a given space mission, DRAMA
+allows analysis of:</p>
+<ul>
+<li>Debris and meteoroid impact flux levels (at user-defined size regimes)</li>
+<li>Collision avoidance manoeuvre frequencies for a given spacecraft and
+a project-specific accepted risk level</li>
+<li>Re-orbit and de-orbit fuel requirements for a given initial orbit and
+disposal scenario</li>
+<li>Geometric cross-section computations</li>
+<li>Re-entry survival predictions for a given object of user-defined
+components</li>
+<li>The associated risk on ground for at the resulting impact ground swath</li>
+</ul>
+<p><em>Please beware that the installation of MASTER may be required to have
+access to all features of the DRAMA suite. While DRAMA comes with space
+debris population files for MASTER's reference epoch, a full MASTER
+installation gives access also to the historic and future population.</em></p>
+<div style="clear: both;"></div>
+<h3>DISCOSweb</h3>
+<p><img
+alt="DISCOSweb logo"
+src="/static/images/discosweb_logo.png"
+style="margin: 10px; max-width: 135px;"
+class="img-responsive pull-right"></p>
+<p><strong>DISCOS</strong> (Database and Information System Characterising Objects in Space)
+serves as a single-source reference for launch information, object
+registration details, launch vehicle descriptions, spacecraft
+information (e.g. size, mass, shape, mission objectives, owner), as
+well as orbital data histories for all trackable, unclassified objects
+which sum up to more than 40000 objects. Today, DISCOS not only plays an
+essential role in the various daily activities at the ESA's Space Debris
+Office, and it is the basis for operational processes in collision
+avoidance, re-entry analyses, and for contingency support. DISCOS also
+provides input to numerous and very differently scoped engineering
+activities, within ESA and throughout academia and industry.
+DISCOS-based routine activities also comprise the maintenance of a
+Re-entry Events Database to support internationally coordinated re-entry
+prediction campaigns of risk objects. Users with a demonstrated
+need-to-know can apply for an account for on-line use (specified quotas
+apply) of DISCOS through a dedicated web-interface, if they belong to a
+research institute, to a government organisation, or to an industrial
+company of an ESA Member State (e.g., not as an individual).</p>
+<div style="clear: both;"></div>
+<h3>Oriundo</h3>
+<p><img
+alt="ORIUNDO logo"
+src="/static/images/oriundo_logo.png"
+style="margin: 10px; max-width: 135px;"
+class="img-responsive pull-right"></p>
+<p><strong>Oriundo</strong> (On-ground RIsk estimation for UNcontrolleD re-entries tOol) is a model
+maintained by the ESA Space Debris Office. As the name suggests, it is targeted
+at estimating the on-ground risk of uncontrolled re-entries. The core comprises
+a population density prediction model based on the the
+<a href="http://www.ciesin.columbia.edu/data/gpw-v4/">Gridded Population of the World</a> scaled with the
+<a href="http://esa.un.org/unpd/wpp/">UN World Population Prospect</a>. The variable input and functionallity
+makes it a very agile tool.</p>
+<div style="clear: both;"></div>
+<h3>PROOF</h3>
+<p><img
+alt="PROOF logo"
+src="/static/images/proof_logo.png"
+style="margin: 10px; max-width: 135px;"
+class="img-responsive pull-right"></p>
+<p><strong>PROOF</strong> (Program for Radar and Optical Observation Forecasting) provides
+statistical pass characteristics of the non-deterministic space debris
+population and as well as the acquisition and pass characteristics of known
+objects for ground- and space-based radar and passive optical sensors. It is
+used in the validation process of ESA's MASTER model.</p>
+<div style="clear: both;"></div>
+<h3>iOTA</h3>
+<p><img
+alt="iOTA logo"
+src="/static/images/iota_logo.png"
+style="margin: 10px; max-width: 135px;"
+class="img-responsive pull-right"></p>
+<p><strong>iOTA</strong> is a simulation software performing propagations of the orbit and
+attitude motion (six degrees-of-freedom) of spacecraft in Earth orbit, taking
+into account all relevant acting forces and torques. It can generate synthetic
+measurement data based on the simulation results enabling a direct comparison
+with real measurements.</p>
+<div style="clear: both;"></div>
+<h3>ESA LCA Database</h3>
+<p><img
+alt="ESA LCA logo"
+src="/static/images/lca_logo.png"
+style="margin: 10px; max-width: 135px;"
+class="img-responsive pull-right"></p>
+<p>The <strong>ESA LCA</strong> (Life-Cycle Assessment) Database allows to assess the environmental
+impacts of space products or systems through the Life-Cycle Assessment
+methodology.</p>
+
+    </div>
+  </div>
+
+  </div>
+
+
+    
+  
+
+  
+    <nav class="navbar navbar-default navbar-fixed-bottom">
+      <div class="container">
+        <p class="navbar-text">
+          <a href="/cookies" class="navbar-link">Cookie Policy</a>
+        </p>
+      </div>
+    </nav>
+  
+
+  </body>
+</html>

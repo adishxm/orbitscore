@@ -1,0 +1,29 @@
+# Generated private reports; .brain source, tasks, and state are shared through Git
+.brain/local-reports/
+team-report.html
+.brain-report-*.html
+
+# Local environments and dependency caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+node_modules/
+apps/web/dist/
+apps/web/tsconfig.tsbuildinfo
+
+# Local runtime data and secrets
+.env
+.env.*
+!.env.example
+*.db
+*.sqlite
+*.sqlite3
+/data/
+
+# Generated local artifacts
+*.log
+coverage/
+.pytest_cache/
+.vite/
+*.zip

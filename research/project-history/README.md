@@ -1,0 +1,3 @@
+# Historical research-paper drafts
+
+This folder preserves the earlier OrbitScore/OrbitReady research-paper files found in the project’s original archive. These drafts are retained for history and comparison; they are **not** the current canonical paper and may contain superseded claims, counts, versions, or findings. Use [`../../paper/OrbitScore_Research_Paper_Final.pdf`](../../paper/OrbitScore_Research_Paper_Final.pdf) and its editable DOCX as the current paper unless the project owner explicitly says otherwise. Before reusing any claim from a draft, verify it against current source code, tests, fixtures, and primary research sources.

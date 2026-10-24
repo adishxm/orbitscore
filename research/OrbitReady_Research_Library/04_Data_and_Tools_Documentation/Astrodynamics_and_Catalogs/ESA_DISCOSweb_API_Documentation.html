@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+>
+  <head>
+  
+    <title>
+  Sign in - Space Debris User Account
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="stylesheet" href="/static/dist/assets/index-CEW3ujQr.css" />
+<script type="module" src="/static/dist/assets/index-CU1K2qze.js"></script>
+<link rel="modulepreload" href="/static/dist/assets/bootstrap-DFSIyT5t.js" />
+  
+  <style>
+    :root {
+      /*
+SPDX-License-Identifier: LicenseRef-ESA-Community-Weak
+SPDX-FileCopyrightText: 2022 European Space Agency
+*/
+
+/* by default, components in the navbar get styling so that they fit well
+   in the collapsed section of the nav. Let's override this so it is always
+   styled correctly.
+*/
+.navbar-brand-dropdown .navbar-nav {
+  float: left;
+  margin: 0;
+}
+
+/* this matches the bootstrap selector we're overriding */
+.navbar-brand-dropdown .navbar-nav > li > a {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+/* we need to fix the alignment of our navbar-brand replacement */
+.navbar-brand-dropdown .dropdown-toggle.navbar-brand {
+  /* we use negative margin because there is a shaded rectangle which would
+     look wrong if we instead altered the padding.
+  */
+  margin-left: -15px;
+}
+
+.dropdown-menu-brand {
+  margin-left: -15px;
+}
+    }
+  </style>
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+  <link rel="manifest" href="/static/site.webmanifest">
+  <link rel="mask-icon" href="/static/safari-pinned-tab.svg" color="#142755">
+  <link rel="shortcut icon" href="/static/favicon.ico">
+  <meta name="apple-mobile-web-app-title" content="Space Debris User Account">
+  <meta name="application-name" content="Space Debris User Account">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="msapplication-config" content="/static/browserconfig.xml">
+  <meta name="theme-color" content="#142755">
+
+  </head>
+  <body
+  style="margin-bottom: 70px;"
+>
+    
+  
+  
+    
+    <div class="login-nav-spacer"></div>
+  
+
+    
+  <div class="container">
+    
+    
+  <div class="center-block login-content">
+    
+  
+    
+  
+
+    
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <p class="text-center" style="font-size: 18px;">
+          
+            Sign in to your <strong>Space Debris User Account</strong>
+          
+          
+            <br>
+            to continue to <strong>DISCOSweb</strong>
+          
+        </p>
+        <form id="login-form" method="post">
+          <input id="next" name="next" type="hidden" value="">
+<input id="csrf_token" name="csrf_token" type="hidden" value="ImRjZWZkNDNkMmNiMDYzMWEyMTNjYjg0MWM2Yjk2ZDczMDUwOGJiYTki.atMi7g.VxsT7kUE4y4lOWJJi3WJ8KHquy8">
+          
+          
+            
+
+
+
+
+
+
+<div class="form-group  required"><label class="control-label" for="email">Email address</label>
+        
+          <input autofocus class="form-control" id="email" name="email" required type="email" value="">
+        
+  </div>
+
+
+          
+          
+  <div class="form-group required">
+    <span class="pull-right">
+      <a href="/auth/password_reset" tabindex="-1">
+        Forgot password?
+      </a>
+    </span>
+    <label class="control-label" for="password">Password</label>
+    <input class="form-control" id="password" name="password" required type="password" value="">
+  </div>
+
+          
+            
+
+
+
+
+
+  
+
+
+    <div class="checkbox">
+      <label>
+        <input id="remember_me" name="remember_me" type="checkbox" value="y"> Remember me
+      </label>
+    </div>
+  
+
+
+
+
+          
+          
+
+
+
+
+
+  
+
+  
+  
+
+
+    <input class="btn btn-primary btn-block" id="submit" name="submit" type="submit" value="Sign in">
+  
+
+
+
+
+        </form>
+        
+          <div class="text-center beneath-submit-text">
+            Not registered?
+            
+              <a id="register" href="/auth/register?referrer=discosweb">
+                Create an account</a>.
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+
+    
+  <script type="module">
+    $('#nav-logout').click(event => {
+      event.preventDefault();
+      const options = {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'X-CSRFToken': 'ImRjZWZkNDNkMmNiMDYzMWEyMTNjYjg0MWM2Yjk2ZDczMDUwOGJiYTki.atMi7g.VxsT7kUE4y4lOWJJi3WJ8KHquy8',
+        },
+      }
+      fetch('/auth/logout', options)
+        .then(response => {
+          if (response.ok) {
+            location.href = '/';
+          }
+        })
+        .catch(err => {
+          console.error(err);
+        })
+    })
+  </script>
+
+  
+    <nav class="navbar navbar-default navbar-fixed-bottom">
+      <div class="container">
+        <p class="navbar-text">
+          <a href="/cookies" class="navbar-link">Cookie Policy</a>
+        </p>
+      </div>
+    </nav>
+  
+
+  </body>
+</html>

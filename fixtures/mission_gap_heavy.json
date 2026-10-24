@@ -1,0 +1,101 @@
+{
+  "mission_id": "mission_gap_heavy",
+  "name": "Asteria-3 Evidence Gap Scenario",
+  "description": "Synthetic mission with unconfirmed candidate extraction and missing policy-critical evidence.",
+  "orbit": {
+    "altitude_km": 420,
+    "inclination_deg": 51.6
+  },
+  "artifacts": [
+    {
+      "artifact_id": "a1",
+      "filename": "asteria3_mission_datasheet_synthetic.pdf",
+      "media_type": "application/pdf",
+      "sha256": "synthetic-fixture-hash-a1",
+      "uploaded_at": "2026-10-19T12:00:00Z",
+      "locator": {
+        "page": 1,
+        "span": "1-12"
+      }
+    },
+    {
+      "artifact_id": "a2",
+      "filename": "asteria3_design_review_synthetic.xlsx",
+      "media_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "sha256": "synthetic-fixture-hash-a2",
+      "uploaded_at": "2026-10-19T12:00:00Z",
+      "locator": {
+        "sheet": "Mission Summary",
+        "cell_range": "B2:F24"
+      }
+    }
+  ],
+  "fields": [
+    {
+      "field": "owner",
+      "value": "TwinForge Student Mission",
+      "human_confirmed": true,
+      "artifact_id": "a1",
+      "locator": {
+        "page": 1,
+        "span": "title",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "reentry_mode",
+      "value": "uncontrolled",
+      "human_confirmed": true,
+      "artifact_id": "a1",
+      "locator": {
+        "page": 8,
+        "span": "§11.1",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "disposal_lifetime_years",
+      "value": 8.4,
+      "human_confirmed": false,
+      "artifact_id": "a1",
+      "locator": {
+        "page": 4,
+        "span": "§7.2 candidate",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "passivated",
+      "value": false,
+      "human_confirmed": false,
+      "artifact_id": "a2",
+      "locator": {
+        "page": null,
+        "span": "sheet cell F14 candidate",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "trackable",
+      "value": true,
+      "human_confirmed": true,
+      "artifact_id": "a1",
+      "locator": {
+        "page": 6,
+        "span": "§9.1",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    },
+    {
+      "field": "propulsion_type",
+      "value": "cold gas",
+      "human_confirmed": false,
+      "artifact_id": "a2",
+      "locator": {
+        "page": null,
+        "span": "B8 candidate",
+        "quote": "Synthetic illustrative source excerpt; validate against original evidence."
+      }
+    }
+  ]
+}
