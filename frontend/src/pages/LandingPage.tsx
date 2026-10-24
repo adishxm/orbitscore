@@ -269,21 +269,6 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
 
-              <div className={styles.heroAnnotation}>
-                <span className={styles.annotationLabel}>BOUNDARY DECLARATION:</span>
-                <span className={styles.annotationValue}>
-                  Deterministic evaluation &amp; provenance only — never produces autonomous decisions.
-                </span>
-              </div>
-            </motion.div>
-
-            {/* 3D Aerospace Spacecraft Viewport */}
-            <div className={styles.heroCanvasWrap}>
-              <SpacecraftCanvas scrollProgress={scrollProgress} />
-            </div>
-          </div>
-        </div>
-
         {/* Scroll Indicator */}
         <div className={styles.scrollCue} aria-hidden="true">
           <div className={styles.scrollIndicatorLine} />
