@@ -9,6 +9,11 @@ import {
   History,
   ArrowUpRight,
   RefreshCw,
+  LayoutDashboard,
+  Code,
+  Bot,
+  ChartNoAxesColumnIncreasing,
+  Activity,
 } from 'lucide-react';
 import { StateChip } from '../components/common/StateChip';
 import { EvidenceState } from '../types/domain';
@@ -199,6 +204,133 @@ export const LandingPage: React.FC = () => {
 
   return (
     <div className={styles.landingRoot}>
+      {/* =========================================================================
+          Astro Sweepers Visual Recreation: Earth Hero & Stats
+          ========================================================================= */}
+      <section className={styles.astroHeroContainer} aria-labelledby="landing-hero-title">
+        <div className={styles.astroHeroBackdrop} />
+        <div className={styles.astroHeroOverlay} />
+
+        <div className={styles.astroHeroContent}>
+          <div className={styles.astroHeroKicker}>
+            <Activity size={14} />
+            <span>Open Evidence Register</span>
+          </div>
+
+          <h1 id="landing-hero-title" className={styles.astroHeroTitleRow1}>
+            Space Needs
+          </h1>
+          <div className={styles.astroHeroTitleRow2}>
+            Verified Orbital Evidence.
+          </div>
+
+          <p className={styles.astroHeroLead}>
+            OrbitScore transforms complex telemetry, CAD/ICD records, and orbital ephemerides into
+            an auditable evidence register for human engineering review.
+          </p>
+
+          {/* Top KPI Callouts */}
+          <div className={styles.astroStatsRow}>
+            <div className={styles.astroStatItem}>
+              <div className={styles.astroStatValue}>36,000+</div>
+              <div className={styles.astroStatLabel}>Trackable Objects</div>
+            </div>
+            <div className={styles.astroStatItem}>
+              <div className={styles.astroStatValue}>900,000+</div>
+              <div className={styles.astroStatLabel}>Smaller Fragments</div>
+            </div>
+            <div className={styles.astroStatItem}>
+              <div className={styles.astroStatValue}>$1T+</div>
+              <div className={styles.astroStatLabel}>Assets at Risk</div>
+            </div>
+            <div className={styles.astroStatItem}>
+              <div className={styles.astroStatValue}>2-Hour</div>
+              <div className={styles.astroStatLabel}>Live CelesTrak Cadence</div>
+            </div>
+          </div>
+
+          {/* Action CTAs */}
+          <div className={styles.astroHeroActions}>
+            <Link to="/missions/ast-001" className={styles.astroPrimaryCta}>
+              <span>Open Asteria-3 Workspace</span>
+              <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+            <Link to="/solution" className={styles.astroSecondaryCta}>
+              <span>Explore Solution &amp; ML Roadmap</span>
+            </Link>
+            <Link to="/conjunctions" className={styles.astroSecondaryCta}>
+              <Activity size={16} aria-hidden="true" />
+              <span>Conjunction Radar</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Intelligence for a Safer Orbit - 4 Feature Cards */}
+      <section className={styles.astroSectionContainer} aria-labelledby="landing-features-title">
+        <header className={styles.astroSectionHeader}>
+          <h2 id="landing-features-title" className={styles.astroSectionTitle}>Intelligence for a Safer Orbit</h2>
+          <p className={styles.astroSectionSubtitle}>
+            OrbitScore is a software-first platform providing real-time tracking, deterministic rule checks,
+            ML re-entry analysis, and actionable collision avoidance registers.
+          </p>
+        </header>
+
+        <div className={styles.astroFeaturesGrid}>
+          <div className={styles.astroFeatureCard}>
+            <div className={styles.astroFeatureIcon}>
+              <LayoutDashboard size={32} />
+            </div>
+            <h3 className={styles.astroFeatureTitle}>Mission Workspaces</h3>
+            <p className={styles.astroFeatureDescription}>
+              Interactive orbital tracks, real-time telemetry ingestion, and in-depth parameter analytics for Asteria-3 and Microsat-X.
+            </p>
+            <Link to="/missions" className={styles.astroFeatureLink}>
+              Launch Workspace &rarr;
+            </Link>
+          </div>
+
+          <div className={styles.astroFeatureCard}>
+            <div className={styles.astroFeatureIcon}>
+              <Code size={32} />
+            </div>
+            <h3 className={styles.astroFeatureTitle}>API &amp; Ephemeris Access</h3>
+            <p className={styles.astroFeatureDescription}>
+              CelesTrak GP integration cached on a strict 2-hour cadence with full SGP4 analytical propagation and ground-track export.
+            </p>
+            <Link to="/orbital-environment" className={styles.astroFeatureLink}>
+              Explore Ephemeris &rarr;
+            </Link>
+          </div>
+
+          <div className={styles.astroFeatureCard}>
+            <div className={styles.astroFeatureIcon}>
+              <Bot size={32} />
+            </div>
+            <h3 className={styles.astroFeatureTitle}>AI &amp; ML Predictions</h3>
+            <p className={styles.astroFeatureDescription}>
+              Gradient boosting re-entry regression calibrated on empirical decay parameters alongside deterministic bounds verification.
+            </p>
+            <Link to="/scenarios" className={styles.astroFeatureLink}>
+              Compare Scenarios &rarr;
+            </Link>
+          </div>
+
+          <div className={styles.astroFeatureCard}>
+            <div className={styles.astroFeatureIcon}>
+              <ChartNoAxesColumnIncreasing size={32} />
+            </div>
+            <h3 className={styles.astroFeatureTitle}>Custom Simulations &amp; Gating</h3>
+            <p className={styles.astroFeatureDescription}>
+              Run counterfactual debris scenarios, verify rule gates (C-01 to C-06), and export audit-ready evidence packets for human review.
+            </p>
+            <Link to="/profiles" className={styles.astroFeatureLink}>
+              Inspect Rules &amp; Gates &rarr;
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* 0. Fullscreen Cinematic 3D Tour (Edolus-Inspired WebGL Experience) */}
       <section id="cinematic-tour" aria-label="Cinematic 3D Mission Tour">
         <React.Suspense fallback={<div style={{ minHeight: '100vh', background: '#000000' }} />}>

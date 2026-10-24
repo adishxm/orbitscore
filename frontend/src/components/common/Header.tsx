@@ -38,12 +38,13 @@ export const Header: React.FC = () => {
 
   const navLinks = [
     { label: 'Overview', to: '/' },
+    { label: 'Solution', to: '/solution' },
     { label: 'How It Works', to: '/how-it-works' },
-    { label: 'Profiles & Rules', to: '/profiles' },
-    { label: 'Missions', to: '/missions' },
+    { label: 'Workspaces', to: '/missions' },
     { label: 'Conjunctions', to: '/conjunctions' },
     { label: 'Environment', to: '/orbital-environment' },
     { label: 'Scenarios', to: '/scenarios' },
+    { label: 'Profiles & Rules', to: '/profiles' },
     { label: 'About Limits', to: '/about-limits' },
     { label: 'System Status', to: '/status' },
   ];

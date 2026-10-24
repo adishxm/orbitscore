@@ -6,6 +6,7 @@ import { Footer } from './components/common/Footer';
 
 // Route Pages
 import { LandingPage } from './pages/LandingPage';
+import { SolutionPage } from './pages/SolutionPage';
 import { HowItWorksPage } from './pages/HowItWorksPage';
 import { ProfilesPage } from './pages/ProfilesPage';
 import { AboutLimitsPage } from './pages/AboutLimitsPage';
@@ -30,6 +31,7 @@ export const AppContent: React.FC = () => {
       <main id="main-content" tabIndex={-1}>
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/solution" element={<SolutionPage />} />
           <Route path="/how-it-works" element={<HowItWorksPage />} />
           <Route path="/profiles" element={<ProfilesPage />} />
           <Route path="/about-limits" element={<AboutLimitsPage />} />
