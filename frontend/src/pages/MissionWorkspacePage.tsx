@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ShieldAlert, Layers, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ShieldAlert, ArrowRight } from 'lucide-react';
 import { useOrbitStore } from '../store/useOrbitStore';
 import { Stepper, WorkspaceStep } from '../components/workspace/Stepper';
 import { MissionContextCard } from '../components/workspace/MissionContextCard';
@@ -12,6 +12,7 @@ import { FindingsView } from '../components/workspace/FindingsView';
 import { ReviewDecisionForm } from '../components/workspace/ReviewDecisionForm';
 import { OpenIssuesList } from '../components/workspace/OpenIssuesList';
 import { ExportGateBlocker } from '../components/workspace/ExportGateBlocker';
+import { ExportPacketView } from '../components/workspace/ExportPacketView';
 import { ASTERIA_3_MISSION } from '../fixtures/asteria-3';
 import styles from './pages.module.css';
 
@@ -286,24 +287,16 @@ export const MissionWorkspacePage: React.FC = () => {
           </div>
         )}
 
-        {/* Step 6: Export Dossier Placeholder */}
-        {currentStep === 'export' && (
-          <div className={styles.card} style={{ textAlign: 'center', padding: 'var(--space-12) var(--space-6)' }}>
-            <Layers size={36} style={{ color: 'var(--color-brand-cyan)', margin: '0 auto var(--space-4)' }} />
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--font-size-xl)', marginBottom: 'var(--space-2)' }}>
-              Stage 6: Cited Export Packet
-            </h2>
-            <p className={styles.cardText} style={{ maxWidth: '60ch', margin: '0 auto var(--space-6)' }}>
-              Generate complete, immutable, cited review dossiers in Markdown, JSON, and printable formats.
-            </p>
-            <button
-              type="button"
-              className={styles.actionButtonSecondary}
-              onClick={() => setCurrentStep('review')}
-            >
-              <span>Back to Review</span>
-            </button>
-          </div>
+        {/* Step 6: Cited Export Dossier */}
+        {currentStep === 'export' && currentCheckRun && (
+          <ExportPacketView
+            mission={currentMission}
+            profile={activeProfile}
+            checkRun={currentCheckRun}
+            decisions={currentDecisions}
+            openIssues={currentIssues}
+            onBackToReview={() => setCurrentStep('review')}
+          />
         )}
 
         {/* Side Panel Inspector Drawer */}
