@@ -1,0 +1,270 @@
+/* SpacecraftCanvas.module.css */
+/* Engineered with OrbitScore Design System custom properties */
+
+.viewportWrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 540px;
+  background: radial-gradient(circle at 60% 40%, rgba(0, 161, 255, 0.08) 0%, rgba(5, 7, 10, 0.95) 70%, #05070a 100%);
+  border: 1px solid var(--os-color-border-subtle);
+  border-radius: var(--os-radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.6);
+}
+
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: grab;
+}
+
+.canvas:active {
+  cursor: grabbing;
+}
+
+/* Fallback SVG graphic */
+.fallbackGraphic {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fallbackSvg {
+  width: 80%;
+  max-width: 440px;
+  height: auto;
+  opacity: 0.85;
+}
+
+/* Real-Time Telemetry Top-Right HUD */
+.hudTopRight {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.hudItem {
+  background: rgba(9, 13, 18, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--os-color-border-subtle);
+  border-left: 2px solid var(--os-color-accent-cyan);
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--os-radius-xs);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.hudLabel {
+  font-family: var(--os-font-mono);
+  font-size: 0.65rem;
+  color: var(--os-color-text-muted);
+  letter-spacing: var(--os-tracking-wide);
+  text-transform: uppercase;
+}
+
+.hudValue {
+  font-family: var(--os-font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--os-color-text-primary);
+}
+
+/* Subsystem Selector Tag Bar */
+.subsystemBar {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 1rem 1.25rem 0;
+  max-width: 100%;
+}
+
+.hotspotBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(16, 21, 28, 0.8);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--os-color-border-subtle);
+  border-radius: var(--os-radius-xs);
+  padding: 0.3rem 0.65rem;
+  color: var(--os-color-text-secondary);
+  font-family: var(--os-font-mono);
+  font-size: 0.75rem;
+  transition: all var(--os-duration-fast) ease;
+}
+
+.hotspotBtn:hover {
+  background: rgba(26, 34, 46, 0.95);
+  border-color: var(--os-color-border-mid);
+  color: var(--os-color-text-primary);
+}
+
+.hotspotBtnActive {
+  background: rgba(0, 161, 255, 0.15);
+  border-color: var(--os-color-accent-cyan);
+  color: var(--os-color-text-white);
+  box-shadow: 0 0 12px rgba(0, 161, 255, 0.25);
+}
+
+.hotspotDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--os-color-text-muted);
+}
+
+.hotspotDot[data-state='confirmed'] {
+  background: var(--os-state-confirmed-text);
+  box-shadow: 0 0 6px var(--os-state-confirmed-text);
+}
+
+.hotspotDot[data-state='unconfirmed'] {
+  background: var(--os-state-unconfirmed-text);
+}
+
+.hotspotDot[data-state='conflicting'] {
+  background: var(--os-state-conflicting-text);
+}
+
+/* Active Subsystem Detail Card */
+.inspectorCard {
+  position: relative;
+  z-index: 10;
+  margin: 1rem 1.25rem 0.5rem;
+  background: rgba(9, 13, 18, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--os-color-border-mid);
+  border-radius: var(--os-radius-sm);
+  padding: 0.85rem 1.1rem;
+  max-width: 440px;
+  pointer-events: auto;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.inspectorHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.inspectorCode {
+  display: block;
+  font-family: var(--os-font-mono);
+  font-size: 0.68rem;
+  color: var(--os-color-accent-cyan);
+  text-transform: uppercase;
+  letter-spacing: var(--os-tracking-wide);
+}
+
+.inspectorTitle {
+  font-family: var(--os-font-display);
+  font-size: 1rem;
+  color: var(--os-color-text-white);
+  font-weight: 600;
+  margin: 0;
+}
+
+.stateBadge {
+  font-family: var(--os-font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--os-radius-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--os-tracking-wide);
+}
+
+.stateBadge_confirmed {
+  background: var(--os-state-confirmed-bg);
+  color: var(--os-state-confirmed-text);
+  border: 1px solid var(--os-state-confirmed-border);
+}
+
+.stateBadge_unconfirmed {
+  background: var(--os-state-unconfirmed-bg);
+  color: var(--os-state-unconfirmed-text);
+  border: 1px solid var(--os-state-unconfirmed-border);
+}
+
+.stateBadge_conflicting {
+  background: var(--os-state-conflicting-bg);
+  color: var(--os-state-conflicting-text);
+  border: 1px solid var(--os-state-conflicting-border);
+}
+
+.inspectorDesc {
+  font-family: var(--os-font-sans);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--os-color-text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.citationRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-top: 1px solid var(--os-color-border-subtle);
+  padding-top: 0.4rem;
+  font-family: var(--os-font-mono);
+  font-size: 0.72rem;
+}
+
+.citationLabel {
+  color: var(--os-color-text-muted);
+}
+
+.citationValue {
+  color: var(--os-color-accent-cyan);
+  font-weight: 500;
+}
+
+/* Drag Hint */
+.dragHint {
+  position: relative;
+  z-index: 10;
+  padding: 0 1.25rem 0.85rem;
+  font-family: var(--os-font-mono);
+  font-size: 0.7rem;
+  color: var(--os-color-text-muted);
+  letter-spacing: var(--os-tracking-wide);
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .viewportWrap {
+    min-height: 420px;
+  }
+
+  .hudTopRight {
+    display: none;
+  }
+
+  .inspectorCard {
+    max-width: 100%;
+    margin: 0.5rem 1rem;
+  }
+}

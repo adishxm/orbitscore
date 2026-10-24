@@ -1,0 +1,104 @@
+/* OrbitHudNav.module.css */
+
+.hudNav {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 90;
+  background: rgba(9, 13, 18, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--os-color-border-bright);
+  border-radius: var(--os-radius-sm);
+  padding: 0.5rem 1rem;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 161, 255, 0.12);
+  max-width: 90vw;
+  width: auto;
+  transition: all var(--os-duration-normal) ease;
+}
+
+.hudInner {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.navSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  opacity: 0.65;
+  transition: opacity var(--os-duration-fast) ease;
+}
+
+.navSectionActive {
+  opacity: 1;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.sectionKey {
+  font-family: var(--os-font-mono);
+  font-size: 0.65rem;
+  color: var(--os-color-accent-cyan);
+  font-weight: 700;
+  letter-spacing: var(--os-tracking-wide);
+}
+
+.sectionTitle {
+  font-family: var(--os-font-display);
+  font-size: 0.72rem;
+  color: var(--os-color-text-primary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--os-tracking-tight);
+}
+
+.subList {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.subBtn {
+  font-family: var(--os-font-sans);
+  font-size: 0.7rem;
+  color: var(--os-color-text-secondary);
+  background: transparent;
+  padding: 0.15rem 0.35rem;
+  border-radius: var(--os-radius-xs);
+  transition: all var(--os-duration-fast) ease;
+}
+
+.subBtn:hover {
+  color: var(--os-color-text-white);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.progressBarBg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 0 0 var(--os-radius-sm) var(--os-radius-sm);
+  overflow: hidden;
+}
+
+.progressBarFill {
+  height: 100%;
+  background: var(--os-color-accent-cyan);
+  box-shadow: 0 0 8px var(--os-color-accent-cyan);
+  transition: width 0.1s linear;
+}
+
+@media (max-width: 900px) {
+  .hudNav {
+    display: none;
+  }
+}
