@@ -1,11 +1,20 @@
 {
-  "name": "orbitscore-twinforge",
+  "name": "orbitscore",
   "version": "1.0.0",
   "private": true,
+  "workspaces": [
+    "frontend"
+  ],
   "scripts": {
-    "dev": "npm --prefix apps/web run dev",
-    "build": "npm --prefix apps/web run build",
-    "test": "npm --prefix apps/web run test",
-    "typecheck": "npm --prefix apps/web run typecheck"
+    "dev": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "test": "npm --prefix frontend run test",
+    "typecheck": "npm --prefix frontend run lint",
+    "lint": "npm --prefix frontend run lint",
+    "backend:test": "python -m pytest backend/tests",
+    "ai:test": "python -m pytest ai_ml/tests",
+    "legacy:web:dev": "npm --prefix legacy/web run dev",
+    "legacy:web:build": "npm --prefix legacy/web run build",
+    "legacy:web:test": "npm --prefix legacy/web run test"
   }
 }

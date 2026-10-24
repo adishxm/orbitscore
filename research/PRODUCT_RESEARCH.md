@@ -51,8 +51,7 @@ The source library contains primary agency tools and reports, satellite catalogs
 | What was the winning-build recommendation and event context? | `.../Original_OrbitReady_Dossiers/OrbitReady — Hackyard Build 2026 Research, Validation, and Winning Build Design.md` and `.../Hackyard_2026_Official_Docs/` | Event-specific research is time-bound; check the current official event material before using. |
 | Which debris mitigation science and engineering sources are collected? | `01_Academic_Literature/Orbital_Debris_and_Astrodynamics/`, `03_Agency_Technical_Reports/` | Use for concepts and references; do not implement physical predictions from a summary. |
 | What standards or regulatory text is collected? | `02_Policy_and_Standards/` | Verify latest official effective text, applicability, and interpretation with a qualified reviewer. |
-| What does AI/HCI research inform? | `01_Academic_Literature/AI_Explainability_and_HCI/` and `02_Policy_and_Standards/Regulatory_Rulings_and_Frameworks/NIST_AI_100_1_AI_Risk_Management_Framework.pdf` | Inform uncertainty, human oversight, UX, and failure handling; it does not validate domain rules. |
-| What does the current software actually implement? | `../apps/`, `../frontend-service/`, `../fixtures/`, tests, and `../.brain/reports/package-audit.md` | Source and tests outrank design diagrams or research aspirations for implementation-status claims. |
+| What does the current software actually implement? | `../frontend/`, `../backend/`, `../ai_ml/`, `../fixtures/`, tests, and `../.brain/reports/package-audit.md` | Source and tests outrank design diagrams or research aspirations for implementation-status claims. |
 
 ## Questions future research should answer
 

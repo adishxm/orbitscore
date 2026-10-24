@@ -8,9 +8,15 @@ team-report.html
 venv/
 __pycache__/
 *.py[cod]
+*.egg-info/
+*.egg
+build/
 node_modules/
+dist/
+frontend/dist/
+legacy/web/dist/
 apps/web/dist/
-apps/web/tsconfig.tsbuildinfo
+*.tsbuildinfo
 
 # Local runtime data and secrets
 .env

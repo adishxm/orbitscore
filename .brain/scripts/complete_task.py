@@ -71,8 +71,9 @@ def main() -> int:
     checks = [
         ("brain validation", [sys.executable, ".brain/scripts/validate_brain.py"], ROOT),
         ("brain reporting tests", [sys.executable, "-m", "unittest", "discover", "-s", ".brain/tests", "-v"], ROOT),
-        ("backend tests", [sys.executable, "-m", "pytest", "-q"], ROOT / "apps/api"),
-        ("verification matrix", [sys.executable, "-m", "app.verification"], ROOT / "apps/api"),
+        ("backend tests", [sys.executable, "-m", "pytest", "-q"], ROOT / "backend"),
+        ("ai adapter tests", [sys.executable, "-m", "pytest", "-q"], ROOT / "ai_ml"),
+        ("verification matrix", [sys.executable, "-m", "app.verification"], ROOT / "backend"),
         ("frontend tests", ["npm", "test"], ROOT),
         ("frontend typecheck", ["npm", "run", "typecheck"], ROOT),
         ("frontend production build", ["npm", "run", "build"], ROOT),

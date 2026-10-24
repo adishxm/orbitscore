@@ -1,0 +1,75 @@
+/* Print Stylesheet for OrbitScore Evidence Packets */
+
+@media print {
+  @page {
+    size: letter portrait;
+    margin: 1.5cm;
+    @bottom-center {
+      content: "Evidence-preparation packet. Not a certification, compliance determination, or official filing.";
+      font-size: 8pt;
+      color: #555555;
+    }
+  }
+
+  html, body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Hide interactive / web-only UI elements */
+  header,
+  nav,
+  footer,
+  .skip-link,
+  .status-banner,
+  button,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Make sure container is 100% width */
+  .container {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Tables in print */
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    page-break-inside: auto;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  th, td {
+    border: 1px solid #cccccc !important;
+    padding: 6pt 8pt !important;
+    color: #000000 !important;
+  }
+
+  th {
+    background-color: #f2f4f7 !important;
+    font-weight: bold !important;
+  }
+
+  /* Print footer notice */
+  .print-footer-notice {
+    display: block !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 8pt;
+    color: #666666;
+    border-top: 1px solid #dddddd;
+    padding-top: 4pt;
+  }
+}
