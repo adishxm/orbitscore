@@ -1,0 +1,57 @@
+# OrbitScore — Release Contract & Scope Boundary Specification
+# Task: V04-00
+schema_version: "1.0.0"
+date_created_utc: "2026-10-25T03:15:00Z"
+project: "OrbitScore"
+repository: "adishxm/orbitscore"
+canonical_baseline_commit: "4030516"
+
+release_classes:
+  R1_evidence_workbench:
+    status: "IMPLEMENTED_AND_VERIFIED"
+    description: "Source-backed candidate extraction assistance, human engineering review, deterministic rule checks, and truthful draft ODAR/EOMP reporting."
+    authority: "Human Engineer in the Loop"
+    prohibited_claims:
+      - "Autonomous regulatory certification"
+      - "Safety score guarantee"
+      - "Automated direct filing to FCC/ISRO without human review"
+
+  R2_research_models:
+    status: "OFFLINE_RESEARCH_PROTOTYPE"
+    description: "Reproducible historical ESA CDM reported-risk forecasting and extraction evaluation within declared populations."
+    authority: "Offline ML Research"
+    disclaimer: "RESEARCH BENCHMARK ONLY — NOT FLIGHT-QUALIFIED OR OPERATIONAL"
+
+  R3_orbital_decision_support:
+    status: "PROPOSED_SCOPED"
+    description: "Specific domain-approved decay/conjunction analysis within an explicit support matrix (SmallSat/CubeSat in LEO)."
+    prerequisites:
+      - "Qualified orbital domain specialist sign-off"
+      - "Independent observational or NASA DAS/SPARK validation"
+
+  R4_controlled_deployed_service:
+    status: "IN_PROGRESS"
+    description: "Operable deployment with fail-closed authentication, persistent volume storage, health probes, and isolated tenant exports."
+
+support_matrix:
+  target_orbits:
+    - "LEO (< 2000 km altitude)"
+  spacecraft_classes:
+    - "CubeSat (1U to 12U)"
+    - "SmallSat (< 500 kg wet mass)"
+  unsupported_regimes:
+    - "GEO / MEO / Deep Space"
+    - "Active propulsion nuclear payloads"
+
+designated_authorities:
+  data_owner: "Aditya"
+  software_reviewer: "Roshan"
+  frontend_reviewer: "Narayan"
+  orbital_domain_reviewer: "Proposed External Astrodynamicist"
+  policy_reviewer: "Proposed Qualified Compliance Counsel"
+
+frozen_acceptance_criteria:
+  auth: "Fail-closed in production; bearer token required for reviewer routes."
+  reports: "No affirmative CONFORMS / PASS without verified primary source evidence."
+  staleness: "Any field mutation immediately invalidates cached evaluations."
+  export_isolation: "Exports strictly scoped to requested mission_id; locked on HTTP 423 for unreviewed/rejected findings."

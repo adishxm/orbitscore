@@ -109,6 +109,16 @@ def extract_candidate_fields(pages: list[Tuple[int, str]]) -> list[CandidateFiel
                 val = float(m.group(1))
                 add_cand("operational_altitude_km", val, "km", page_num, line_no, line_str)
 
+            # Mass extraction (e.g. "wet mass is 4.0 kg", "mass: 4.0 kg", "weighs 40 kg")
+            m = re.search(r"(?:total\s*)?(?:wet\s*)?mass(?:\s*\(kg\))?[:\s]+(?:is\s*)?(\d+(?:\.\d+)?)\s*(?:kg)?", line_str, re.IGNORECASE)
+            if not m:
+                m = re.search(r"(\d+(?:\.\d+)?)\s*kg\s*(?:total\s*)?(?:wet\s*)?mass", line_str, re.IGNORECASE)
+            if not m:
+                m = re.search(r"weighs\s+(\d+(?:\.\d+)?)\s*kg", line_str, re.IGNORECASE)
+            if m:
+                val = float(m.group(1))
+                add_cand("wet_mass_kg", val, "kg", page_num, line_no, line_str)
+
             # 2. Inclination (e.g. "97.4 deg inclination")
             m = re.search(r"(\d+(?:\.\d+)?)\s*deg(?:rees?)?\s*inclination", line_str, re.IGNORECASE)
             if not m:
