@@ -14,13 +14,16 @@
     "T006": "done",
     "T007": "done",
     "T008": "done",
-    "T009": "done"
+    "T009": "done",
+    "T010": "done",
+    "T011": "done",
+    "T012": "done"
   },
   "last_verification": {
-    "brain_validation": "passed; 9 tasks; project scope aligned",
+    "brain_validation": "passed; 12 tasks; project scope aligned",
     "brain_reporting_tests": "5 passed",
-    "backend_pytest": "54 passed",
-    "ai_ml_pytest": "13 passed",
+    "backend_pytest": "55 passed",
+    "ai_ml_pytest": "15 passed",
     "verification_matrix": "12 evaluations; provenance valid",
     "frontend_vitest": "67 passed across 10 suites",
     "typecheck": "passed",
@@ -28,6 +31,6 @@
     "report": ".brain/reports/task-runs/20261024T233621.235477+0530_T009_verification.json"
   },
   "project_completion_status": "ELIGIBLE",
-  "last_project_completion_check": ".brain/reports/completion-runs/20261024T233042.573700+0530_project-completion.json",
+  "last_project_completion_check": ".brain/reports/completion-runs/20261024T234123.292525+0530_project-completion.json",
   "rule": "Do not change a task to done without task-local evidence, an updated team-report.html, and reviewer sign-off. The project completion gate is fail-closed and requires final human sign-off."
 }

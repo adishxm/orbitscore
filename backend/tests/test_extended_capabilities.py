@@ -139,3 +139,18 @@ def test_nasa_odar_and_isro_eomp_generation():
     assert "ISRO DFSM 2030" in eomp_md
     assert "Part III: Spacecraft Passivation Protocols" in eomp_md
     assert "Part IV: Re-entry Ground Safety Assessment" in eomp_md
+
+
+def test_odar_excessive_lifetime_and_missing_evidence_fail_safe():
+    """Verify that excessive lifetime (>5yr) reports NON-CONFORMANT and missing passivation reports UNVERIFIED."""
+    from backend.app.odar_generator import generate_nasa_odar_markdown
+
+    empty_mission = {"name": "TestSat", "mass_budget_kg": 50.0}
+    # 50-year decay scenario with zero evidence
+    md = generate_nasa_odar_markdown(empty_mission, [], [], estimated_decay_years=50.0)
+
+    assert "NON-CONFORMANT" in md
+    assert "UNVERIFIED" in md
+    assert "NEEDS_EVIDENCE" in md
+    assert "Draft Review Packet" in md
+

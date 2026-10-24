@@ -1851,6 +1851,16 @@
             "type": "string",
             "title": "Model Version",
             "default": "CollisionVector-RF-v1.0"
+          },
+          "research_only": {
+            "type": "boolean",
+            "title": "Research Only",
+            "default": true
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer",
+            "default": "RESEARCH DEMONSTRATION ONLY: Deterministic 2D encounter geometry scaling proxy. Does not constitute operational maneuver guidance or agency collision avoidance certification."
           }
         },
         "type": "object",
@@ -2047,6 +2057,16 @@
             "type": "string",
             "title": "Model Version",
             "default": "OrbitalDecay-GBR-v1.0"
+          },
+          "research_only": {
+            "type": "boolean",
+            "title": "Research Only",
+            "default": true
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer",
+            "default": "RESEARCH DEMONSTRATION ONLY: Semi-empirical surrogate model based on King-Hele formulation. Flight compliance verification requires formal numerical propagation (e.g. NASA DAS 3.x)."
           }
         },
         "type": "object",
@@ -2418,6 +2438,11 @@
             },
             "type": "array",
             "title": "Recommendations"
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer",
+            "default": "PRE-REVIEW HEURISTIC: Objective evidence completeness and consistency metric. Does not constitute an official regulatory compliance certification or safety rating."
           }
         },
         "type": "object",
