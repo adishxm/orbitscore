@@ -41,7 +41,7 @@ class ElevenLabsNarrateResponse(BaseModel):
 def is_elevenlabs_enabled() -> bool:
     """Return True only if explicitly enabled and API key is present."""
     flag = os.getenv("ELEVENLABS_ENABLED", "0").lower() in ("1", "true", "yes")
-    has_key = bool(os.getenv("XI_API_KEY", "").strip())
+    has_key = bool(os.getenv("XI_API_KEY", "").strip() or os.getenv("ELEVENLABS_API_KEY", "").strip())
     return flag and has_key
 
 def narrate_reviewed_finding(
@@ -54,6 +54,18 @@ def narrate_reviewed_finding(
     Strictly gates on human review decision: unreviewed findings return REJECTED_UNREVIEWED.
     """
     now_iso = datetime.now(timezone.utc).isoformat()
+
+    # User Consent Gate: Explicit opt-in required
+    if not request.opt_in:
+        return ElevenLabsNarrateResponse(
+            status="ERROR",
+            finding_id=request.finding_id,
+            mission_id=request.mission_id,
+            character_count=len(request.reviewed_text),
+            transcript=request.reviewed_text,
+            generated_at=now_iso,
+            message="Narration rejected: Explicit user opt-in is required before generating audio."
+        )
 
     # Security & Integrity Gate: Finding must be human reviewed
     if not is_finding_reviewed or review_status not in ("APPROVED", "WAIVED_WITH_NOTE", "ACCEPTED"):
@@ -91,7 +103,7 @@ def narrate_reviewed_finding(
     import json
     import base64
 
-    xi_key = os.getenv("XI_API_KEY", "")
+    xi_key = os.getenv("XI_API_KEY") or os.getenv("ELEVENLABS_API_KEY", "")
     tts_url = f"https://api.elevenlabs.io/v1/text-to-speech/{request.voice_id}"
 
     payload = {

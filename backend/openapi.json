@@ -38,6 +38,23 @@
         }
       }
     },
+    "/ready": {
+      "get": {
+        "summary": "Readiness Check",
+        "description": "Readiness probe checking database connectivity and system integrations.",
+        "operationId": "readiness_check_ready_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
     "/profiles": {
       "get": {
         "summary": "Profiles",
@@ -374,8 +391,132 @@
     "/export/{mission_id}": {
       "get": {
         "summary": "Export Packet",
-        "description": "Export complete cited review packet. Returns 423 if any finding lacks a human decision.",
+        "description": "Export complete cited review packet. Returns 423 if any finding lacks a human decision or provenance is tampered.",
         "operationId": "export_packet_export__mission_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mission_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mission Id"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Format"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/export/{mission_id}/odar": {
+      "get": {
+        "summary": "Export Odar",
+        "description": "Export NASA-STD-8719.14 compliant ODAR draft review packet. Enforces canonical export gate.",
+        "operationId": "export_odar_export__mission_id__odar_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "mission_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mission Id"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Format"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/export/{mission_id}/eomp": {
+      "get": {
+        "summary": "Export Eomp",
+        "description": "Export End-of-Mission Plan (EOMP) conforming to ISRO DFSM 2030 / FCC. Enforces canonical export gate.",
+        "operationId": "export_eomp_export__mission_id__eomp_get",
         "security": [
           {
             "HTTPBearer": []
@@ -1748,23 +1889,6 @@
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
                 }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/ready": {
-      "get": {
-        "summary": "Readiness Check",
-        "description": "Readiness probe checking database connectivity and system integrations.",
-        "operationId": "readiness_check_ready_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
               }
             }
           }
@@ -3809,6 +3933,7 @@
             "enum": [
               "LIVE",
               "SNAPSHOT",
+              "STALE_SNAPSHOT",
               "SYNTHETIC"
             ],
             "title": "Data Mode",

@@ -69,15 +69,32 @@ def is_browser_use_enabled() -> bool:
 def validate_url_allowlist(url: str) -> str:
     """
     Validate that the given URL belongs to an approved public authoritative space domain.
-    Raises ValueError if non-allowlisted or malformed.
+    Enforces SSRF prevention by rejecting private IPs, loopback, userinfo, and cloud metadata targets.
+    Raises ValueError if non-allowlisted, malformed, or SSRF risk.
     """
     parsed = urllib.parse.urlparse(url)
-    if not parsed.scheme or parsed.scheme not in ("http", "https"):
+    if not parsed.scheme or parsed.scheme.lower() not in ("http", "https"):
         raise ValueError("Invalid URL scheme. Only HTTP and HTTPS are permitted.")
-    
-    hostname = (parsed.hostname or "").lower()
+
+    if parsed.username or parsed.password:
+        raise ValueError("SSRF blocked: Embedded credentials/userinfo in target URL are prohibited.")
+
+    hostname = (parsed.hostname or "").lower().strip("[]")
     if not hostname:
         raise ValueError("URL must have a valid hostname.")
+
+    # Block localhost, loopback, and private IPv4 / IPv6 addresses
+    if hostname in ("localhost", "127.0.0.1", "::1", "0.0.0.0"):
+        raise ValueError("SSRF blocked: Localhost and loopback destinations are prohibited.")
+
+    if hostname.startswith("10.") or hostname.startswith("192.168.") or hostname.startswith("169.254."):
+        raise ValueError("SSRF blocked: Private or link-local network addresses are prohibited.")
+
+    # Block 172.16.0.0 - 172.31.255.255
+    if hostname.startswith("172."):
+        parts = hostname.split(".")
+        if len(parts) >= 2 and parts[1].isdigit() and 16 <= int(parts[1]) <= 31:
+            raise ValueError("SSRF blocked: Private class B network addresses are prohibited.")
 
     # Match exact domain or subdomain of approved domains
     is_allowed = False

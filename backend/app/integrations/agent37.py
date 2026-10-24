@@ -178,8 +178,11 @@ def _extract_candidates_deterministic(excerpt: str, source_id: str) -> list[Agen
 
     return candidates
 
-def _parse_agent37_output_json(raw_text: str, source_id: str) -> list[Agent37Candidate]:
-    """Parse JSON array output from Agent37 with markdown fence stripping."""
+def _parse_agent37_output_json(raw_text: str, source_id: str, excerpt: Optional[str] = None) -> list[Agent37Candidate]:
+    """
+    Parse JSON array output from Agent37 with markdown fence stripping.
+    Strict Invariant: exact_quote must be a literal substring of the submitted excerpt.
+    """
     text = raw_text.strip()
     if text.startswith("```"):
         # Strip code blocks
@@ -216,6 +219,12 @@ def _parse_agent37_output_json(raw_text: str, source_id: str) -> list[Agent37Can
         if not field:
             continue
         
+        raw_quote = str(item.get("exact_quote", "")).strip()
+        # Invariant: If excerpt is provided, exact_quote must be a literal substring of excerpt
+        if excerpt and raw_quote and raw_quote not in excerpt:
+            # Quote does not literally appear in the source excerpt; reject to prevent hallucination
+            continue
+
         # Uncertainty handling
         unc = item.get("uncertainty")
         try:
@@ -232,7 +241,7 @@ def _parse_agent37_output_json(raw_text: str, source_id: str) -> list[Agent37Can
             field=field,
             value=item.get("value"),
             unit=item.get("unit"),
-            exact_quote=str(item.get("exact_quote", "")),
+            exact_quote=raw_quote,
             source_identifier=source_id,
             uncertainty=unc_val,
             confidence_tier=tier,  # type: ignore
@@ -304,8 +313,8 @@ def triage_excerpt_agent37(request: Agent37TriageRequest) -> Agent37TriageRespon
             agent_name = data.get("agent", "hermes")
             usage = data.get("usage")
 
-            # Parse candidate list
-            candidates = _parse_agent37_output_json(raw_output, request.source_identifier)
+            # Parse candidate list with literal excerpt quote validation
+            candidates = _parse_agent37_output_json(raw_output, request.source_identifier, excerpt=request.excerpt)
             if not candidates:
                 # Fallback to local regex if Agent 37 output wasn't cleanly JSON
                 candidates = _extract_candidates_deterministic(request.excerpt, request.source_identifier)

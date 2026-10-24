@@ -27,7 +27,7 @@ from .extractor import (
 )
 from .ai_adapter import run_ai_candidate_extraction, is_ai_enabled
 from .auth import (
-    get_current_user, require_reviewer, require_viewer_or_reviewer, AuthenticatedUser
+    get_current_user, require_reviewer, require_viewer_or_reviewer, AuthenticatedUser, is_production
 )
 from .integrations.agent37 import (
     triage_excerpt_agent37, Agent37TriageRequest, Agent37TriageResponse, is_agent37_enabled,
@@ -282,6 +282,41 @@ def health():
     }
 
 
+@app.get("/ready")
+def ready():
+    """
+    Readiness probe for deployment environments (Render, Kubernetes, Docker).
+    Verifies that the SQLite database is reachable and operational with zero connection leaks.
+    Returns 200 OK if ready, 503 Service Unavailable if database is unreachable.
+    """
+    try:
+        conn = get_connection()
+        try:
+            cursor = conn.cursor()
+            cursor.execute("SELECT 1")
+            cursor.fetchone()
+        finally:
+            conn.close()
+        return {
+            "status": "ready",
+            "ready": True,
+            "ok": True,
+            "service": "orbitscore-backend",
+            "version": app.version,
+            "database": "sqlite_connected"
+        }
+    except Exception as exc:
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "status": "not_ready",
+                "ok": False,
+                "error": "DATABASE_UNAVAILABLE",
+                "message": str(exc)
+            }
+        )
+
+
 @app.get("/profiles")
 def profiles(user: AuthenticatedUser = Depends(require_viewer_or_reviewer)):
     return load_profiles()
@@ -373,14 +408,14 @@ def provenance(user: AuthenticatedUser = Depends(require_viewer_or_reviewer)):
     return {"events": events, "verification": verification}
 
 
-@app.get("/export/{mission_id}")
-def export_packet(
-    mission_id: str,
-    request: Request,
-    format: Optional[str] = Query(None),
-    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
-):
-    """Export complete cited review packet. Returns 423 if any finding lacks a human decision."""
+def _validate_and_get_export_gate(mission_id: str) -> tuple[dict, dict, dict, dict]:
+    """
+    Canonical export gate shared by /export/{mission_id}, /export/{mission_id}/odar, and /export/{mission_id}/eomp.
+    Fails closed with HTTP 423 EXPORT_LOCKED if:
+    - Mission is unevaluated.
+    - Any finding lacks a human decision or has a rejected decision.
+    - Provenance hash chain is invalid or tampered.
+    """
     evaluation = get_evaluation_db(mission_id)
     if not evaluation:
         raise HTTPException(423, detail={"code": "EXPORT_LOCKED", "message": "Mission must be evaluated before export", "pending_decisions": 1})
@@ -400,8 +435,29 @@ def export_packet(
         })
 
     prov_status = verify_provenance_chain_db()
+    if not prov_status.get("valid", True):
+        raise HTTPException(423, detail={
+            "code": "EXPORT_LOCKED",
+            "error": "TAMPERED_PROVENANCE_CHAIN",
+            "message": "Export locked: Provenance hash chain verification failed. Data integrity compromise detected."
+        })
+
+    mission = get_mission(mission_id)
+    return mission, evaluation, reviews, prov_status
+
+
+@app.get("/export/{mission_id}")
+def export_packet(
+    mission_id: str,
+    request: Request,
+    format: Optional[str] = Query(None),
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
+    """Export complete cited review packet. Returns 423 if any finding lacks a human decision or provenance is tampered."""
+    mission, evaluation, reviews, prov_status = _validate_and_get_export_gate(mission_id)
+
     packet = generate_packet(
-        get_mission(mission_id),
+        mission,
         evaluation,
         list(reviews.values()),
         provenance_status=prov_status
@@ -416,6 +472,110 @@ def export_packet(
     if format == "html" or "text/html" in accept_header:
         return HTMLResponse(content=packet["html"], status_code=200)
     return packet
+
+
+@app.get("/export/{mission_id}/odar")
+def export_odar(
+    mission_id: str,
+    format: Optional[str] = Query(None),
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
+    """Export NASA-STD-8719.14 compliant ODAR draft review packet. Enforces canonical export gate."""
+    mission, evaluation, reviews, prov_status = _validate_and_get_export_gate(mission_id)
+    evidence_items = mission.get("fields", []) + mission.get("artifacts", [])
+    decisions_list = list(reviews.values())
+
+    decay_years = None
+    for f in mission.get("fields", []):
+        f_name = f.get("field") or f.get("field_name") or ""
+        if "decay" in f_name or "disposal" in f_name or "lifetime" in f_name:
+            try:
+                decay_years = float(f.get("value"))
+                break
+            except (ValueError, TypeError):
+                pass
+
+    markdown_doc = generate_nasa_odar_markdown(
+        mission=mission,
+        evidence_items=evidence_items,
+        decisions=decisions_list,
+        estimated_decay_years=decay_years
+    )
+
+    append_provenance_event_db("odar_exported", {
+        "mission_id": mission_id,
+        "format": format or "markdown",
+        "status": "READY"
+    }, mission_id)
+
+    if format == "pdf":
+        pdf_bytes = generate_pdf_report(
+            title="NASA-STD-8719.14C ODAR Review Packet",
+            markdown_content=markdown_doc,
+            mission_name=mission.get("name", mission_id),
+            watermark_text="DRAFT — REQUIRES HUMAN REVIEW"
+        )
+        return Response(content=pdf_bytes, media_type="application/pdf")
+    elif format == "json":
+        return {
+            "mission_id": mission_id,
+            "document_type": "ODAR",
+            "standard": "NASA-STD-8719.14C",
+            "markdown": markdown_doc,
+            "provenance": prov_status
+        }
+    return Response(content=markdown_doc, media_type="text/markdown")
+
+
+@app.get("/export/{mission_id}/eomp")
+def export_eomp(
+    mission_id: str,
+    format: Optional[str] = Query(None),
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
+    """Export End-of-Mission Plan (EOMP) conforming to ISRO DFSM 2030 / FCC. Enforces canonical export gate."""
+    mission, evaluation, reviews, prov_status = _validate_and_get_export_gate(mission_id)
+    evidence_items = mission.get("fields", []) + mission.get("artifacts", [])
+
+    decay_years = None
+    for f in mission.get("fields", []):
+        f_name = f.get("field") or f.get("field_name") or ""
+        if "decay" in f_name or "disposal" in f_name or "lifetime" in f_name:
+            try:
+                decay_years = float(f.get("value"))
+                break
+            except (ValueError, TypeError):
+                pass
+
+    markdown_doc = generate_eomp_markdown(
+        mission=mission,
+        evidence_items=evidence_items,
+        estimated_decay_years=decay_years
+    )
+
+    append_provenance_event_db("eomp_exported", {
+        "mission_id": mission_id,
+        "format": format or "markdown",
+        "status": "READY"
+    }, mission_id)
+
+    if format == "pdf":
+        pdf_bytes = generate_pdf_report(
+            title="ISRO DFSM 2030 End-of-Mission Plan (EOMP)",
+            markdown_content=markdown_doc,
+            mission_name=mission.get("name", mission_id),
+            watermark_text="DRAFT — REQUIRES HUMAN REVIEW"
+        )
+        return Response(content=pdf_bytes, media_type="application/pdf")
+    elif format == "json":
+        return {
+            "mission_id": mission_id,
+            "document_type": "EOMP",
+            "standard": "ISRO DFSM 2030 / FCC Part 25",
+            "markdown": markdown_doc,
+            "provenance": prov_status
+        }
+    return Response(content=markdown_doc, media_type="text/markdown")
 
 
 @app.patch("/missions/{mission_id}/fields/{field_name}")
@@ -509,6 +669,7 @@ async def upload_artifact(
     mission_artifacts = m.setdefault("artifacts", [])
     mission_artifacts.append(record.model_dump())
     save_mission(m)
+    invalidate_evaluation_db(mission_id)
 
     append_provenance_event_db("artifact_uploaded", {
         "artifact_id": art_id,
@@ -606,6 +767,11 @@ def extract_artifact(artifact_id: str, user: AuthenticatedUser = Depends(require
 
 @app.post("/reset")
 def reset_demo(user: AuthenticatedUser = Depends(require_reviewer)):
+    if is_production():
+        raise HTTPException(
+            status_code=403,
+            detail={"error": "RESET_FORBIDDEN_IN_PRODUCTION", "message": "Database reset is strictly forbidden in production mode."}
+        )
     reset_db()
     _ensure_fixtures_loaded()
     return {"ok": True}
@@ -673,7 +839,12 @@ def elevenlabs_narrate(
     Generate audio narration for an already human-reviewed finding.
     Strict Invariant: Unreviewed findings are rejected. Server-side API key only.
     """
-    revs = list_reviews_db()
+    if not request.opt_in:
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "OPT_IN_REQUIRED", "message": "Explicit user opt-in is required before generating audio narration."}
+        )
+    revs = list_reviews_db(request.mission_id)
     finding_decision = revs.get(request.finding_id)
     is_reviewed = finding_decision is not None
     review_status = finding_decision.get("decision") if finding_decision else None

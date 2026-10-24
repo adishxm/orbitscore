@@ -188,7 +188,7 @@ cd orbitscore
 # Install Python dependencies (Python 3.10+)
 pip install -r requirements.txt
 
-# Run backend test suite (64+ tests)
+# Run backend test suite (86 tests)
 python -m pytest backend/tests
 
 # Run synthetic verification matrix (12 evaluations)
@@ -200,7 +200,7 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000   # run from backend/ director
 
 #### 2. AI/ML Standalone Suite
 ```bash
-# Run isolated AI/ML tests (34 tests)
+# Run isolated AI/ML tests (33 tests)
 python -m pytest ai_ml/tests
 
 # Check model artifact registry
@@ -214,7 +214,7 @@ cd frontend
 # Install Node dependencies (Node 18+)
 npm install
 
-# Run unit & accessibility tests (85 tests across 12 suites)
+# Run unit & accessibility tests (89 tests across 12 suites)
 npm test
 
 # Run TypeScript type check
@@ -245,11 +245,11 @@ OrbitScore maintains rigorous testing standards across all tiers:
 
 | Subsystem | Test Framework | Test Count | Focus Areas |
 |---|---|---|---|
-| **Frontend UI** | Vitest + React Testing Library | **85 Passed** (12 suites) | Workspaces, Evidence Register, Export Gate, Agent37 Drawer, Axe a11y, Banned words |
-| **Backend API** | Pytest + FastAPI TestClient | **64 Passed** | Rule engine, SQLite/PostgreSQL, Provenance SHA-256 chain, ODAR/EOMP generation, Auth |
-| **AI/ML Astrodynamics**| Pytest | **34 Passed** | Decay lifetime regression, CDM risk classification, Artifact Registry, Candidate normalization |
+| **Frontend UI** | Vitest + React Testing Library | **89 Passed** (12 suites) | Workspaces, Evidence Register, Export Gate, Agent37 Drawer, Axe a11y, Banned words |
+| **Backend API** | Pytest + FastAPI TestClient | **86 Passed** | Rule engine, SQLite/PostgreSQL, Provenance SHA-256 chain, ODAR/EOMP generation, Auth |
+| **AI/ML Astrodynamics**| Pytest | **33 Passed** | Decay lifetime regression, CDM risk classification, Artifact Registry, Candidate normalization |
 | **Verification Matrix**| Python Verification Harness | **12 Evaluations** | Complete, gap-heavy, and conflict synthetic missions across DFSM 2030 and FCC rules |
-| **Total Automated** | GitHub Actions CI | **183+ Tests** | Zero failures, zero type errors, zero lint warnings |
+| **Total Automated** | GitHub Actions CI | **208 Tests** (86 + 33 + 89) | Zero failures, zero type errors, zero lint warnings |
 
 Run the complete validation suite:
 ```bash

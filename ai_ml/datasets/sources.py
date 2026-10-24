@@ -35,8 +35,21 @@ def compute_bytes_sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def validate_source_record(record: SourceDocumentRecord) -> tuple[bool, str]:
-    """Validate that a source document conforms to data integrity and security gates."""
+def verify_source_bytes(record: SourceDocumentRecord, content_bytes: bytes) -> tuple[bool, str]:
+    """Verify that actual document bytes match the recorded byte size and SHA-256 digest."""
+    if len(content_bytes) != record.byte_size:
+        return False, f"Byte size mismatch: recorded {record.byte_size}, actual {len(content_bytes)}."
+    computed = compute_bytes_sha256(content_bytes)
+    if computed.lower() != record.sha256.lower():
+        return False, f"SHA-256 digest mismatch: recorded {record.sha256}, actual {computed}."
+    return True, "Byte-level integrity verified."
+
+
+def validate_source_record(
+    record: SourceDocumentRecord,
+    content_bytes: Optional[bytes] = None
+) -> tuple[bool, str]:
+    """Validate that a source document conforms to data integrity and security gates, optionally checking bytes."""
     if len(record.sha256) != 64:
         return False, f"Invalid SHA-256 digest length ({len(record.sha256)}). Must be 64 characters."
     if record.byte_size <= 0:
@@ -45,4 +58,8 @@ def validate_source_record(record: SourceDocumentRecord) -> tuple[bool, str]:
         return False, "Document page count must be at least 1."
     if record.privacy_class not in ("PUBLIC", "RESTRICTED", "CONFIDENTIAL_MISSION_DATA"):
         return False, f"Invalid privacy classification: {record.privacy_class}"
+
+    if content_bytes is not None:
+        return verify_source_bytes(record, content_bytes)
+
     return True, "Source record is valid and verified."

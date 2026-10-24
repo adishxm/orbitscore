@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "project": "orbitscore",
-  "last_verified_at": "2026-10-24",
+  "last_verified_at": "2026-10-25",
   "current_phase": "completed",
   "active_task": null,
   "last_team_report": "team-report.html",
@@ -26,14 +26,13 @@
   },
   "last_verification": {
     "brain_validation": "passed; 17 tasks; project scope aligned",
-    "brain_reporting_tests": "5 passed",
-    "backend_pytest": "55 passed",
-    "ai_ml_pytest": "34 passed",
+    "v04_acceptance": "passed; all governance contracts, mappings, and tests verified",
+    "backend_pytest": "86 passed",
+    "ai_ml_pytest": "33 passed",
     "verification_matrix": "12 evaluations; provenance valid",
-    "frontend_vitest": "67 passed across 10 suites",
+    "frontend_vitest": "89 passed across 12 suites",
     "typecheck": "passed",
-    "production_build": "passed",
-    "report": ".brain/reports/task-runs/20261024T233621.235477+0530_T009_verification.json"
+    "production_build": "passed"
   },
   "project_completion_status": "ELIGIBLE",
   "last_project_completion_check": ".brain/reports/completion-runs/20261024T234123.292525+0530_project-completion.json",

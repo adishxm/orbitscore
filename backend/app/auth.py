@@ -21,29 +21,45 @@ class AuthenticatedUser(BaseModel):
 bearer_scheme = HTTPBearer(auto_error=False)
 api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
 
-def is_auth_enforced() -> bool:
-    """Check if authentication is strictly enforced via environment."""
-    is_prod = (
+DEMO_REVIEWER_KEY = "orbitscore-reviewer-key-2026"
+DEMO_VIEWER_KEY = "orbitscore-viewer-key-2026"
+
+def is_production() -> bool:
+    """Return True if running in production or staging mode."""
+    return (
         os.getenv("ORBIT_ENV", "").lower() in ("production", "prod")
         or os.getenv("ENVIRONMENT", "").lower() in ("production", "prod")
     )
-    val = os.getenv("ORBITSCORE_AUTH_ENABLED", "1" if is_prod else "0").lower()
+
+def is_auth_enforced() -> bool:
+    """Check if authentication is strictly enforced via environment."""
+    if is_production():
+        return True
+    val = os.getenv("ORBITSCORE_AUTH_ENABLED", "0").lower()
     return val in ("1", "true", "yes")
 
 def get_configured_reviewer_key() -> str:
-    return (
+    key = (
         os.getenv("ORBITSCORE_REVIEWER_KEY")
         or os.getenv("ORBIT_REVIEWER_KEY")
         or os.getenv("REVIEWER_BEARER_TOKEN")
-        or "orbitscore-reviewer-key-2026"
     )
+    if not key:
+        if is_production():
+            raise RuntimeError("Production mode requires explicitly configured ORBITSCORE_REVIEWER_KEY or ORBIT_REVIEWER_KEY")
+        return DEMO_REVIEWER_KEY
+    return key
 
 def get_configured_viewer_key() -> str:
-    return (
+    key = (
         os.getenv("ORBITSCORE_VIEWER_KEY")
         or os.getenv("ORBIT_VIEWER_KEY")
-        or "orbitscore-viewer-key-2026"
     )
+    if not key:
+        if is_production():
+            raise RuntimeError("Production mode requires explicitly configured ORBITSCORE_VIEWER_KEY or ORBIT_VIEWER_KEY")
+        return DEMO_VIEWER_KEY
+    return key
 
 async def get_current_user(
     request: Request,
@@ -61,13 +77,29 @@ async def get_current_user(
     elif api_key:
         token = api_key
 
-    reviewer_key = get_configured_reviewer_key()
-    viewer_key = get_configured_viewer_key()
+    # Reject demo credentials in production mode
+    if is_production() and token in (DEMO_REVIEWER_KEY, DEMO_VIEWER_KEY):
+        explicit_rev = os.getenv("ORBITSCORE_REVIEWER_KEY") or os.getenv("ORBIT_REVIEWER_KEY")
+        explicit_view = os.getenv("ORBITSCORE_VIEWER_KEY") or os.getenv("ORBIT_VIEWER_KEY")
+        if token == DEMO_REVIEWER_KEY and explicit_rev != DEMO_REVIEWER_KEY:
+            raise HTTPException(status_code=401, detail={"error": "INVALID_CREDENTIALS", "message": "Demo credentials are not permitted in production."})
+        if token == DEMO_VIEWER_KEY and explicit_view != DEMO_VIEWER_KEY:
+            raise HTTPException(status_code=401, detail={"error": "INVALID_CREDENTIALS", "message": "Demo credentials are not permitted in production."})
+
+    try:
+        reviewer_key = get_configured_reviewer_key()
+    except RuntimeError:
+        reviewer_key = None
+
+    try:
+        viewer_key = get_configured_viewer_key()
+    except RuntimeError:
+        viewer_key = None
 
     if token:
-        if token == reviewer_key:
+        if reviewer_key and token == reviewer_key:
             return AuthenticatedUser(username="engineer-reviewer", role="reviewer", token_type="api_key")
-        elif token == viewer_key:
+        elif viewer_key and token == viewer_key:
             return AuthenticatedUser(username="observer-viewer", role="viewer", token_type="api_key")
         else:
             raise HTTPException(status_code=401, detail={"error": "INVALID_CREDENTIALS", "message": "Provided token is invalid."})

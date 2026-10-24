@@ -3,7 +3,7 @@
   "model_name": "CDM-GradientBoosting-LogRisk-V1",
   "version": "1.0.0",
   "sha256": "c65b204be7e826c09712e1a613c2198ab05331782e3ed4cdd56ddbfd97e711c1",
-  "trained_at_utc": "2026-10-24T21:30:23.442471+00:00",
+  "trained_at_utc": "2026-10-24T23:18:57.860062+00:00",
   "train_sample_count": 2,
   "features": [
     "time_to_tca_days",

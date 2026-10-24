@@ -24,7 +24,7 @@ class SpaceTrackTLE(BaseModel):
     apogee_km: float
     period_minutes: float
     source: str = "Space-Track.org / 18th Space Defense Squadron"
-    data_mode: Literal["LIVE", "SNAPSHOT", "SYNTHETIC"] = "SYNTHETIC"
+    data_mode: Literal["LIVE", "SNAPSHOT", "STALE_SNAPSHOT", "SYNTHETIC"] = "SYNTHETIC"
     fetched_at: Optional[str] = None
     sha256: Optional[str] = None
     disclaimer: Optional[str] = None
@@ -60,7 +60,7 @@ class SpaceTrackClient:
         """
         Fetch TLE with strict mode separation:
         1. LIVE: Active authenticated session to Space-Track.org API
-        2. SNAPSHOT: Loaded from persisted local spatio-temporal snapshot with fetched_at
+        2. SNAPSHOT: Loaded from persisted local spatio-temporal snapshot with fetched_at (marks STALE_SNAPSHOT if > 14 days)
         3. SYNTHETIC: Labeled calibrated demonstration fixture
         """
         # Try LIVE fetch if credentials configured
@@ -126,9 +126,23 @@ class SpaceTrackClient:
             from app.db import get_latest_tle_snapshot
             snapshot = get_latest_tle_snapshot(norad_cat_id)
             if snapshot:
+                fetched_at = snapshot.get("fetched_at")
+                data_mode = "SNAPSHOT"
+                disclaimer = "STORED TELEMETRY SNAPSHOT - NOT REAL-TIME PROPAGATED"
+                if fetched_at:
+                    try:
+                        fetched_dt = datetime.fromisoformat(fetched_at.replace("Z", "+00:00"))
+                        age_days = (datetime.now(timezone.utc) - fetched_dt).total_seconds() / 86400.0
+                        max_age_days = float(os.getenv("SPACE_TRACK_MAX_SNAPSHOT_AGE_DAYS", "14.0"))
+                        if age_days > max_age_days:
+                            data_mode = "STALE_SNAPSHOT"
+                            disclaimer = f"STALE TELEMETRY SNAPSHOT ({age_days:.1f} days old; exceeds {max_age_days:.0f}-day limit) - NOT REAL-TIME PROPAGATED"
+                    except Exception:
+                        pass
+
                 return SpaceTrackTLE(
                     norad_cat_id=snapshot["norad_id"],
-                    object_name=f"NORAD-{snapshot['norad_id']} (STORED SNAPSHOT)",
+                    object_name=f"NORAD-{snapshot['norad_id']} ({data_mode})",
                     epoch=snapshot["epoch"],
                     line1=snapshot["line1"],
                     line2=snapshot["line2"],
@@ -139,10 +153,10 @@ class SpaceTrackClient:
                     apogee_km=500.2,
                     period_minutes=94.6,
                     source=snapshot["source"],
-                    data_mode="SNAPSHOT",
+                    data_mode=data_mode,
                     fetched_at=snapshot["fetched_at"],
                     sha256=snapshot["sha256"],
-                    disclaimer="STORED TELEMETRY SNAPSHOT - NOT REAL-TIME PROPAGATED",
+                    disclaimer=disclaimer,
                 )
         except Exception:
             pass
