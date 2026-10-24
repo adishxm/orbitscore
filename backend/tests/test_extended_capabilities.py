@@ -8,8 +8,12 @@ Tests for extended platform capabilities:
 """
 import pytest
 from fastapi.testclient import TestClient
-from backend.app.main import app
-from backend.app.auth import get_configured_reviewer_key
+try:
+    from app.main import app
+    from app.auth import get_configured_reviewer_key
+except ImportError:
+    from backend.app.main import app
+    from backend.app.auth import get_configured_reviewer_key
 
 client = TestClient(app)
 AUTH_HEADERS = {"Authorization": f"Bearer {get_configured_reviewer_key()}"}

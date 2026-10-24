@@ -189,7 +189,14 @@ def main() -> int:
         if recorded != expected:
             blockers.append(f"Final project sign-off disposition for optional task {task_id} does not match project-scope.json.")
 
-    validation = subprocess.run([sys.executable, str(BRAIN / "scripts" / "validate_brain.py")], cwd=ROOT, text=True, capture_output=True)
+    validation = subprocess.run(
+        [sys.executable, str(BRAIN / "scripts" / "validate_brain.py")],
+        cwd=ROOT,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        capture_output=True
+    )
     if validation.returncode:
         blockers.append(f"Brain metadata validation failed: {(validation.stderr or validation.stdout).strip()}")
     else:

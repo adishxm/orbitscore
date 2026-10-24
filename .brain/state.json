@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
-  "project": "orbitready",
-  "last_verified_at": "2026-10-22",
+  "project": "orbitscore",
+  "last_verified_at": "2026-10-24",
   "current_phase": "reporting-and-completion-gate-review",
   "active_task": "T009",
   "last_team_report": "team-report.html",
