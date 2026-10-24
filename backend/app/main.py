@@ -30,7 +30,9 @@ from .auth import (
     get_current_user, require_reviewer, require_viewer_or_reviewer, AuthenticatedUser
 )
 from .integrations.agent37 import (
-    triage_excerpt_agent37, Agent37TriageRequest, Agent37TriageResponse, is_agent37_enabled
+    triage_excerpt_agent37, Agent37TriageRequest, Agent37TriageResponse, is_agent37_enabled,
+    chat_with_agent37, Agent37ChatRequest, Agent37ChatResponse,
+    check_agent37_live_status, Agent37StatusResponse
 )
 from .integrations.browser_use import (
     capture_public_source, BrowserCaptureRequest, BrowserCaptureResponse, is_browser_use_enabled
@@ -575,6 +577,24 @@ def agent37_triage(
             "status": res.status
         }, request.mission_id)
     return res
+
+
+@app.post("/integrations/agent37/chat", response_model=Agent37ChatResponse)
+def agent37_chat(
+    request: Agent37ChatRequest,
+    user: AuthenticatedUser = Depends(require_reviewer)
+):
+    """
+    Interactive mission copilot chat powered by Agent 37 sandbox.
+    Strict Invariant: Agent 37 answers questions and cites evidence but CANNOT certify compliance.
+    """
+    return chat_with_agent37(request)
+
+
+@app.get("/integrations/agent37/status", response_model=Agent37StatusResponse)
+def agent37_status():
+    """Live connectivity and health check for the configured Agent 37 instance."""
+    return check_agent37_live_status()
 
 
 @app.post("/integrations/browser-use/capture", response_model=BrowserCaptureResponse)

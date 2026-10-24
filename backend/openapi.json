@@ -774,6 +774,72 @@
         ]
       }
     },
+    "/integrations/agent37/chat": {
+      "post": {
+        "summary": "Agent37 Chat",
+        "description": "Interactive mission copilot chat powered by Agent 37 sandbox.\nStrict Invariant: Agent 37 answers questions and cites evidence but CANNOT certify compliance.",
+        "operationId": "agent37_chat_integrations_agent37_chat_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Agent37ChatRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agent37ChatResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/integrations/agent37/status": {
+      "get": {
+        "summary": "Agent37 Status",
+        "description": "Live connectivity and health check for the configured Agent 37 instance.",
+        "operationId": "agent37_status_integrations_agent37_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agent37StatusResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/integrations/browser-use/capture": {
       "post": {
         "summary": "Browser Use Capture",
@@ -1381,7 +1447,8 @@
             "maximum": 1.0,
             "minimum": 0.0,
             "title": "Uncertainty",
-            "description": "Estimated extraction uncertainty (0.0=certain, 1.0=uncertain)"
+            "description": "Estimated extraction uncertainty (0.0=certain, 1.0=uncertain)",
+            "default": 0.1
           },
           "confidence_tier": {
             "type": "string",
@@ -1404,10 +1471,164 @@
           "field",
           "value",
           "exact_quote",
-          "source_identifier",
-          "uncertainty"
+          "source_identifier"
         ],
         "title": "Agent37Candidate"
+      },
+      "Agent37ChatRequest": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id"
+          },
+          "mission_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mission Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "title": "Agent37ChatRequest"
+      },
+      "Agent37ChatResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "SUCCESS",
+              "FALLBACK",
+              "ERROR"
+            ],
+            "title": "Status"
+          },
+          "agent": {
+            "type": "string",
+            "title": "Agent",
+            "default": "hermes"
+          },
+          "response": {
+            "type": "string",
+            "title": "Response"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id"
+          },
+          "request_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Id"
+          },
+          "timestamp": {
+            "type": "string",
+            "title": "Timestamp"
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer",
+            "default": "Agent37 assistance only. Not an official compliance determination."
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "response",
+          "timestamp"
+        ],
+        "title": "Agent37ChatResponse"
+      },
+      "Agent37StatusResponse": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "configured": {
+            "type": "boolean",
+            "title": "Configured"
+          },
+          "instance_id": {
+            "type": "string",
+            "title": "Instance Id"
+          },
+          "instance_url": {
+            "type": "string",
+            "title": "Instance Url"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "agent_name": {
+            "type": "string",
+            "title": "Agent Name"
+          },
+          "latency_ms": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latency Ms"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "enabled",
+          "configured",
+          "instance_id",
+          "instance_url",
+          "status",
+          "agent_name"
+        ],
+        "title": "Agent37StatusResponse"
       },
       "Agent37TriageRequest": {
         "properties": {
@@ -1474,6 +1695,40 @@
             },
             "type": "array",
             "title": "Candidates"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id"
+          },
+          "agent_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Agent Id"
+          },
+          "usage": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Usage"
           },
           "disclaimer": {
             "type": "string",
