@@ -90,11 +90,11 @@ describe('Slice 9: Reference Landing Page & Motion Layer', () => {
       </MemoryRouter>
     );
 
-    // Initial state: missing
-    expect(screen.getByText(/A required baseline parameter has no citation or entry/i)).toBeInTheDocument();
+    // Initial state: confirmed
+    expect(screen.getByText(/A human team member with named technical role has verified/i)).toBeInTheDocument();
 
     // Click 'conflicting' tab
-    const conflictingTab = screen.getByRole('tab', { name: /CONFLICTING/i });
+    const conflictingTab = screen.getByRole('tab', { name: /Active source documents disagree/i });
     fireEvent.click(conflictingTab);
 
     expect(
@@ -102,13 +102,16 @@ describe('Slice 9: Reference Landing Page & Motion Layer', () => {
     ).toBeInTheDocument();
     expect(screen.getByText(/3\.82 kg in CAD model vs 4\.15 kg/i)).toBeInTheDocument();
 
-    // Click 'stale' tab
-    const staleTab = screen.getByRole('tab', { name: /STALE/i });
-    fireEvent.click(staleTab);
+    // Click 'out-of-scope' tab
+    const outOfScopeTab = screen.getByRole('tab', { name: /Parameter belongs outside profile applicability/i });
+    fireEvent.click(outOfScopeTab);
 
     expect(
-      screen.getByText(/The cited document revision or test record predates/i)
+      screen.getByText(/Parameter belongs to a subsystem, payload, or vehicle class outside/i)
     ).toBeInTheDocument();
+
+    // Verify temporal stale notice is present
+    expect(screen.getByText(/Temporal Currency Notice/i)).toBeInTheDocument();
   });
 
   it('renders traceability chain and synthetic fixtures launchers', () => {
@@ -118,20 +121,24 @@ describe('Slice 9: Reference Landing Page & Motion Layer', () => {
       </MemoryRouter>
     );
 
-    // Traceability chain
+    // Traceability chain with honest human decision
     expect(screen.getByText('ICD-AST3-004')).toBeInTheDocument();
     expect(screen.getByText('Finding C-03')).toBeInTheDocument();
-    expect(screen.getByText('Waiver Granted')).toBeInTheDocument();
+    expect(screen.getByText('Accepted for packet')).toBeInTheDocument();
 
     // Fixtures
     expect(screen.getByText('Asteria-3 Technology Demo')).toBeInTheDocument();
     expect(screen.getByText('Microsat-X ESPA Class')).toBeInTheDocument();
 
-    const asteriaLink = screen.getByRole('link', { name: /Launch Asteria-3 Workspace/i });
-    expect(asteriaLink).toHaveAttribute('href', '/missions/asteria-3');
+    const asteriaLinks = screen.getAllByRole('link', { name: /Launch Asteria-3 Workspace/i });
+    expect(asteriaLinks.length).toBeGreaterThan(0);
+    expect(asteriaLinks[0]).toHaveAttribute('href', '/missions/asteria-3');
 
     const microsatLink = screen.getByRole('link', { name: /Inspect Boundary Gate/i });
     expect(microsatLink).toHaveAttribute('href', '/missions/microsat-x');
+
+    // Closing CTA
+    expect(screen.getByText('Ready to Inspect Mission Evidence?')).toBeInTheDocument();
   });
 
   it('passes axe accessibility audit on the reference landing page', async () => {
