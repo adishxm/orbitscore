@@ -1,0 +1,563 @@
+openapi: 3.1.0
+info:
+  title: OrbitScore Evidence Workspace API (Draft)
+  version: 0.1.0
+  description: >
+    Draft API contract for the OrbitScore backend target (FastAPI + PostgreSQL).
+    This contract mirrors the frontend TypeScript domain types.
+    In the current build, all interactions are executed via an in-memory LocalMockAdapter.
+    Nothing in this API is connected to live production infrastructure.
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Local development FastAPI server (Target)
+  - url: memory://local
+    description: Active in-browser LocalMockAdapter (Current Build)
+
+paths:
+  /missions:
+    get:
+      summary: List all missions in workspace
+      operationId: listMissions
+      responses:
+        '200':
+          description: List of missions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Mission'
+    post:
+      summary: Create a new mission workspace
+      operationId: createMission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MissionCreate'
+      responses:
+        '201':
+          description: Created mission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mission'
+
+  /missions/{missionId}:
+    parameters:
+      - name: missionId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Retrieve mission details
+      operationId: getMission
+      responses:
+        '200':
+          description: Mission record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mission'
+
+  /missions/{missionId}/evidence:
+    parameters:
+      - name: missionId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: List evidence register items for mission
+      operationId: listEvidence
+      responses:
+        '200':
+          description: Array of evidence items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EvidenceItem'
+    post:
+      summary: Record new evidence item
+      operationId: createEvidence
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EvidenceItemCreate'
+      responses:
+        '201':
+          description: Created evidence item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvidenceItem'
+
+  /missions/{missionId}/evidence/{evidenceId}:
+    parameters:
+      - name: missionId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: evidenceId
+        in: path
+        required: true
+        schema:
+          type: string
+    put:
+      summary: Update evidence item or confirm status
+      operationId: updateEvidence
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EvidenceItemUpdate'
+      responses:
+        '200':
+          description: Updated evidence item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvidenceItem'
+
+  /profiles:
+    get:
+      summary: List available evidence evaluation profiles
+      operationId: listProfiles
+      responses:
+        '200':
+          description: Array of profiles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Profile'
+
+  /missions/{missionId}/check-runs:
+    parameters:
+      - name: missionId
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      summary: Execute deterministic check run with frozen input snapshot
+      operationId: executeCheckRun
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [profileId, profileVersion]
+              properties:
+                profileId:
+                  type: string
+                  example: demo-evidence-completeness
+                profileVersion:
+                  type: string
+                  example: v0.1.0
+      responses:
+        '200':
+          description: Check run result with findings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckRun'
+
+  /check-runs/{checkRunId}/findings:
+    parameters:
+      - name: checkRunId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Retrieve deterministic findings for a check run
+      operationId: getFindings
+      responses:
+        '200':
+          description: Array of findings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Finding'
+
+  /findings/{findingId}/reviews:
+    parameters:
+      - name: findingId
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      summary: Record human reviewer decision for a finding
+      operationId: createReviewDecision
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewDecisionCreate'
+      responses:
+        '201':
+          description: Created review decision
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewDecision'
+
+  /missions/{missionId}/export:
+    parameters:
+      - name: missionId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: format
+        in: query
+        required: true
+        schema:
+          type: string
+          enum: [markdown, json, html]
+    get:
+      summary: Generate cited evidence review packet (gated by complete human review)
+      operationId: exportPacket
+      responses:
+        '200':
+          description: Generated export packet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportPacket'
+            text/markdown:
+              schema:
+                type: string
+            text/html:
+              schema:
+                type: string
+        '428':
+          description: Precondition Required — Export blocked because one or more findings lack a human review decision
+
+components:
+  schemas:
+    Mission:
+      type: object
+      required: [id, name, objectType, teamName, isSynthetic, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        objectType:
+          type: string
+          enum: [cubesat, smallsat, payload, other]
+        description:
+          type: string
+        orbitRegimeDeclared:
+          type: string
+        plannedLaunchWindow:
+          type: string
+        teamName:
+          type: string
+        isSynthetic:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    MissionCreate:
+      type: object
+      required: [name, objectType, teamName]
+      properties:
+        name:
+          type: string
+        objectType:
+          type: string
+          enum: [cubesat, smallsat, payload, other]
+        description:
+          type: string
+        orbitRegimeDeclared:
+          type: string
+        plannedLaunchWindow:
+          type: string
+        teamName:
+          type: string
+
+    EvidenceItem:
+      type: object
+      required: [id, missionId, parameterKey, label, value, state, source, enteredBy, enteredAt, isSynthetic]
+      properties:
+        id:
+          type: string
+        missionId:
+          type: string
+        parameterKey:
+          type: string
+        label:
+          type: string
+        value:
+          type: string
+        unit:
+          type: string
+        valueType:
+          type: string
+          enum: [numeric, text, date, boolean]
+        state:
+          type: string
+          enum: [confirmed, unconfirmed, missing, conflicting, out-of-scope]
+        source:
+          $ref: '#/components/schemas/SourceCitation'
+        notes:
+          type: string
+        enteredBy:
+          type: string
+        enteredAt:
+          type: string
+          format: date-time
+        confirmedBy:
+          type: string
+        confirmedAt:
+          type: string
+          format: date-time
+        isSynthetic:
+          type: boolean
+
+    SourceCitation:
+      type: object
+      required: [documentTitle, locator]
+      properties:
+        documentTitle:
+          type: string
+        documentVersion:
+          type: string
+        documentDate:
+          type: string
+        locator:
+          type: string
+          description: Page number, section, or engineering drawing ID
+        uri:
+          type: string
+
+    EvidenceItemCreate:
+      type: object
+      required: [parameterKey, label, value, state, source, enteredBy]
+      properties:
+        parameterKey:
+          type: string
+        label:
+          type: string
+        value:
+          type: string
+        unit:
+          type: string
+        valueType:
+          type: string
+          enum: [numeric, text, date, boolean]
+        state:
+          type: string
+          enum: [confirmed, unconfirmed, missing, conflicting, out-of-scope]
+        source:
+          $ref: '#/components/schemas/SourceCitation'
+        notes:
+          type: string
+        enteredBy:
+          type: string
+
+    EvidenceItemUpdate:
+      type: object
+      properties:
+        value:
+          type: string
+        unit:
+          type: string
+        state:
+          type: string
+          enum: [confirmed, unconfirmed, missing, conflicting, out-of-scope]
+        source:
+          $ref: '#/components/schemas/SourceCitation'
+        confirmedBy:
+          type: string
+        confirmedAt:
+          type: string
+          format: date-time
+        notes:
+          type: string
+
+    Profile:
+      type: object
+      required: [id, version, title, description, applicability, limitations, checks, status]
+      properties:
+        id:
+          type: string
+        version:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        applicability:
+          type: array
+          items:
+            type: string
+        limitations:
+          type: array
+          items:
+            type: string
+        checks:
+          type: array
+          items:
+            $ref: '#/components/schemas/CheckDef'
+        status:
+          type: string
+          enum: [demo]
+
+    CheckDef:
+      type: object
+      required: [id, title, description, requiredParameterKeys, logic, rationale]
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        requiredParameterKeys:
+          type: array
+          items:
+            type: string
+        logic:
+          type: string
+        rationale:
+          type: string
+
+    CheckRun:
+      type: object
+      required: [id, missionId, profileId, profileVersion, startedAt, inputSnapshot, results]
+      properties:
+        id:
+          type: string
+        missionId:
+          type: string
+        profileId:
+          type: string
+        profileVersion:
+          type: string
+        startedAt:
+          type: string
+          format: date-time
+        inputSnapshot:
+          type: array
+          items:
+            $ref: '#/components/schemas/EvidenceItem'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Finding'
+
+    Finding:
+      type: object
+      required: [id, checkRunId, checkId, outcome, evidenceRefs, message, whyThisOutcome]
+      properties:
+        id:
+          type: string
+        checkRunId:
+          type: string
+        checkId:
+          type: string
+        outcome:
+          type: string
+          enum:
+            - Documented
+            - 'Needs attention: missing'
+            - 'Needs attention: conflicting'
+            - 'Needs attention: unconfirmed'
+            - 'Not applicable (out of profile scope)'
+        evidenceRefs:
+          type: array
+          items:
+            type: string
+        message:
+          type: string
+        whyThisOutcome:
+          type: string
+
+    ReviewDecision:
+      type: object
+      required: [id, findingId, decision, reviewerName, reviewerRole, decidedAt]
+      properties:
+        id:
+          type: string
+        findingId:
+          type: string
+        decision:
+          type: string
+          enum:
+            - Accepted for packet
+            - Needs more evidence
+            - Disputed
+            - Deferred to specialist
+            - Noted – no action
+        reviewerName:
+          type: string
+        reviewerRole:
+          type: string
+        comment:
+          type: string
+        decidedAt:
+          type: string
+          format: date-time
+
+    ReviewDecisionCreate:
+      type: object
+      required: [decision, reviewerName, reviewerRole]
+      properties:
+        decision:
+          type: string
+          enum:
+            - Accepted for packet
+            - Needs more evidence
+            - Disputed
+            - Deferred to specialist
+            - Noted – no action
+        reviewerName:
+          type: string
+        reviewerRole:
+          type: string
+        comment:
+          type: string
+
+    ExportPacket:
+      type: object
+      required: [id, missionId, generatedAt, profileId, profileVersion, appVersion, sections, limitationsText]
+      properties:
+        id:
+          type: string
+        missionId:
+          type: string
+        generatedAt:
+          type: string
+          format: date-time
+        profileId:
+          type: string
+        profileVersion:
+          type: string
+        appVersion:
+          type: string
+        sections:
+          type: object
+        limitationsText:
+          type: string
