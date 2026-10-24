@@ -238,6 +238,21 @@ evaluations = EvaluationsDict()
 events = EventsList()
 
 
+@app.get("/")
+def root():
+    return {
+        "service": "OrbitScore API",
+        "status": "online",
+        "version": app.version,
+        "description": "Deterministic regulatory policy evaluation & human review decision dossier API.",
+        "docs_url": "/docs",
+        "redoc_url": "/redoc",
+        "health_url": "/health",
+        "frontend_workspace": "http://localhost:5173",
+        "message": "Welcome to the OrbitScore Backend API. Visit /docs for interactive API documentation or http://localhost:5173 for the frontend workspace."
+    }
+
+
 @app.get("/health")
 def health():
     return {
