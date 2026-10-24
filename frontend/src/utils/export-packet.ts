@@ -104,7 +104,7 @@ export function exportPacketToMarkdown(packet: ExportPacket): string {
   // Automated Findings
   lines.push(`## 4. Automated Deterministic Consistency Findings`);
   lines.push(``);
-  lines.push(`The software inspection generated ${packet.check_run.findings.length} findings from immutable primary evidence:`);
+  lines.push(`The software inspection generated ${packet.check_run.findings.length} findings from registered primary evidence:`);
   lines.push(``);
   lines.push(`| Check ID | Check Title | Severity | Outcome | Affected Parameters | Summary |`);
   lines.push(`| :--- | :--- | :--- | :--- | :--- | :--- |`);

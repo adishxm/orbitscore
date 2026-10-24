@@ -5,10 +5,12 @@
  */
 
 export type EvidenceState =
-  | 'missing'
-  | 'unconfirmed'
   | 'confirmed'
+  | 'unconfirmed'
+  | 'missing'
   | 'conflicting'
+  | 'out-of-scope'
+  | 'out_of_scope'
   | 'stale';
 
 export type MissionObjectType =
@@ -123,6 +125,11 @@ export interface CheckRun {
 }
 
 export type ReviewDecisionType =
+  | 'accepted_for_packet'
+  | 'needs_more_evidence'
+  | 'disputed'
+  | 'deferred_to_specialist'
+  | 'noted_no_action'
   | 'accepted_as_is'
   | 'mitigation_filed'
   | 'waiver_granted'

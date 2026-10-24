@@ -49,7 +49,7 @@ export const DEMO_PROFILE: Profile = {
       id: 'C-04',
       title: 'Source Document Citation & Page/Section Locators',
       description:
-        'Verifies that every evidence item points to an authentic primary document with an explicit page, section, or drawing number locator.',
+        'Verifies that every evidence item points to a cited primary document with an explicit page, section, or drawing number locator.',
       category: 'source_traceability',
       severity: 'action_required',
       requires_human_signoff: true,
