@@ -96,8 +96,10 @@ describe('Slice 2: Layout Shell, Navigation & Honesty Banners', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByRole('heading', { level: 1, name: /Asteria-3 CubeSat/i })).toBeInTheDocument();
-    expect(screen.getByText(/Workspace Flow Active/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 2, name: /Asteria-3 Technology Demonstration CubeSat/i })
+    ).toBeInTheDocument();
+    expect(screen.getByText('2. Evidence Register')).toBeInTheDocument();
   });
 
   it('renders 404 page on unknown routes', () => {

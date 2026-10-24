@@ -65,7 +65,7 @@
   - Snapshot hashing: Deterministic 32-bit hex digest verified reproducible across identical datasets and sensitive to value mutations
 
 ### Slice 4: Synthetic Asteria-3 Fixture & State Store
-- **Status**: COMPLETE
+- **Status**: COMPLETE (commit `38b26c9`)
 - **Gates Verified**:
   - `tsc --noEmit`: 0 errors
   - `npm run build`: Success in 637ms
@@ -75,13 +75,22 @@
   - Microsat-X fixture implemented: 150 kg ESPA-class smallsat for out-of-scope profile gating
   - Zustand store implemented: local storage persistence under `orbitscore_store_v1` with safe memory fallback, re-run staleness tracking on edits, input snapshot freezing, `resetDemo()`, and `clearData()`
 
+### Slice 5: Workspace Flow: Context, Evidence Register & Confirmation
+- **Status**: COMPLETE
+- **Gates Verified**:
+  - `tsc --noEmit`: 0 errors
+  - `npm run build`: Success in 591ms
+  - `npm test`: 39/39 tests passed across 5 test suites (`workspace-flow.test.tsx`, `store.test.ts`, `demo-evidence-completeness.test.ts`, `layout-shell.test.tsx`, `banned-words-lint.test.ts`)
+  - Axe accessibility audit: 0 violations on workspace layout
+  - Components implemented: `Stepper` (6 stages), `StateChip` (5 states with WCAG AA dual-surface contrast), `MissionContextCard` (editable parameters & summary counts), `DataTable` (column sorting, state/category filtering, real-time text search, responsive card view on mobile), `SidePanel` (citation inspection, conflicting values alert, human confirmation form with reviewer name and role), `AddEvidenceModal`
+
 ---
 
 ## Next 3 Actions
 
-1. **Slice 5 (Workspace Flow: Context, Evidence Register & Confirmation)**: Build DataTable with column sorting and search, 5 StateChip indicators, SidePanel confirmation drawer with citation inspection, and Stepper navigation.
-2. **Slice 6 (Profile Gate, Check Execution & Findings)**: Connect profile runner, render FindingCard with bidirectional traceability links to evidence rows, and display severity indicators.
-3. **Slice 7 (Human Review Decisions, Open Issues & Export Gate)**: Implement ReviewDecisionForm (human decisions separate from software findings), OpenIssuesList, and mandatory export gating.
+1. **Slice 6 (Profile Gate, Check Execution & Findings)**: Connect profile runner, render FindingCard with bidirectional traceability links to evidence rows, and display severity indicators.
+2. **Slice 7 (Human Review Decisions, Open Issues & Export Gate)**: Implement ReviewDecisionForm (human decisions separate from software findings), OpenIssuesList, and mandatory export gating.
+3. **Slice 8 (Cited Export Packet Generator & Print Stylesheet)**: Implement Markdown, JSON, and printable HTML packet generation with citations, cover page, and disclaimers.
 
 ---
 
