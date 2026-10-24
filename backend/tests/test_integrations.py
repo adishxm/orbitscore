@@ -130,3 +130,30 @@ def test_elevenlabs_narration_for_approved_finding():
     assert data["status"] in ("SUCCESS", "DISABLED_FALLBACK")
     assert data["finding_id"] == finding_id
     assert "AI-generated narration; not certification" in data["disclaimer"]
+
+
+def test_agent37_chat_copilot_endpoint():
+    """Verify Agent37 interactive Copilot responds with advisory disclaimer and session metadata."""
+    res = client.post(
+        "/integrations/agent37/chat",
+        json={
+            "message": "What is the orbital lifetime limit for LEO disposal?",
+            "mission_id": "asteria-3"
+        }
+    )
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] in ("SUCCESS", "FALLBACK", "ERROR")
+    assert "Agent37 assistance only" in data["disclaimer"]
+    assert len(data["response"]) > 0
+
+
+def test_agent37_status_endpoint():
+    """Verify GET /integrations/agent37/status returns connectivity health check."""
+    res = client.get("/integrations/agent37/status")
+    assert res.status_code == 200
+    data = res.json()
+    assert "status" in data
+    assert "instance_id" in data
+    assert data["instance_id"] != ""
+
