@@ -2,9 +2,21 @@
 
 ## Current Status: Phase One & Phase Two-A Planning Completed
 
-- **Phase**: Phase One (Reference Site Deep Inspection) & Phase Two-A (Design System & Implementation Plan)
-- **Status**: Planning & Analysis Complete. No application code written yet. Awaiting user review before Phase Two-B build.
-- **Timestamp**: 2026-10-24T15:45:00+05:30
+- **Phase**: CSS Architecture Overhaul & Honest Content Alignment
+- **Status**: Step 1 Diagnosis Complete. Proceeding to Step 2 & 3 implementation.
+- **Timestamp**: 2026-10-24T19:45:00+05:30
+
+### Step 1 Diagnosis & Root Cause
+- **Module & Class Audit**: 23 stylesheets and 318 CSS classes audited. 0 undefined classes used in TSX; 0 unimported stylesheets.
+- **Global Entry**: `main.tsx` correctly imports `global.css` and `print.css`, which in turns imports `tokens.css`. No Tailwind present.
+- **Root Cause**: Severe token naming mismatch. `tokens.css` defines `--os-*` tokens (`--os-space-*`, `--os-color-accent-cyan`, `--os-color-surface-card`, `--os-font-display`, `--os-type-*`), whereas nearly all `.module.css` files and component inline styles referenced undeclared legacy tokens (`--space-*`, `--color-brand-cyan`, `--color-surface-card`, `--font-heading`, `--font-size-*`).
+- **Impact**: Browsers treat declarations with invalid `var()` references as invalid at computed-value time, causing grid gaps, card backgrounds, borders, padding, and fluid typography to completely collapse to transparent/unset/0.
+- **Fix Plan**:
+  1. Base & Layout Primitives: Establish `tokens.css` as single source of truth, refine `global.css` with reset, typography scale, container (1360px max-width, 934px content focus), and layout utilities.
+  2. Module Migration: Migrate every `.module.css` to use strictly `--os-*` design tokens, eliminating all legacy variables.
+  3. Inline Styles: Remove all inline styles in TSX and replace with semantic CSS module classes.
+  4. Content Honesty: Align 5 evidence states (confirmed, unconfirmed, missing, conflicting, out-of-scope; remove stale as state), remove unverified claims, fix human review decision types, and update live API modal.
+  5. Multi-Viewport Verification: Screenshot and audit at 1920, 1440, 1024, 768, 390px, ensuring zero horizontal overflow, 0 axe a11y violations, and passing tests.
 
 ---
 
