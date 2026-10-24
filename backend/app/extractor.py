@@ -48,6 +48,20 @@ def extract_text_from_bytes(content: bytes, filename: str, media_type: str = "")
         except Exception:
             pass
 
+        # Fallback to pypdf
+        try:
+            import pypdf
+            import io
+            reader = pypdf.PdfReader(io.BytesIO(content))
+            pages = []
+            for page_idx, page in enumerate(reader.pages):
+                text = page.extract_text() or ""
+                pages.append((page_idx + 1, text))
+            if pages and any(p[1].strip() for p in pages):
+                return pages
+        except Exception:
+            pass
+
         raise ValueError("Failed to extract readable text from PDF artifact.")
 
     if lower_name.endswith(".json") or media_type == "application/json":
