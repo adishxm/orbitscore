@@ -43,7 +43,7 @@
   - Zero external font CDN requests
 
 ### Slice 2: Layout Shell, Navigation & Honesty Banners
-- **Status**: COMPLETE
+- **Status**: COMPLETE (commit `982b372`)
 - **Gates Verified**:
   - `tsc --noEmit`: 0 errors
   - `npm run build`: Success in 563ms (clean chunking into React, state, motion, icons, app CSS)
@@ -53,13 +53,24 @@
   - Mandatory disclaimer on all pages and footer: "Despite the name, OrbitScore does not score or certify missions; it organizes evidence for human review."
   - Routes verified: `/`, `/how-it-works`, `/profiles`, `/about-limits`, `/status`, `/missions`, `/missions/:id`, `*` (404)
 
+### Slice 3: Domain Types & Pure Deterministic Check Engine
+- **Status**: COMPLETE
+- **Gates Verified**:
+  - `tsc --noEmit`: 0 errors
+  - `npm run build`: Success in 562ms
+  - `npm test`: 21/21 tests passed across 3 test suites (`demo-evidence-completeness.test.ts`, `layout-shell.test.tsx`, `banned-words-lint.test.ts`)
+  - Banned-wording linter: 0 violations across all domain types, profiles, and check definitions
+  - Applicability gate tested: In-scope CubeSats (1U-27U) execute 6 checks; out-of-scope vehicles (e.g. ESPA) produce single `out_of_profile_scope` finding with explicit inapplicability rationale
+  - Pure check functions tested: C-01 (Missing parameters), C-02 (SI Units validation), C-03 (Cross-document conflicts), C-04 (Source citations & locators), C-05 (Temporal baseline currency), C-06 (Human verification)
+  - Snapshot hashing: Deterministic 32-bit hex digest verified reproducible across identical datasets and sensitive to value mutations
+
 ---
 
 ## Next 3 Actions
 
-1. **Slice 3 (Domain Types & Pure Check Engine)**: Implement domain models in `src/types/domain.ts` and pure check functions in `src/profiles/demo-evidence-completeness.ts` (checks C-01 through C-06 and applicability gate) with 100% test coverage.
-2. **Slice 4 (Synthetic Asteria-3 Fixture & State Store)**: Implement `src/fixtures/asteria-3.ts`, `src/fixtures/microsat-x.ts`, and Zustand store `useOrbitStore.ts` with local persistence, input snapshot freezing, and clean demo reset.
-3. **Slice 5 (Workspace Flow: Context, Evidence Register & Confirmation)**: Build DataTable with 5 state chips, citation locator inspector drawer, and Stepper navigation.
+1. **Slice 4 (Synthetic Asteria-3 Fixture & State Store)**: Implement `src/fixtures/asteria-3.ts`, `src/fixtures/microsat-x.ts`, and Zustand store `useOrbitStore.ts` with local persistence, input snapshot freezing, and clean demo reset.
+2. **Slice 5 (Workspace Flow: Context, Evidence Register & Confirmation)**: Build DataTable with 5 state chips, citation locator inspector drawer, and Stepper navigation.
+3. **Slice 6 (Profile Gate, Check Execution & Findings)**: Connect profile runner, render FindingCard with bidirectional traceability links to evidence rows, and display severity indicators.
 
 ---
 
