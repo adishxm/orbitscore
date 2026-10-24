@@ -7,12 +7,12 @@
   "last_team_report": "team-report.html",
   "tasks": {
     "T001": "done",
-    "T002": "ready",
-    "T003": "blocked-by-T002",
-    "T004": "blocked-by-T002",
+    "T002": "done",
+    "T003": "ready",
+    "T004": "ready",
     "T005": "blocked-by-T003",
     "T006": "ready",
-    "T007": "blocked-by-T002",
+    "T007": "ready",
     "T008": "blocked-by-T005",
     "T009": "verifying"
   },

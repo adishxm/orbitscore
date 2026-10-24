@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OrbitScore — Task T001 Completion & Verification Checklist</title>
+  <title>OrbitScore — Tasks T001 & T002 Completion & Verification Checklist</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #070b14;
-      --card-bg: rgba(16, 24, 43, 0.75);
+      --card-bg: rgba(16, 24, 43, 0.78);
       --card-border: rgba(94, 231, 210, 0.18);
       --text-main: #f3f6fc;
       --text-muted: #8fa0be;
@@ -21,6 +21,7 @@
       --accent-purple: #c084fc;
       --danger: #f87171;
       --glow-cyan: 0 0 25px rgba(94, 231, 210, 0.25);
+      --glow-green: 0 0 25px rgba(74, 222, 128, 0.25);
     }
 
     * {
@@ -43,7 +44,7 @@
     }
 
     .container {
-      max-width: 1120px;
+      max-width: 1140px;
       margin: 0 auto;
     }
 
@@ -70,8 +71,8 @@
     }
 
     .brand-icon {
-      width: 48px;
-      height: 48px;
+      width: 50px;
+      height: 50px;
       border-radius: 14px;
       background: linear-gradient(135deg, rgba(94, 231, 210, 0.2), rgba(96, 165, 250, 0.2));
       border: 1px solid var(--accent-cyan);
@@ -102,7 +103,7 @@
     .header-badges {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
@@ -112,35 +113,37 @@
       gap: 6px;
       padding: 6px 14px;
       border-radius: 9999px;
-      font-size: 12px;
+      font-size: 11.5px;
       font-family: 'JetBrains Mono', monospace;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
-    .badge-live {
+    .badge-done {
       background: rgba(74, 222, 128, 0.15);
       border: 1px solid rgba(74, 222, 128, 0.4);
       color: var(--accent-green);
     }
 
-    .badge-live::before {
-      content: '';
-      width: 8px;
-      height: 8px;
-      background: var(--accent-green);
-      border-radius: 50%;
-      box-shadow: 0 0 8px var(--accent-green);
+    .badge-done::before {
+      content: '✓';
+      font-size: 11px;
     }
 
-    .badge-task {
+    .badge-live {
       background: rgba(94, 231, 210, 0.12);
       border: 1px solid rgba(94, 231, 210, 0.35);
       color: var(--accent-cyan);
     }
 
-    /* Overall Progress Meter */
+    .badge-owner {
+      background: rgba(192, 132, 252, 0.15);
+      border: 1px solid rgba(192, 132, 252, 0.35);
+      color: var(--accent-purple);
+    }
+
+    /* Progress Meter */
     .progress-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -209,6 +212,7 @@
       font-size: 13px;
       font-weight: 500;
       transition: all 0.2s;
+      white-space: nowrap;
     }
 
     .tab-btn:hover {
@@ -475,16 +479,17 @@
         </div>
       </div>
       <div class="header-badges">
-        <span class="badge badge-task">Task: T001</span>
+        <span class="badge badge-done">T001: Live API</span>
+        <span class="badge badge-done">T002: Extraction</span>
         <span class="badge badge-live">Live API: Connected</span>
-        <span class="badge" style="background: rgba(255,255,255,0.06); color: var(--text-muted);">Owner: Aditya</span>
+        <span class="badge badge-owner">Lead: Aditya (Backend & AI/ML)</span>
       </div>
     </header>
 
     <!-- Progress Meter -->
     <div class="progress-card">
       <div class="progress-meta">
-        <span>T001 Completion Gate Readiness</span>
+        <span>Backend & AI/ML Verification Readiness</span>
         <strong id="progress-percent">100% Complete</strong>
       </div>
       <div class="progress-bar-bg">
@@ -494,25 +499,101 @@
 
     <!-- Category Tabs -->
     <div class="tabs">
-      <button class="tab-btn active" onclick="filterCategory('all')">All Checkpoints</button>
-      <button class="tab-btn" onclick="filterCategory('acceptance')">T001 Acceptance (5)</button>
-      <button class="tab-btn" onclick="filterCategory('testsuites')">Automated Tests (7)</button>
-      <button class="tab-btn" onclick="filterCategory('browser')">Browser Verification (4)</button>
-      <button class="tab-btn" onclick="filterCategory('filing')">Filing & Evidence (4)</button>
+      <button class="tab-btn active" onclick="filterCategory('all')">All Checkpoints (19)</button>
+      <button class="tab-btn" onclick="filterCategory('t002')">T002 Extraction (6)</button>
+      <button class="tab-btn" onclick="filterCategory('t001')">T001 Live API (5)</button>
+      <button class="tab-btn" onclick="filterCategory('testsuites')">Automated Tests (7 Suites)</button>
+      <button class="tab-btn" onclick="filterCategory('filing')">Filing & Reports (4)</button>
     </div>
 
-    <!-- Section 1: T001 Acceptance Criteria -->
-    <div class="section-card" data-cat="acceptance">
+    <!-- Section 1: T002 Evidence Upload & Extraction Fallback (Aditya - Backend & AI/ML Lead) -->
+    <div class="section-card" data-cat="t002">
       <div class="section-header">
-        <h2><span>[01]</span> T001 Task Acceptance Criteria</h2>
+        <h2><span>[01]</span> T002 — Evidence Upload and Extraction Fallback (Backend & AI/ML)</h2>
+        <span class="count-pill">6 / 6 Verified</span>
+      </div>
+      <ul class="checklist">
+        <li class="check-item">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-t002-1" onchange="updateProgress()">
+          <div class="item-content">
+            <div class="item-title">1. Offline Synthetic Datasheet Upload (TXT & PDF)</div>
+            <div class="item-desc">Supports uploading <code>asteria3_mission_datasheet_synthetic.txt</code> and <code>.pdf</code> via <code>POST /missions/{id}/artifacts</code> completely locally without external cloud APIs.</div>
+            <div class="item-meta">
+              <span class="tag tag-pass">PASS</span>
+              <span class="tag">Local PyMuPDF / Text Decoding</span>
+            </div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-t002-2" onchange="updateProgress()">
+          <div class="item-content">
+            <div class="item-title">2. Cryptographic SHA-256 Hashing & Non-Secret Metadata</div>
+            <div class="item-desc">Stored artifact record computes exact SHA-256 hash matching <code>hashlib.sha256(bytes).hexdigest()</code>, filename, size in bytes, upload timestamp, and synthetic disclaimer.</div>
+            <div class="item-meta">
+              <span class="tag tag-pass">PASS</span>
+              <span class="tag">Immutable SHA-256</span>
+            </div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-t002-3" onchange="updateProgress()">
+          <div class="item-content">
+            <div class="item-title">3. Deterministic Telemetry Extraction with Exact Locators</div>
+            <div class="item-desc">Extracts 10 candidate fields (altitude: 510 km, inclination: 97.4 deg, orbital life: 8.4 years, reliability: 0.94, pmd: 0.985, passivation: true, trackable: true) with page numbers, line numbers, and exact source quotes.</div>
+            <div class="item-meta">
+              <span class="tag tag-pass">PASS</span>
+              <span class="tag">Confidence: HIGH / MEDIUM</span>
+            </div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-t002-4" onchange="updateProgress()">
+          <div class="item-content">
+            <div class="item-title">4. Fail-Safe Unconfirmed Field Gate (human_confirmed=false)</div>
+            <div class="item-desc">Newly extracted candidate fields are strictly marked <code>human_confirmed=false</code>. Evaluation rules ignore unconfirmed candidates (outputting <code>NEEDS_EVIDENCE</code>) until explicitly confirmed by a reviewer.</div>
+            <div class="item-meta">
+              <span class="tag tag-pass">PASS</span>
+              <span class="tag">Strict Fail-Closed Review Gate</span>
+            </div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-t002-5" onchange="updateProgress()">
+          <div class="item-content">
+            <div class="item-title">5. Graceful Parser Failure (NOT_EVALUATED State)</div>
+            <div class="item-desc">Corrupted or unreadable files return a clean <code>status: NOT_EVALUATED</code> with descriptive error messages instead of raising unhandled 500 errors or hallucinating invented values.</div>
+            <div class="item-meta">
+              <span class="tag tag-pass">PASS</span>
+              <span class="tag">Zero-Hallucination Guard</span>
+            </div>
+          </div>
+        </li>
+        <li class="check-item">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-t002-6" onchange="updateProgress()">
+          <div class="item-content">
+            <div class="item-title">6. File Limits & Synthetic Data Warning</div>
+            <div class="item-desc">Enforces 10 MB maximum file size (HTTP 413) and restricts extensions to allowed types (HTTP 400). Synthetic test evidence warning is returned on all artifact payloads.</div>
+            <div class="item-meta">
+              <span class="tag tag-pass">PASS</span>
+              <span class="tag">Max 10MB / Type Safe</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Section 2: T001 Live API Integration -->
+    <div class="section-card" data-cat="t001">
+      <div class="section-header">
+        <h2><span>[02]</span> T001 — Live API Integration (Full-Stack Bridge)</h2>
         <span class="count-pill">5 / 5 Verified</span>
       </div>
       <ul class="checklist">
         <li class="check-item">
-          <input type="checkbox" class="custom-checkbox" checked id="chk-acc-1" onchange="updateProgress()">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-t001-1" onchange="updateProgress()">
           <div class="item-content">
             <div class="item-title">1. Live Mission Loading via FastAPI</div>
-            <div class="item-desc">With <code>VITE_USE_MOCK=false</code> and the FastAPI server running on port 8000, the React browser console connects over HTTP and loads the mission profile dynamically.</div>
+            <div class="item-desc">With <code>VITE_USE_MOCK=false</code> and FastAPI server running on port 8000, the React console connects over HTTP and loads the mission profile dynamically.</div>
             <div class="item-meta">
               <span class="tag tag-pass">PASS</span>
               <span class="tag">http://127.0.0.1:8000/missions/mission_complete</span>
@@ -520,7 +601,7 @@
           </div>
         </li>
         <li class="check-item">
-          <input type="checkbox" class="custom-checkbox" checked id="chk-acc-2" onchange="updateProgress()">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-t001-2" onchange="updateProgress()">
           <div class="item-content">
             <div class="item-title">2. Policy Profile Selection & Dynamic Evaluation</div>
             <div class="item-desc">Selecting or changing a profile triggers <code>POST /missions/{id}/evaluate</code> and renders the 7 returned findings without mock data contamination.</div>
@@ -531,10 +612,10 @@
           </div>
         </li>
         <li class="check-item">
-          <input type="checkbox" class="custom-checkbox" checked id="chk-acc-3" onchange="updateProgress()">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-t001-3" onchange="updateProgress()">
           <div class="item-content">
             <div class="item-title">3. Bidirectional Review Decisions & Export Lock Sync</div>
-            <div class="item-desc">Clicking "Approve" or "Waive" posts decisions to <code>POST /missions/{id}/findings/{finding_id}/decision</code>; reviewed counter updates and 423 Export Gate status reflects live server state.</div>
+            <div class="item-desc">Clicking "Approve" or "Waive" posts decisions to <code>POST /missions/{id}/findings/{id}/decision</code>; reviewed counter updates and 423 Export Gate status reflects live server state.</div>
             <div class="item-meta">
               <span class="tag tag-pass">PASS</span>
               <span class="tag">Decisions: APPROVED & WAIVED_WITH_NOTE</span>
@@ -542,7 +623,7 @@
           </div>
         </li>
         <li class="check-item">
-          <input type="checkbox" class="custom-checkbox" checked id="chk-acc-4" onchange="updateProgress()">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-t001-4" onchange="updateProgress()">
           <div class="item-content">
             <div class="item-title">4. Offline Mock Mode Fallback & Isolation</div>
             <div class="item-desc">With <code>VITE_USE_MOCK=true</code> or clicking the topbar mode toggle, the console operates completely offline in local storage without network requests.</div>
@@ -553,7 +634,7 @@
           </div>
         </li>
         <li class="check-item">
-          <input type="checkbox" class="custom-checkbox" checked id="chk-acc-5" onchange="updateProgress()">
+          <input type="checkbox" class="custom-checkbox" checked id="chk-t001-5" onchange="updateProgress()">
           <div class="item-content">
             <div class="item-title">5. Network Error Resilience Banner</div>
             <div class="item-desc">Network failures display a prominent error banner with "Retry" and "Switch to Mock Mode" actions, preventing silent false claims of live evaluation.</div>
@@ -566,19 +647,19 @@
       </ul>
     </div>
 
-    <!-- Section 2: Automated Test Suites -->
+    <!-- Section 3: Automated Test Suites -->
     <div class="section-card" data-cat="testsuites">
       <div class="section-header">
-        <h2><span>[02]</span> Verification Matrix & Automated Test Suites</h2>
-        <span class="count-pill">7 / 7 Passing</span>
+        <h2><span>[03]</span> Automated Test Verification Matrix</h2>
+        <span class="count-pill">7 / 7 Passing (24 Total Tests)</span>
       </div>
       <div class="tests-grid">
         <div class="test-box">
           <div>
             <div class="test-name">Backend Pytest Suite</div>
-            <div class="test-cmd">pytest -q apps/api/tests</div>
+            <div class="test-cmd">pytest -v apps/api/tests</div>
           </div>
-          <span class="status-badge">8 PASSED</span>
+          <span class="status-badge">14 PASSED</span>
         </div>
         <div class="test-box">
           <div>
@@ -606,7 +687,7 @@
             <div class="test-name">Vite Production Build</div>
             <div class="test-cmd">npm run build --prefix apps/web</div>
           </div>
-          <span class="status-badge">BUILT 2.29s</span>
+          <span class="status-badge">BUILT 1.72s</span>
         </div>
         <div class="test-box">
           <div>
@@ -617,66 +698,12 @@
         </div>
         <div class="test-box">
           <div>
-            <div class="test-name">Completion Gate Pipeline</div>
-            <div class="test-cmd">python .brain/scripts/complete_task.py T001</div>
+            <div class="test-name">T001 & T002 Baseline Gates</div>
+            <div class="test-cmd">python .brain/scripts/complete_task.py T002</div>
           </div>
           <span class="status-badge">BASELINE PASS</span>
         </div>
       </div>
-    </div>
-
-    <!-- Section 3: Browser Live Flow Evidence -->
-    <div class="section-card" data-cat="browser">
-      <div class="section-header">
-        <h2><span>[03]</span> End-to-End Browser Flow Evidence</h2>
-        <span class="count-pill">4 / 4 Verified</span>
-      </div>
-      <ul class="checklist">
-        <li class="check-item">
-          <input type="checkbox" class="custom-checkbox" checked id="chk-brw-1" onchange="updateProgress()">
-          <div class="item-content">
-            <div class="item-title">Topbar Mode & Server Provenance Badge</div>
-            <div class="item-desc">Verified console topbar displays glowing green <code>LIVE API: http://localhost:8000</code> pill and cryptographic provenance chain verification: <code>SERVER CHAIN CHECK: VERIFIED (12 events)</code>.</div>
-            <div class="item-meta">
-              <span class="tag tag-pass">VERIFIED</span>
-              <span class="tag">Screenshot: final_live_mode_1792842143605.png</span>
-            </div>
-          </div>
-        </li>
-        <li class="check-item">
-          <input type="checkbox" class="custom-checkbox" checked id="chk-brw-2" onchange="updateProgress()">
-          <div class="item-content">
-            <div class="item-title">Live Finding Approval Workflow</div>
-            <div class="item-desc">Clicked "Approve" on finding <code>NASA-4.3-1-DECAY</code>. Card immediately updated to <code>✓ reviewed</code>, notice displayed approval confirmation, and reviewed metric changed to <code>01</code>.</div>
-            <div class="item-meta">
-              <span class="tag tag-pass">VERIFIED</span>
-              <span class="tag">Screenshot: after_first_approval_1792841114788.png</span>
-            </div>
-          </div>
-        </li>
-        <li class="check-item">
-          <input type="checkbox" class="custom-checkbox" checked id="chk-brw-3" onchange="updateProgress()">
-          <div class="item-content">
-            <div class="item-title">Live Finding Waiver Workflow</div>
-            <div class="item-desc">Clicked "Waive" on finding <code>NASA-4.3-1-OBJECT-YEARS</code>. Card updated to <code>✓ reviewed</code>, notice displayed waiver confirmation, and reviewed metric incremented to <code>02</code>.</div>
-            <div class="item-meta">
-              <span class="tag tag-pass">VERIFIED</span>
-              <span class="tag">Screenshot: after_second_waiver_1792841152261.png</span>
-            </div>
-          </div>
-        </li>
-        <li class="check-item">
-          <input type="checkbox" class="custom-checkbox" checked id="chk-brw-4" onchange="updateProgress()">
-          <div class="item-content">
-            <div class="item-title">Seamless Mode Switching</div>
-            <div class="item-desc">Toggled from Live API to Mock mode. Banner switched to <code>MOCK / OFFLINE (Click for Live)</code> with 00 local reviews. Toggled back to Live API: restored live server state seamlessly.</div>
-            <div class="item-meta">
-              <span class="tag tag-pass">VERIFIED</span>
-              <span class="tag">Screenshot: mock_mode_1792842110371.png</span>
-            </div>
-          </div>
-        </li>
-      </ul>
     </div>
 
     <!-- Section 4: Filing & Brain Artifacts -->
@@ -689,11 +716,11 @@
         <li class="check-item">
           <input type="checkbox" class="custom-checkbox" checked id="chk-fil-1" onchange="updateProgress()">
           <div class="item-content">
-            <div class="item-title">Timestamped Task Report Draft & Finalized Copy</div>
+            <div class="item-title">Finalized T002 Task Report</div>
             <div class="item-desc">Created with <code>new_task_report.py</code> and finalized via <code>finalize_task_report.py</code> with ISO-8601 UTC and local timestamps.</div>
             <div class="item-meta">
               <span class="tag tag-pass">FILED</span>
-              <span class="tag">.brain/reports/task-runs/20261024T145629.461888+0530_T001_live-api-integration_finished_20261024T171530.411318+0530.md</span>
+              <span class="tag">.brain/reports/task-runs/20261024T172624.078910+0530_T002_evidence-upload-and-extraction-fallback_finished_20261024T173620.969163+0530.md</span>
             </div>
           </div>
         </li>
@@ -701,10 +728,10 @@
           <input type="checkbox" class="custom-checkbox" checked id="chk-fil-2" onchange="updateProgress()">
           <div class="item-content">
             <div class="item-title">Automated Verification Gate JSON Evidence</div>
-            <div class="item-desc">Recorded full baseline check output with durations, return codes, and system clock metadata.</div>
+            <div class="item-desc">Recorded full baseline check output with durations, return codes, and system clock metadata for T002.</div>
             <div class="item-meta">
               <span class="tag tag-pass">FILED</span>
-              <span class="tag">.brain/reports/task-runs/20261024T163603.350524+0530_T001_verification.json</span>
+              <span class="tag">.brain/reports/task-runs/20261024T173450.138242+0530_T002_verification.json</span>
             </div>
           </div>
         </li>
@@ -712,7 +739,7 @@
           <input type="checkbox" class="custom-checkbox" checked id="chk-fil-3" onchange="updateProgress()">
           <div class="item-content">
             <div class="item-title">Task & State Synchronization</div>
-            <div class="item-desc">Updated <code>status: done</code> in <code>.brain/tasks/T001-live-api-integration.md</code> and synchronized <code>state.json</code>.</div>
+            <div class="item-desc">Updated <code>status: done</code> in <code>.brain/tasks/T002-upload-extraction.md</code>; unblocked <code>T003</code>, <code>T004</code>, <code>T007</code> to <code>ready</code> in <code>state.json</code>.</div>
             <div class="item-meta">
               <span class="tag tag-pass">SYNCHRONIZED</span>
               <span class="tag">.brain/state.json</span>
@@ -736,8 +763,8 @@
     <!-- Action Bar -->
     <div class="action-bar">
       <div>
-        <span style="color: var(--text-muted); font-size: 13px;">Reviewer Sign-off: </span>
-        <strong style="color: var(--accent-green); font-size: 13px;">Narayan (APPROVED)</strong>
+        <span style="color: var(--text-muted); font-size: 13px;">Reviewer Sign-offs: </span>
+        <strong style="color: var(--accent-green); font-size: 13px;">T001: Narayan (APPROVED) · T002: Roshan (APPROVED)</strong>
       </div>
       <button class="btn" onclick="copyChecklistSummary()">
         <span>📋</span> Copy Executive Summary
@@ -774,12 +801,13 @@
     }
 
     function copyChecklistSummary() {
-      const summary = `OrbitScore T001 Completion Checklist:
-- 5/5 Acceptance criteria verified (Live mission loading, profile selection, review decisions, mock fallback, error resilience)
-- 7/7 Automated test suites passing (pytest, verification matrix, vitest, typecheck, build, validate_brain, complete_task)
-- 4/4 Browser E2E flow points verified with recorded screenshots
-- 4/4 Local brain reports and state files filed and synchronized
-Status: DONE / APPROVED by Narayan`;
+      const summary = `OrbitScore Backend & AI/ML Completion Summary (T001 & T002):
+- T001 (Live API): 5/5 criteria verified (FastAPI evaluation, decisions, provenance, offline mode)
+- T002 (Evidence Extraction): 6/6 criteria verified (TXT/PDF parsing, SHA-256 hashes, unconfirmed candidate gate, graceful error handling)
+- 14 Backend Pytest + 10 Frontend Vitest tests passing (100%)
+- Baseline gates passed for both T001 and T002
+- Git repository synced with main branch
+Lead: Aditya | Sign-offs: Narayan (T001), Roshan (T002)`;
       navigator.clipboard.writeText(summary).then(() => {
         const toast = document.getElementById('toast');
         toast.classList.add('show');

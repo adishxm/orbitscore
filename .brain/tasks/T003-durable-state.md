@@ -1,6 +1,6 @@
 # T003 — Durable local state
 
-- status: blocked-by-T002
+- status: ready
 - owner: Aditya
 - reviewer: Roshan
 - priority: P1

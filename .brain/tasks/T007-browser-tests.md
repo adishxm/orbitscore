@@ -1,6 +1,6 @@
 # T007 — Browser acceptance tests
 
-- status: blocked-by-T002
+- status: ready
 - owner: Narayan
 - reviewer: Roshan
 - priority: P1

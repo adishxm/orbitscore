@@ -1,6 +1,6 @@
 # T002 — Evidence upload and extraction fallback
 
-- status: ready
+- status: done
 - owner: Aditya
 - reviewer: Roshan
 - priority: P0
