@@ -142,8 +142,10 @@ def test_nasa_odar_and_isro_eomp_generation():
 
 
 def test_odar_excessive_lifetime_and_missing_evidence_fail_safe():
-    """Verify that excessive lifetime (>5yr) reports NON-CONFORMANT and missing passivation reports UNVERIFIED."""
-    from backend.app.odar_generator import generate_nasa_odar_markdown
+    try:
+        from app.odar_generator import generate_nasa_odar_markdown
+    except ImportError:
+        from backend.app.odar_generator import generate_nasa_odar_markdown
 
     empty_mission = {"name": "TestSat", "mass_budget_kg": 50.0}
     # 50-year decay scenario with zero evidence

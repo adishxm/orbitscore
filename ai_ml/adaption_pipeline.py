@@ -131,34 +131,99 @@ def partition_dataset(
 
     return train, val, test
 
+import re
+from ai_ml.evaluation.extraction_metrics import evaluate_field_extractions
+
+def extract_baseline_fields(raw_text: str) -> dict[str, Any]:
+    """Deterministic regex baseline extractor for synthetic flight documents."""
+    fields: dict[str, Any] = {}
+    
+    # Wet mass
+    m_wet = re.search(r"wet\s+mass\s+(?:is|of)?\s*([\d\.]+)\s*kg", raw_text, re.IGNORECASE)
+    if m_wet:
+        fields["wet_mass_kg"] = float(m_wet.group(1))
+
+    # Dry mass
+    m_dry = re.search(r"dry\s+mass\s+(?:is|of)?\s*([\d\.]+)\s*kg", raw_text, re.IGNORECASE)
+    if m_dry:
+        fields["dry_mass_kg"] = float(m_dry.group(1))
+
+    # Apogee altitude
+    m_ap = re.search(r"apogee\s+altitude\s+(?:is|of)?\s*([\d\.]+)\s*km", raw_text, re.IGNORECASE)
+    if m_ap:
+        fields["apogee_altitude_km"] = float(m_ap.group(1))
+
+    # Perigee altitude
+    m_per = re.search(r"perigee\s+altitude\s+(?:is|of)?\s*([\d\.]+)\s*km", raw_text, re.IGNORECASE)
+    if m_per:
+        fields["perigee_altitude_km"] = float(m_per.group(1))
+
+    # Circular altitude
+    m_alt = re.search(r"([\d\.]+)\s*km\s+circular\s+altitude", raw_text, re.IGNORECASE)
+    if m_alt:
+        fields["altitude_km"] = float(m_alt.group(1))
+
+    # Inclination
+    m_inc = re.search(r"inclination\s+is\s+([\d\.]+)\s*degrees", raw_text, re.IGNORECASE)
+    if m_inc:
+        fields["inclination_deg"] = float(m_inc.group(1))
+
+    # Disposal duration
+    m_disp = re.search(r"(?:calculated\s+at|lifetime\s+is|lifetime\s+without\s+propulsion\s+is)\s*([\d\.]+)\s*years?", raw_text, re.IGNORECASE)
+    if m_disp:
+        fields["disposal_duration_years"] = float(m_disp.group(1))
+
+    # Casualty risk
+    m_cas = re.search(r"casualty\s+risk\s+of\s+([1-9][\d]*:[\d]+)", raw_text, re.IGNORECASE)
+    if m_cas:
+        fields["human_casualty_risk"] = m_cas.group(1)
+
+    # Passivation
+    if "venting" in raw_text.lower() and "batteries" in raw_text.lower():
+        fields["passivation_method"] = "venting_and_switch"
+
+    # Energy storage
+    m_eng = re.search(r"stored\s+energy\s+is\s+([\d\.]+)\s*j", raw_text, re.IGNORECASE)
+    if m_eng:
+        fields["energy_storage_joules"] = float(m_eng.group(1))
+
+    return fields
+
 def compute_synthetic_metrics(
     train: list[SyntheticExtractionSample],
     val: list[SyntheticExtractionSample],
-    test: list[SyntheticExtractionSample]
+    test: list[SyntheticExtractionSample],
+    custom_predictions: Optional[dict[str, dict[str, Any]]] = None
 ) -> AdaptionEvaluationMetrics:
     """
-    Evaluate baseline extraction precision, recall, and F1 score against ground truth fields.
+    Rigorously evaluate baseline or custom extraction against ground truth fields.
+    Does not assume 1.0; metrics reflect actual true positives, false positives, and false negatives.
     """
     all_samples = train + val + test
     dataset_bytes = json.dumps([s.model_dump() for s in all_samples], sort_keys=True).encode("utf-8")
     dataset_sha256 = hashlib.sha256(dataset_bytes).hexdigest()
 
-    # Calculate simulated extraction performance across held-out test split
-    total_expected = sum(len(s.ground_truth_fields) for s in test)
-    # Baseline deterministic heuristic matches expected fields on test split
-    correct_matches = total_expected
-    precision = 1.0 if correct_matches > 0 else 0.0
-    recall = 1.0 if total_expected > 0 else 0.0
-    f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0.0
+    ground_truth_map: dict[str, dict[str, Any]] = {s.sample_id: s.ground_truth_fields for s in test}
+    
+    if custom_predictions is not None:
+        predictions_map = custom_predictions
+    else:
+        # Run empirical regex extractor across held-out test split
+        predictions_map = {s.sample_id: extract_baseline_fields(s.raw_text) for s in test}
+
+    report = evaluate_field_extractions(
+        predictions_by_sample=predictions_map,
+        ground_truth_by_sample=ground_truth_map
+    )
 
     return AdaptionEvaluationMetrics(
         total_samples=len(all_samples),
         train_count=len(train),
         val_count=len(val),
         test_count=len(test),
-        precision=round(precision, 4),
-        recall=round(recall, 4),
-        f1_score=round(f1, 4),
+        precision=report.precision,
+        recall=report.recall,
+        f1_score=report.f1_score,
         dataset_sha256=dataset_sha256,
         evaluated_at=datetime.now(timezone.utc).isoformat()
     )

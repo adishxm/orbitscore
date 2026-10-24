@@ -35,6 +35,18 @@
       "allowed_dispositions": ["complete", "deferred_by_owner"],
       "current_disposition": "complete",
       "note": "Explicit declaration of numpy and scikit-learn in canonical packaging."
+    },
+    "T013": {
+      "title": "Candidate schema, normalization, and validation",
+      "allowed_dispositions": ["complete", "deferred_by_owner"],
+      "current_disposition": "complete",
+      "note": "Domain normalizers, quote-to-text evidence validation, and rigorous extraction metrics."
+    },
+    "T014": {
+      "title": "ESA CDM event processing and baseline forecasting",
+      "allowed_dispositions": ["complete", "deferred_by_owner"],
+      "current_disposition": "complete",
+      "note": "Cutoff-safe event assembly, disjoint event partitioning, persistence baseline, and CLI subcommands."
     }
   },
   "completion_scope_warning": "This defines tracked MVP scope only; it cannot prove every possible product requirement, domain correctness, market success, regulatory fitness, or production readiness."

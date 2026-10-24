@@ -17,13 +17,15 @@
     "T009": "done",
     "T010": "done",
     "T011": "done",
-    "T012": "done"
+    "T012": "done",
+    "T013": "done",
+    "T014": "done"
   },
   "last_verification": {
-    "brain_validation": "passed; 12 tasks; project scope aligned",
+    "brain_validation": "passed; 14 tasks; project scope aligned",
     "brain_reporting_tests": "5 passed",
     "backend_pytest": "55 passed",
-    "ai_ml_pytest": "15 passed",
+    "ai_ml_pytest": "26 passed",
     "verification_matrix": "12 evaluations; provenance valid",
     "frontend_vitest": "67 passed across 10 suites",
     "typecheck": "passed",
