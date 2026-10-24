@@ -30,10 +30,18 @@ from ai_ml.evaluation.cdm_metrics import evaluate_cdm_forecast
 from ai_ml.datasets.sources import SourceDocumentRecord, validate_source_record
 
 
+ALLOWLISTED_MODEL_FAMILIES = {
+    "sklearn_gradient_boosting",
+    "sklearn_random_forest",
+    "persistence",
+    "train_median",
+}
+
+
 def load_and_validate_config(config_path: Optional[str]) -> Optional[Dict[str, Any]]:
     """
     Rigorously load and parse an experiment configuration file.
-    Fails and exits with code 1 if path does not exist or cannot be parsed as valid YAML.
+    Fails and exits with code 1 if path does not exist, cannot be parsed, or violates semantic invariants.
     """
     if not config_path:
         return None
@@ -49,6 +57,24 @@ def load_and_validate_config(config_path: Optional[str]) -> Optional[Dict[str, A
         if not isinstance(cfg, dict):
             sys.stderr.write(f"Invalid YAML configuration in {config_path}: expected dictionary mapping at root.\n")
             sys.exit(1)
+
+        # Semantic verification (V04 §9.2)
+        model_cfg = cfg.get("model", {})
+        if model_cfg:
+            family = model_cfg.get("family")
+            if family and family not in ALLOWLISTED_MODEL_FAMILIES:
+                sys.stderr.write(
+                    f"Config validation error: model family '{family}' is not in allowlist: {sorted(list(ALLOWLISTED_MODEL_FAMILIES))}\n"
+                )
+                sys.exit(1)
+
+        protocol_cfg = cfg.get("protocol", {})
+        if protocol_cfg:
+            cutoff = protocol_cfg.get("feature_cutoff_days")
+            if cutoff is not None and float(cutoff) < 0:
+                sys.stderr.write("Config validation error: feature_cutoff_days must be non-negative.\n")
+                sys.exit(1)
+
         return cfg
     except Exception as exc:
         sys.stderr.write(f"Error parsing configuration YAML '{config_path}': {exc}\n")
@@ -263,7 +289,9 @@ def handle_cdm_train(config: Optional[str] = None, demo: bool = False) -> int:
     train_events = [ev1, ev2]
     test_events = [ev3]
 
-    res = train_and_evaluate_cdm_regressor(train_events, test_events)
+    params = cfg.get("model", {}).get("parameters") if cfg else None
+    seed = int(cfg.get("seed", 42)) if cfg else 42
+    res = train_and_evaluate_cdm_regressor(train_events, test_events, parameters=params, random_state=seed)
     out = {
         "status": "TRAINED",
         "mode": "EXPERIMENT_CONFIGURED" if cfg else ("DEMO_SYNTHETIC" if demo else "DEFAULT_SYNTHETIC"),

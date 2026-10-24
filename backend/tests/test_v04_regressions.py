@@ -280,3 +280,60 @@ def test_r33_r34_r35_r36_r37_r38_model_registry_security(tmp_path):
     )
     with pytest.raises(ValueError, match="Cannot register unapproved"):
         register_trusted_artifact(unapproved_meta, {"dummy": 1}, artifact_dir=tmp_path)
+
+
+def test_v04_canonical_contract_and_orbital_routes():
+    from app.schemas import (
+        DataOrigin, TransportMode, ReviewState, AnalysisStatus, CanonicalEvidenceRecord
+    )
+    # V04-02: Canonical evidence record round-trip
+    rec = CanonicalEvidenceRecord(
+        field="operational_altitude_km",
+        value=700.0,
+        unit="km",
+        data_origin=DataOrigin.REAL_EXTERNAL,
+        transport_mode=TransportMode.SNAPSHOT,
+        review_state=ReviewState.CONFIRMED,
+        analysis_status=AnalysisStatus.AVAILABLE,
+        artifact_id="art_700",
+        source_locator={"page": 3, "line": 12}
+    )
+    d = rec.model_dump()
+    assert d["data_origin"] == "REAL_EXTERNAL"
+    assert d["transport_mode"] == "SNAPSHOT"
+    assert d["review_state"] == "CONFIRMED"
+    assert d["analysis_status"] == "AVAILABLE"
+
+    # R30: Pathway and decay-path field resolution (700 km / 53 deg)
+    mission_id = "r30_orbit_test"
+    save_mission({
+        "mission_id": mission_id,
+        "name": "CustomOrbitSat",
+        "fields": [
+            {"field": "operational_altitude_km", "value": 700.0, "human_confirmed": True},
+            {"field": "inclination_deg", "value": 53.0, "human_confirmed": True},
+            {"field": "remaining_orbital_life_years", "value": 15.0, "human_confirmed": True}
+        ]
+    })
+
+    from app.auth import get_configured_reviewer_key
+    reviewer_key = get_configured_reviewer_key()
+    headers = {"Authorization": f"Bearer {reviewer_key}"}
+
+    # Verify pathway reflects 700 km altitude and 53 deg inclination
+    res_path = client.get(f"/missions/{mission_id}/pathway", headers=headers)
+    assert res_path.status_code == 200
+    pdata = res_path.json()
+    assert pdata["altitude_km"] == 700.0
+    assert pdata["inclination_deg"] == 53.0
+    assert len(pdata["pathway_points"]) > 0
+
+    # Verify decay path reflects 700 km initial altitude and 15 year lifetime
+    res_decay = client.get(f"/missions/{mission_id}/decay-path", headers=headers)
+    assert res_decay.status_code == 200
+    ddata = res_decay.json()
+    assert ddata["initial_altitude_km"] == 700.0
+    assert ddata["estimated_lifetime_years"] == 15.0
+    assert ddata["model_status"] in ("SCHEMATIC", "RESEARCH")
+    assert len(ddata["decay_series"]) == 10
+

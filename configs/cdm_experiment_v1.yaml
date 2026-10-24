@@ -1,0 +1,34 @@
+schema_version: orbit-experiment-v1
+experiment_id: cdm_real_v1
+purpose: forecast_final_reported_log10_risk
+mode: research
+seed: 42
+dataset:
+  origin: REAL_EXTERNAL
+  source_manifest: fixtures/esa/source-manifest.json
+  table_manifest: fixtures/esa/tables-manifest.json
+  input_schema: esa-challenge-reviewed-v1
+protocol:
+  feature_cutoff_days: 2.0
+  label_definition_id: official-protocol-reviewed-v1
+  split_manifest: fixtures/esa/split-manifest.json
+features:
+  contract_id: cdm-four-feature-v1
+  ordered_names:
+    - feature_time_to_tca_days
+    - miss_distance_m
+    - relative_speed_m_s
+    - latest_early_risk
+model:
+  family: sklearn_gradient_boosting
+  parameters:
+    n_estimators: 40
+    max_depth: 3
+    learning_rate: 0.1
+baselines:
+  - last_observed_risk
+  - train_median
+outputs:
+  run_directory: experiments/cdm_real_v1
+approval:
+  requested_stage: candidate

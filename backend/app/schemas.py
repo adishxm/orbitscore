@@ -1,5 +1,43 @@
+from enum import Enum
 from typing import Any, Literal
 from pydantic import BaseModel, Field
+
+class DataOrigin(str, Enum):
+    REAL_EXTERNAL = "REAL_EXTERNAL"
+    VALIDATED_SIMULATION = "VALIDATED_SIMULATION"
+    SYNTHETIC_FIXTURE = "SYNTHETIC_FIXTURE"
+    USER_UNVERIFIED = "USER_UNVERIFIED"
+
+class TransportMode(str, Enum):
+    LIVE = "LIVE"
+    SNAPSHOT = "SNAPSHOT"
+    DEMO = "DEMO"
+    UNAVAILABLE = "UNAVAILABLE"
+
+class ReviewState(str, Enum):
+    UNCONFIRMED = "UNCONFIRMED"
+    CONFIRMED = "CONFIRMED"
+    CONFLICTING = "CONFLICTING"
+    REJECTED = "REJECTED"
+    OUT_OF_SCOPE = "OUT_OF_SCOPE"
+
+class AnalysisStatus(str, Enum):
+    AVAILABLE = "AVAILABLE"
+    MISSING_INPUT = "MISSING_INPUT"
+    INVALID_INPUT = "INVALID_INPUT"
+    OUT_OF_DOMAIN = "OUT_OF_DOMAIN"
+    MODEL_UNAVAILABLE = "MODEL_UNAVAILABLE"
+
+class CanonicalEvidenceRecord(BaseModel):
+    field: str
+    value: Any = None
+    unit: str | None = None
+    data_origin: DataOrigin = DataOrigin.SYNTHETIC_FIXTURE
+    transport_mode: TransportMode = TransportMode.SNAPSHOT
+    review_state: ReviewState = ReviewState.UNCONFIRMED
+    analysis_status: AnalysisStatus = AnalysisStatus.AVAILABLE
+    artifact_id: str | None = None
+    source_locator: dict[str, Any] = Field(default_factory=dict)
 
 EvidenceState = Literal["PASS_UNDER_PROFILE", "WARNING", "NEEDS_EVIDENCE", "CONFLICT", "NOT_EVALUATED"]
 

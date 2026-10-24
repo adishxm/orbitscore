@@ -42,15 +42,23 @@ def extract_cdm_feature_matrix(events: List[CDMEventExample]) -> Tuple[np.ndarra
     return X, y
 
 
-def build_cdm_regressor_pipeline(random_state: int = 42) -> Pipeline:
+def build_cdm_regressor_pipeline(
+    random_state: int = 42,
+    parameters: Optional[Dict[str, Any]] = None
+) -> Pipeline:
     """Build a leak-safe preprocessing and gradient boosting regression pipeline."""
+    params = parameters or {}
+    n_est = int(params.get("n_estimators", 40))
+    m_depth = int(params.get("max_depth", 3))
+    lr = float(params.get("learning_rate", 0.1))
+
     return Pipeline([
         ("imputer", SimpleImputer(strategy="median")),
         ("scaler", StandardScaler()),
         ("regressor", GradientBoostingRegressor(
-            n_estimators=40,
-            max_depth=3,
-            learning_rate=0.1,
+            n_estimators=n_est,
+            max_depth=m_depth,
+            learning_rate=lr,
             random_state=random_state
         ))
     ])
@@ -58,7 +66,9 @@ def build_cdm_regressor_pipeline(random_state: int = 42) -> Pipeline:
 
 def train_and_evaluate_cdm_regressor(
     train_events: List[CDMEventExample],
-    test_events: List[CDMEventExample]
+    test_events: List[CDMEventExample],
+    parameters: Optional[Dict[str, Any]] = None,
+    random_state: int = 42
 ) -> Dict[str, Any]:
     """
     Train regressor on train_events and evaluate against persistence baseline on test_events.
@@ -95,7 +105,7 @@ def train_and_evaluate_cdm_regressor(
     if not (np.all(np.isfinite(X_train)) and np.all(np.isfinite(y_train)) and np.all(np.isfinite(X_test)) and np.all(np.isfinite(y_test))):
         raise ValueError("Non-finite values (NaN or Inf) detected in CDM training/test feature matrices.")
 
-    pipeline = build_cdm_regressor_pipeline()
+    pipeline = build_cdm_regressor_pipeline(random_state=random_state, parameters=parameters)
     pipeline.fit(X_train, y_train)
 
     preds_ml = pipeline.predict(X_test).tolist()

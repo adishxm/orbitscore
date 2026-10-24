@@ -1092,14 +1092,14 @@ def get_mission_pathway(
     alt = 500.0
     inc = 97.4
     for f in m.get("fields", []):
-        fn = f.get("field_name")
+        fn = f.get("field") or f.get("field_name")
         val = f.get("value")
-        if fn in ("altitude_km", "perigee_altitude_km", "apogee_altitude_km") and val is not None:
+        if fn in ("altitude_km", "perigee_altitude_km", "apogee_altitude_km", "operational_altitude_km") and val is not None:
             try:
                 alt = float(val)
             except (ValueError, TypeError):
                 pass
-        elif fn == "inclination_deg" and val is not None:
+        elif fn in ("inclination_deg", "orbit_inclination_deg") and val is not None:
             try:
                 inc = float(val)
             except (ValueError, TypeError):
@@ -1233,14 +1233,14 @@ def get_mission_decay_path(
     lifetime_yrs = 3.8
 
     for f in m.get("fields", []):
-        fn = f.get("field_name")
+        fn = f.get("field") or f.get("field_name")
         val = f.get("value")
-        if fn in ("altitude_km", "perigee_altitude_km", "apogee_altitude_km") and val is not None:
+        if fn in ("altitude_km", "perigee_altitude_km", "apogee_altitude_km", "operational_altitude_km") and val is not None:
             try:
                 init_alt = float(val)
             except (ValueError, TypeError):
                 pass
-        elif fn in ("remaining_orbital_life_years", "disposal_duration_years", "debris_decay_years") and val is not None:
+        elif fn in ("remaining_orbital_life_years", "disposal_duration_years", "debris_decay_years", "mission_lifetime_years") and val is not None:
             try:
                 lifetime_yrs = float(val)
             except (ValueError, TypeError):
@@ -1250,7 +1250,7 @@ def get_mission_decay_path(
     model_status = "SCHEMATIC"
     try:
         from ai_ml.inference.registry import get_registered_artifact
-        artifact = get_registered_artifact("decay_regressor_approved", require_approved=True)
+        artifact = get_registered_artifact("decay_regressor_approved")
         if artifact:
             model_status = "RESEARCH"
     except Exception:
