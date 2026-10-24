@@ -2,86 +2,92 @@
 
 > **Engineering Review Boundary Notice**: Despite the name, OrbitScore does not score or certify missions; it organizes evidence for human review.
 
-OrbitScore is a source-linked mission evidence organization workspace for student, university, and small spacecraft engineering teams.
+OrbitScore is a source-linked mission evidence organization and pre-review decision-support system for student, university, and small spacecraft engineering teams.
 
----
-
-## Repository Structure
-
-The complete mission evidence workspace application, design system, tests, and documentation are organized inside the [`frontend/`](./frontend) directory, alongside the research library and backend services:
+## Repository layout
 
 ```text
-OrbitScore/
-├── frontend/                      # React 18 + TS interactive mission evidence workspace
-│   ├── docs/                      # Complete specifications & engineering documentation
-│   │   ├── orbitscore_master_prompt_v2.md # Project brief and execution mandate
-│   │   ├── PROGRESS.md            # Checkpoint tracking log
-│   │   ├── VALIDATION_REPORT.md   # Final validation report & gate verification
-│   │   ├── DESIGN_SYSTEM.md       # Visual tokens, typography, colors, animations & components
-│   │   ├── IMPLEMENTATION_PLAN.md # Architecture, vertical slices & test matrix
-│   │   ├── PROFILE_SPEC.md        # Demo Evidence Completeness v0.1.0 specification
-│   │   ├── ASSETS.md              # Provenance & typography licensing
-│   │   ├── ASSUMPTIONS.md         # Domain, UX & architectural defaults
-│   │   ├── REFERENCE_ANALYSIS.md  # Deep reference site inspection log
-│   │   ├── openapi.draft.yaml     # Draft OpenAPI 3.1 contract
-│   │   └── reference/screenshots/ # Inspection evidence screenshots
-│   ├── src/                       # React 18 + TypeScript application source code
-│   │   ├── components/            # UI components (Header, Footer, Workspace, Findings, Stepper)
-│   │   ├── fixtures/              # Synthetic scenarios (Asteria-3, Microsat-X)
-│   │   ├── pages/                 # Route pages (Landing, Workspace, Profiles, HowItWorks, etc.)
-│   │   ├── profiles/              # Pure deterministic check engine (6 checks)
-│   │   ├── store/                 # Zustand state management with local persistence
-│   │   ├── styles/                # CSS variable design tokens & global stylesheets
-│   │   ├── test/                  # 9 test suites (unit, integration, axe a11y, banned words)
-│   │   ├── types/                 # Domain types
-│   │   └── utils/                 # Export dossier packet generator
-│   ├── public/                    # Self-hosted fonts & static assets
-│   ├── package.json               # Application dependencies & npm scripts
-│   └── README.md                  # Detailed frontend documentation
-├── apps/                          # Backend services (FastAPI API & web services)
-├── research/                      # Preserved research library, sources & literature
-├── paper/                         # Research paper artifacts & documentation
-├── package.json                   # Root convenience runner (proxies commands to frontend & apps)
-└── .gitignore
+.
+├── frontend/          # Canonical React 18 + TS interactive mission evidence workspace (Zustand, Lucide, Framer Motion)
+├── backend/           # FastAPI API service, SQLite persistence, deterministic evaluation, provenance, export
+├── ai_ml/             # Isolated AI provider adapter, Pydantic schemas, and standalone unit tests
+├── docs/              # Architecture, technical stack, research, and API contract specifications
+├── fixtures/          # Synthetic mission inputs, versioned rule profiles, and evaluation verification report
+├── research/          # Preserved research library, sources, literature dossiers, and indexes
+├── paper/             # Research-paper artifacts and documentation
+├── .brain/            # Shared agent instructions, tasks, state, and verified run reports
+└── legacy/            # Archived initial prototype console (legacy/web) and client library (legacy/frontend-service)
 ```
 
----
+## Quick start
 
-## Quickstart
-
-Run these commands directly from the repository root:
+### Canonical Frontend (`frontend/`)
 
 ```bash
-# Start local development server (http://localhost:5173)
-npm run dev
-
-# Run all 9 Vitest suites (unit, integration, axe a11y, banned-words lint)
+# Run tests (63 tests across 9 suites)
 npm test
 
-# Run strict TypeScript build
+# Typecheck
+npm run typecheck
+
+# Production build
 npm run build
+
+# Start local development server (http://localhost:5173)
+npm run dev
 
 # Run banned-wording scanner
 npm run lint:banned-words
 ```
 
-Or navigate directly to `frontend/`:
+### Backend API (`backend/`)
 
 ```bash
-cd frontend
-npm run dev
+# Install dependencies including the editable ai_ml package
+pip install -r requirements.txt
+
+# Run backend test suite (38 tests)
+python -m pytest backend/tests
+
+# Run synthetic verification matrix
+python -m app.verification   # from backend/
+
+# Start FastAPI dev server (http://127.0.0.1:8000)
+uvicorn app.main:app --host 127.0.0.1 --port 8000   # from backend/
 ```
 
-For complete technical documentation, see [`frontend/docs/`](./frontend/docs) and [`frontend/README.md`](./frontend/README.md).
+### AI / ML Adapter (`ai_ml/`)
 
----
+```bash
+# Run isolated AI adapter test suite (6 tests)
+python -m pytest ai_ml/tests
+```
 
-## Research Library & Task Gate
+AI extraction is disabled by default (`ORBIT_AI_ENABLED=false`) and always operates with temperature 0.0, a 10.0-second timeout, and an automatic deterministic regex fallback (`backend/app/extractor.py`). All AI-extracted fields are strictly labeled `human_confirmed=False`.
 
-Before product research or policy-sensitive work, review [`research/README.md`](research/README.md) and [`research/SOURCE_REGISTER.md`](research/SOURCE_REGISTER.md) for source hierarchy, date, scope, and claim safeguards.
+### Archived Legacy Console (`legacy/`)
 
-`.brain/` contains shared project instructions, task definitions, and verification scripts:
+```bash
+npm run legacy:web:test
+npm run legacy:web:dev
+```
+
+## Project onboarding & research
+
+Before product research or policy-sensitive work, agents should start at [`research/README.md`](research/README.md), read the product synthesis, then follow its links into the preserved research library. Check [`research/SOURCE_REGISTER.md`](research/SOURCE_REGISTER.md) for source hierarchy, date, scope, and claim safeguards.
+
+## Local Antigravity brain and task gate
+
+`.brain/` contains shared project instructions, task definitions, and status, so it is committed with the application. Generated reports under `.brain/local-reports/` and `team-report.html` are local-only and ignored by Git.
+
+Run task baseline verification:
 
 ```bash
 python .brain/scripts/complete_task.py T001
+```
+
+To validate the consistency of tasks, dependencies, and state:
+
+```bash
+python .brain/scripts/validate_brain.py
 ```

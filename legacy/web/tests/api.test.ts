@@ -1,8 +1,8 @@
 import {
   appendProvenanceEvent, evaluateMission, exportPacket, getMission, getStateSnapshot, resetDemoState,
   runCounterfactual, submitReviewDecision, updateFieldValue, verifyProvenanceChain,
-} from "../../../frontend-service/api";
-import { __testing } from "../../../frontend-service/api";
+} from "../../frontend-service/api";
+import { __testing } from "../../frontend-service/api";
 
 describe("OrbitScore frontend service", () => {
   beforeEach(() => resetDemoState());
@@ -71,7 +71,7 @@ import {
   checkApiHealth, fetchMissionLive, fetchProfilesLive, evaluateMissionLive,
   submitReviewDecisionLive, fetchExportLive, fetchProvenanceLive, updateFieldLive,
   runCounterfactualLive, normalizeLiveMission,
-} from "../../../frontend-service/api";
+} from "../../frontend-service/api";
 
 describe("OrbitScore live API client integration", () => {
   it("normalizes a live mission fixture with field_id and human_confirmed", () => {

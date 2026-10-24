@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 from app.engine import evaluate_mission, run_counterfactual
 from app.provenance import append_event, verify_chain
 from app.main import app, missions, reviews, evaluations, events
-ROOT=Path(__file__).resolve().parents[3]
+ROOT=Path(__file__).resolve().parents[2]
 FIX=ROOT/'fixtures'
 def fixture(name): return json.loads((FIX/f'{name}.json').read_text(encoding='utf-8'))
 

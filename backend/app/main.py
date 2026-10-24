@@ -33,7 +33,7 @@ from .db import (
     verify_provenance_chain_db
 )
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[2]
 FIXTURES = ROOT / "fixtures"
 
 # Initialize durable SQLite database on startup

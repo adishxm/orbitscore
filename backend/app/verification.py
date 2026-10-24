@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from .engine import evaluate_mission, load_profiles
 from .provenance import append_event, verify_chain
-ROOT=Path(__file__).resolve().parents[3]
+ROOT=Path(__file__).resolve().parents[2]
 
 def main():
     catalog=load_profiles(); report={'verification_date':'2026-10-20','method':'Executed deterministic Python engine on each supplied mission fixture under each selectable profile; no fixture expected_statuses are consumed.','matrix':[],'provenance':[]}

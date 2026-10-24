@@ -8,6 +8,11 @@ const rulesJson = existsSync(rulesPath) ? JSON.parse(readFileSync(rulesPath, "ut
 
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      "@noble/hashes": resolve(__dirname, "node_modules/@noble/hashes"),
+    },
+  },
   define: { __ORBIT_RULES_PROFILES__: JSON.stringify(rulesJson) },
   test: { environment: "node", globals: true, include: ["tests/**/*.test.ts"] },
   server: { host: "0.0.0.0", port: 5173 },

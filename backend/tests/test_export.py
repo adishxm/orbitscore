@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 from app.main import app, missions, reviews, evaluations, events
 from app.export import generate_packet, generate_html_packet
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[2]
 FIXTURES = ROOT / "fixtures"
 
 def load_fixture(name):

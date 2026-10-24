@@ -8,12 +8,16 @@ team-report.html
 venv/
 __pycache__/
 *.py[cod]
+*.egg-info/
+*.egg
+build/
 node_modules/
-apps/web/dist/
-apps/web/tsconfig.tsbuildinfo
-frontend/dist/
 dist/
+frontend/dist/
+legacy/web/dist/
+apps/web/dist/
 **/dist/
+*.tsbuildinfo
 
 # OS and editors
 .DS_Store

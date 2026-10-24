@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[2]
 PROFILE_FILE = ROOT / "fixtures" / "rules_profiles.json"
 STATUSES = {"PASS_UNDER_PROFILE", "WARNING", "NEEDS_EVIDENCE", "CONFLICT", "NOT_EVALUATED"}
 

@@ -19,26 +19,25 @@ Synthetic mission with source locators
 
 ## Implemented package map
 
-- Backend: `apps/api/app/main.py`, `schemas.py`, `engine.py`, `provenance.py`, and `export.py`.
+- Canonical Frontend: `frontend/` (React/Vite/TypeScript, Zustand store, Framer Motion, 9 test suites, 63 Vitest tests, Axe a11y passed).
+- Backend: `backend/app/main.py`, `schemas.py`, `engine.py`, `db.py`, `provenance.py`, `export.py`, and `extractor.py`.
+- AI / ML: `ai_ml/` (`adapter.py`, `schemas.py`, `tests/test_adapter.py`). Unconfirmed-only candidates, temperature 0.0, 10.0s timeout, deterministic fallback.
 - Policy catalog: `fixtures/rules_profiles.json`, with four selectable profiles.
 - Synthetic mission inputs: `fixtures/mission_complete.json`, `mission_gap_heavy.json`, and `mission_conflict.json`.
-- Evidence sample: `fixtures/asteria3_mission_datasheet_synthetic.pdf` and `.txt` (synthetic, not real mission evidence).
-- Frontend: `frontend-service/schemas.ts`, `frontend-service/api.ts`, and the React/Vite UI in `apps/web/`.
-- Tests: `apps/api/tests/test_evaluator.py`; `apps/web/tests/api.test.ts`.
+- Evidence sample: `fixtures/asteria3_mission_datasheet_synthetic.pdf` and `.txt`.
+- Legacy console & client: `legacy/web/` and `legacy/frontend-service/` (retained for transition and reference).
 - Results: `fixtures/evaluation_verification_report.json` captures three missions × four profiles and a verified SHA-256 trace.
-
-The FastAPI demo exposes `GET /health`, `GET /profiles`, `GET /missions`, `GET /missions/{mission_id}`, `POST /missions`, `POST /missions/{mission_id}/evaluate`, `POST /missions/{mission_id}/findings/{finding_id}/decision`, `POST /missions/{mission_id}/counterfactual`, `GET /provenance`, and `GET /export/{mission_id}`.
 
 ## Verification completed
 
-On 2026-10-20, the packaged application was executed and verified:
-
 ```text
-cd apps/api && pytest -q                 7 passed
-cd apps/api && python -m app.verification 12 evaluations; provenance valid
-npm test                                  1 Vitest file, 5 tests passed
-npm run typecheck                         passed
-npm run build                             passed (Vite production bundle)
+python -m pytest backend/tests         38 passed
+python -m pytest ai_ml/tests           6 passed
+python -m app.verification (in backend) 12 evaluations; provenance valid
+npm test                                63 Vitest tests passed (9 suites)
+npm run typecheck                       passed (tsc --noEmit)
+npm run build                           passed (Vite production bundle)
+npm run legacy:web:test                 10 Vitest tests passed
 ```
 
 Tests cover all three fixtures across all four profiles, the 8.4-year NASA-vs-FCC switching case, unconfirmed evidence, conflicts, a bounded counterfactual, review-gated export, and sequence-specific provenance tampering. The frontend tests additionally verify local state persistence and SHA-256 output.

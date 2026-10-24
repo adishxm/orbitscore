@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any, Optional
 from datetime import datetime, timezone
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DB_PATH = ROOT / "data" / "orbitscore.db"
 
 

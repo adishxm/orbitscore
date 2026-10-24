@@ -5,8 +5,8 @@ import {
   isMockModeConfigured, checkApiHealth, fetchMissionLive, fetchProfilesLive, evaluateMissionLive,
   submitReviewDecisionLive, fetchExportLive, fetchProvenanceLive, updateFieldLive,
   runCounterfactualLive, resetDemoLive, DEFAULT_API_BASE_URL,
-} from "../../../frontend-service/api";
-import type { EvidenceState, Finding, MissionProfile, ExportPacket, ExportLocked, VerificationResult } from "../../../frontend-service/schemas";
+} from "../../frontend-service/api";
+import type { EvidenceState, Finding, MissionProfile, ExportPacket, ExportLocked, VerificationResult } from "../../frontend-service/schemas";
 
 const statusLabel: Record<EvidenceState, string> = {
   PASS_UNDER_PROFILE: "PASS",

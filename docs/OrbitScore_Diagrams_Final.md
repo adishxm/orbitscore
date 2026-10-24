@@ -6,21 +6,20 @@
 
 ```mermaid
 flowchart LR
-  U[Mission team / reviewer] --> UI[React + TypeScript UI]
-  UI --> TS[frontend-service schemas and API adapter]
-  TS -->|mock: dynamic local evaluation| R[rules_profiles.json]
-  TS -.->|target live API mode / T001| API[FastAPI apps/api/app/main.py]
+  U[Mission team / reviewer] --> UI[Canonical React + TypeScript UI (frontend/)]
+  UI -.->|API client| API[FastAPI backend/app/main.py]
   API --> E[engine.py: selected-profile rules]
-  E --> R
+  E --> R[rules_profiles.json]
   API --> P[provenance.py: SHA-256 chain]
   API --> X[export.py: cited HTML/JSON]
+  API -.-> AI[ai_ml adapter: unconfirmed candidates only]
   E --> F[Findings: five explicit states]
   F --> G{Decision persisted
 for every finding?}
   G -->|No| L[EXPORT_LOCKED]
   G -->|Yes| O[Review packet]
   UI --> H[Human confirmation and review]
-  H -->|confirmed fields / decisions| TS
+  H -->|confirmed fields / decisions| API
 ```
 
 The deterministic evaluator only uses human-confirmed values for rules that require confirmation. The human selects the profile, reviews scope and conflicts, and owns all engineering or regulatory decisions. Browser mock state persists in localStorage; the API demo state lasts only for the process lifetime.
@@ -111,7 +110,8 @@ Counterfactual outputs change only the declared synthetic lever and report the a
 
 ## 6. Verification
 
-- Python backend: `apps/api/tests/test_evaluator.py` — **7 passed**.
-- Fixture/profile matrix: `python -m app.verification` — **12 evaluations; provenance valid**.
-- Frontend: `apps/web/tests/api.test.ts` — **5 Vitest tests passed**.
-- `npm run typecheck` and `npm run build` — **passed**.
+- Canonical frontend: `npm test` — **63 Vitest tests passed (9 suites)**; `npm run typecheck` and `npm run build` — **passed**.
+- Python backend: `python -m pytest backend/tests` — **38 passed**.
+- AI/ML adapter: `python -m pytest ai_ml/tests` — **6 passed**.
+- Fixture/profile matrix: `python -m app.verification` (in `backend/`) — **12 evaluations; provenance valid**.
+- Legacy console: `npm run legacy:web:test` — **10 Vitest tests passed**.

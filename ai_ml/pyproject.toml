@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "orbitscore-ai-ml"
+version = "0.1.0"
+description = "Optional AI-assisted extraction adapter for OrbitScore"
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic>=2.6,<3",
+    "httpx>=0.24.0",
+]
+
+[tool.setuptools]
+package-dir = {"ai_ml" = "."}
+packages = ["ai_ml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q"
