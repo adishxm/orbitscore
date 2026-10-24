@@ -70,36 +70,53 @@ class WatermarkedNumberedCanvas(canvas.Canvas if REPORTLAB_AVAILABLE else object
         self.restoreState()
 
 
+def _match_evidence(evidence_items: List[Dict[str, Any]], term: str) -> Optional[Dict[str, Any]]:
+    """Match evidence items by checking 'field', 'parameter_key', 'name', 'key', or 'label'."""
+    term_lower = term.lower()
+    for e in evidence_items:
+        key = str(e.get("field") or e.get("parameter_key") or e.get("name") or e.get("key") or "").lower()
+        label = str(e.get("label", "")).lower()
+        if term_lower in key or term_lower in label:
+            return e
+    return None
+
+
 def generate_nasa_odar_markdown(
     mission: Dict[str, Any],
     evidence_items: List[Dict[str, Any]],
     decisions: List[Dict[str, Any]],
-    estimated_decay_years: float = 3.8,
+    estimated_decay_years: Optional[float] = None,
 ) -> str:
-    """Generates a complete NASA-STD-8719.14 compliant draft ODAR review packet (Sections 1-8)."""
+    """Generates a complete NASA-STD-8719.14 compliant draft ODAR review packet (Sections 1-8). Fails closed when evidence is missing."""
     mission_name = mission.get("name", "Unknown Mission")
     form_factor = mission.get("form_factor", "3U")
     mass = mission.get("mass_budget_kg") or mission.get("mass_kg") or 4.0
     target_orbit = mission.get("target_orbit", "500 km SSO")
 
-    # Find specific primary citations
-    battery_ev = next((e for e in evidence_items if "battery" in str(e.get("parameter_key", "")).lower() or "passivat" in str(e.get("parameter_key", "")).lower()), None)
+    # Match primary citations across all schema naming variations
+    battery_ev = _match_evidence(evidence_items, "battery") or _match_evidence(evidence_items, "passivat")
     battery_confirmed = battery_ev and (battery_ev.get("state") == "confirmed" or battery_ev.get("human_confirmed") is True) and str(battery_ev.get("value", "")).lower() not in ("false", "no", "0")
 
-    collision_ev = next((e for e in evidence_items if "collision" in str(e.get("parameter_key", "")).lower() or "conjunction" in str(e.get("parameter_key", "")).lower()), None)
+    collision_ev = _match_evidence(evidence_items, "collision") or _match_evidence(evidence_items, "conjunction")
     collision_confirmed = collision_ev and (collision_ev.get("state") == "confirmed" or collision_ev.get("human_confirmed") is True)
 
-    demise_ev = next((e for e in evidence_items if "demise" in str(e.get("parameter_key", "")).lower() or "casualty" in str(e.get("parameter_key", "")).lower()), None)
+    demise_ev = _match_evidence(evidence_items, "demise") or _match_evidence(evidence_items, "casualty")
     demise_confirmed = demise_ev and (demise_ev.get("state") == "confirmed" or demise_ev.get("human_confirmed") is True)
 
-    tether_ev = next((e for e in evidence_items if "tether" in str(e.get("parameter_key", "")).lower()), None)
+    tether_ev = _match_evidence(evidence_items, "tether")
     tether_confirmed = tether_ev and (tether_ev.get("state") == "confirmed" or tether_ev.get("human_confirmed") is True)
 
-    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    decay_ev = _match_evidence(evidence_items, "disposal") or _match_evidence(evidence_items, "decay") or _match_evidence(evidence_items, "lifetime")
+    decay_confirmed = decay_ev and (decay_ev.get("state") == "confirmed" or decay_ev.get("human_confirmed") is True)
 
-    # Determine compliance statuses dynamically
-    fcc_compliant = estimated_decay_years <= 5.0
-    isro_compliant = estimated_decay_years <= 5.0
+    # Attempt to extract decay years from confirmed evidence if not explicitly passed
+    if estimated_decay_years is None and decay_ev and decay_ev.get("value") is not None:
+        try:
+            estimated_decay_years = float(decay_ev["value"])
+        except (ValueError, TypeError):
+            pass
+
+    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
     lines = [
         f"# Orbital Debris Assessment Report (ODAR)",
@@ -113,7 +130,6 @@ def generate_nasa_odar_markdown(
         "",
         "## Section 1: Program Management & Mission Overview",
         f"- **Mission Name**: {mission_name}",
-        f"- **Organization / Operator**: SmallSat Consortium / University Partner",
         f"- **Spacecraft Class**: Small Satellite ({form_factor} CubeSat)",
         f"- **Launch Mass (Wet / Dry)**: {mass} kg / {mass} kg",
         f"- **Target Orbit**: {target_orbit}",
@@ -121,8 +137,8 @@ def generate_nasa_odar_markdown(
         f"- **Operational Telemetry Interface**: Space-Track Conjunction Assessment Portal",
         "",
         "## Section 2: Assessment of Debris Released During Normal Operations (Requirement 4.3-1)",
-        "- **Status**: CONFORMS (Zero intentional release)",
-        "- **Assessment**: No operational covers, tie-downs, lens caps, or separation springs are released during deployment or nominal maneuvers. Deployable solar panels remain permanently tethered to the chassis.",
+        "- **Status**: ⚠️ UNCONFIRMED / PENDING HUMAN REVIEW (Operational debris release declaration required)",
+        "- **Assessment**: No operational covers, tie-downs, lens caps, or separation hardware may be released without documented qualification. Conformance requires human engineering sign-off.",
         "",
         "## Section 3: Assessment of Intentional Breakups and Accidental Explosions (Requirements 4.4-1 through 4.4-4)",
     ]
@@ -132,20 +148,20 @@ def generate_nasa_odar_markdown(
             "- **Passivation Status**: PASSIVATION CONFIRMED IN EVIDENCE REGISTER",
             f"- **Electrical Power Storage**: Lithium-Ion battery pack (nominal 40 Wh).",
             f"- **Passivation Mechanism**: Automatic charge controller disconnect and depletion resistor at End-of-Mission.",
-            f"- **Primary Citation**: `{battery_ev.get('source_document')}` (Rev: {battery_ev.get('revision')}, Section: {battery_ev.get('locator')})",
+            f"- **Primary Citation**: `{battery_ev.get('source_document') or battery_ev.get('source_doc_title')}` (Rev: {battery_ev.get('revision')}, Section: {battery_ev.get('locator')})",
         ])
     elif battery_ev:
         lines.extend([
             "- **Passivation Status**: ⚠️ UNCONFIRMED / PENDING HUMAN REVIEW (Battery record present but unverified)",
             f"- **Electrical Power Storage**: Lithium-Ion battery pack (nominal 40 Wh).",
             f"- **Passivation Mechanism**: Automatic depletion resistor proposed; verification pending.",
-            f"- **Primary Citation**: `{battery_ev.get('source_document')}` (Status: {battery_ev.get('state', 'unconfirmed')})",
+            f"- **Primary Citation**: `{battery_ev.get('source_document') or battery_ev.get('source_doc_title')}` (Status: {battery_ev.get('state', 'unconfirmed')})",
         ])
     else:
         lines.extend([
             "- **Passivation Status**: ⚠️ UNVERIFIED (Passivation evidence required for compliance)",
-            f"- **Electrical Power Storage**: Lithium-Ion battery pack (nominal 40 Wh).",
-            f"- **Passivation Mechanism**: Automatic depletion resistor proposed; verification pending.",
+            f"- **Electrical Power Storage**: Lithium-Ion battery pack.",
+            f"- **Passivation Mechanism**: Depletion mechanism proposed; verification pending.",
             "- **Primary Citation**: ⚠️ NEEDS_EVIDENCE: No primary battery passivation or energy storage depletion record attached.",
         ])
 
@@ -158,7 +174,7 @@ def generate_nasa_odar_markdown(
         lines.extend([
             f"- **Collision Probability with Large Debris (>10 cm)**: < 1.0 × 10⁻⁴ (Conforms per confirmed assessment)",
             f"- **Cross-Sectional Collision Area**: 0.03 m² ({form_factor} stowed envelope)",
-            f"- **Primary Citation**: `{collision_ev.get('source_document')}`",
+            f"- **Primary Citation**: `{collision_ev.get('source_document') or collision_ev.get('source_doc_title')}`",
         ])
     else:
         lines.extend([
@@ -173,28 +189,45 @@ def generate_nasa_odar_markdown(
         "",
         "## Section 5: Assessment of Post-Mission Disposal & Atmospheric Re-entry (Requirements 4.6-1 to 4.6-4)",
         f"- **Disposal Mode**: Natural Atmospheric Re-entry via LEO Aerodynamic Drag.",
-        f"- **Estimated Orbit Decay Timeline**: **{estimated_decay_years:.1f} Years**.",
-        "- **Regulatory Threshold Compliance**:",
     ])
 
-    if fcc_compliant:
-        lines.append(f"  - **US FCC 5-Year Rule (FCC-22-74)**: ✅ **CONFORMS** ({estimated_decay_years:.1f} years post-mission < 5.0-year limit)")
+    if estimated_decay_years is not None and estimated_decay_years > 5.0:
+        lines.extend([
+            f"- **Estimated Orbit Decay Timeline**: **{estimated_decay_years:.1f} Years**.",
+            "- **Regulatory Threshold Compliance**:",
+            f"  - **US FCC 5-Year Rule (FCC-22-74)**: ❌ **NON-CONFORMANT** ({estimated_decay_years:.1f} years post-mission exceeds 5.0-year limit)",
+            f"  - **ISRO Debris-Free Space Missions (DFSM 2030)**: ❌ **NON-CONFORMANT** ({estimated_decay_years:.1f} years post-mission exceeds 5.0-year limit)",
+        ])
+    elif estimated_decay_years is not None and decay_confirmed:
+        lines.extend([
+            f"- **Estimated Orbit Decay Timeline**: **{estimated_decay_years:.1f} Years**.",
+            "- **Regulatory Threshold Compliance**:",
+            f"  - **US FCC 5-Year Rule (FCC-22-74)**: ✅ **CONFORMS** ({estimated_decay_years:.1f} years post-mission < 5.0-year limit)",
+            f"  - **ISRO Debris-Free Space Missions (DFSM 2030)**: ✅ **CONFORMS** ({estimated_decay_years:.1f} years post-mission < 5.0-year limit)",
+        ])
+    elif estimated_decay_years is not None:
+        lines.extend([
+            f"- **Estimated Orbit Decay Timeline**: {estimated_decay_years:.1f} Years (⚠️ UNVERIFIED: Calculation present but lacks confirmed reviewer sign-off).",
+            "- **Regulatory Threshold Compliance**:",
+            f"  - **US FCC 5-Year Rule (FCC-22-74)**: ⚠️ **UNVERIFIED** ({estimated_decay_years:.1f} years calculated, pending reviewer confirmation)",
+            f"  - **ISRO Debris-Free Space Missions (DFSM 2030)**: ⚠️ **UNVERIFIED** ({estimated_decay_years:.1f} years calculated, pending reviewer confirmation)",
+        ])
     else:
-        lines.append(f"  - **US FCC 5-Year Rule (FCC-22-74)**: ❌ **NON-CONFORMANT** ({estimated_decay_years:.1f} years post-mission exceeds 5.0-year limit)")
-
-    if isro_compliant:
-        lines.append(f"  - **ISRO Debris-Free Space Missions (DFSM 2030)**: ✅ **CONFORMS** ({estimated_decay_years:.1f} years post-mission < 5.0-year limit)")
-    else:
-        lines.append(f"  - **ISRO Debris-Free Space Missions (DFSM 2030)**: ❌ **NON-CONFORMANT** ({estimated_decay_years:.1f} years post-mission exceeds 5.0-year limit)")
+        lines.extend([
+            "- **Estimated Orbit Decay Timeline**: ⚠️ **NOT DETERMINED** (Requires confirmed deorbit decay analysis; default numbers not assumed).",
+            "- **Regulatory Threshold Compliance**:",
+            "  - **US FCC 5-Year Rule (FCC-22-74)**: ⚠️ **NOT EVALUATED** (Missing confirmed orbital decay model and citation)",
+            "  - **ISRO Debris-Free Space Missions (DFSM 2030)**: ⚠️ **NOT EVALUATED** (Missing confirmed post-mission disposal plan)",
+        ])
 
     lines.extend([
         "",
         "## Section 6: Assessment of Tether Systems (Requirement 4.7-1)",
     ])
     if tether_confirmed:
-        lines.append(f"- **Tether Status**: Confirmed in evidence (`{tether_ev.get('source_document')}`). Conforms to snagging risk guidelines.")
+        lines.append(f"- **Tether Status**: Confirmed in evidence (`{tether_ev.get('source_document') or tether_ev.get('source_doc_title')}`). Conforms to snagging risk guidelines.")
     else:
-        lines.append("- **Tether Status**: CONFORMS BY EXCLUSION (Vehicle does not deploy conductive or electrodynamic tether structures).")
+        lines.append("- **Tether Status**: ⚠️ UNCONFIRMED BY PRIMARY EVIDENCE (Explicit vehicle ICD or architectural declaration required).")
 
     lines.extend([
         "",
@@ -202,17 +235,12 @@ def generate_nasa_odar_markdown(
     ])
     if demise_confirmed:
         lines.extend([
-            f"- **Casualty Risk**: < 1:10,000 (Conforms per confirmed demise assessment `{demise_ev.get('source_document')}`).",
-        ])
-    elif float(mass) <= 10.0:
-        lines.extend([
-            f"- Total vehicle mass is {mass} kg, composed predominantly of Aluminum 6061-T6 and FR4 circuit boards.",
-            f"- **Casualty Risk**: ⚠️ ESTIMATE PENDING (Empirical aerothermal assessment / DAS 3.x required for submission; smallsat envelope modeled as demisable subject to verified material inventory).",
+            f"- **Casualty Risk**: < 1:10,000 (Conforms per confirmed demise assessment `{demise_ev.get('source_document') or demise_ev.get('source_doc_title')}`).",
         ])
     else:
         lines.extend([
             f"- Total vehicle mass is {mass} kg.",
-            f"- **Casualty Risk**: ⚠️ NEEDS_EVIDENCE: Formal NASA DAS 3.x aerothermal demise assessment required for vehicle mass > 10 kg.",
+            "- **Casualty Risk**: ⚠️ NEEDS_EVIDENCE: Formal aerothermal demise assessment (NASA DAS 3.x / empirical ground impact model) required for submission; default demisability not assumed.",
         ])
 
     lines.extend([
@@ -222,9 +250,9 @@ def generate_nasa_odar_markdown(
 
     if decisions:
         for idx, d in enumerate(decisions, start=1):
-            lines.append(f"{idx}. **Finding `{d.get('finding_id')}`**: Decision `{d.get('decision')}` signed by `{d.get('reviewer_name', 'Reviewer')}` ({d.get('reviewer_role', 'Safety Authority')}). Rationale: {d.get('rationale', 'Approved with documented risk assessment.')}")
+            lines.append(f"{idx}. **Finding `{d.get('finding_id')}`**: Decision `{d.get('decision')}` signed by `{d.get('reviewer_name') or d.get('reviewer', 'Reviewer')}` ({d.get('reviewer_role', 'Safety Authority')}). Rationale: {d.get('rationale') or d.get('note', 'Documented review decision.')}")
     else:
-        lines.append("All baseline findings evaluated with nominal zero waivers required.")
+        lines.append("⚠️ Zero human review decisions registered for this mission. Regulatory submission requires all findings to be reviewed.")
 
     lines.extend([
         "",
@@ -238,7 +266,7 @@ def generate_nasa_odar_markdown(
 def generate_eomp_markdown(
     mission: Dict[str, Any],
     evidence_items: List[Dict[str, Any]],
-    estimated_decay_years: float = 3.8,
+    estimated_decay_years: Optional[float] = None,
 ) -> str:
     """Generates an End-of-Mission Plan (EOMP) conforming to ISRO DFSM 2030 and FCC guidelines."""
     mission_name = mission.get("name", "Unknown Mission")
@@ -246,6 +274,17 @@ def generate_eomp_markdown(
     mass = mission.get("mass_budget_kg") or mission.get("mass_kg") or 4.0
 
     timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+
+    decay_ev = _match_evidence(evidence_items, "disposal") or _match_evidence(evidence_items, "decay") or _match_evidence(evidence_items, "lifetime")
+    decay_confirmed = decay_ev and (decay_ev.get("state") == "confirmed" or decay_ev.get("human_confirmed") is True)
+    if estimated_decay_years is None and decay_ev and decay_ev.get("value") is not None:
+        try:
+            estimated_decay_years = float(decay_ev["value"])
+        except (ValueError, TypeError):
+            pass
+
+    battery_ev = _match_evidence(evidence_items, "battery") or _match_evidence(evidence_items, "passivat")
+    battery_confirmed = battery_ev and (battery_ev.get("state") == "confirmed" or battery_ev.get("human_confirmed") is True)
 
     lines = [
         f"# End-of-Mission Plan (EOMP)",
@@ -258,29 +297,52 @@ def generate_eomp_markdown(
         "",
         "### Part I: Spacecraft Baseline Configuration",
         f"1. **Operational Altitude**: {mission.get('target_orbit', '500 km SSO')}",
-        f"2. **Dry / Wet Mass**: {mass} kg / {mass} kg (Cold gas/electric propulsion: None)",
-        f"3. **Power Subsystem**: Triple-junction solar cells, 40 Wh Li-Ion battery pack",
-        f"4. **RF Communications**: UHF/VHF telemetry beacon (437.5 MHz) & S-band payload downlink",
+        f"2. **Dry / Wet Mass**: {mass} kg / {mass} kg",
+        f"3. **Power Subsystem**: {'Confirmed in evidence register' if battery_confirmed else '⚠️ Unconfirmed: Battery specification requires primary citation'}",
         "",
         "### Part II: Disposal Trajectory & Drag Decay Timeline",
-        f"- **Disposal Mechanism**: Passive atmospheric decay accelerated by orbital cross-sectional drag.",
-        f"- **Calculated Orbital Lifetime**: **{estimated_decay_years:.1f} years** (Target: < 5.0 years post-mission).",
-        f"- **Deorbit Conformance**: {'✅ Conforms (< 5 yr)' if estimated_decay_years <= 5.0 else '❌ Non-conformant (> 5 yr)'}.",
-        f"- **Perigee Maintenance**: Circular orbit (498.8 km x 500.2 km), decaying uniformly.",
+        "- **Disposal Mechanism**: Atmospheric re-entry via orbital aerodynamic drag.",
+    ]
+
+    if estimated_decay_years is not None and decay_confirmed:
+        lines.extend([
+            f"- **Calculated Orbital Lifetime**: **{estimated_decay_years:.1f} years** (Target: < 5.0 years post-mission).",
+            f"- **Deorbit Conformance**: {'✅ Conforms (< 5 yr limit)' if estimated_decay_years <= 5.0 else '❌ Non-conformant (> 5 yr limit)'}.",
+        ])
+    elif estimated_decay_years is not None:
+        lines.extend([
+            f"- **Calculated Orbital Lifetime**: {estimated_decay_years:.1f} years (⚠️ UNVERIFIED: Calculation pending reviewer sign-off).",
+            "- **Deorbit Conformance**: ⚠️ UNVERIFIED (Reviewer confirmation required).",
+        ])
+    else:
+        lines.extend([
+            "- **Calculated Orbital Lifetime**: ⚠️ **NOT DETERMINED** (Requires confirmed numerical decay calculation; default numbers not assumed).",
+            "- **Deorbit Conformance**: ⚠️ **NOT EVALUATED** (Missing verified disposal timeline).",
+        ])
+
+    lines.extend([
         "",
         "### Part III: Spacecraft Passivation Protocols",
-        "1. **Energy Storage Disconnection**: Ground command `PWR_EOM_DEPLETE` initiates continuous transmitter broadcast to discharge batteries below 2.8V per cell.",
-        "2. **Solar Array Shunting**: Internal isolation MOSFET switches opened to prevent re-charging.",
-        "3. **RF Inhibit**: Radio beacon transmissions permanently shut down within 48 hours of mission termination.",
+    ])
+    if battery_confirmed:
+        lines.extend([
+            "1. **Energy Storage Disconnection**: Ground command initiates battery depletion resistor circuit at End-of-Mission.",
+            "2. **Solar Array Shunting**: Internal isolation switches opened to prevent re-charging.",
+            "3. **RF Inhibit**: Radio beacon transmissions permanently shut down within 48 hours of mission termination.",
+        ])
+    else:
+        lines.append("⚠️ Passivation protocols not established: No confirmed energy depletion procedure in evidence register.")
+
+    lines.extend([
         "",
         "### Part IV: Re-entry Ground Safety Assessment",
-        f"- **Demisability**: Total mass {mass} kg; kinetic energy of residual fragments below threshold.",
+        f"- **Demisability**: Total mass {mass} kg. Formal aerothermal demise analysis (NASA DAS 3.x) required for submission.",
         "- **Ground Impact Area**: Uncontrolled re-entry into ocean / equatorial waters with low casualty expectation.",
         "",
         "### Part V: Operations & Tracking Sign-Off",
         "- **Contact Point**: Mission Operations Control Center (MOCC)",
-        "- **Catalog Notification**: Formal notification sent to IN-SPACe / ISTRAC (India) and Space-Track (US).",
-    ]
+        "- **Catalog Notification**: Formal notification coordinated with national authority and Space-Track.",
+    ])
 
     return "\n".join(lines)
 

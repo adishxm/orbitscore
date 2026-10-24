@@ -8,6 +8,35 @@
 export const DEFAULT_API_BASE_URL =
   (import.meta as any).env?.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
 
+export function getAuthHeaders(): Record<string, string> {
+  const token =
+    typeof window !== 'undefined'
+      ? window.sessionStorage?.getItem('orbitscore_auth_token') ||
+        window.localStorage?.getItem('orbitscore_auth_token') ||
+        (import.meta as any).env?.VITE_API_KEY ||
+        ''
+      : '';
+  if (token) {
+    return {
+      Authorization: `Bearer ${token}`,
+      'X-API-Key': token,
+    };
+  }
+  return {};
+}
+
+export function setAuthToken(token: string): void {
+  if (typeof window !== 'undefined') {
+    window.sessionStorage?.setItem('orbitscore_auth_token', token);
+  }
+}
+
+export function clearAuthToken(): void {
+  if (typeof window !== 'undefined') {
+    window.sessionStorage?.removeItem('orbitscore_auth_token');
+  }
+}
+
 export interface ApiHealthResponse {
   ok: boolean;
   version?: string;
@@ -176,6 +205,7 @@ export async function evaluateMissionLive(
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
+        ...getAuthHeaders(),
       },
       body: JSON.stringify({ profile_id: profileId }),
     }
@@ -202,6 +232,7 @@ export async function submitReviewDecisionLive(
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
+        ...getAuthHeaders(),
       },
       body: JSON.stringify({
         decision,
@@ -265,7 +296,10 @@ export async function fetchExportLive(
   baseUrl = DEFAULT_API_BASE_URL
 ): Promise<{ status: string; packet?: any; message?: string }> {
   const res = await fetch(`${baseUrl}/export/${encodeURIComponent(missionId)}`, {
-    headers: { Accept: 'application/json' },
+    headers: {
+      Accept: 'application/json',
+      ...getAuthHeaders(),
+    },
   });
   if (res.status === 423) {
     const errorData = await res.json().catch(() => ({}));

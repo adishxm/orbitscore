@@ -40,20 +40,24 @@ def verify_esa_dataset_file(file_path: Path | str, expected_sha256: Optional[str
     actual_sha256 = hasher.hexdigest()
     matches = (actual_sha256 == expected_sha256) if expected_sha256 else True
 
+    is_synthetic_fixture = "sample" in p.name.lower() or "stub" in p.name.lower()
+
     return {
         "valid": matches,
-        "status": "VERIFIED" if matches else "CHECKSUM_MISMATCH",
+        "status": ("SYNTHETIC_BENCHMARK_FIXTURE" if is_synthetic_fixture else "VERIFIED") if matches else "CHECKSUM_MISMATCH",
+        "is_synthetic": is_synthetic_fixture,
         "path": str(p),
         "size_bytes": size_bytes,
         "sha256": actual_sha256,
-        "source_url": ESA_KELVIN_DATASET_URL
+        "source_url": ESA_KELVIN_DATASET_URL,
+        "disclaimer": "Synthetic CDM benchmark fixture for pipeline verification; not an upstream ESA Kelvins operational download." if is_synthetic_fixture else None
     }
 
 
 def download_esa_dataset_stub(destination_dir: Path | str) -> Dict[str, Any]:
     """
-    Downloads or stages the ESA Kelvin CDM dataset into the target directory.
-    When network access is offline, provides instructions and verifies local stage.
+    Downloads or stages a synthetic demonstration CDM sample fixture into the target directory.
+    Clearly marks and verifies local sample fixture without overstating operational data.
     """
     dest = Path(destination_dir)
     dest.mkdir(parents=True, exist_ok=True)

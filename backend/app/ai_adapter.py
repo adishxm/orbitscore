@@ -17,15 +17,19 @@ from .extractor import extract_candidate_fields, SYNTHETIC_WARNING
 logger = logging.getLogger(__name__)
 
 
-def run_ai_candidate_extraction(pages: list[Tuple[int, str]]) -> list[CandidateField]:
+def run_ai_candidate_extraction(
+    pages: list[Tuple[int, str]],
+    allow_external: bool = False
+) -> list[CandidateField]:
     """Execute AI extraction delegating to ai_ml package with deterministic fallback.
     
     Invariants enforced:
     1. Adapter never writes final review statuses or decisions.
     2. Extracted fields strictly have human_confirmed=False.
-    3. Preserves deterministic fallback when AI is disabled or fails.
+    3. Preserves deterministic fallback when AI is disabled, unpermitted, or fails.
+    4. Explicit document consent (allow_external=True) strictly required before sending bytes externally.
     """
-    if not is_ai_enabled():
+    if not allow_external or not is_ai_enabled():
         return extract_candidate_fields(pages)
 
     raw_candidates = _run_ai_extraction(pages, fallback_fn=extract_candidate_fields)

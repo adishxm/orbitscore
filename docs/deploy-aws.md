@@ -15,10 +15,16 @@ OrbitScore consists of a **FastAPI + AI/ML backend service** and a **React 18 + 
         │
         └──► [ AWS App Runner / ECS ] ──► FastAPI + Scikit-Learn Engine
                      │
-                     ├──► AWS Secrets Manager (JWT keys, Space-Track credentials)
-                     ├──► Amazon RDS / Aurora (PostgreSQL + PostGIS spatial tables)
+                     ├──► AWS Secrets Manager (Reviewer key, Agent37 configuration)
+                     ├──► Persistent Volume / EBS Mount (SQLite database: `/data/orbitscore.db`)
                      └──► EBS / S3 (Model Artifacts with SHA-256 integrity verification)
 ```
+
+> [!NOTE]
+> **Database and Storage Architecture**:
+> - OrbitScore runtime uses SQLite configured with WAL mode (`PRAGMA journal_mode=WAL`) on a mounted persistent volume (`DATABASE_PATH=/data/orbitscore.db` or configured volume path).
+> - Migrations are managed via Alembic in `backend/alembic/`.
+> - For zero-loss rollbacks, always snapshot or back up the persistent volume or SQLite database file before applying schema migrations.
 
 > [!NOTE]
 > **Vercel vs AWS Demarcation**:
@@ -97,7 +103,12 @@ If a deployment fails health checks or introduces regression:
    ```bash
    aws ecs update-service --cluster orbitscore-prod --service orbitscore-api --task-definition orbitscore-task:PREVIOUS_REVISION
    ```
-3. **Database Rollback**: If a schema migration caused issues, use Alembic:
-   ```bash
-   alembic downgrade -1
-   ```
+3. **Database Rollback & Disaster Recovery**:
+   - To prevent data loss, take a volume snapshot or copy `orbitscore.db` before migrations.
+   - For a schema rollback to a previous state:
+     ```bash
+     # Restore SQLite database from pre-migration backup/snapshot
+     cp /data/orbitscore.db.bak /data/orbitscore.db
+     # Or run Alembic downgrade if downward migration scripts are confirmed non-destructive
+     alembic downgrade -1
+     ```

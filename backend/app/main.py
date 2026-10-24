@@ -51,7 +51,7 @@ from .odar_generator import generate_nasa_odar_markdown, generate_eomp_markdown,
 from .db import (
     init_db, reset_db, get_connection, save_mission, get_mission_db, list_missions_db,
     save_artifact_db, get_artifact_db, get_artifact_content_db,
-    save_evaluation_db, get_evaluation_db, save_review_db, list_reviews_db,
+    save_evaluation_db, get_evaluation_db, invalidate_evaluation_db, save_review_db, list_reviews_db,
     save_counterfactual_db, append_provenance_event_db, get_all_provenance_events_db,
     verify_provenance_chain_db
 )
@@ -352,10 +352,20 @@ def export_packet(
     evaluation = get_evaluation_db(mission_id)
     if not evaluation:
         raise HTTPException(423, detail={"code": "EXPORT_LOCKED", "message": "Mission must be evaluated before export", "pending_decisions": 1})
-    reviews = list_reviews_db()
-    missing = [f["finding_id"] for f in evaluation.get("findings", []) if f["finding_id"] not in reviews]
-    if missing:
-        raise HTTPException(423, detail={"code": "EXPORT_LOCKED", "unreviewed_findings": missing, "pending_decisions": len(missing)})
+    reviews = list_reviews_db(mission_id)
+    unreviewed = [f["finding_id"] for f in evaluation.get("findings", []) if f["finding_id"] not in reviews]
+    rejected = [
+        f["finding_id"] for f in evaluation.get("findings", [])
+        if f["finding_id"] in reviews and reviews[f["finding_id"]].get("decision") not in ("ACCEPTED", "WAIVED_WITH_NOTE", "APPROVED", "WAIVED")
+    ]
+    if unreviewed or rejected:
+        raise HTTPException(423, detail={
+            "code": "EXPORT_LOCKED",
+            "unreviewed_findings": unreviewed,
+            "rejected_findings": rejected,
+            "pending_decisions": len(unreviewed) + len(rejected),
+            "message": "Export locked: All findings must be approved or waived by human reviewer; rejected or unreviewed findings block export."
+        })
 
     prov_status = verify_provenance_chain_db()
     packet = generate_packet(
@@ -403,6 +413,7 @@ def update_field(
             "locator": {}
         })
     save_mission(m)
+    invalidate_evaluation_db(mission_id)
     append_provenance_event_db("field_updated", {
         "mission_id": mission_id,
         "field": field_name,
@@ -512,8 +523,16 @@ def extract_artifact(artifact_id: str, user: AuthenticatedUser = Depends(require
             message=f"Parser failure: {str(exc)}"
         )
 
-    # Use AI candidate extraction when enabled; otherwise falls back cleanly to deterministic parser
-    candidates = run_ai_candidate_extraction(pages)
+    meta = {}
+    if rec.get("metadata_json"):
+        try:
+            meta = json.loads(rec["metadata_json"])
+        except Exception:
+            pass
+    allowed_ext = bool(meta.get("allowed_external_processing", False))
+
+    # Use AI candidate extraction when enabled AND permitted; otherwise falls back cleanly to deterministic parser
+    candidates = run_ai_candidate_extraction(pages, allow_external=allowed_ext)
 
     if not candidates:
         return ExtractionResponse(
@@ -534,6 +553,7 @@ def extract_artifact(artifact_id: str, user: AuthenticatedUser = Depends(require
         m_fields.append(cand_dict)
 
     save_mission(m)
+    invalidate_evaluation_db(mission_id)
 
     append_provenance_event_db("artifact_extracted", {
         "artifact_id": artifact_id,
@@ -805,14 +825,24 @@ def export_nasa_odar_report(
     evaluation = get_evaluation_db(mission_id)
     if not evaluation:
         raise HTTPException(423, detail={"code": "EXPORT_LOCKED", "message": "Mission must be evaluated before export", "pending_decisions": 1})
-    reviews = list_reviews_db()
-    missing = [f["finding_id"] for f in evaluation.get("findings", []) if f["finding_id"] not in reviews]
-    if missing:
-        raise HTTPException(423, detail={"code": "EXPORT_LOCKED", "unreviewed_findings": missing, "pending_decisions": len(missing)})
+    reviews = list_reviews_db(mission_id)
+    unreviewed = [f["finding_id"] for f in evaluation.get("findings", []) if f["finding_id"] not in reviews]
+    rejected = [
+        f["finding_id"] for f in evaluation.get("findings", [])
+        if f["finding_id"] in reviews and reviews[f["finding_id"]].get("decision") not in ("ACCEPTED", "WAIVED_WITH_NOTE", "APPROVED", "WAIVED")
+    ]
+    if unreviewed or rejected:
+        raise HTTPException(423, detail={
+            "code": "EXPORT_LOCKED",
+            "unreviewed_findings": unreviewed,
+            "rejected_findings": rejected,
+            "pending_decisions": len(unreviewed) + len(rejected),
+            "message": "Export locked: All findings must be approved or waived by human reviewer; rejected or unreviewed findings block export."
+        })
 
     m = get_mission(mission_id)
     fields = m.get("fields", [])
-    decisions = [v for v in reviews.values() if v.get("mission_id") == m.get("mission_id")]
+    decisions = list(reviews.values())
     md = generate_nasa_odar_markdown(m, fields, decisions)
     if format == "pdf":
         pdf_bytes = generate_pdf_report("Orbital Debris Assessment Report (ODAR)", md, m.get("name", mission_id))
@@ -834,10 +864,20 @@ def export_isro_fcc_eomp_plan(
     evaluation = get_evaluation_db(mission_id)
     if not evaluation:
         raise HTTPException(423, detail={"code": "EXPORT_LOCKED", "message": "Mission must be evaluated before export", "pending_decisions": 1})
-    reviews = list_reviews_db()
-    missing = [f["finding_id"] for f in evaluation.get("findings", []) if f["finding_id"] not in reviews]
-    if missing:
-        raise HTTPException(423, detail={"code": "EXPORT_LOCKED", "unreviewed_findings": missing, "pending_decisions": len(missing)})
+    reviews = list_reviews_db(mission_id)
+    unreviewed = [f["finding_id"] for f in evaluation.get("findings", []) if f["finding_id"] not in reviews]
+    rejected = [
+        f["finding_id"] for f in evaluation.get("findings", [])
+        if f["finding_id"] in reviews and reviews[f["finding_id"]].get("decision") not in ("ACCEPTED", "WAIVED_WITH_NOTE", "APPROVED", "WAIVED")
+    ]
+    if unreviewed or rejected:
+        raise HTTPException(423, detail={
+            "code": "EXPORT_LOCKED",
+            "unreviewed_findings": unreviewed,
+            "rejected_findings": rejected,
+            "pending_decisions": len(unreviewed) + len(rejected),
+            "message": "Export locked: All findings must be approved or waived by human reviewer; rejected or unreviewed findings block export."
+        })
 
     m = get_mission(mission_id)
     fields = m.get("fields", [])

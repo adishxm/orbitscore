@@ -16,7 +16,7 @@ export const OrbitalContextCard: React.FC<OrbitalContextCardProps> = ({ mission,
       <div className={styles.headerRow}>
         <div className={styles.titleArea}>
           <div className={styles.kicker}>
-            {isLive ? 'STAGE 1B • LIVE ORBITAL INTELLIGENCE' : 'STAGE 1B • SYNTHETIC ORBITAL CONTEXT'}
+            {isLive ? 'STAGE 1B • LIVE ORBITAL INTELLIGENCE (VERIFIED SOURCE)' : 'STAGE 1B • SYNTHETIC ORBITAL CONTEXT'}
           </div>
           <h2 id="orbital-context-heading" className={styles.title}>
             <span>Orbital Trajectory & Mission Envelope</span>
@@ -155,8 +155,8 @@ export const OrbitalContextCard: React.FC<OrbitalContextCardProps> = ({ mission,
               <div className={styles.paramValue}>{mission.mass_budget_kg} kg</div>
             </div>
             <div className={styles.paramCard}>
-              <div className={styles.paramLabel}>Synthetic Lifetime</div>
-              <div className={styles.paramValue}>~3.8 yrs (Drag)</div>
+              <div className={styles.paramLabel}>Simulation Decay Est.</div>
+              <div className={styles.paramValue}>~3.8 yrs (Synthetic Demo)</div>
             </div>
           </div>
 

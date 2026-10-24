@@ -69,7 +69,14 @@ export const Agent37Copilot: React.FC<Agent37CopilotProps> = ({ isOpen, onClose 
     }
   }, [isOpen]);
 
-  // Handle ESC key to close
+  // Isolate Copilot state per mission: reset triage, imports, and chat session when mission switches
+  useEffect(() => {
+    setTriageResult(null);
+    setImportedIndices({});
+    setSessionId(null);
+  }, [activeMissionId]);
+
+  // Handle ESC key and focus management
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -118,12 +125,12 @@ export const Agent37Copilot: React.FC<Agent37CopilotProps> = ({ isOpen, onClose 
       value: cand.value,
       unit: cand.unit || undefined,
       value_type: typeof cand.value === 'number' ? 'numeric' : 'string',
-      source_doc_title: 'Agent37 Cloud Triage Extraction',
-      source_doc_ref: `agent37:sandbox_${status?.instance_id || 'z2dhn46l7d'}`,
+      source_doc_title: '[UNVERIFIED MODEL DRAFT] AI Quote Extraction',
+      source_doc_ref: `draft_ai_quote:unverified_locator`,
       source_doc_date: new Date().toISOString().split('T')[0] ?? '2026-10-24',
       locator: cand.exact_quote,
       state: 'unconfirmed',
-      notes: `Extracted via Agent37 (${triageResult?.provider || 'agent37_cloud'}). Uncertainty: ${cand.uncertainty}. Strict Invariant: Human engineering confirmation required.`,
+      notes: `[UNVERIFIED MODEL DRAFT] Extracted via Agent37 (${triageResult?.provider || 'agent37_cloud'}). Uncertainty: ${cand.uncertainty}. INVARIANT: Must be verified against a real, hashed primary source before engineering confirmation.`,
     });
 
     setImportedIndices((prev) => ({ ...prev, [idx]: true }));

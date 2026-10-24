@@ -136,11 +136,11 @@ export const CHAPTERS: ChapterConfig[] = [
   {
     id: 'space-credit-core',
     index: 4,
-    title: 'Space Credit & Provenance Core',
+    title: 'Evidence Core & Provenance Ledger',
     kicker: 'CHAPTER 04 / 06',
-    subheading: '4-Pillar Readiness Index & Cryptographic SHA-256 Ledger',
+    subheading: 'Demonstration 4-Pillar Scenario & Cryptographic SHA-256 Ledger',
     description:
-      'Four-pillar readiness benchmarking (orbital lifetime, footprint, passivation, and primary citation provenance) locked in a tamper-evident SHA-256 cryptographic chain.',
+      'Demonstration scenario benchmarking (orbital lifetime, footprint, passivation, and primary citation provenance) locked in a tamper-evident SHA-256 cryptographic chain.',
     scroll: { start: 0.54, end: 0.71 },
     camera: {
       keys: [
@@ -151,8 +151,8 @@ export const CHAPTERS: ChapterConfig[] = [
     },
     input: 'pointer',
     hud: [
-      { id: 'index', label: 'SPACE CREDIT INDEX', value: '88.4 / 100 (TIER AA)', position: 'top-left', scramble: true },
-      { id: 'decay', label: 'GBR LIFETIME PREDICT', value: '12.4', unit: 'years', position: 'top-right' },
+      { id: 'index', label: '[SIMULATED SCENARIO] DEMO INDEX', value: 'DEMO PROTOTYPE ONLY', position: 'top-left', scramble: true },
+      { id: 'decay', label: 'SIMULATED DECAY EST', value: 'SYNTHETIC BENCHMARK', position: 'top-right' },
       { id: 'sha', label: 'PROVENANCE INTEGRITY', value: 'SHA-256 CHAIN VALID', position: 'bottom-left' },
       { id: 'tamper', label: 'TAMPER EVIDENCE', value: '14 VERIFIED EVENTS', position: 'bottom-right' },
     ],
@@ -214,7 +214,7 @@ export const CHAPTERS: ChapterConfig[] = [
     input: 'pointer',
     hud: [
       { id: 'odar', label: 'NASA-STD-8719.14', value: 'ODAR REVIEW DRAFT', position: 'top-left' },
-      { id: 'eomp', label: 'ISRO DFSM 2030', value: 'EOMP 5-YR DEORBIT READY', position: 'top-right' },
+      { id: 'eomp', label: 'ISRO DFSM 2030', value: 'DRAFT EOMP TEMPLATE (UNVERIFIED)', position: 'top-right' },
       { id: 'hash', label: 'PACKAGE HASH', value: 'e3b0c44298fc1c149afb...', position: 'bottom-left', scramble: true },
       { id: 'cta', label: 'WORKSPACE ACTION', value: 'LAUNCH ASTERIA-3 DEMO', position: 'bottom-right' },
     ],

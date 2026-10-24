@@ -21,6 +21,10 @@ def get_db_path() -> Path:
     env_path = os.environ.get("ORBIT_DB_PATH") or os.environ.get("DATABASE_PATH")
     if env_path:
         return Path(env_path)
+    # Check if /data volume is mounted (e.g. Render / Docker deployment)
+    render_data = Path("/data")
+    if render_data.exists() and os.access(str(render_data), os.W_OK):
+        return render_data / "orbitscore.db"
     return DEFAULT_DB_PATH
 
 
@@ -273,10 +277,21 @@ def save_review_db(review: dict, db_path: Optional[Path | str] = None) -> None:
     conn.close()
 
 
-def list_reviews_db(db_path: Optional[Path | str] = None) -> dict[str, dict]:
+def invalidate_evaluation_db(mission_id: str, db_path: Optional[Path | str] = None) -> None:
+    """Invalidate cached evaluation when mission data, fields, or evidence change."""
+    conn = get_connection(db_path)
+    with conn:
+        conn.execute("DELETE FROM evaluations WHERE mission_id = ?", (mission_id,))
+    conn.close()
+
+
+def list_reviews_db(mission_id: Optional[str] = None, db_path: Optional[Path | str] = None) -> dict[str, dict]:
     conn = get_connection(db_path)
     cur = conn.cursor()
-    cur.execute("SELECT finding_id, mission_id, decision, note, reviewer FROM reviews")
+    if mission_id:
+        cur.execute("SELECT finding_id, mission_id, decision, note, reviewer FROM reviews WHERE mission_id = ?", (mission_id,))
+    else:
+        cur.execute("SELECT finding_id, mission_id, decision, note, reviewer FROM reviews")
     rows = cur.fetchall()
     conn.close()
     return {

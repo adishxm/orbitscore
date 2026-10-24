@@ -49,8 +49,7 @@ def upgrade() -> None:
         sa.Column('value_json', sa.Text(), nullable=True),
         sa.Column('human_confirmed', sa.Integer(), server_default='0', nullable=False),
         sa.Column('artifact_id', sa.String(length=128), nullable=True),
-        sa.Column('confidence', sa.Float(), nullable=True),
-        sa.Column('page_number', sa.Integer(), nullable=True),
+        sa.Column('locator_json', sa.Text(), nullable=True),
         sa.Column('updated_at', sa.String(length=64), nullable=False)
     )
 
@@ -59,8 +58,8 @@ def upgrade() -> None:
         'evaluations',
         sa.Column('mission_id', sa.String(length=128), primary_key=True),
         sa.Column('profile_id', sa.String(length=128), nullable=False),
-        sa.Column('result_json', sa.Text(), nullable=False),
-        sa.Column('evaluated_at', sa.String(length=64), nullable=False)
+        sa.Column('evaluation_json', sa.Text(), nullable=False),
+        sa.Column('updated_at', sa.String(length=64), nullable=False)
     )
 
     # 5. Reviews table
@@ -69,9 +68,9 @@ def upgrade() -> None:
         sa.Column('finding_id', sa.String(length=128), primary_key=True),
         sa.Column('mission_id', sa.String(length=128), nullable=False),
         sa.Column('decision', sa.String(length=64), nullable=False),
-        sa.Column('note', sa.Text(), nullable=False),
+        sa.Column('note', sa.Text(), nullable=True),
         sa.Column('reviewer', sa.String(length=128), nullable=False),
-        sa.Column('reviewed_at', sa.String(length=64), nullable=False)
+        sa.Column('updated_at', sa.String(length=64), nullable=False)
     )
 
     # 6. Counterfactuals table
@@ -79,30 +78,34 @@ def upgrade() -> None:
         'counterfactuals',
         sa.Column('id', sa.Integer(), primary_key=True, autoincrement=True),
         sa.Column('mission_id', sa.String(length=128), nullable=False),
-        sa.Column('request_json', sa.Text(), nullable=False),
-        sa.Column('response_json', sa.Text(), nullable=False),
+        sa.Column('finding_id', sa.String(length=128), nullable=False),
+        sa.Column('lever', sa.String(length=128), nullable=False),
+        sa.Column('proposed_value_json', sa.Text(), nullable=False),
+        sa.Column('result_json', sa.Text(), nullable=False),
         sa.Column('created_at', sa.String(length=64), nullable=False)
     )
 
     # 7. Provenance table
     op.create_table(
         'provenance',
-        sa.Column('id', sa.Integer(), primary_key=True, autoincrement=True),
-        sa.Column('sequence_num', sa.Integer(), nullable=False),
+        sa.Column('sequence', sa.Integer(), primary_key=True, autoincrement=True),
+        sa.Column('event_id', sa.String(length=128), nullable=True),
         sa.Column('event_type', sa.String(length=128), nullable=False),
+        sa.Column('mission_id', sa.String(length=128), nullable=True),
         sa.Column('payload_json', sa.Text(), nullable=False),
-        sa.Column('timestamp_iso', sa.String(length=64), nullable=False),
-        sa.Column('prev_sha256', sa.String(length=64), nullable=False),
-        sa.Column('event_sha256', sa.String(length=64), nullable=False)
+        sa.Column('previous_hash', sa.String(length=64), nullable=False),
+        sa.Column('hash', sa.String(length=64), nullable=False),
+        sa.Column('created_at', sa.String(length=64), nullable=False)
     )
 
     # 8. Spatio-temporal TLE Snapshots
     op.create_table(
         'tle_snapshots',
         sa.Column('id', sa.Integer(), primary_key=True, autoincrement=True),
-        sa.Column('norad_id', sa.String(length=64), nullable=False),
+        sa.Column('norad_id', sa.Integer(), nullable=False),
         sa.Column('epoch', sa.String(length=64), nullable=False),
-        sa.Column('raw_tle', sa.Text(), nullable=False),
+        sa.Column('line1', sa.Text(), nullable=False),
+        sa.Column('line2', sa.Text(), nullable=False),
         sa.Column('source', sa.String(length=64), nullable=False),
         sa.Column('fetched_at', sa.String(length=64), nullable=False),
         sa.Column('sha256', sa.String(length=64), nullable=False)
@@ -112,16 +115,17 @@ def upgrade() -> None:
     op.create_table(
         'cdm_events',
         sa.Column('id', sa.Integer(), primary_key=True, autoincrement=True),
-        sa.Column('event_id', sa.String(length=128), nullable=False),
-        sa.Column('norad_primary', sa.String(length=64), nullable=False),
-        sa.Column('norad_secondary', sa.String(length=64), nullable=False),
+        sa.Column('cdm_id', sa.String(length=128), unique=True, nullable=False),
+        sa.Column('primary_norad', sa.Integer(), nullable=False),
+        sa.Column('primary_name', sa.String(length=256), nullable=False),
+        sa.Column('secondary_norad', sa.Integer(), nullable=False),
+        sa.Column('secondary_name', sa.String(length=256), nullable=False),
         sa.Column('tca', sa.String(length=64), nullable=False),
         sa.Column('miss_distance_m', sa.Float(), nullable=False),
-        sa.Column('relative_speed_m_s', sa.Float(), nullable=False),
-        sa.Column('raw_cdm_json', sa.Text(), nullable=False),
-        sa.Column('source', sa.String(length=64), nullable=False),
-        sa.Column('fetched_at', sa.String(length=64), nullable=False),
-        sa.Column('sha256', sa.String(length=64), nullable=False)
+        sa.Column('collision_probability', sa.Float(), nullable=False),
+        sa.Column('alert_level', sa.String(length=64), nullable=False),
+        sa.Column('data_mode', sa.String(length=64), nullable=False),
+        sa.Column('created_at', sa.String(length=64), nullable=False)
     )
 
 

@@ -162,3 +162,17 @@ New scope (T026+) ⇒ re-open `.brain/PROJECT_SIGNOFF.md` review; never edit sta
 | "PostgreSQL spatial-temporal store" | snapshot tables + Alembic Postgres path |
 | "hosted securely on AWS or Vercel" | Dockerfile + `deploy-aws.md`; Render demo; Vercel = frontend |
 | *(bonus, from v02)* real-data ML honesty | `ai_ml/{extraction,evaluation,training}` + Track-B ESA CDM offline pipeline — real verification completes in v02 T019–T021 |
+
+---
+
+## Security & Static Review Audit Resolution (25 October 2026)
+
+- [x] **A1. Auth fail-closed in production**: `ORBITSCORE_AUTH_ENABLED` fails closed when `ORBIT_ENV=production`; Docker Compose and `.env.example` require reviewer credentials.
+- [x] **A2. Report correctness & evidence linking**: `_match_evidence` links both `field` and `parameter_key`; removed default 3.8 yr lifetime; returns explicit `NOT EVALUATED / UNVERIFIED` and `NEEDS_EVIDENCE` states.
+- [x] **A3. Stale evaluation invalidation & export isolation**: Mission field edits invalidate evaluations (`invalidated: true`); exports enforce mission-scoped reviews and block rejected findings.
+- [x] **A4. Schema & storage reconciliation**: Alembic migration table columns aligned with `db.py`; SQLite WAL configured on mounted persistent volume `/data/orbitscore.db`.
+- [x] **A5. Agent37 privacy & verified TLS**: Document-level `allowed_external_processing` permission enforced; strict `ssl.create_default_context()` without unverified fallbacks; host domain validation.
+- [x] **A6. Synthetic dataset & model labeling**: `esa_downloader.py` reports `SYNTHETIC_BENCHMARK_FIXTURE`; `art_gb_01.meta.json` set to unapproved demo fixture.
+- [x] **A7. UI labels & Copilot provenance**: Static chapter targets labeled `[SIMULATED SCENARIO] DEMO TARGET`; Copilot imports labeled `[UNVERIFIED MODEL DRAFT] AI Quote Extraction` with mission isolation.
+- [x] **A8. CI & Test reconciliation**: Automated GitHub Actions CI created; 182 tests verified passing (85 frontend + 64 backend + 33 AI/ML).
+

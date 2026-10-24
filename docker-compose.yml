@@ -12,6 +12,10 @@ services:
       - ORBIT_ENV=production
       - ORBIT_SECRET_KEY=dev-secret-key-change-for-production
       - ORBIT_LIVE_DATA_ENABLED=false
+      - ORBITSCORE_AUTH_ENABLED=1
+      - ORBITSCORE_REVIEWER_KEY=orbitscore-reviewer-key-2026
+      - ORBITSCORE_VIEWER_KEY=orbitscore-viewer-key-2026
+      - DATABASE_PATH=/app/data/orbitscore.db
     volumes:
       - orbitdata:/app/data
     healthcheck:

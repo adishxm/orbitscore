@@ -23,13 +23,26 @@ api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
 
 def is_auth_enforced() -> bool:
     """Check if authentication is strictly enforced via environment."""
-    return os.getenv("ORBITSCORE_AUTH_ENABLED", "0").lower() in ("1", "true", "yes")
+    is_prod = (
+        os.getenv("ORBIT_ENV", "").lower() in ("production", "prod")
+        or os.getenv("ENVIRONMENT", "").lower() in ("production", "prod")
+    )
+    val = os.getenv("ORBITSCORE_AUTH_ENABLED", "1" if is_prod else "0").lower()
+    return val in ("1", "true", "yes")
 
 def get_configured_reviewer_key() -> str:
-    return os.getenv("ORBITSCORE_REVIEWER_KEY", "orbitscore-reviewer-key-2026")
+    return (
+        os.getenv("ORBITSCORE_REVIEWER_KEY")
+        or os.getenv("ORBIT_REVIEWER_KEY")
+        or "orbitscore-reviewer-key-2026"
+    )
 
 def get_configured_viewer_key() -> str:
-    return os.getenv("ORBITSCORE_VIEWER_KEY", "orbitscore-viewer-key-2026")
+    return (
+        os.getenv("ORBITSCORE_VIEWER_KEY")
+        or os.getenv("ORBIT_VIEWER_KEY")
+        or "orbitscore-viewer-key-2026"
+    )
 
 async def get_current_user(
     request: Request,
@@ -38,8 +51,8 @@ async def get_current_user(
 ) -> AuthenticatedUser:
     """
     Authenticate user via Bearer token or X-API-Key header.
-    When ORBITSCORE_AUTH_ENABLED is not set, permits default reviewer access for local offline tests,
-    unless explicitly requested.
+    When ORBITSCORE_AUTH_ENABLED is not set, permits default reviewer access only in local development/test mode,
+    failing closed whenever production environment or auth enforcement is detected.
     """
     token = None
     if bearer_creds:

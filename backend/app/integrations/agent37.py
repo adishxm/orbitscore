@@ -83,21 +83,31 @@ def is_agent37_enabled() -> bool:
     return flag and has_key
 
 def get_agent37_endpoint() -> str:
-    """Resolve the active Agent37 runtime endpoint URL."""
+    """Resolve the active Agent37 runtime endpoint URL with strict HTTPS and domain constraints."""
+    import urllib.parse
     raw_url = os.getenv("AGENT37_INSTANCE_URL", "").strip()
     instance_id = os.getenv("AGENT37_INSTANCE_ID", "z2dhn46l7d").strip()
     if raw_url:
-        return f"{raw_url.rstrip('/')}/v1/responses"
-    if instance_id:
-        return f"https://{instance_id}.agent37.app/v1/responses"
-    return "https://api.agent37.com/v1/responses"
+        endpoint = f"{raw_url.rstrip('/')}/v1/responses"
+    elif instance_id:
+        endpoint = f"https://{instance_id}.agent37.app/v1/responses"
+    else:
+        endpoint = "https://api.agent37.com/v1/responses"
+
+    parsed = urllib.parse.urlparse(endpoint)
+    if parsed.scheme.lower() != "https":
+        raise ValueError(f"Insecure transport scheme '{parsed.scheme}'. Agent37 strictly requires HTTPS.")
+
+    allowed_suffixes = (".agent37.app", ".agent37.com")
+    netloc = parsed.netloc.lower().split(":")[0]
+    if not (any(netloc.endswith(s) for s in allowed_suffixes) or netloc in ("agent37.com", "api.agent37.com")):
+        raise ValueError(f"Unapproved external host '{netloc}' for Agent37. Only official agent37 domains permitted.")
+
+    return endpoint
 
 def _get_ssl_context() -> ssl.SSLContext:
-    """Create resilient SSL context supporting system or local CA bundles."""
-    try:
-        return ssl.create_default_context()
-    except Exception:
-        return ssl._create_unverified_context()
+    """Create strict, verified SSL context. Fails closed on TLS errors without insecure fallbacks."""
+    return ssl.create_default_context()
 
 def _extract_candidates_deterministic(excerpt: str, source_id: str) -> list[Agent37Candidate]:
     """

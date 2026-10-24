@@ -41,7 +41,7 @@ OrbitScore delivers a polished, responsive mission evidence workspace and synthe
 ### Canonical Frontend (`frontend/`)
 
 ```bash
-# Run tests (68 tests across 10 suites)
+# Run tests (85 tests across 12 suites, including Axe a11y & banned-words lint)
 npm test
 
 # Typecheck
@@ -63,7 +63,7 @@ npm run lint:banned-words
 # Install dependencies including the editable ai_ml package
 pip install -r requirements.txt
 
-# Run backend test suite (62 tests)
+# Run backend test suite (64 tests)
 python -m pytest backend/tests
 
 # Run synthetic verification matrix
@@ -81,6 +81,17 @@ python -m pytest ai_ml/tests
 ```
 
 AI extraction is disabled by default (`ORBIT_AI_ENABLED=false`) and always operates with temperature 0.0, a 10.0-second timeout, and an automatic deterministic regex fallback (`backend/app/extractor.py`). All AI-extracted fields are strictly labeled `human_confirmed=False`.
+
+## Security Audit Remediations (October 2026 Audit)
+
+The repository underwent a rigorous static security and compliance audit covering commit `b543a4bd8108aba456a3b6053d38e6aa3a7ab21b`. All findings were addressed:
+1. **Authentication Fail-Closed**: `ORBITSCORE_AUTH_ENABLED` defaults strictly to fail-closed in production (`ORBIT_ENV=production`), requiring bearer reviewer token credentials across API endpoints and Docker Compose.
+2. **Report Correctness & Evidence Linking**: ODAR/EOMP generators match evidence on both `field` and `parameter_key` schemas. Removed hardcoded 3.8-year lifetime defaults; reports return explicit `NOT EVALUATED / UNVERIFIED` and `NEEDS_EVIDENCE` states when primary sources are absent or unconfirmed.
+3. **Stale Evaluation Invalidation & Export Isolation**: Field edits invalidate cached evaluations (`invalidated: true`). Export gates enforce strict mission isolation (`list_reviews_db(mission_id)`) and lock on any non-approved / rejected findings.
+4. **Schema Alignment & Persistent Storage**: Aligned Alembic migration schemas with runtime `db.py` column structures. Persistent storage correctly mounts to `/data/orbitscore.db` in production containers.
+5. **Agent37 Privacy & Safe TLS**: Enforced per-document `allowed_external_processing` permission checks before external dispatch. Eliminated unverified TLS fallback (`ssl.create_default_context()` enforced) and constrained endpoints to verified HTTPS hosts.
+6. **Synthetic Demo Labeling**: Unapproved model fixtures and synthetic ESA Kelvin benchmarks explicitly marked `SYNTHETIC DEMONSTRATION ONLY`.
+7. **CI Pipeline**: Added automated GitHub Actions CI (`.github/workflows/ci.yml`) covering all 182 backend, AI/ML, and frontend tests.
 
 ### Archived Legacy Console (`legacy/`)
 
