@@ -31,11 +31,24 @@
 
 ---
 
-## Next 3 Actions (Vertical Slice Execution)
+## Slice Execution Progress
 
-1. **Slice 1 (Scaffold & Tooling)**: Initialize Vite + React 18 + TypeScript (strict) in `/frontend/app`, configure ESLint, Prettier, Vitest, axe-core, CSS modules, design tokens, and self-hosted fonts.
-2. **Slice 2 & 3 (Layout Shell & Domain Engine)**: Build Header, Footer, Status Banner (`DEMO / MOCK`, `SYNTHETIC DATA`), domain types, pure check engine (`demo-evidence-completeness` v0.1.0) with unit tests for all 6 deterministic checks.
-3. **Slice 4 & 5 (Asteria-3 Fixture & Workspace Flow)**: Implement Asteria-3 synthetic fixture, state management (Zustand + local storage adapter), evidence register table, and confirmation drawer.
+### Slice 1: Scaffold, Tooling & Design System Foundation
+- **Status**: COMPLETE
+- **Gates Verified**:
+  - `tsc --noEmit`: 0 errors
+  - `npm run build`: Success in 526ms (Initial JS: 45.2 KB gzipped; CSS: 2.41 KB gzipped — both well within §8 performance budgets)
+  - `npm test`: 1/1 tests passed (banned-words lint verified over all `/src` files)
+  - Self-hosted fonts: Space Grotesk, Inter, JetBrains Mono downloaded and configured with `@font-face` and `font-display: swap` in `/public/fonts`
+  - Zero external font CDN requests
+
+---
+
+## Next 3 Actions
+
+1. **Slice 2 (Layout Shell & Routing)**: Build Header, Footer, Status Banner (`DEMO / MOCK`, `SYNTHETIC DATA`), routing structure (`/`, `/how-it-works`, `/profiles`, `/about-limits`, `/status`, `/app/missions`, 404), and accessibility landmark tests.
+2. **Slice 3 (Domain Types & Check Engine Module)**: Implement domain models in `/src/types/domain.ts` and pure check functions in `/src/profiles/demo-evidence-completeness.ts` with 100% Vitest coverage.
+3. **Slice 4 (Asteria-3 Fixture & State Store)**: Implement Zustand store with persistence, reset action, and the Asteria-3 synthetic 3U CubeSat dataset.
 
 ---
 
