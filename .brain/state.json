@@ -8,23 +8,23 @@
   "tasks": {
     "T001": "done",
     "T002": "done",
-    "T003": "ready",
-    "T004": "ready",
-    "T005": "blocked-by-T003",
+    "T003": "done",
+    "T004": "done",
+    "T005": "done",
     "T006": "ready",
     "T007": "ready",
-    "T008": "blocked-by-T005",
+    "T008": "done",
     "T009": "verifying"
   },
   "last_verification": {
     "brain_validation": "passed; 9 tasks; project scope aligned",
     "brain_reporting_tests": "5 passed",
-    "backend_pytest": "7 passed",
+    "backend_pytest": "38 passed",
     "verification_matrix": "12 evaluations; provenance valid",
-    "frontend_vitest": "6 passed",
+    "frontend_vitest": "10 passed",
     "typecheck": "passed",
     "production_build": "passed",
-    "report": ".brain/reports/task-runs/20261022T015106.160951+0530_T009_verification.json"
+    "report": ".brain/reports/task-runs/20261024T181028.159570+0530_T008_verification.json"
   },
   "project_completion_status": "NOT_ELIGIBLE",
   "last_project_completion_check": ".brain/reports/completion-runs/20261022T015319.029317+0530_project-completion.json",

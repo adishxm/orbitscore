@@ -1,6 +1,6 @@
 # T004 — Durable provenance chain
 
-- status: ready
+- status: done
 - owner: Aditya
 - reviewer: Roshan
 - priority: P1

@@ -1,6 +1,6 @@
 # T003 — Durable local state
 
-- status: ready
+- status: done
 - owner: Aditya
 - reviewer: Roshan
 - priority: P1

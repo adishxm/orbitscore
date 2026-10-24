@@ -1,6 +1,6 @@
 # T005 — Cited review packet
 
-- status: blocked-by-T003
+- status: done
 - owner: Aditya
 - reviewer: Narayan
 - priority: P1

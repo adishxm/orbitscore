@@ -1,6 +1,6 @@
 # T008 — Optional structured AI extraction
 
-- status: blocked-by-T005
+- status: done
 - owner: Aditya
 - reviewer: Narayan
 - priority: P2

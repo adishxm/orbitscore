@@ -440,6 +440,7 @@
   "provenance_verification": {
     "valid": true,
     "count": 12,
-    "head": "e4288b6115abd8bb45622c8163bcc4612853bb489b08da4d8adf6c80a0b5cff9"
+    "head": "e4288b6115abd8bb45622c8163bcc4612853bb489b08da4d8adf6c80a0b5cff9",
+    "notice": "Tamper-evident verification checked; not a legally binding third-party certification or distributed blockchain."
   }
 }
