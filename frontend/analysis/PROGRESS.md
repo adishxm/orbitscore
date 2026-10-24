@@ -54,7 +54,7 @@
   - Routes verified: `/`, `/how-it-works`, `/profiles`, `/about-limits`, `/status`, `/missions`, `/missions/:id`, `*` (404)
 
 ### Slice 3: Domain Types & Pure Deterministic Check Engine
-- **Status**: COMPLETE
+- **Status**: COMPLETE (commit `9bf81f6`)
 - **Gates Verified**:
   - `tsc --noEmit`: 0 errors
   - `npm run build`: Success in 562ms
@@ -64,13 +64,24 @@
   - Pure check functions tested: C-01 (Missing parameters), C-02 (SI Units validation), C-03 (Cross-document conflicts), C-04 (Source citations & locators), C-05 (Temporal baseline currency), C-06 (Human verification)
   - Snapshot hashing: Deterministic 32-bit hex digest verified reproducible across identical datasets and sensitive to value mutations
 
+### Slice 4: Synthetic Asteria-3 Fixture & State Store
+- **Status**: COMPLETE
+- **Gates Verified**:
+  - `tsc --noEmit`: 0 errors
+  - `npm run build`: Success in 637ms
+  - `npm test`: 28/28 tests passed across 4 test suites (`store.test.ts`, `demo-evidence-completeness.test.ts`, `layout-shell.test.tsx`, `banned-words-lint.test.ts`)
+  - Banned-wording linter: 0 violations across all fixtures and store logic
+  - Asteria-3 fixture implemented: 3U CubeSat with conflicting mass (4.15 kg CAD vs 3.82 kg ICD), missing deployment epoch, unconfirmed battery screening, stale TVAC test (16 months old), and out-of-scope propulsion trade
+  - Microsat-X fixture implemented: 150 kg ESPA-class smallsat for out-of-scope profile gating
+  - Zustand store implemented: local storage persistence under `orbitscore_store_v1` with safe memory fallback, re-run staleness tracking on edits, input snapshot freezing, `resetDemo()`, and `clearData()`
+
 ---
 
 ## Next 3 Actions
 
-1. **Slice 4 (Synthetic Asteria-3 Fixture & State Store)**: Implement `src/fixtures/asteria-3.ts`, `src/fixtures/microsat-x.ts`, and Zustand store `useOrbitStore.ts` with local persistence, input snapshot freezing, and clean demo reset.
-2. **Slice 5 (Workspace Flow: Context, Evidence Register & Confirmation)**: Build DataTable with 5 state chips, citation locator inspector drawer, and Stepper navigation.
-3. **Slice 6 (Profile Gate, Check Execution & Findings)**: Connect profile runner, render FindingCard with bidirectional traceability links to evidence rows, and display severity indicators.
+1. **Slice 5 (Workspace Flow: Context, Evidence Register & Confirmation)**: Build DataTable with column sorting and search, 5 StateChip indicators, SidePanel confirmation drawer with citation inspection, and Stepper navigation.
+2. **Slice 6 (Profile Gate, Check Execution & Findings)**: Connect profile runner, render FindingCard with bidirectional traceability links to evidence rows, and display severity indicators.
+3. **Slice 7 (Human Review Decisions, Open Issues & Export Gate)**: Implement ReviewDecisionForm (human decisions separate from software findings), OpenIssuesList, and mandatory export gating.
 
 ---
 
