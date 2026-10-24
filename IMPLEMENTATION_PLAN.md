@@ -1,1 +1,0 @@
-frontend/analysis/IMPLEMENTATION_PLAN.md

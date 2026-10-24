@@ -12,14 +12,15 @@
 
 | File | Status | Location | Notes |
 |---|---|---|---|
-| `PROGRESS.md` | Active | `frontend/analysis/` | Checkpoint tracking log |
-| `ASSUMPTIONS.md` | Active | `frontend/analysis/` | Architecture, UX, and domain defaults |
-| `REFERENCE_ANALYSIS.md` | Complete | `frontend/analysis/` | §5.0 tooling check, §5.1 coverage log, §5.2 13-point analysis with evidence tags |
-| `DESIGN_SYSTEM.md` | Complete | `frontend/analysis/` | Derived original tokens (colors, type, spacing, motion, WCAG AA 5 states) & component specs |
-| `IMPLEMENTATION_PLAN.md` | Complete | `frontend/analysis/` | Route architecture, vertical slices, feature mapping, test plan |
-| `ASSETS.md` | Complete | `frontend/analysis/` | Asset provenance, open font licensing, original vector graphics |
-| `PROFILE_SPEC.md` | Complete | `frontend/analysis/` | `demo-evidence-completeness` v0.1.0 and 6 deterministic check definitions |
-| `openapi.draft.yaml` | Complete | `frontend/analysis/` | Future FastAPI/PostgreSQL OpenAPI 3.1 draft contract |
+| `PROGRESS.md` | Active | `frontend/docs/` | Checkpoint tracking log |
+| `ASSUMPTIONS.md` | Active | `frontend/docs/` | Architecture, UX, and domain defaults |
+| `REFERENCE_ANALYSIS.md` | Complete | `frontend/docs/` | §5.0 tooling check, §5.1 coverage log, §5.2 13-point analysis with evidence tags |
+| `DESIGN_SYSTEM.md` | Complete | `frontend/docs/` | Derived original tokens (colors, type, spacing, motion, WCAG AA 5 states) & component specs |
+| `IMPLEMENTATION_PLAN.md` | Complete | `frontend/docs/` | Route architecture, vertical slices, feature mapping, test plan |
+| `ASSETS.md` | Complete | `frontend/docs/` | Asset provenance, open font licensing, original vector graphics |
+| `PROFILE_SPEC.md` | Complete | `frontend/docs/` | `demo-evidence-completeness` v0.1.0 and 6 deterministic check definitions |
+| `openapi.draft.yaml` | Complete | `frontend/docs/` | Future FastAPI/PostgreSQL OpenAPI 3.1 draft contract |
+| `orbitscore_master_prompt_v2.md` | Complete | `frontend/docs/` | Master engineering prompt and technical mandate |
 
 ---
 
