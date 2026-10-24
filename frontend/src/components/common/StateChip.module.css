@@ -1,0 +1,59 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  transition: all var(--transition-fast) var(--ease-out-quad);
+}
+
+.chipIcon {
+  flex-shrink: 0;
+}
+
+/* Missing State */
+.missing {
+  background: var(--color-state-missing-bg);
+  color: var(--color-state-missing);
+  border-color: rgba(75, 90, 108, 0.4);
+}
+
+/* Unconfirmed State */
+.unconfirmed {
+  background: var(--color-state-unconfirmed-bg);
+  color: var(--color-state-unconfirmed);
+  border-color: rgba(0, 161, 255, 0.35);
+}
+
+/* Confirmed State */
+.confirmed {
+  background: var(--color-state-confirmed-bg);
+  color: var(--color-state-confirmed);
+  border-color: rgba(16, 185, 129, 0.35);
+}
+
+/* Conflicting State */
+.conflicting {
+  background: var(--color-state-conflicting-bg);
+  color: var(--color-state-conflicting);
+  border-color: rgba(224, 86, 36, 0.4);
+}
+
+/* Stale State */
+.stale {
+  background: var(--color-state-stale-bg);
+  color: var(--color-state-stale);
+  border-color: rgba(217, 119, 6, 0.4);
+}
+
+/* Interactive hover when inside clickable table row */
+.chip:hover {
+  filter: brightness(1.1);
+}

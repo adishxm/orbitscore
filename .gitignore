@@ -11,6 +11,13 @@ __pycache__/
 node_modules/
 apps/web/dist/
 apps/web/tsconfig.tsbuildinfo
+frontend/dist/
+dist/
+**/dist/
+
+# OS and editors
+.DS_Store
+.wireit
 
 # Local runtime data and secrets
 .env
@@ -21,8 +28,11 @@ apps/web/tsconfig.tsbuildinfo
 *.sqlite3
 /data/
 
-# Generated local artifacts
+# Generated local artifacts and logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 coverage/
 .pytest_cache/
 .vite/

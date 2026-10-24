@@ -1,11 +1,17 @@
 {
-  "name": "orbitscore-twinforge",
+  "name": "orbitscore",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "npm --prefix apps/web run dev",
-    "build": "npm --prefix apps/web run build",
-    "test": "npm --prefix apps/web run test",
-    "typecheck": "npm --prefix apps/web run typecheck"
+    "dev": "npm --prefix frontend run dev",
+    "start": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "test": "npm --prefix frontend run test",
+    "lint": "npm --prefix frontend run lint",
+    "lint:banned-words": "npm --prefix frontend run lint:banned-words",
+    "web:dev": "npm --prefix apps/web run dev",
+    "web:build": "npm --prefix apps/web run build",
+    "web:test": "npm --prefix apps/web run test",
+    "web:typecheck": "npm --prefix apps/web run typecheck"
   }
 }

@@ -1,0 +1,195 @@
+/* OrbitScore CSS Design Tokens */
+/* Derived from EnduroSat reference and engineered for WCAG 2.2 AA */
+
+/* Self-Hosted Typefaces with font-display: swap */
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('/fonts/spacegrotesk-500.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('/fonts/spacegrotesk-700.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter-400.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter-600.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrainsmono-400.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrainsmono-600.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Surfaces & Backgrounds */
+  --os-color-bg-deep: #05070a;
+  --os-color-bg-base: #090d12;
+  --os-color-surface-subtle: #10151c;
+  --os-color-surface-card: #141a23;
+  --os-color-surface-hover: #1a222e;
+  --os-color-surface-overlay: #1c2431;
+
+  /* Hairline Borders */
+  --os-color-border-subtle: #1c2530;
+  --os-color-border-mid: #2b3644;
+  --os-color-border-bright: #3f4e62;
+  --os-color-border-cyan: #00a1ff;
+
+  /* Text & Labels (Engineered for WCAG 2.2 AA: Contrast >= 4.5:1 on dark) */
+  --os-color-text-white: #ffffff;     /* Contrast 18.5:1 */
+  --os-color-text-primary: #f0f4f8;   /* Contrast 16.2:1 */
+  --os-color-text-secondary: #9daec2; /* Contrast 8.2:1 */
+  --os-color-text-muted: #6f8298;     /* Contrast 4.6:1 */
+  --os-color-text-dim: #4d5c6f;       /* Contrast 3.1:1 (inactive/decorative) */
+
+  /* Brand Accents */
+  --os-color-accent-cyan: #00a1ff;
+  --os-color-accent-cyan-hover: #33b4ff;
+  --os-color-accent-cyan-muted: rgba(0, 161, 255, 0.15);
+  --os-color-accent-amber: #f59e0b;
+  --os-color-accent-crimson: #f43f5e;
+
+  /* 5 Evidence State Tokens - Dark Canvas (Contrast >= 4.5:1 on dark surfaces) */
+  --os-state-confirmed-text: #34d399; /* Emerald 400 - 8.4:1 */
+  --os-state-confirmed-bg: rgba(16, 185, 129, 0.12);
+  --os-state-confirmed-border: rgba(16, 185, 129, 0.35);
+
+  --os-state-unconfirmed-text: #fbbf24; /* Amber 400 - 8.6:1 */
+  --os-state-unconfirmed-bg: rgba(245, 158, 11, 0.12);
+  --os-state-unconfirmed-border: rgba(245, 158, 11, 0.35);
+
+  --os-state-missing-text: #f87171; /* Red 400 - 6.7:1 */
+  --os-state-missing-bg: rgba(239, 68, 68, 0.12);
+  --os-state-missing-border: rgba(239, 68, 68, 0.35);
+
+  --os-state-conflicting-text: #c084fc; /* Purple 400 - 6.9:1 */
+  --os-state-conflicting-bg: rgba(168, 85, 247, 0.14);
+  --os-state-conflicting-border: rgba(168, 85, 247, 0.35);
+
+  --os-state-outofscope-text: #94a3b8; /* Slate 400 - 5.9:1 */
+  --os-state-outofscope-bg: rgba(148, 163, 184, 0.12);
+  --os-state-outofscope-border: rgba(148, 163, 184, 0.35);
+
+  /* Light / Print Canvas Evidence State Tokens (Contrast >= 4.5:1 on #FFFFFF) */
+  --os-state-confirmed-print-text: #047857; /* Emerald 700 - 5.8:1 */
+  --os-state-confirmed-print-bg: #ecfdf5;
+
+  --os-state-unconfirmed-print-text: #b45309; /* Amber 700 - 5.2:1 */
+  --os-state-unconfirmed-print-bg: #fffbeb;
+
+  --os-state-missing-print-text: #b91c1c; /* Red 700 - 6.1:1 */
+  --os-state-missing-print-bg: #fef2f2;
+
+  --os-state-conflicting-print-text: #7e22ce; /* Purple 700 - 6.4:1 */
+  --os-state-conflicting-print-bg: #faf5ff;
+
+  --os-state-outofscope-print-text: #475569; /* Slate 600 - 5.4:1 */
+  --os-state-outofscope-print-bg: #f1f5f9;
+
+  /* Typography Families */
+  --os-font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --os-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --os-font-mono: 'JetBrains Mono', 'IBM Plex Mono', Menlo, Consolas, monospace;
+
+  /* Fluid Typography Scale */
+  --os-type-hero: clamp(2.5rem, 5.5vw + 1rem, 5.25rem);
+  --os-type-title-1: clamp(1.875rem, 3.5vw + 0.5rem, 3.25rem);
+  --os-type-title-2: clamp(1.375rem, 2vw + 0.5rem, 2.125rem);
+  --os-type-title-3: clamp(1.125rem, 1.25vw + 0.25rem, 1.625rem);
+  --os-type-body-l: clamp(1.0625rem, 0.5vw + 0.875rem, 1.25rem);
+  --os-type-body: 1rem;
+  --os-type-body-s: 0.875rem;
+  --os-type-caption: 0.75rem;
+
+  /* Line Heights */
+  --os-lh-tight: 1.05;
+  --os-lh-snug: 1.25;
+  --os-lh-normal: 1.55;
+  --os-lh-relaxed: 1.75;
+
+  /* Letter Spacings */
+  --os-tracking-tighter: -0.04em;
+  --os-tracking-tight: -0.02em;
+  --os-tracking-normal: 0em;
+  --os-tracking-wide: 0.05em;
+  --os-tracking-caps: 0.1em;
+
+  /* Spacing Scale */
+  --os-space-1: 0.25rem;  /* 4px */
+  --os-space-2: 0.5rem;   /* 8px */
+  --os-space-3: 0.75rem;  /* 12px */
+  --os-space-4: 1.0rem;   /* 16px */
+  --os-space-5: 1.25rem;  /* 20px */
+  --os-space-6: 1.5rem;   /* 24px */
+  --os-space-8: 2.0rem;   /* 32px */
+  --os-space-10: 2.5rem;  /* 40px */
+  --os-space-12: 3.0rem;  /* 48px */
+  --os-space-16: 4.0rem;  /* 64px */
+  --os-space-24: 6.0rem;  /* 96px */
+  --os-space-32: 8.0rem;  /* 128px */
+
+  /* Containers & Dimensions */
+  --os-container-sm: 640px;
+  --os-container-md: 960px;
+  --os-container-lg: 1200px;
+  --os-container-xl: 1360px;
+  --os-container-pad: clamp(1.25rem, 4vw, 3.5rem);
+
+  /* Geometry & Radii */
+  --os-radius-xs: 2px;
+  --os-radius-sm: 4px;
+  --os-radius-md: 6px;
+  --os-radius-pill: 9999px;
+
+  /* Z-Index Hierarchy */
+  --os-z-below: -1;
+  --os-z-canvas: 0;
+  --os-z-content: 10;
+  --os-z-sticky: 100;
+  --os-z-header: 250;
+  --os-z-drawer: 300;
+  --os-z-modal: 400;
+  --os-z-toast: 500;
+  --os-z-banner: 600;
+
+  /* Motion & Easing */
+  --os-ease-standard: cubic-bezier(0.51, 0.01, 0.2, 1);
+  --os-ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  --os-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --os-duration-fast: 150ms;
+  --os-duration-normal: 300ms;
+  --os-duration-medium: 450ms;
+  --os-duration-deliberate: 600ms;
+  --os-duration-long: 800ms;
+}
