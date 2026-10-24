@@ -15,7 +15,7 @@
     "T008": {
       "title": "Optional structured AI extraction",
       "allowed_dispositions": ["complete", "deferred_by_owner"],
-      "current_disposition": "pending",
+      "current_disposition": "complete",
       "note": "The product is intentionally designed to remain useful with AI disabled. A deferred disposition requires an explicit owner/reviewer rationale and does not count as delivering the AI adapter."
     }
   },

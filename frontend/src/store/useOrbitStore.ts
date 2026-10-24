@@ -12,7 +12,13 @@ import {
 import { DEMO_PROFILE, executeProfileChecks } from '../profiles/demo-evidence-completeness';
 import { ASTERIA_3_MISSION, ASTERIA_3_EVIDENCE } from '../fixtures/asteria-3';
 import { MICROSAT_X_MISSION, MICROSAT_X_EVIDENCE } from '../fixtures/microsat-x';
-import { checkApiHealth, fetchProvenanceLive, DEFAULT_API_BASE_URL } from '../api/backend';
+import {
+  checkApiHealth,
+  fetchProvenanceLive,
+  evaluateMissionLive,
+  submitReviewDecisionLive,
+  DEFAULT_API_BASE_URL
+} from '../api/backend';
 
 export interface OrbitState {
   activeMissionId: string;
@@ -241,6 +247,14 @@ export const useOrbitStore = create<OrbitState>()(
           },
         }));
 
+        if (get().apiMode === 'live' && get().isApiConnected) {
+          evaluateMissionLive(missionId, profile.id, get().apiServerUrl)
+            .then(() => get().syncProvenance())
+            .catch((err) => {
+              console.warn('Live API evaluation error, preserved deterministic local run:', err);
+            });
+        }
+
         return checkRun;
       },
 
@@ -261,6 +275,21 @@ export const useOrbitStore = create<OrbitState>()(
             [missionId]: [...filtered, newDecision],
           },
         }));
+
+        if (get().apiMode === 'live' && get().isApiConnected) {
+          submitReviewDecisionLive(
+            missionId,
+            decisionData.finding_id,
+            decisionData.decision,
+            decisionData.rationale,
+            decisionData.reviewer_name,
+            get().apiServerUrl
+          )
+            .then(() => get().syncProvenance())
+            .catch((err) => {
+              console.error('Failed to submit review decision to live backend:', err);
+            });
+        }
       },
 
       addOpenIssue: (missionId, issueData) => {

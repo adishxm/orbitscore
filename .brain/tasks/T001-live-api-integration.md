@@ -12,7 +12,8 @@ Make the normal React app use the FastAPI API for mission listing, profile selec
 
 ## Allowed files
 
-`apps/api/app/main.py`, `apps/web/src/`, `apps/web/vite.config.ts`, `apps/web/.env.example`, `frontend-service/`, tests, and docs needed for the run command.
+`backend/app/main.py`, `frontend/src/`, `frontend/vite.config.ts`, `frontend/.env.example`, legacy archives (`legacy/web/`, `legacy/frontend-service/`), tests, and docs needed for the run command.
+*(Note: Reconciled during layout consolidation from legacy `apps/api` and `apps/web` to top-level canonical `backend/` and `frontend/` at commit `ca96b42`)*.
 
 ## Acceptance checks
 
@@ -25,3 +26,4 @@ Make the normal React app use the FastAPI API for mission listing, profile selec
 ## Required verification
 
 Run backend pytest, frontend Vitest, typecheck, build, and one manual browser flow in both live and mock modes. Record request/response evidence in the task log.
+*(Note: Canonical store in `frontend/src/store/useOrbitStore.ts` now wires `evaluateMissionLive`, `submitReviewDecisionLive`, and `fetchProvenanceLive` when `apiMode === 'live'`)*.

@@ -7,7 +7,7 @@ from pathlib import Path
 from datetime import datetime, timezone
 from typing import Optional
 
-from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Query, Request
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Query, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 
@@ -25,6 +25,18 @@ from .extractor import (
     MAX_FILE_SIZE, ALLOWED_EXTENSIONS, SYNTHETIC_WARNING
 )
 from .ai_adapter import run_ai_candidate_extraction, is_ai_enabled
+from .auth import (
+    get_current_user, require_reviewer, require_viewer_or_reviewer, AuthenticatedUser
+)
+from .integrations.agent37 import (
+    triage_excerpt_agent37, Agent37TriageRequest, Agent37TriageResponse, is_agent37_enabled
+)
+from .integrations.browser_use import (
+    capture_public_source, BrowserCaptureRequest, BrowserCaptureResponse, is_browser_use_enabled
+)
+from .integrations.elevenlabs import (
+    narrate_reviewed_finding, ElevenLabsNarrateRequest, ElevenLabsNarrateResponse, is_elevenlabs_enabled
+)
 from .db import (
     init_db, reset_db, get_connection, save_mission, get_mission_db, list_missions_db,
     save_artifact_db, get_artifact_db, get_artifact_content_db,
@@ -72,7 +84,26 @@ app = FastAPI(
     description="Deterministic regulatory policy evaluation & human review decision dossier API.",
     lifespan=lifespan
 )
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+
+# Environment-specific CORS configuration - avoids wildcard origins in production/staging
+cors_origins_env = os.getenv("ORBITSCORE_CORS_ORIGINS", "")
+if cors_origins_env:
+    cors_origins = [o.strip() for o in cors_origins_env.split(",") if o.strip()]
+else:
+    cors_origins = [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000"
+    ]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=cors_origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
+)
 
 
 # Compatibility dictionary proxies backed by SQLite for tests and scripts
@@ -207,12 +238,12 @@ def health():
 
 
 @app.get("/profiles")
-def profiles():
+def profiles(user: AuthenticatedUser = Depends(require_viewer_or_reviewer)):
     return load_profiles()
 
 
 @app.get("/missions")
-def list_missions():
+def list_missions(user: AuthenticatedUser = Depends(require_viewer_or_reviewer)):
     _ensure_fixtures_loaded()
     missions = list_missions_db()
     if not missions:
@@ -222,7 +253,7 @@ def list_missions():
 
 
 @app.get("/missions/{mission_id}")
-def get_mission(mission_id: str):
+def get_mission(mission_id: str, user: AuthenticatedUser = Depends(require_viewer_or_reviewer)):
     m = get_mission_db(mission_id)
     if not m:
         fixture = FIXTURES / f"{mission_id}.json"
@@ -235,7 +266,7 @@ def get_mission(mission_id: str):
 
 
 @app.post("/missions")
-def create_mission(payload: MissionProfile):
+def create_mission(payload: MissionProfile, user: AuthenticatedUser = Depends(require_reviewer)):
     mission = payload.model_dump()
     save_mission(mission)
     append_provenance_event_db("mission_created", {"mission_id": mission["mission_id"]}, mission["mission_id"])
@@ -243,7 +274,7 @@ def create_mission(payload: MissionProfile):
 
 
 @app.post("/missions/{mission_id}/evaluate")
-def evaluate(mission_id: str, request: EvaluateRequest):
+def evaluate(mission_id: str, request: EvaluateRequest, user: AuthenticatedUser = Depends(require_reviewer)):
     mission = get_mission(mission_id)
     try:
         result = evaluate_mission(mission, request.profile_id)
@@ -259,7 +290,7 @@ def evaluate(mission_id: str, request: EvaluateRequest):
 
 
 @app.post("/missions/{mission_id}/findings/{finding_id}/decision")
-def decision(mission_id: str, finding_id: str, request: DecisionRequest):
+def decision(mission_id: str, finding_id: str, request: DecisionRequest, user: AuthenticatedUser = Depends(require_reviewer)):
     evaluation = get_evaluation_db(mission_id)
     if not evaluation or not any(f["finding_id"] == finding_id for f in evaluation.get("findings", [])):
         raise HTTPException(404, "Evaluate mission and select an existing finding first")
@@ -270,7 +301,7 @@ def decision(mission_id: str, finding_id: str, request: DecisionRequest):
 
 
 @app.post("/missions/{mission_id}/counterfactual")
-def counterfactual(mission_id: str, request: CounterfactualRequest):
+def counterfactual(mission_id: str, request: CounterfactualRequest, user: AuthenticatedUser = Depends(require_reviewer)):
     evaluation = get_evaluation_db(mission_id)
     if not evaluation:
         raise HTTPException(409, "Evaluate mission first")
@@ -283,14 +314,19 @@ def counterfactual(mission_id: str, request: CounterfactualRequest):
 
 
 @app.get("/provenance")
-def provenance():
+def provenance(user: AuthenticatedUser = Depends(require_viewer_or_reviewer)):
     events = get_all_provenance_events_db()
     verification = verify_provenance_chain_db()
     return {"events": events, "verification": verification}
 
 
 @app.get("/export/{mission_id}")
-def export_packet(mission_id: str, request: Request, format: Optional[str] = Query(None)):
+def export_packet(
+    mission_id: str,
+    request: Request,
+    format: Optional[str] = Query(None),
+    user: AuthenticatedUser = Depends(require_viewer_or_reviewer)
+):
     """Export complete cited review packet. Returns 423 if any finding lacks a human decision."""
     evaluation = get_evaluation_db(mission_id)
     if not evaluation:
@@ -320,7 +356,12 @@ def export_packet(mission_id: str, request: Request, format: Optional[str] = Que
 
 
 @app.patch("/missions/{mission_id}/fields/{field_name}")
-def update_field(mission_id: str, field_name: str, request: FieldUpdateRequest):
+def update_field(
+    mission_id: str,
+    field_name: str,
+    request: FieldUpdateRequest,
+    user: AuthenticatedUser = Depends(require_reviewer)
+):
     m = get_mission(mission_id)
     fields = m.setdefault("fields", [])
     updated = False
@@ -351,15 +392,24 @@ def update_field(mission_id: str, field_name: str, request: FieldUpdateRequest):
 
 
 @app.patch("/fields/{field_id}")
-def update_field_by_id(field_id: str, request: FieldUpdateRequest, mission_id: str | None = None):
+def update_field_by_id(
+    field_id: str,
+    request: FieldUpdateRequest,
+    mission_id: str | None = None,
+    user: AuthenticatedUser = Depends(require_reviewer)
+):
     target_mission = mission_id or "mission_complete"
-    return update_field(target_mission, field_id, request)
+    return update_field(target_mission, field_id, request, user=user)
 
 
 # --- Artifact Upload and Extraction Endpoints ---
 
 @app.post("/missions/{mission_id}/artifacts", response_model=ArtifactRecord)
-async def upload_artifact(mission_id: str, file: UploadFile = File(...)):
+async def upload_artifact(
+    mission_id: str,
+    file: UploadFile = File(...),
+    user: AuthenticatedUser = Depends(require_reviewer)
+):
     """Upload a synthetic mission evidence document with SHA-256 verification and durable persistence."""
     m = get_mission(mission_id)
     filename = file.filename or "unknown_artifact"
@@ -408,7 +458,7 @@ async def upload_artifact(mission_id: str, file: UploadFile = File(...)):
 
 
 @app.get("/artifacts/{artifact_id}")
-def get_artifact(artifact_id: str):
+def get_artifact(artifact_id: str, user: AuthenticatedUser = Depends(require_viewer_or_reviewer)):
     rec = get_artifact_db(artifact_id)
     if not rec:
         raise HTTPException(404, "Artifact not found")
@@ -416,7 +466,7 @@ def get_artifact(artifact_id: str):
 
 
 @app.post("/artifacts/{artifact_id}/extract", response_model=ExtractionResponse)
-def extract_artifact(artifact_id: str):
+def extract_artifact(artifact_id: str, user: AuthenticatedUser = Depends(require_reviewer)):
     """Extract candidate fields using AI (if enabled) or deterministic regex parser."""
     rec = get_artifact_db(artifact_id)
     if not rec:
@@ -482,7 +532,113 @@ def extract_artifact(artifact_id: str):
 
 
 @app.post("/reset")
-def reset_demo():
+def reset_demo(user: AuthenticatedUser = Depends(require_reviewer)):
     reset_db()
     _ensure_fixtures_loaded()
     return {"ok": True}
+
+
+# --- Six Services Integration Endpoints ---
+
+@app.post("/integrations/agent37/triage", response_model=Agent37TriageResponse)
+def agent37_triage(
+    request: Agent37TriageRequest,
+    user: AuthenticatedUser = Depends(require_reviewer)
+):
+    """
+    Perform bounded candidate evidence triage via Agent37 on a supplied excerpt.
+    Strict Invariant: Candidates produced are strictly unconfirmed (human_confirmed = False).
+    """
+    res = triage_excerpt_agent37(request)
+    if res.candidates and request.mission_id:
+        append_provenance_event_db("agent37_triage_executed", {
+            "mission_id": request.mission_id,
+            "candidate_count": len(res.candidates),
+            "source_hash": res.source_hash,
+            "status": res.status
+        }, request.mission_id)
+    return res
+
+
+@app.post("/integrations/browser-use/capture", response_model=BrowserCaptureResponse)
+def browser_use_capture(
+    request: BrowserCaptureRequest,
+    user: AuthenticatedUser = Depends(require_reviewer)
+):
+    """
+    Capture public-source candidate excerpt from an approved allowlisted authority.
+    Strict Invariant: Enforces strict domain allowlist (NASA, FCC, FAA, ESA, ISO, etc.).
+    Does not login, submit forms, or alter external services.
+    """
+    return capture_public_source(request)
+
+
+@app.post("/integrations/elevenlabs/narrate", response_model=ElevenLabsNarrateResponse)
+def elevenlabs_narrate(
+    request: ElevenLabsNarrateRequest,
+    user: AuthenticatedUser = Depends(require_reviewer)
+):
+    """
+    Generate audio narration for an already human-reviewed finding.
+    Strict Invariant: Unreviewed findings are rejected. Server-side API key only.
+    """
+    revs = list_reviews_db()
+    finding_decision = revs.get(request.finding_id)
+    is_reviewed = finding_decision is not None
+    review_status = finding_decision.get("decision") if finding_decision else None
+
+    return narrate_reviewed_finding(request, is_finding_reviewed=is_reviewed, review_status=review_status)
+
+
+@app.get("/integrations/status")
+def integrations_status():
+    """
+    Report enabled status and configuration boundary for the six integrated services without leaking secrets.
+    """
+    return {
+        "services": {
+            "flutterflow": {
+                "role": "Mobile Reviewer Client",
+                "api_contract": "/openapi.json",
+                "auth_method": "Bearer Token",
+                "status": "READY"
+            },
+            "agent37": {
+                "role": "Bounded Candidate Evidence Triage",
+                "enabled": is_agent37_enabled(),
+                "mode": "cloud" if is_agent37_enabled() else "local_deterministic_fallback",
+                "output_constraint": "human_confirmed=False strictly",
+                "status": "READY"
+            },
+            "browser_use": {
+                "role": "Allowlisted Public-Source Capture & QA",
+                "enabled": is_browser_use_enabled(),
+                "mode": "cloud" if is_browser_use_enabled() else "local_allowlist_preview",
+                "domain_filter": "strict_allowlist_enforced",
+                "status": "READY"
+            },
+            "elevenlabs": {
+                "role": "Accessible Audio Narration of Human-Reviewed Findings",
+                "enabled": is_elevenlabs_enabled(),
+                "mode": "cloud" if is_elevenlabs_enabled() else "local_mock_preview",
+                "gate": "human_reviewed_findings_only",
+                "status": "READY"
+            },
+            "adaption": {
+                "role": "Isolated Synthetic-Data & Model Evaluation Workbench",
+                "enabled": False,
+                "location": "ai_ml/adaption_pipeline.py",
+                "pipeline_type": "offline_research_only",
+                "production_inference_connected": False,
+                "status": "READY"
+            },
+            "render": {
+                "role": "Application & Static Hosting Infrastructure",
+                "config": "render.yaml",
+                "services": ["orbitscore-web", "orbitscore-api", "orbitscore-worker"],
+                "status": "CONFIGURED"
+            }
+        },
+        "governance_notice": "External services cannot certify compliance, approve evidence, or make review decisions. Deterministic evaluation and provenance remain authoritative."
+    }
+
