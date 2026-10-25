@@ -1,10 +1,12 @@
-/* Stepper.module.css */
+/* Stepper.module.css - 6-Stage Gate Navigator */
+
 .stepperWrap {
-  margin-bottom: var(--os-space-8);
-  background-color: var(--os-color-surface-card);
-  border: 1px solid var(--os-color-border-subtle);
-  border-radius: var(--os-radius-md);
-  padding: var(--os-space-3);
+  margin-bottom: var(--space-8, 32px);
+  background: linear-gradient(180deg, var(--surface-1) 0%, var(--surface-2) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md, 14px);
+  padding: 8px 12px;
+  box-shadow: var(--shadow-card);
 }
 
 .stepList {
@@ -15,7 +17,7 @@
   padding: 0;
   margin: 0;
   overflow-x: auto;
-  gap: var(--os-space-2);
+  gap: var(--space-2, 8px);
   -webkit-overflow-scrolling: touch;
 }
 
@@ -28,21 +30,21 @@
   width: 100%;
   display: flex;
   align-items: center;
-  gap: var(--os-space-3);
-  padding: var(--os-space-3) var(--os-space-4);
+  gap: var(--space-3, 12px);
+  padding: 8px 12px;
   background: transparent;
   border: 1px solid transparent;
-  border-radius: var(--os-radius-sm);
+  border-radius: var(--radius-sm, 8px);
   cursor: pointer;
   text-align: left;
   min-height: 44px;
-  transition: all var(--os-duration-fast) var(--os-ease-standard);
-  color: var(--os-color-text-secondary);
+  transition: all var(--duration-fast, 150ms) var(--ease-out);
+  color: var(--text-1);
 }
 
 .stepButton:hover {
-  background-color: var(--os-color-surface-hover);
-  color: var(--os-color-text-white);
+  background-color: rgba(255, 255, 255, 0.04);
+  color: var(--text-0);
 }
 
 .stepNumber {
@@ -51,15 +53,15 @@
   justify-content: center;
   width: 24px;
   height: 24px;
-  border-radius: var(--os-radius-pill);
-  background-color: var(--os-color-surface-sunken);
-  border: 1px solid var(--os-color-border-subtle);
-  font-family: var(--os-font-mono);
-  font-size: var(--os-type-caption);
+  border-radius: 999px;
+  background-color: var(--surface-2);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 11px;
   font-weight: 700;
-  color: var(--os-color-text-muted);
+  color: var(--text-2);
   flex-shrink: 0;
-  transition: all var(--os-duration-fast) var(--os-ease-standard);
+  transition: all var(--duration-fast, 150ms) var(--ease-out);
 }
 
 .stepContent {
@@ -69,66 +71,45 @@
 }
 
 .stepLabel {
-  font-family: var(--os-font-display);
-  font-size: var(--os-type-body-s);
-  font-weight: 700;
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: var(--text-0);
 }
 
 .stepSubtext {
-  font-family: var(--os-font-mono);
+  font-family: var(--font-mono);
   font-size: 10px;
-  color: var(--os-color-text-muted);
+  color: var(--text-2);
   text-transform: uppercase;
-  letter-spacing: var(--os-tracking-wide);
+  letter-spacing: 0.08em;
 }
 
 /* Active Step */
 .active .stepButton {
-  background-color: rgba(13, 148, 136, 0.08);
-  border-color: var(--os-color-accent-teal, #0d9488);
-  color: var(--os-color-text-white);
+  background-color: rgba(106, 165, 255, 0.12);
+  border-color: var(--accent);
+  color: var(--text-0);
+  box-shadow: 0 0 16px -4px rgba(106, 165, 255, 0.35);
 }
 
 .active .stepNumber {
-  background-color: var(--os-color-accent-teal, #0d9488);
-  border-color: var(--os-color-accent-teal, #0d9488);
-  color: #ffffff;
-}
-
-.active .stepSubtext {
-  color: var(--os-color-accent-teal, #0d9488);
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: #04060b;
+  font-weight: 700;
 }
 
 /* Completed Step */
 .completed .stepNumber {
-  background-color: var(--os-state-confirmed-bg);
-  border-color: var(--os-state-confirmed-border);
-  color: var(--os-state-confirmed-text);
+  background-color: rgba(52, 211, 153, 0.12);
+  border-color: var(--ok);
+  color: var(--ok);
 }
 
-@media (max-width: 768px) {
-  .stepList {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--os-space-2);
-  }
-
-  .stepSubtext {
-    display: none;
-  }
-
-  .stepItem {
-    min-width: 0;
-  }
-
-  .stepButton {
-    padding: var(--os-space-2) var(--os-space-3);
-  }
-
-  .stepLabel {
-    font-size: var(--os-type-caption);
-  }
+.completed:not(.active) .stepButton:hover {
+  background-color: rgba(52, 211, 153, 0.06);
 }

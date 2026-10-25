@@ -1,105 +1,110 @@
+/* ReviewDecisionForm.module.css - Human Review & Technical Authority Decisions */
+
 .card {
-  background-color: var(--os-color-surface-card);
-  border: 1px solid var(--os-color-border-subtle);
-  border-radius: var(--os-radius-md);
-  padding: var(--os-space-6);
-  margin-bottom: var(--os-space-6);
+  background: linear-gradient(180deg, var(--surface-1) 0%, var(--surface-2) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md, 14px);
+  padding: 24px;
+  margin-bottom: var(--space-6, 24px);
+  box-shadow: var(--shadow-card);
 }
 
 .kicker {
-  font-family: var(--os-font-mono);
-  font-size: var(--os-type-caption);
-  color: var(--os-color-accent-teal, #0d9488);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--accent);
   text-transform: uppercase;
-  letter-spacing: var(--os-tracking-wide);
-  margin-bottom: var(--os-space-1);
+  letter-spacing: 0.12em;
+  margin-bottom: var(--space-1, 4px);
   font-weight: 600;
 }
 
 .title {
-  font-family: var(--os-font-display);
-  font-size: var(--os-type-title-2);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
   font-weight: 700;
-  color: var(--os-color-text-white);
-  margin: 0 0 var(--os-space-2) 0;
+  color: var(--text-0);
+  margin: 0 0 var(--space-2, 8px) 0;
 }
 
 .authorityCallout {
   display: flex;
   align-items: flex-start;
-  gap: var(--os-space-3);
-  background-color: var(--os-color-surface-sunken);
-  border: 1px solid var(--os-color-border-subtle);
-  border-left: 3px solid var(--os-color-accent-teal, #0d9488);
-  border-radius: var(--os-radius-sm);
-  padding: var(--os-space-3) var(--os-space-4);
-  margin-bottom: var(--os-space-6);
+  gap: var(--space-3, 12px);
+  background-color: rgba(106, 165, 255, 0.05);
+  border: 1px solid rgba(106, 165, 255, 0.25);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm, 8px);
+  padding: var(--space-3, 12px) var(--space-4, 16px);
+  margin-bottom: var(--space-6, 24px);
 }
 
 .authorityTitle {
-  font-family: var(--os-font-mono);
-  font-size: var(--os-type-caption);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
   font-weight: 700;
-  color: var(--os-color-accent-teal, #0d9488);
+  color: var(--accent);
   text-transform: uppercase;
-  letter-spacing: var(--os-tracking-wide);
-  margin-bottom: var(--os-space-1);
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-1, 4px);
 }
 
 .authorityText {
-  font-size: var(--os-type-caption);
-  color: var(--os-color-text-secondary);
-  line-height: var(--os-lh-normal);
+  font-size: 0.75rem;
+  color: var(--text-1);
+  line-height: 1.5;
   margin: 0;
 }
 
 .selectorSection {
-  margin-bottom: var(--os-space-6);
+  margin-bottom: var(--space-6, 24px);
 }
 
 .selectorLabel {
   display: block;
-  font-family: var(--os-font-mono);
-  font-size: var(--os-type-caption);
-  color: var(--os-color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-2);
   text-transform: uppercase;
-  margin-bottom: var(--os-space-2);
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-2, 8px);
   font-weight: 600;
 }
 
 .findingTabs {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--os-space-2);
-  margin-bottom: var(--os-space-4);
+  gap: var(--space-2, 8px);
+  margin-bottom: var(--space-4, 16px);
 }
 
 .findingTab {
   display: inline-flex;
   align-items: center;
-  gap: var(--os-space-2);
-  padding: var(--os-space-2) var(--os-space-3);
-  background-color: var(--os-color-surface-sunken);
-  border: 1px solid var(--os-color-border-subtle);
-  border-radius: var(--os-radius-sm);
-  color: var(--os-color-text-secondary);
-  font-family: var(--os-font-mono);
-  font-size: var(--os-type-caption);
+  gap: var(--space-2, 8px);
+  padding: 6px 12px;
+  background-color: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm, 8px);
+  color: var(--text-1);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
   cursor: pointer;
   min-height: 38px;
-  transition: all var(--os-duration-fast) var(--os-ease-standard);
+  transition: all var(--duration-fast, 150ms) var(--ease-out);
 }
 
 .findingTab:hover {
-  border-color: var(--os-color-border-bright);
-  color: var(--os-color-text-primary);
+  border-color: var(--border-strong);
+  color: var(--text-0);
 }
 
 .findingTabActive {
-  background-color: rgba(13, 148, 136, 0.08);
-  border-color: var(--os-color-accent-teal, #0d9488);
-  color: var(--os-color-accent-teal, #0d9488);
+  background-color: rgba(106, 165, 255, 0.12);
+  border-color: var(--accent);
+  color: var(--accent);
   font-weight: 600;
+  box-shadow: 0 0 12px -3px rgba(106, 165, 255, 0.3);
 }
 
 .findingTabSigned {
@@ -111,7 +116,8 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: var(--os-state-confirmed-text);
+  background-color: var(--ok);
+  box-shadow: 0 0 6px var(--ok);
 }
 
 .signIndicatorPending {
@@ -119,84 +125,84 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: var(--os-state-conflicting-text);
+  background-color: var(--warn);
 }
 
 .findingContextBox {
-  background-color: var(--os-color-surface-sunken);
-  border: 1px solid var(--os-color-border-subtle);
-  border-radius: var(--os-radius-sm);
-  padding: var(--os-space-4);
-  margin-bottom: var(--os-space-6);
+  background-color: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm, 8px);
+  padding: var(--space-4, 16px);
+  margin-bottom: var(--space-6, 24px);
 }
 
 .contextHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--os-space-2);
+  margin-bottom: var(--space-2, 8px);
   flex-wrap: wrap;
-  gap: var(--os-space-2);
+  gap: var(--space-2, 8px);
 }
 
 .contextTitle {
-  font-family: var(--os-font-display);
-  font-size: var(--os-type-body);
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
   font-weight: 700;
-  color: var(--os-color-text-white);
+  color: var(--text-0);
   margin: 0;
 }
 
 .contextSummary {
-  font-size: var(--os-type-body-s);
-  color: var(--os-color-text-secondary);
-  margin-bottom: var(--os-space-2);
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  color: var(--text-1);
+  margin-bottom: var(--space-2, 8px);
 }
 
 .contextDetails {
-  font-size: var(--os-type-caption);
-  color: var(--os-color-text-muted);
-  font-family: var(--os-font-mono);
+  font-size: 0.75rem;
+  color: var(--text-2);
+  font-family: var(--font-mono);
   margin: 0;
   white-space: pre-wrap;
-  line-height: var(--os-lh-normal);
+  line-height: 1.5;
 }
 
 .severityBadge {
-  font-family: var(--os-font-mono);
-  font-size: var(--os-type-caption);
-  color: var(--os-color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-2);
 }
 
 .recordedStatusGroup {
   display: flex;
   align-items: center;
-  gap: var(--os-space-2);
+  gap: var(--space-2, 8px);
 }
 
 .timestampBadge {
-  font-family: var(--os-font-mono);
+  font-family: var(--font-mono);
   font-size: 11px;
-  color: var(--os-color-text-muted);
+  color: var(--text-2);
   display: inline-flex;
   align-items: center;
   gap: 4px;
 }
 
 .emptyFindingsText {
-  color: var(--os-color-text-muted);
-  font-size: var(--os-type-body-s);
-  font-family: var(--os-font-mono);
-  padding: var(--os-space-6);
+  color: var(--text-2);
+  font-size: 0.8125rem;
+  font-family: var(--font-mono);
+  padding: var(--space-6, 24px);
   text-align: center;
 }
-
 
 .formGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--os-space-4);
-  margin-bottom: var(--os-space-4);
+  gap: var(--space-4, 16px);
+  margin-bottom: var(--space-4, 16px);
 }
 
 @media (max-width: 768px) {
@@ -208,42 +214,42 @@
 .formGroup {
   display: flex;
   flex-direction: column;
-  gap: var(--os-space-1);
+  gap: var(--space-1, 4px);
 }
 
 .label {
-  font-family: var(--os-font-mono);
-  font-size: var(--os-type-caption);
-  color: var(--os-color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-1);
   font-weight: 600;
 }
 
 .input,
 .select,
 .textarea {
-  background-color: var(--os-color-surface-sunken);
-  border: 1px solid var(--os-color-border-mid);
-  border-radius: var(--os-radius-sm);
-  padding: var(--os-space-2) var(--os-space-3);
-  font-family: var(--os-font-sans);
-  font-size: var(--os-type-body-s);
-  color: var(--os-color-text-primary);
+  background-color: var(--bg-0);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm, 8px);
+  padding: 8px 12px;
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  color: var(--text-0);
   min-height: 42px;
-  transition: border-color var(--os-duration-fast) var(--os-ease-standard);
+  transition: border-color var(--duration-fast, 150ms) var(--ease-out);
 }
 
 .input:focus,
 .select:focus,
 .textarea:focus {
-  outline: 2px solid var(--os-color-accent-teal, #0d9488);
-  outline-offset: 1px;
-  border-color: var(--os-color-accent-teal, #0d9488);
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(106, 165, 255, 0.25);
 }
 
 .textarea {
   min-height: 90px;
   resize: vertical;
-  line-height: var(--os-lh-normal);
+  line-height: 1.5;
 }
 
 .fullWidth {
@@ -251,44 +257,50 @@
 }
 
 .recordedSignoffBox {
-  background-color: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  border-radius: var(--os-radius-sm);
-  padding: var(--os-space-3) var(--os-space-4);
-  margin-bottom: var(--os-space-4);
+  background-color: rgba(52, 211, 153, 0.08);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  border-radius: var(--radius-sm, 8px);
+  padding: var(--space-3, 12px) var(--space-4, 16px);
+  margin-bottom: var(--space-4, 16px);
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--os-space-2);
+  gap: var(--space-2, 8px);
 }
 
 .recordedText {
-  font-size: var(--os-type-caption);
-  color: var(--os-state-confirmed-text);
-  font-family: var(--os-font-mono);
+  font-size: 0.75rem;
+  color: var(--ok);
+  font-family: var(--font-mono);
 }
 
 .saveButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--os-space-2);
-  background-color: var(--os-color-accent-teal, #0d9488);
+  gap: var(--space-2, 8px);
+  background-color: var(--accent-fill);
   color: #ffffff;
-  border: 1px solid var(--os-color-accent-teal, #0d9488);
-  border-radius: var(--os-radius-xs, 2px);
-  padding: var(--os-space-2) var(--os-space-4);
-  font-family: var(--os-font-mono);
-  font-size: var(--os-type-body-s);
-  font-weight: 700;
+  border: 1px solid var(--accent-fill);
+  border-radius: var(--radius-sm, 10px);
+  padding: 0 20px;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 600;
   cursor: pointer;
-  min-height: 42px;
-  transition: background-color var(--os-duration-fast) var(--os-ease-standard);
+  min-height: 44px;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+  transition: all var(--duration-fast, 150ms) var(--ease-out);
 }
 
-.saveButton:hover {
-  background-color: var(--os-color-accent-teal-hover, #0f766e);
+.saveButton:hover:not(:disabled) {
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-1px);
+}
+
+.saveButton:active {
+  transform: scale(0.98);
 }
 
 .saveButton:disabled {
