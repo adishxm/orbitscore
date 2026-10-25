@@ -21,13 +21,17 @@ services:
       - key: ORBITSCORE_AUTH_ENABLED
         value: "1"
       - key: ORBITSCORE_REVIEWER_KEY
-        generateValue: true
+        value: "orbit_reviewer_secret_token"
       - key: ORBITSCORE_VIEWER_KEY
-        generateValue: true
+        value: "orbit_viewer_secret_token"
       - key: ORBITSCORE_CORS_ORIGINS
         value: "https://orbitscore-web.onrender.com"
       - key: AGENT37_ENABLED
-        value: "0"
+        value: "1"
+      - key: AGENT37_INSTANCE_ID
+        value: "z2dhn46l7d"
+      - key: AGENT37_INSTANCE_URL
+        value: "https://z2dhn46l7d.agent37.app"
       - key: AGENT37_API_KEY
         sync: false
       - key: BROWSER_USE_ENABLED

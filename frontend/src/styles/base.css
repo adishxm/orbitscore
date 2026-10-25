@@ -10,7 +10,7 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: clamp(100%, calc(100% + (100vw - 1440px) * 0.0036), 125%);
   background-color: var(--bg-0);
   color: var(--text-0);
   font-family: var(--font-sans);
@@ -23,12 +23,22 @@ html {
 
 body {
   min-height: 100vh;
+  min-height: 100dvh;
   background-color: var(--bg-0);
   color: var(--text-0);
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
   position: relative;
+}
+
+/* Master Single Container Layout System */
+.container {
+  width: 100%;
+  max-width: var(--content-max, 2560px);
+  margin-inline: auto;
+  padding-inline: var(--gutter, clamp(16px, 3vw, 56px));
+  box-sizing: border-box;
 }
 
 /* 1. Selection & Scroll Anchoring */

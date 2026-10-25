@@ -119,17 +119,19 @@ export const GlobalAtmosphere: React.FC = () => {
 
   return (
     <div className={styles.atmosphereRoot} aria-hidden="true">
-      {/* 1. Deep Space Radial Glows (Blue top-left, Cyan top-right, at most 12% opacity) */}
-      <div className={styles.radialGlowBlue} />
-      <div className={styles.radialGlowCyan} />
+      {/* 1. Full-Document Blue Gradient Layer (background.svg) */}
+      <div className={styles.svgBackgroundLayer} />
 
-      {/* 2. Faint 48px Technical Precision Grid with radial vignette mask */}
+      {/* 2. Top-Hero Ethereal Blue Glow Pool */}
+      <div className={styles.topHeroGlow} />
+
+      {/* 3. Faint 48px Technical Precision Grid with radial vignette mask */}
       <div className={styles.technicalGrid} />
 
-      {/* 3. Fixed Canvas Starfield */}
+      {/* 4. Fixed Canvas Starfield */}
       <canvas ref={canvasRef} className={styles.starfieldCanvas} />
 
-      {/* 4. Fine SVG Film Grain (3-4% opacity to eliminate gradient banding) */}
+      {/* 5. Fine SVG Film Grain (3-4% opacity to eliminate gradient banding) */}
       <div className={styles.filmGrain} />
     </div>
   );

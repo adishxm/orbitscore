@@ -56,7 +56,7 @@
   /* =========================================================================
      1. Primary Palette (Deep-space navy-black & atmospheric sunrise glow)
      ========================================================================= */
-  --bg-0: #04060b;         /* Page primary background */
+  --bg-0: #050505;         /* Page primary background (matching background.svg) */
   --bg-1: #070b14;         /* Alternating section background */
   --surface-1: #0b111d;    /* Base card / container surface */
   --surface-2: #101828;    /* Elevated surface / hover state */
@@ -100,6 +100,10 @@
   --space-12: 48px;
   --space-18: 72px;
   --space-28: 112px;
+
+  /* Master Layout Tokens */
+  --gutter: clamp(16px, 3vw, 56px);
+  --content-max: 2560px;
 
   --section-pad: clamp(72px, 10vw, 140px);
 
