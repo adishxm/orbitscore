@@ -87,7 +87,10 @@ class SpaceTrackClient:
 
                             # Persist live snapshot
                             try:
-                                from app.db import save_tle_snapshot
+                                try:
+                                    from backend.app.db import save_tle_snapshot
+                                except ImportError:
+                                    from app.db import save_tle_snapshot
                                 save_tle_snapshot(
                                     norad_id=int(data["NORAD_CAT_ID"]),
                                     epoch=data["EPOCH"],
@@ -96,7 +99,7 @@ class SpaceTrackClient:
                                     source="Space-Track.org Live API",
                                     fetched_at=now_str,
                                     sha256=digest,
-                                )
+                                    )
                             except Exception:
                                 pass
 
@@ -123,7 +126,10 @@ class SpaceTrackClient:
 
         # Check local SNAPSHOT store
         try:
-            from app.db import get_latest_tle_snapshot
+            try:
+                from backend.app.db import get_latest_tle_snapshot
+            except ImportError:
+                from app.db import get_latest_tle_snapshot
             snapshot = get_latest_tle_snapshot(norad_cat_id)
             if snapshot:
                 fetched_at = snapshot.get("fetched_at")

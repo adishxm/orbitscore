@@ -124,7 +124,10 @@ async def fetch_celestrak_gp(
     now_iso = now_utc.isoformat()
 
     # 1. Check local durable SQLite cache
-    from app.db import get_cached_celestrak, save_celestrak_cache
+    try:
+        from backend.app.db import get_cached_celestrak, save_celestrak_cache
+    except ImportError:
+        from app.db import get_cached_celestrak, save_celestrak_cache
     cached = get_cached_celestrak(norad_id, fmt)
 
     if cached and not force_refresh:

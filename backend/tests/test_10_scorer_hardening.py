@@ -34,6 +34,7 @@ def test_10_scorer_production_auth_fail_closed(monkeypatch):
     monkeypatch.setenv("ORBIT_ENV", "production")
     monkeypatch.delenv("ORBITSCORE_REVIEWER_KEY", raising=False)
     monkeypatch.delenv("ORBIT_REVIEWER_KEY", raising=False)
+    monkeypatch.delenv("REVIEWER_BEARER_TOKEN", raising=False)
 
     # Calling get_configured_reviewer_key in production without explicit env key raises RuntimeError
     with pytest.raises(RuntimeError) as exc_info:
