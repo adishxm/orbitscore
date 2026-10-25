@@ -345,8 +345,8 @@ export const HeroOrbitVisual: React.FC<HeroOrbitVisualProps> = ({
       <div
         className={styles.satelliteTelemetryCard}
         style={{
-          left: Math.min(360, Math.max(16, activeMarker.x - 70)),
-          top: Math.max(16, activeMarker.y - 65),
+          left: `${(activeMarker.x / 480) * 100}%`,
+          top: `${(activeMarker.y / 400) * 100}%`,
         }}
       >
         <div className={styles.cardHeader}>

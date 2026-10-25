@@ -47,7 +47,7 @@
 
 .cardGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
   gap: var(--space-6, 24px);
   margin-top: var(--space-8, 32px);
 }
@@ -58,6 +58,8 @@
   border-radius: var(--radius-md, 14px);
   padding: 24px;
   box-shadow: var(--shadow-card);
+  min-width: 0;
+  container-type: inline-size;
   transition: transform var(--duration-fast, 150ms) var(--ease-out),
               border-color var(--duration-fast, 150ms) var(--ease-out),
               box-shadow var(--duration-fast, 150ms) var(--ease-out);

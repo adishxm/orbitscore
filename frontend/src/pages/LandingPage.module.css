@@ -16,9 +16,9 @@
 
 .container {
   width: 100%;
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 0 24px;
+  max-width: var(--content-max, 2560px);
+  margin-inline: auto;
+  padding-inline: var(--gutter, clamp(16px, 3vw, 56px));
   box-sizing: border-box;
 }
 
@@ -64,20 +64,25 @@
    ========================================================================= */
 .heroSection {
   position: relative;
-  padding: clamp(64px, 8vw, 100px) 0 100px;
+  min-height: calc(100svh - 80px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(32px, 5vh, 64px) 0 clamp(48px, 6vh, 80px);
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .heroGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 48px;
+  gap: clamp(24px, 4vw, 56px);
   align-items: center;
 }
 
 @media (min-width: 1100px) {
   .heroGrid {
-    grid-template-columns: 1.15fr 0.85fr;
+    grid-template-columns: 58fr 42fr;
   }
 }
 
@@ -87,6 +92,7 @@
   gap: 20px;
   position: relative;
   z-index: 2;
+  min-width: 0;
 }
 
 /* Chip Row */
@@ -134,13 +140,12 @@
 
 .heroHeadline {
   font-family: var(--font-display);
-  font-size: var(--type-h1);
+  font-size: clamp(2.25rem, 4vw, 6.5rem);
   font-weight: 600;
-  line-height: 1.04;
+  line-height: 1.05;
   letter-spacing: -0.03em;
   color: var(--text-0);
   margin: 0;
-  max-width: 20ch;
 }
 
 .heroHeadlineGradient {
@@ -157,7 +162,7 @@
   font-size: 1.125rem;
   line-height: 1.6;
   color: var(--text-1);
-  max-width: 56ch;
+  max-width: 62ch;
   margin: 0;
 }
 
@@ -232,17 +237,20 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Proof Strip */
+/* Proof Strip - Spans Full Container */
 .proofStrip {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-top: 12px;
-  padding-top: 20px;
+  gap: clamp(12px, 2vw, 24px);
+  margin-top: clamp(24px, 4vh, 48px);
+  padding-top: clamp(16px, 2.5vh, 24px);
   border-top: 1px solid var(--border);
+  width: 100%;
+  position: relative;
+  z-index: 5;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .proofStrip {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -274,6 +282,52 @@
   justify-content: center;
   position: relative;
   z-index: 2;
+  min-width: 0;
+}
+
+/* Earth-Limb Horizon Arc Under Hero (Positioned below proof strip) */
+.earthLimbWrapper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 90px;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.earthLimbAtmosphere {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, rgba(34, 211, 238, 0.08) 0%, transparent 100%);
+  filter: blur(24px);
+}
+
+.earthLimbCurve {
+  position: absolute;
+  top: 35px;
+  left: -20%;
+  right: -20%;
+  height: 400px;
+  border-radius: 50%;
+  border-top: 1.5px solid var(--accent-2);
+  box-shadow: 0 -6px 28px -4px rgba(34, 211, 238, 0.4),
+              0 -2px 10px rgba(106, 165, 255, 0.5);
+}
+
+.earthLimbSunriseGlow {
+  position: absolute;
+  top: 30px;
+  left: 38%;
+  width: 24%;
+  height: 50px;
+  background: radial-gradient(ellipse at 50% 0%, rgba(255, 180, 84, 0.4) 0%, transparent 75%);
+  filter: blur(16px);
 }
 
 /* =========================================================================
@@ -290,17 +344,20 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 24px;
+  align-items: stretch;
 }
 
 @media (min-width: 1100px) {
   .fleetColumnsGrid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 55fr 45fr;
   }
 }
 
 .fleetCol {
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  height: 100%;
 }
 
 /* =========================================================================
@@ -315,20 +372,8 @@
 
 .vectorGrid3x2 {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
   gap: 20px;
-}
-
-@media (max-width: 1100px) {
-  .vectorGrid3x2 {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 680px) {
-  .vectorGrid3x2 {
-    grid-template-columns: 1fr;
-  }
 }
 
 .vectorCard {
@@ -340,6 +385,8 @@
   flex-direction: column;
   gap: 12px;
   box-shadow: var(--shadow-card);
+  container-type: inline-size;
+  min-width: 0;
   transition: transform var(--duration-fast) var(--ease-out),
               border-color var(--duration-fast) var(--ease-out),
               box-shadow var(--duration-fast) var(--ease-out);
@@ -609,15 +656,9 @@
 
 .gateSpecsGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
   gap: 16px;
   margin-bottom: 28px;
-}
-
-@media (max-width: 800px) {
-  .gateSpecsGrid {
-    grid-template-columns: 1fr;
-  }
 }
 
 .gateSpecCard {
@@ -628,6 +669,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  min-width: 0;
 }
 
 .gateSpecCardAlert {
@@ -837,21 +879,9 @@
 
 .statesGrid5 {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
   gap: 12px;
   margin-bottom: 20px;
-}
-
-@media (max-width: 900px) {
-  .statesGrid5 {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 500px) {
-  .statesGrid5 {
-    grid-template-columns: 1fr;
-  }
 }
 
 .stateGridCell {
@@ -863,6 +893,7 @@
   flex-direction: column;
   gap: 8px;
   text-align: left;
+  min-width: 0;
   cursor: pointer;
   transition: all var(--duration-fast) var(--ease-out);
 }
@@ -1008,15 +1039,9 @@
 
 .lineageNodesGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
   gap: 16px;
   position: relative;
-}
-
-@media (max-width: 800px) {
-  .lineageNodesGrid {
-    grid-template-columns: 1fr;
-  }
 }
 
 .lineageNodeCard {
@@ -1028,6 +1053,7 @@
   flex-direction: column;
   gap: 8px;
   position: relative;
+  min-width: 0;
 }
 
 .lineageStepNum {
@@ -1199,20 +1225,8 @@
 
 .workspacesGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
   gap: 16px;
-}
-
-@media (max-width: 1024px) {
-  .workspacesGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 560px) {
-  .workspacesGrid {
-    grid-template-columns: 1fr;
-  }
 }
 
 .workspaceCard {
@@ -1224,6 +1238,8 @@
   flex-direction: column;
   gap: 10px;
   box-shadow: var(--shadow-card);
+  container-type: inline-size;
+  min-width: 0;
   transition: all var(--duration-fast) var(--ease-out);
 }
 

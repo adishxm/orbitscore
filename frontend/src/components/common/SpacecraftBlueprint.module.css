@@ -12,12 +12,14 @@
   gap: 16px;
   box-shadow: var(--shadow-card);
   position: relative;
+  container-type: inline-size;
 }
 
 .blueprintHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   border-bottom: 1px solid var(--border);
   padding-bottom: 12px;
 }
@@ -31,10 +33,13 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   color: var(--text-0);
+  min-width: 0;
+  flex: 1;
 }
 
 .iconAccent {
   color: var(--accent);
+  flex-shrink: 0;
 }
 
 .hintChip {
@@ -46,6 +51,8 @@
   border: 1px solid rgba(106, 165, 255, 0.25);
   padding: 2px 8px;
   border-radius: var(--radius-pill);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* Schematic SVG Frame */

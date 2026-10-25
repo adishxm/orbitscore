@@ -5,8 +5,8 @@
 .orbitVisualContainer {
   position: relative;
   width: 100%;
-  max-width: 540px;
-  height: 400px;
+  aspect-ratio: 1;
+  max-height: min(70vh, 580px);
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -51,6 +51,7 @@
   flex-direction: column;
   gap: 3px;
   z-index: 15;
+  transform: translate(-50%, -120%);
   transition: left 0.15s ease-out, top 0.15s ease-out;
   white-space: nowrap;
 }

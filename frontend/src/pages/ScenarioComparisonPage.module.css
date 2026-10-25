@@ -1,9 +1,11 @@
 /* ScenarioComparisonPage.module.css */
 
 .container {
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: var(--os-space-6) var(--os-space-4) var(--os-space-12);
+  width: 100%;
+  max-width: var(--content-max, 2560px);
+  margin-inline: auto;
+  padding: var(--os-space-6) var(--gutter, clamp(16px, 3vw, 56px)) var(--os-space-12);
+  box-sizing: border-box;
 }
 
 .header {

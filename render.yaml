@@ -47,8 +47,6 @@ services:
   - type: web
     name: orbitscore-web
     runtime: static
-    region: oregon
-    plan: starter
     rootDir: frontend
     buildCommand: "npm install && npm run build"
     staticPublishPath: dist

@@ -12,14 +12,13 @@
   background-color: var(--bg-0, #050505);
 }
 
-/* Full-Document Blue Gradient Layer (background.svg) */
+/* Full-Document Blue Gradient Layer (background.svg) - Full-bleed on 4K/Ultrawide */
 .svgBackgroundLayer {
   position: absolute;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
   width: 100%;
-  max-width: 1920px;
   height: 6480px;
   background-image: url('/background.svg');
   background-repeat: no-repeat;
@@ -29,9 +28,9 @@
   pointer-events: none;
 }
 
-@media (min-width: 1920px) {
+@media (min-width: 2560px) {
   .svgBackgroundLayer {
-    background-size: 1920px auto;
+    background-size: cover;
   }
 }
 
@@ -39,9 +38,9 @@
 .topHeroGlow {
   position: absolute;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100vw;
+  left: 0;
+  right: 0;
+  width: 100%;
   height: 960px;
   background: radial-gradient(
     ellipse 85% 60% at 50% 12%,
@@ -71,8 +70,8 @@
 .starfieldCanvas {
   position: fixed;
   inset: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100dvh;
   display: block;
   pointer-events: none;
 }

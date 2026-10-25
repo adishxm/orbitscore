@@ -158,26 +158,6 @@ export const LandingPage: React.FC = () => {
                   <span>Sync live ephemeris</span>
                 </button>
               </div>
-
-              {/* Proof Strip Computed From Real App Data */}
-              <div className={styles.proofStrip} aria-label="Real Engine Specifications">
-                <div className={styles.proofTile}>
-                  <span className={styles.proofVal}>{REAL_SATELLITES.length} SATELLITES</span>
-                  <span className={styles.proofLabel}>TRACKED FLEET</span>
-                </div>
-                <div className={styles.proofTile}>
-                  <span className={styles.proofVal}>{PHASE_GATE_STAGES.length} HARD GATES</span>
-                  <span className={styles.proofLabel}>STRICT VERIFICATION</span>
-                </div>
-                <div className={styles.proofTile}>
-                  <span className={styles.proofVal}>SHA-256 MERKLE</span>
-                  <span className={styles.proofLabel}>AUDIT LINEAGE</span>
-                </div>
-                <div className={styles.proofTile}>
-                  <span className={styles.proofVal}>CELESTRAK SGP4</span>
-                  <span className={styles.proofLabel}>EPHEMERIS FEED</span>
-                </div>
-              </div>
             </div>
 
             {/* Right Column: Centerpiece Orbit Visual */}
@@ -194,6 +174,33 @@ export const LandingPage: React.FC = () => {
               />
             </div>
           </div>
+
+          {/* Proof Strip Computed From Real App Data - Spans Full Container */}
+          <div className={styles.proofStrip} aria-label="Real Engine Specifications">
+            <div className={styles.proofTile}>
+              <span className={styles.proofVal}>{REAL_SATELLITES.length} SATELLITES</span>
+              <span className={styles.proofLabel}>TRACKED FLEET</span>
+            </div>
+            <div className={styles.proofTile}>
+              <span className={styles.proofVal}>{PHASE_GATE_STAGES.length} HARD GATES</span>
+              <span className={styles.proofLabel}>STRICT VERIFICATION</span>
+            </div>
+            <div className={styles.proofTile}>
+              <span className={styles.proofVal}>SHA-256 MERKLE</span>
+              <span className={styles.proofLabel}>AUDIT LINEAGE</span>
+            </div>
+            <div className={styles.proofTile}>
+              <span className={styles.proofVal}>CELESTRAK SGP4</span>
+              <span className={styles.proofLabel}>EPHEMERIS FEED</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Earth-Limb Horizon Arc Glow Under Hero (Full-bleed, Below Stats Strip) */}
+        <div className={styles.earthLimbWrapper} aria-hidden="true">
+          <div className={styles.earthLimbAtmosphere} />
+          <div className={styles.earthLimbCurve} />
+          <div className={styles.earthLimbSunriseGlow} />
         </div>
       </section>
 
