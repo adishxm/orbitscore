@@ -93,107 +93,137 @@ export const MissionWorkspacePage: React.FC = () => {
     completedSteps.push('review');
   }
 
+  const stateCounts = useMemo(() => {
+    return currentEvidence.reduce(
+      (acc, item) => {
+        acc[item.state] = (acc[item.state] || 0) + 1;
+        return acc;
+      },
+      {
+        confirmed: 0,
+        unconfirmed: 0,
+        conflicting: 0,
+        stale: 0,
+        missing: 0,
+        out_of_scope: 0,
+      } as Record<string, number>
+    );
+  }, [currentEvidence]);
+
   return (
     <div className={styles.pageRoot}>
       <div className="container">
-        {/* Navigation Breadcrumb and Actions */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 'var(--space-4)',
-            flexWrap: 'wrap',
-            gap: 'var(--space-2)',
-          }}
-        >
+        {/* 1. Top Bar: Breadcrumb, Synthetic Indicator, Demo Reset & Copilot */}
+        <div className={styles.workspaceTopBar}>
           <Link
             to="/missions"
             className={styles.breadcrumbLink}
+            aria-label="Return to all workspaces"
           >
             <ArrowLeft size={14} aria-hidden="true" />
-            <span>Back to Mission Registry</span>
+            <span>All workspaces</span>
           </Link>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <button
-              type="button"
-              onClick={() => setIsAgent37Open(true)}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(168, 85, 247, 0.25) 100%)',
-                border: '1px solid rgba(99, 102, 241, 0.5)',
-                borderRadius: 'var(--radius-sm)',
-                padding: '5px 12px',
-                color: '#c7d2fe',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '11px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                boxShadow: '0 0 12px rgba(99, 102, 241, 0.25)',
-                transition: 'all 0.15s ease-in-out',
-              }}
-              title="Open Agent 37 Mission Triage Copilot"
-            >
-              <Bot size={13} aria-hidden="true" style={{ color: '#818cf8' }} />
-              <span>Agent 37 Copilot</span>
-              <span
-                style={{
-                  width: '6px',
-                  height: '6px',
-                  borderRadius: '50%',
-                  background: '#10b981',
-                  boxShadow: '0 0 6px #10b981',
-                }}
-              />
-            </button>
+          <div className={styles.topBarActions}>
+            <div className={styles.syntheticIndicator} role="status">
+              <span className={styles.syntheticIndicatorDot} aria-hidden="true" />
+              <span>Synthetic Demo Fixture • Stored locally in browser session</span>
+            </div>
 
             <button
               type="button"
               onClick={() => resetDemo()}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                background: 'transparent',
-                border: '1px solid var(--color-border-subtle)',
-                borderRadius: 'var(--radius-sm)',
-                padding: '4px 10px',
-                color: 'var(--color-text-secondary)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '11px',
-                cursor: 'pointer',
-              }}
+              className={styles.resetButton}
               title="Restore pristine Asteria-3 synthetic fixture data"
+              aria-label="Reset Demo Data"
             >
               <RotateCcw size={12} aria-hidden="true" />
               <span>Reset Demo Data</span>
             </button>
+
+            <button
+              type="button"
+              onClick={() => setIsAgent37Open(true)}
+              className={styles.copilotButton}
+              title="Open Agent 37 Mission Triage Copilot"
+            >
+              <Bot size={13} aria-hidden="true" />
+              <span>Agent 37 Copilot</span>
+            </button>
           </div>
         </div>
 
-        {/* Stepper Workflow Header */}
+        {/* 2. Workspace Title & Subtitle */}
+        <header className={styles.workspaceHeader}>
+          <div className={styles.workspaceTitleGroup}>
+            <h2 className={styles.workspaceTitle}>{currentMission.name}</h2>
+            <p className={styles.workspaceSubtitle}>
+              {currentMission.form_factor} • {currentMission.target_orbit} • Mass budget: {currentMission.mass_budget_kg.toFixed(2)} kg • Engineering review workspace
+            </p>
+          </div>
+        </header>
+
+        {/* 3. Restrained Mandatory Scope Callout */}
+        <div className={styles.scopeBoundaryNotice} role="note">
+          <ShieldAlert size={16} className={styles.scopeIcon} aria-hidden="true" />
+          <span>
+            Despite the name, OrbitScore does not score or certify missions; it organizes evidence for qualified human review. All findings are deterministic consistency checks.
+          </span>
+        </div>
+
+        {/* 4. Evidence Register Counts Summary (Not an engineering conclusion) */}
+        <div className={styles.summaryBar} aria-label="Evidence Register Counts">
+          <div className={styles.summaryBarHeader}>
+            <span className={styles.summaryBarTitle}>Evidence Register Counts</span>
+            <span className={styles.summaryBarMeta}>
+              Tabulated across {currentEvidence.length} parameters (not a mission rating or engineering conclusion)
+            </span>
+          </div>
+          <div className={styles.summaryPills}>
+            <div className={styles.summaryPill}>
+              <span className={styles.pillLabel}>Total</span>
+              <span className={styles.pillValue}>{currentEvidence.length}</span>
+            </div>
+            <div className={styles.summaryPill}>
+              <span className={styles.pillDot} style={{ background: 'var(--os-color-state-confirmed, #10b981)' }} />
+              <span className={styles.pillLabel}>Confirmed</span>
+              <span className={styles.pillValue}>{stateCounts.confirmed || 0}</span>
+            </div>
+            <div className={styles.summaryPill}>
+              <span className={styles.pillDot} style={{ background: 'var(--os-color-state-unconfirmed, #f59e0b)' }} />
+              <span className={styles.pillLabel}>Unconfirmed</span>
+              <span className={styles.pillValue}>{stateCounts.unconfirmed || 0}</span>
+            </div>
+            <div className={styles.summaryPill}>
+              <span className={styles.pillDot} style={{ background: 'var(--os-color-state-conflicting, #c084fc)' }} />
+              <span className={styles.pillLabel}>Conflicting</span>
+              <span className={styles.pillValue}>{stateCounts.conflicting || 0}</span>
+            </div>
+            <div className={styles.summaryPill}>
+              <span className={styles.pillDot} style={{ background: 'var(--os-color-state-missing, #ef4444)' }} />
+              <span className={styles.pillLabel}>Missing</span>
+              <span className={styles.pillValue}>{stateCounts.missing || 0}</span>
+            </div>
+            {(stateCounts.stale || 0) > 0 && (
+              <div className={styles.summaryPill}>
+                <span className={styles.pillDot} style={{ background: 'var(--os-color-state-stale, #fb923c)' }} />
+                <span className={styles.pillLabel}>Stale</span>
+                <span className={styles.pillValue}>{stateCounts.stale || 0}</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* 5. One Compact Six-Stage Navigator */}
         <Stepper
           currentStep={currentStep}
           onStepChange={(step) => setCurrentStep(step)}
           completedSteps={completedSteps}
         />
 
-        {/* Mandatory Scope Callout */}
-        <div className={styles.disclaimerCallout} role="note">
-          <ShieldAlert size={22} color="var(--os-color-accent-amber)" aria-hidden="true" className={styles.flexShrink0} />
-          <div>
-            <div className={styles.disclaimerCalloutTitle}>Workspace Review Boundary</div>
-            <p className={`${styles.cardText} ${styles.scopeNoticeText}`}>
-              Despite the name, OrbitScore does not score or certify missions; it organizes evidence for human review.
-              All findings are deterministic consistency checks and must be evaluated by a qualified engineer.
-            </p>
-          </div>
-        </div>
+        {/* Slide-Like Focused Stage Views */}
 
-        {/* Step 1: Mission Context & Orbital Visual */}
+        {/* Stage 1: Mission Baseline Parameters */}
         {currentStep === 'context' && (
           <div>
             <MissionContextCard
@@ -210,9 +240,19 @@ export const MissionWorkspacePage: React.FC = () => {
               }}
             />
 
-            <OrbitalContextCard mission={currentMission} />
+            <details className={styles.disclosureSection}>
+              <summary className={styles.disclosureSummary}>▸ View Orbital Mechanics & Ephemeris Details</summary>
+              <div className={styles.disclosureContent}>
+                <OrbitalContextCard mission={currentMission} />
+              </div>
+            </details>
 
-            <ReadinessIndexCard mission={currentMission} evidence={currentEvidence} />
+            <details className={styles.disclosureSection}>
+              <summary className={styles.disclosureSummary}>▸ View Evidence Completeness Overview</summary>
+              <div className={styles.disclosureContent}>
+                <ReadinessIndexCard mission={currentMission} evidence={currentEvidence} />
+              </div>
+            </details>
 
             <div className={styles.buttonGroupEnd}>
               <button
@@ -227,14 +267,9 @@ export const MissionWorkspacePage: React.FC = () => {
           </div>
         )}
 
-        {/* Step 2: Evidence Register */}
+        {/* Stage 2: Evidence Register */}
         {currentStep === 'evidence' && (
           <div>
-            <MissionContextCard
-              mission={currentMission}
-              evidence={currentEvidence}
-            />
-
             <DataTable
               items={currentEvidence}
               selectedId={selectedEvidenceId}
@@ -263,7 +298,7 @@ export const MissionWorkspacePage: React.FC = () => {
           </div>
         )}
 
-        {/* Step 3: Profile Gate */}
+        {/* Stage 3: Profile Gate */}
         {currentStep === 'profile' && (
           <div>
             <ProfileGateCard
@@ -292,7 +327,7 @@ export const MissionWorkspacePage: React.FC = () => {
           </div>
         )}
 
-        {/* Step 4: Automated Findings */}
+        {/* Stage 4: Automated Findings */}
         {currentStep === 'findings' && (
           <div>
             <FindingsView
@@ -310,11 +345,16 @@ export const MissionWorkspacePage: React.FC = () => {
               onReRunChecks={() => runChecks(missionId)}
             />
 
-            <CounterfactualLab missionId={missionId} />
+            <details className={styles.disclosureSection}>
+              <summary className={styles.disclosureSummary}>▸ View Counterfactual Sensitivity Lab</summary>
+              <div className={styles.disclosureContent}>
+                <CounterfactualLab missionId={missionId} />
+              </div>
+            </details>
           </div>
         )}
 
-        {/* Step 5: Review Decisions & Gating */}
+        {/* Stage 5: Review Decisions & Gating */}
         {currentStep === 'review' && (
           <div>
             <ReviewDecisionForm
@@ -342,7 +382,6 @@ export const MissionWorkspacePage: React.FC = () => {
               decisions={currentDecisions}
               onSelectFinding={(findingId) => {
                 setSelectedReviewFindingId(findingId);
-                // Scroll to top of review section
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               onProceedToExport={() => setCurrentStep('export')}
@@ -360,7 +399,7 @@ export const MissionWorkspacePage: React.FC = () => {
           </div>
         )}
 
-        {/* Step 6: Cited Export Dossier */}
+        {/* Stage 6: Cited Export Dossier */}
         {currentStep === 'export' && currentCheckRun && (
           <ExportPacketView
             mission={currentMission}

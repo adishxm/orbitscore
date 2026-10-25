@@ -1,9 +1,9 @@
-/* SolutionPage.module.css - Replicating Astro Sweepers Solution Page visual aesthetic */
+/* SolutionPage.module.css - High-Density Aerospace Solution Visual Architecture */
 
 .solutionRoot {
   min-height: 100vh;
-  background-color: #0a0a0a;
-  color: #f3f4f6;
+  background-color: transparent;
+  color: #ffffff;
   font-family: var(--os-font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
   overflow-x: hidden;
 }
@@ -25,23 +25,11 @@
 }
 
 .heroBackdrop {
-  position: absolute;
-  inset: 0;
-  background-image: url('/assets/earth.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  transform: scale(1.15);
-  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 1;
+  display: none;
 }
 
 .heroOverlay {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, rgba(10, 10, 10, 0.45) 0%, rgba(10, 10, 10, 0.85) 85%);
-  backdrop-filter: blur(1px);
-  z-index: 2;
+  display: none;
 }
 
 .heroContent {
@@ -61,16 +49,15 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.35rem 0.85rem;
-  background: rgba(34, 211, 238, 0.1);
-  border: 1px solid rgba(34, 211, 238, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #22d3ee;
+  color: #ffffff;
   margin-bottom: 1.5rem;
-  box-shadow: 0 0 15px rgba(34, 211, 238, 0.15);
 }
 
 .heroTitleRow1 {
@@ -78,9 +65,8 @@
   font-size: clamp(2.5rem, 6vw, 4.75rem);
   font-weight: 800;
   line-height: 1.05;
-  color: #a5f3fc;
+  color: #ffffff;
   margin: 0 0 0.5rem 0;
-  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.9), 0 0 20px rgba(34, 211, 238, 0.3);
   letter-spacing: -0.02em;
 }
 
@@ -89,19 +75,17 @@
   font-size: clamp(2rem, 5vw, 4rem);
   font-weight: 800;
   line-height: 1.1;
-  color: #67e8f9;
+  color: #f1f5f9;
   margin: 0 0 1.5rem 0;
-  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.9), 0 0 25px rgba(34, 211, 238, 0.4);
   letter-spacing: -0.02em;
 }
 
 .heroLead {
   font-size: clamp(1rem, 2vw, 1.25rem);
   line-height: 1.6;
-  color: #bfdbfe;
+  color: #e2e8f0;
   max-width: 720px;
   margin: 0 auto 2.5rem auto;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
 /* Stats Counter Callout Row */
@@ -128,15 +112,14 @@
   font-family: var(--os-font-display, "Space Grotesk", sans-serif);
   font-size: clamp(1.75rem, 3.5vw, 2.75rem);
   font-weight: 800;
-  color: #67e8f9;
+  color: #ffffff;
   line-height: 1.1;
-  text-shadow: 0 0 15px rgba(34, 211, 238, 0.4);
 }
 
 .statLabel {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #bfdbfe;
+  color: #e2e8f0;
   margin-top: 0.25rem;
 }
 
@@ -154,21 +137,21 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #06b6d4;
-  color: #000000;
+  background-color: #0284c7;
+  color: #ffffff;
   font-weight: 700;
   font-size: 0.9375rem;
   padding: 0.85rem 1.75rem;
   border-radius: 0.5rem;
   text-decoration: none;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.4);
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
 }
 
 .primaryCta:hover {
-  background-color: #22d3ee;
+  background-color: #0369a1;
+  color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(34, 211, 238, 0.6);
 }
 
 .secondaryCta {
@@ -176,8 +159,8 @@
   align-items: center;
   gap: 0.5rem;
   background-color: rgba(17, 24, 39, 0.85);
-  color: #22d3ee;
-  border: 1px solid rgba(34, 211, 238, 0.4);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   font-weight: 600;
   font-size: 0.9375rem;
   padding: 0.85rem 1.5rem;
@@ -189,7 +172,7 @@
 
 .secondaryCta:hover {
   background-color: rgba(31, 41, 55, 0.95);
-  border-color: #22d3ee;
+  border-color: #ffffff;
   color: #ffffff;
   transform: translateY(-2px);
 }
@@ -200,9 +183,10 @@
 
 .telemetryStrip {
   width: 100%;
-  background: #0f172a;
-  border-top: 1px solid #1e293b;
-  border-bottom: 1px solid #1e293b;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding: 1rem 0;
 }
 
@@ -222,7 +206,7 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.8125rem;
-  color: #94a3b8;
+  color: #e2e8f0;
 }
 
 .telemetryDot {
@@ -230,7 +214,6 @@
   height: 8px;
   border-radius: 50%;
   background-color: #10b981;
-  box-shadow: 0 0 8px #10b981;
 }
 
 .telemetryItems {
@@ -245,11 +228,11 @@
   align-items: center;
   gap: 0.4rem;
   font-size: 0.8125rem;
-  color: #cbd5e1;
+  color: #f1f5f9;
 }
 
 .telemetryUnit strong {
-  color: #22d3ee;
+  color: #ffffff;
   font-family: var(--os-font-mono, monospace);
 }
 
@@ -280,7 +263,7 @@
 
 .sectionSubtitle {
   font-size: 1.0625rem;
-  color: #9ca3af;
+  color: #e2e8f0;
   line-height: 1.6;
   margin: 0;
 }
@@ -304,25 +287,25 @@
 }
 
 .featureCard {
-  background-color: #111827;
-  border: 1px solid #1f2937;
+  background-color: rgba(17, 24, 39, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0.5rem;
   padding: 1.75rem;
   display: flex;
   flex-direction: column;
-  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.25s ease, border-color 0.25s ease;
   position: relative;
   overflow: hidden;
 }
 
 .featureCard:hover {
-  transform: translateY(-6px) scale(1.02);
-  border-color: #22d3ee;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4), 0 0 20px rgba(34, 211, 238, 0.15);
+  transform: translateY(-6px);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 .featureIcon {
-  color: #22d3ee;
+  color: #ffffff;
   width: 2.25rem;
   height: 2.25rem;
   margin-bottom: 1rem;
@@ -337,7 +320,7 @@
 
 .featureDescription {
   font-size: 0.875rem;
-  color: #9ca3af;
+  color: #e2e8f0;
   line-height: 1.5;
   margin: 0 0 1.25rem 0;
   flex-grow: 1;
@@ -349,14 +332,13 @@
   gap: 0.35rem;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #22d3ee;
-  text-decoration: none;
+  color: #ffffff;
+  text-decoration: underline;
   transition: color 0.15s ease;
 }
 
 .featureLink:hover {
-  color: #67e8f9;
-  text-decoration: underline;
+  color: #f1f5f9;
 }
 
 /* =========================================================================
@@ -364,8 +346,9 @@
    ========================================================================= */
 
 .quickLookCard {
-  background: #0f172a;
-  border: 1px solid #1e293b;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0.75rem;
   padding: 2rem;
   margin: 4rem 0;
@@ -379,7 +362,7 @@
   gap: 1rem;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #1e293b;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .quickLookTitle {
@@ -394,7 +377,7 @@
 .quickLookTabs {
   display: flex;
   gap: 0.5rem;
-  background: #090d16;
+  background: rgba(9, 13, 22, 0.75);
   padding: 0.25rem;
   border-radius: 0.5rem;
 }
@@ -402,7 +385,7 @@
 .tabBtn {
   background: transparent;
   border: none;
-  color: #94a3b8;
+  color: #e2e8f0;
   padding: 0.4rem 0.85rem;
   border-radius: 0.375rem;
   font-size: 0.8125rem;
@@ -412,8 +395,8 @@
 }
 
 .tabBtnActive {
-  background: #22d3ee;
-  color: #000000;
+  background: #0284c7;
+  color: #ffffff;
 }
 
 .quickLookBody {
@@ -423,8 +406,9 @@
 }
 
 .previewMetricCard {
-  background: #111827;
-  border: 1px solid #1f2937;
+  background: rgba(17, 24, 39, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 0.5rem;
   padding: 1.25rem;
 }
@@ -433,7 +417,7 @@
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-  color: #9ca3af;
+  color: #e2e8f0;
   letter-spacing: 0.05em;
   margin-bottom: 0.35rem;
 }
@@ -442,13 +426,13 @@
   font-family: var(--os-font-mono, monospace);
   font-size: 1.25rem;
   font-weight: 700;
-  color: #67e8f9;
+  color: #ffffff;
   margin-bottom: 0.5rem;
 }
 
 .previewMetricDetail {
   font-size: 0.8125rem;
-  color: #94a3b8;
+  color: #e2e8f0;
   line-height: 1.4;
 }
 
@@ -464,15 +448,16 @@
 
 .roadmapPill {
   display: inline-block;
-  background-color: #111827;
-  border: 1px solid #1f2937;
+  background-color: rgba(17, 24, 39, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0.5rem;
   padding: 0.75rem 1.5rem;
   margin-top: 1.5rem;
 }
 
 .roadmapQuote {
-  color: #22d3ee;
+  color: #ffffff;
   font-weight: 600;
   font-size: 1.125rem;
   margin: 0;
@@ -487,10 +472,11 @@
 }
 
 .roadmapCard {
-  background-color: #111827;
+  background-color: rgba(17, 24, 39, 0.75);
+  backdrop-filter: blur(8px);
   border-radius: 0.5rem;
   padding: 1.75rem;
-  border: 1px solid #1f2937;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   align-items: flex-start;
@@ -498,7 +484,7 @@
 }
 
 .roadmapCard:hover {
-  transform: translateY(-4px) scale(1.015);
+  transform: translateY(-4px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
 
@@ -507,7 +493,6 @@
 }
 .roadmapCardGreen:hover {
   border-color: #22c55e;
-  box-shadow: 0 0 20px rgba(34, 197, 94, 0.15);
 }
 
 .roadmapCardYellow {
@@ -515,7 +500,6 @@
 }
 .roadmapCardYellow:hover {
   border-color: #eab308;
-  box-shadow: 0 0 20px rgba(234, 179, 8, 0.15);
 }
 
 .roadmapCardCyan {
@@ -523,7 +507,6 @@
 }
 .roadmapCardCyan:hover {
   border-color: #22d3ee;
-  box-shadow: 0 0 20px rgba(34, 211, 238, 0.15);
 }
 
 .roadmapIconWrapper {
@@ -531,7 +514,7 @@
   width: 3rem;
   height: 3rem;
   border-radius: 0.5rem;
-  background-color: #1f2937;
+  background-color: rgba(31, 41, 55, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -546,7 +529,7 @@
 }
 
 .iconCyan {
-  color: #22d3ee;
+  color: #ffffff;
 }
 
 .roadmapBody {
@@ -572,19 +555,19 @@
 
 .badgeLive {
   background-color: rgba(34, 197, 94, 0.15);
-  color: #4ade80;
+  color: #ffffff;
   border-color: rgba(34, 197, 94, 0.3);
 }
 
 .badgeDev {
   background-color: rgba(234, 179, 8, 0.15);
-  color: #facc15;
+  color: #ffffff;
   border-color: rgba(234, 179, 8, 0.3);
 }
 
 .badgeFuture {
   background-color: rgba(6, 182, 212, 0.15);
-  color: #22d3ee;
+  color: #ffffff;
   border-color: rgba(6, 182, 212, 0.3);
 }
 
@@ -596,7 +579,7 @@
 }
 
 .roadmapCardDescription {
-  color: #9ca3af;
+  color: #e2e8f0;
   line-height: 1.6;
   font-size: 0.9375rem;
   margin: 0;
@@ -604,8 +587,9 @@
 
 /* Call to action card at the bottom */
 .bottomCtaBox {
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(15, 23, 42, 0.8) 100%);
-  border: 1px solid rgba(34, 211, 238, 0.3);
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0.75rem;
   padding: 3rem 2rem;
   text-align: center;
@@ -622,7 +606,7 @@
 }
 
 .bottomCtaLead {
-  color: #cbd5e1;
+  color: #f1f5f9;
   max-width: 600px;
   margin: 0 auto 2rem auto;
   font-size: 1rem;

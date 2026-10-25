@@ -33,7 +33,7 @@ export const AboutLimitsPage: React.FC = () => {
         </div>
 
         {/* What It Is vs What It Is Not Grid */}
-        <section className={styles.section} aria-labelledby="comparison-heading">
+        <section id="scope" className={styles.section} aria-labelledby="comparison-heading">
           <div className={styles.sectionHeader}>
             <h2 id="comparison-heading" className={styles.sectionTitle}>
               Comparative Boundary Matrix
@@ -94,7 +94,7 @@ export const AboutLimitsPage: React.FC = () => {
         </section>
 
         {/* Why the Name Section */}
-        <section className={styles.section} aria-labelledby="name-heading">
+        <section id="governance" className={styles.section} aria-labelledby="name-heading">
           <div className={styles.sectionHeader}>
             <h2 id="name-heading" className={styles.sectionTitle}>
               Why the Project Name "OrbitScore"?
@@ -106,6 +106,34 @@ export const AboutLimitsPage: React.FC = () => {
             deliberately avoids calculating any aggregate index. Instead, every parameter stands on its own source citation,
             and human reviewers retain sole responsibility for flight decisions.
           </p>
+        </section>
+
+        {/* Data Handling & Local Storage Policy */}
+        <section id="data-policy" className={styles.section} aria-labelledby="data-policy-heading">
+          <div className={styles.sectionHeader}>
+            <h2 id="data-policy-heading" className={styles.sectionTitle}>
+              Data Handling &amp; Local Storage Policy
+            </h2>
+          </div>
+          <p className={styles.lead}>
+            OrbitScore operates with strict data boundary transparency:
+          </p>
+          <div className={styles.cardIs}>
+            <ul className={styles.bulletList}>
+              <li className={styles.bulletItem}>
+                <span className={styles.bulletCheck} aria-hidden="true">✓</span>
+                <span><strong>Client-Side Local Storage:</strong> When in local demonstration mode, mission parameters, evidence items, and review records are stored in browser LocalStorage. They are not transmitted to external servers.</span>
+              </li>
+              <li className={styles.bulletItem}>
+                <span className={styles.bulletCheck} aria-hidden="true">✓</span>
+                <span><strong>Device Scoping:</strong> Data stored in browser LocalStorage is local to this browser profile and is not encrypted against other users sharing this operating system account.</span>
+              </li>
+              <li className={styles.bulletItem}>
+                <span className={styles.bulletCheck} aria-hidden="true">✓</span>
+                <span><strong>Live API Mode:</strong> Connecting to the optional local FastAPI backend routes requests strictly to your configured backend endpoint (e.g. 127.0.0.1:8000) for SQLite persistence and SHA-256 provenance chaining.</span>
+              </li>
+            </ul>
+          </div>
         </section>
       </div>
     </div>

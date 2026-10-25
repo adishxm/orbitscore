@@ -121,22 +121,22 @@
   align-items: center;
   justify-content: center;
   gap: var(--os-space-2);
-  background-color: var(--os-color-accent-cyan);
-  color: #000000;
+  background-color: var(--os-color-accent-teal, #0d9488);
+  color: #ffffff;
   font-family: var(--os-font-mono);
   font-weight: 700;
   font-size: var(--os-type-body-s);
   padding: 0.65rem 1.25rem;
   min-height: 44px;
-  border-radius: var(--os-radius-xs);
+  border-radius: var(--os-radius-xs, 2px);
   text-decoration: none;
-  border: none;
+  border: 1px solid var(--os-color-accent-teal, #0d9488);
   cursor: pointer;
-  transition: opacity var(--os-duration-fast) var(--os-ease-standard);
+  transition: background-color var(--os-duration-fast) var(--os-ease-standard);
 }
 
 .actionButton:hover {
-  opacity: 0.9;
+  background-color: var(--os-color-accent-teal-hover, #0f766e);
 }
 
 .actionButtonSecondary {
@@ -145,22 +145,23 @@
   justify-content: center;
   gap: var(--os-space-2);
   background-color: transparent;
-  color: var(--os-color-text-primary);
+  color: var(--os-color-text-secondary);
   font-family: var(--os-font-mono);
   font-size: var(--os-type-body-s);
   font-weight: 600;
   padding: 0.65rem 1.25rem;
   min-height: 44px;
-  border-radius: var(--os-radius-xs);
+  border-radius: var(--os-radius-xs, 2px);
   border: 1px solid var(--os-color-border-mid);
   text-decoration: none;
   cursor: pointer;
-  transition: border-color var(--os-duration-fast) var(--os-ease-standard);
+  transition: all var(--os-duration-fast) var(--os-ease-standard);
 }
 
 .actionButtonSecondary:hover {
-  border-color: var(--os-color-accent-cyan);
-  color: var(--os-color-accent-cyan);
+  background-color: var(--os-color-surface-hover);
+  border-color: var(--os-color-border-bright);
+  color: var(--os-color-text-white);
 }
 
 /* Sub-route sections & layout */
@@ -441,6 +442,228 @@
 
 .scopeNoticeText {
   margin: 0;
+}
+
+/* Workspace Layout & Information Hierarchy */
+.workspaceTopBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--os-space-4);
+  flex-wrap: wrap;
+  gap: var(--os-space-3);
+}
+
+.topBarActions {
+  display: flex;
+  align-items: center;
+  gap: var(--os-space-2);
+  flex-wrap: wrap;
+}
+
+.syntheticIndicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--os-font-mono);
+  font-size: 11px;
+  color: var(--os-color-text-secondary);
+  background-color: var(--os-color-surface-sunken);
+  border: 1px solid var(--os-color-border-subtle);
+  border-radius: var(--os-radius-xs, 2px);
+  padding: 4px 10px;
+}
+
+.syntheticIndicatorDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--os-color-accent-teal, #0d9488);
+}
+
+.resetButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: transparent;
+  border: 1px solid var(--os-color-border-mid);
+  border-radius: var(--os-radius-xs, 2px);
+  padding: 4px 10px;
+  color: var(--os-color-text-secondary);
+  font-family: var(--os-font-mono);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all var(--os-duration-fast) var(--os-ease-standard);
+}
+
+.resetButton:hover {
+  border-color: var(--os-color-border-bright);
+  color: var(--os-color-text-white);
+  background-color: var(--os-color-surface-hover);
+}
+
+.copilotButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--os-color-surface-card);
+  border: 1px solid var(--os-color-border-mid);
+  border-radius: var(--os-radius-xs, 2px);
+  padding: 4px 10px;
+  color: var(--os-color-text-primary);
+  font-family: var(--os-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--os-duration-fast) var(--os-ease-standard);
+}
+
+.copilotButton:hover {
+  border-color: var(--os-color-accent-teal, #0d9488);
+  color: var(--os-color-accent-teal, #0d9488);
+}
+
+.workspaceHeader {
+  margin-bottom: var(--os-space-4);
+}
+
+.workspaceTitleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--os-space-1);
+}
+
+.workspaceTitle {
+  font-family: var(--os-font-display);
+  font-size: var(--os-type-title-2);
+  font-weight: 700;
+  color: var(--os-color-text-white);
+  margin: 0;
+  letter-spacing: var(--os-tracking-tight);
+}
+
+.workspaceSubtitle {
+  font-family: var(--os-font-sans);
+  font-size: var(--os-type-body-s);
+  color: var(--os-color-text-secondary);
+  margin: 0;
+}
+
+.scopeBoundaryNotice {
+  display: flex;
+  align-items: center;
+  gap: var(--os-space-3);
+  background-color: var(--os-color-surface-sunken);
+  border: 1px solid var(--os-color-border-subtle);
+  border-left: 3px solid var(--os-color-accent-amber);
+  border-radius: var(--os-radius-xs, 2px);
+  padding: var(--os-space-3) var(--os-space-4);
+  margin-bottom: var(--os-space-4);
+  font-size: var(--os-type-caption);
+  color: var(--os-color-text-secondary);
+  line-height: var(--os-lh-normal);
+}
+
+.scopeIcon {
+  color: var(--os-color-accent-amber);
+  flex-shrink: 0;
+}
+
+.summaryBar {
+  background-color: var(--os-color-surface-card);
+  border: 1px solid var(--os-color-border-subtle);
+  border-radius: var(--os-radius-sm);
+  padding: var(--os-space-3) var(--os-space-4);
+  margin-bottom: var(--os-space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--os-space-2);
+}
+
+.summaryBarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--os-space-2);
+}
+
+.summaryBarTitle {
+  font-family: var(--os-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--os-tracking-wide);
+  color: var(--os-color-text-white);
+}
+
+.summaryBarMeta {
+  font-size: 11px;
+  color: var(--os-color-text-muted);
+}
+
+.summaryPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--os-space-2);
+}
+
+.summaryPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: var(--os-radius-xs, 2px);
+  background-color: var(--os-color-surface-sunken);
+  border: 1px solid var(--os-color-border-subtle);
+  font-family: var(--os-font-mono);
+  font-size: 11px;
+}
+
+.pillLabel {
+  color: var(--os-color-text-secondary);
+}
+
+.pillValue {
+  font-weight: 700;
+  color: var(--os-color-text-white);
+}
+
+.pillDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.disclosureSection {
+  margin-top: var(--os-space-6);
+  background-color: var(--os-color-surface-card);
+  border: 1px solid var(--os-color-border-subtle);
+  border-radius: var(--os-radius-sm);
+  padding: var(--os-space-3) var(--os-space-4);
+}
+
+.disclosureSummary {
+  font-family: var(--os-font-mono);
+  font-size: var(--os-type-caption);
+  font-weight: 600;
+  color: var(--os-color-text-secondary);
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  padding: var(--os-space-1) 0;
+  transition: color var(--os-duration-fast) var(--os-ease-standard);
+}
+
+.disclosureSummary:hover {
+  color: var(--os-color-text-white);
+}
+
+.disclosureContent {
+  margin-top: var(--os-space-4);
+  padding-top: var(--os-space-4);
+  border-top: 1px solid var(--os-color-border-subtle);
 }
 
 
