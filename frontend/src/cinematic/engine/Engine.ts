@@ -119,31 +119,83 @@ export class CinematicEngine {
     }
   }
 
+  private detectWebGLCapabilities(canvas: HTMLCanvasElement): {
+    supported: boolean;
+    precision: 'highp' | 'mediump';
+    powerPreference: 'high-performance' | 'default';
+  } {
+    try {
+      const gl = (canvas.getContext('webgl2') ||
+        canvas.getContext('webgl') ||
+        canvas.getContext('experimental-webgl')) as WebGLRenderingContext | WebGL2RenderingContext | null;
+
+      if (!gl) {
+        return { supported: false, precision: 'mediump', powerPreference: 'default' };
+      }
+
+      // Check shader precision capabilities safely without throwing if format returns null
+      const vHigh = gl.getShaderPrecisionFormat?.(gl.VERTEX_SHADER, gl.HIGH_FLOAT);
+      const fHigh = gl.getShaderPrecisionFormat?.(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT);
+      const hasHighPrecision = Boolean(vHigh && fHigh && vHigh.precision > 0 && fHigh.precision > 0);
+
+      const vMed = gl.getShaderPrecisionFormat?.(gl.VERTEX_SHADER, gl.MEDIUM_FLOAT);
+      const fMed = gl.getShaderPrecisionFormat?.(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT);
+      const hasMedPrecision = Boolean(vMed && fMed && vMed.precision > 0 && fMed.precision > 0);
+
+      if (!hasHighPrecision && !hasMedPrecision) {
+        return { supported: false, precision: 'mediump', powerPreference: 'default' };
+      }
+
+      return {
+        supported: true,
+        precision: hasHighPrecision ? 'highp' : 'mediump',
+        powerPreference: 'default',
+      };
+    } catch {
+      return { supported: false, precision: 'mediump', powerPreference: 'default' };
+    }
+  }
+
   init(canvas: HTMLCanvasElement): boolean {
+    const caps = this.detectWebGLCapabilities(canvas);
+    if (!caps.supported) {
+      const userReason = 'Hardware acceleration is disabled or unsupported in this browser environment.';
+      console.warn('[CinematicEngine] WebGL capability check failed; transitioning to accessible 2D fallback');
+      eventBus.emit('engine:fallback', { reason: userReason });
+      stateMachine.transition('FALLBACK', { fallbackReason: userReason });
+      return false;
+    }
+
     try {
       this.renderer = new THREE.WebGLRenderer({
         canvas,
         antialias: qualityManager.profile.smaa || true,
         alpha: false,
-        powerPreference: 'high-performance',
+        powerPreference: caps.powerPreference,
+        precision: caps.precision,
         preserveDrawingBuffer: false,
       });
 
       this.renderer.setPixelRatio(qualityManager.clampDpr(window.devicePixelRatio));
-      this.renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+      this.renderer.setSize(canvas.clientWidth || window.innerWidth, canvas.clientHeight || window.innerHeight, false);
       this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
       this.renderer.toneMappingExposure = 1.1;
 
       // Warm-up compilation
-      this.renderer.compile(this.scene, this.camera);
+      try {
+        this.renderer.compile(this.scene, this.camera);
+      } catch (compileErr) {
+        console.warn('[CinematicEngine] Pre-compilation warning:', compileErr);
+      }
 
-      this.resize(canvas.clientWidth, canvas.clientHeight);
+      this.resize(canvas.clientWidth || window.innerWidth, canvas.clientHeight || window.innerHeight);
       this.start();
       return true;
     } catch (err: any) {
-      console.error('[CinematicEngine] Failed to initialize WebGL context:', err);
-      eventBus.emit('engine:fallback', { reason: err.message || 'WebGL context failure' });
-      stateMachine.transition('FALLBACK', { fallbackReason: err.message });
+      console.warn('[CinematicEngine] Failed to initialize WebGL context:', err);
+      const userReason = 'Hardware acceleration is disabled or unsupported in this browser environment.';
+      eventBus.emit('engine:fallback', { reason: userReason });
+      stateMachine.transition('FALLBACK', { fallbackReason: userReason });
       return false;
     }
   }

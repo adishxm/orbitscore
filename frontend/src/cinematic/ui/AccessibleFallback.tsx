@@ -1,6 +1,5 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShieldAlert, ArrowRight, ExternalLink } from 'lucide-react';
+import { Info, ArrowRight, ExternalLink } from 'lucide-react';
 import { CHAPTERS } from '../config/chapters.config';
 import styles from './AccessibleFallback.module.css';
 
@@ -8,12 +7,13 @@ interface AccessibleFallbackProps {
   reason?: string;
 }
 
-export const AccessibleFallback: React.FC<AccessibleFallbackProps> = ({ reason }) => {
+export const AccessibleFallback: React.FC<AccessibleFallbackProps> = () => {
   return (
     <section className={styles.fallbackRoot} aria-labelledby="fallback-title">
       <div className={styles.container}>
         {/* Poster Header */}
         <div className={styles.posterWrap} role="img" aria-label="OrbitScore synthetic 3U CubeSat in 500 km SSO orbit">
+          <div className={styles.modeBadge}>ORBITAL MISSION TOUR • 2D MODE</div>
           <div className={styles.posterIllustration} aria-hidden="true" />
           <h2 id="fallback-title" className={styles.posterTitle}>
             OrbitScore: Mission Evidence Workspace
@@ -23,15 +23,13 @@ export const AccessibleFallback: React.FC<AccessibleFallbackProps> = ({ reason }
           </p>
         </div>
 
-        {/* Diagnostic Notice */}
-        <div className={styles.noticeBox} role="alert">
-          <ShieldAlert size={24} color="var(--os-color-accent-amber, #f59e0b)" aria-hidden="true" />
+        {/* Experience Mode Status */}
+        <div className={styles.noticeBox} role="status">
+          <Info size={20} color="#22d3ee" aria-hidden="true" />
           <div>
-            <h3>Hardware Acceleration / WebGL 2 Notice</h3>
+            <h3>2D Interactive Mode Active</h3>
             <p>
-              {reason
-                ? `The interactive 3D WebGL experience could not initialize: ${reason}. `
-                : 'Your browser or device is currently running without WebGL 2 hardware acceleration. '}
+              Interactive 3D orbital visualization is presented in 2D preview mode on this display.
               All mission evidence registers, deterministic rule engines, and review decision tools remain 100% accessible below.
             </p>
           </div>

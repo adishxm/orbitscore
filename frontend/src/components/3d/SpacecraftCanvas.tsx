@@ -90,10 +90,20 @@ export const SpacecraftCanvas: React.FC<SpacecraftCanvasProps> = ({
   useEffect(() => {
     try {
       const testCanvas = document.createElement('canvas');
-      const gl =
+      const gl = (testCanvas.getContext('webgl2') ||
         testCanvas.getContext('webgl') ||
-        testCanvas.getContext('experimental-webgl');
+        testCanvas.getContext('experimental-webgl')) as WebGLRenderingContext | WebGL2RenderingContext | null;
       if (!gl) {
+        setWebglSupported(false);
+        return;
+      }
+      const vHigh = gl.getShaderPrecisionFormat?.(gl.VERTEX_SHADER, gl.HIGH_FLOAT);
+      const fHigh = gl.getShaderPrecisionFormat?.(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT);
+      const vMed = gl.getShaderPrecisionFormat?.(gl.VERTEX_SHADER, gl.MEDIUM_FLOAT);
+      const fMed = gl.getShaderPrecisionFormat?.(gl.FRAGMENT_SHADER, gl.MEDIUM_FLOAT);
+      const hasPrecision = Boolean((vHigh && fHigh && vHigh.precision > 0 && fHigh.precision > 0) ||
+                                   (vMed && fMed && vMed.precision > 0 && fMed.precision > 0));
+      if (!hasPrecision) {
         setWebglSupported(false);
       }
     } catch {
@@ -447,9 +457,21 @@ export const SpacecraftCanvas: React.FC<SpacecraftCanvasProps> = ({
       canvas.removeEventListener('pointerup', handlePointerUp);
       canvas.removeEventListener('pointercancel', handlePointerUp);
 
-      // Dispose Three.js resources
+      // Dispose Three.js resources thoroughly to prevent context leak
+      scene.traverse((obj) => {
+        if ((obj as THREE.Mesh).isMesh) {
+          const mesh = obj as THREE.Mesh;
+          mesh.geometry?.dispose();
+          if (Array.isArray(mesh.material)) {
+            mesh.material.forEach((m) => m.dispose());
+          } else {
+            mesh.material?.dispose();
+          }
+        }
+      });
       scene.clear();
       renderer.dispose();
+      renderer.forceContextLoss?.();
     };
   }, [webglSupported, shouldReduceMotion, scrollProgress]);
 
@@ -470,26 +492,59 @@ export const SpacecraftCanvas: React.FC<SpacecraftCanvasProps> = ({
           aria-hidden="true"
         />
       ) : (
-        /* Accessible Fallback when WebGL is unavailable or in testing */
-        <div className={styles.fallbackGraphic} role="img" aria-label="CubeSat Technical Diagram">
+        /* Accessible Precision Blueprint when WebGL is unavailable */
+        <div className={styles.fallbackGraphic} role="img" aria-label="3U Aluminum Chassis CAD Blueprint">
           <svg
             className={styles.fallbackSvg}
-            viewBox="0 0 400 320"
+            viewBox="0 0 460 360"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             aria-hidden="true"
           >
-            <rect x="150" y="40" width="100" height="240" rx="4" fill="#141a23" stroke="#00a1ff" strokeWidth="2" />
-            <line x1="60" y1="60" x2="150" y2="60" stroke="#00a1ff" strokeWidth="2" />
-            <line x1="250" y1="60" x2="340" y2="60" stroke="#00a1ff" strokeWidth="2" />
-            <rect x="50" y="60" width="100" height="180" rx="2" fill="#091428" stroke="#1c2530" />
-            <rect x="250" y="60" width="100" height="180" rx="2" fill="#091428" stroke="#1c2530" />
-            <circle cx="200" cy="80" r="24" fill="#05070a" stroke="#00a1ff" strokeWidth="1.5" />
-            <text x="200" y="160" textAnchor="middle" fill="#f0f4f8" fontSize="12" fontFamily="monospace">
-              3U CUBESAT
+            {/* Technical Grid Background */}
+            <defs>
+              <pattern id="cadGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(0, 161, 255, 0.07)" strokeWidth="0.5" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#cadGrid)" />
+
+            {/* Dimensional Guideline Indicators */}
+            <line x1="130" y1="30" x2="130" y2="330" stroke="rgba(148, 163, 184, 0.25)" strokeDasharray="3 3" />
+            <line x1="330" y1="30" x2="330" y2="330" stroke="rgba(148, 163, 184, 0.25)" strokeDasharray="3 3" />
+            
+            {/* 3U Chassis Main Body */}
+            <rect x="175" y="45" width="110" height="270" rx="3" fill="#090d14" stroke="#00a1ff" strokeWidth="1.8" />
+            <rect x="180" y="50" width="100" height="85" rx="2" fill="#0d1522" stroke="rgba(0, 161, 255, 0.35)" />
+            <rect x="180" y="140" width="100" height="85" rx="2" fill="#0d1522" stroke="rgba(0, 161, 255, 0.35)" />
+            <rect x="180" y="230" width="100" height="80" rx="2" fill="#0d1522" stroke="rgba(0, 161, 255, 0.35)" />
+
+            {/* Deployable Solar Array Wings */}
+            <rect x="35" y="70" width="130" height="220" rx="2" fill="#070d18" stroke="#00a1ff" strokeWidth="1.2" strokeDasharray="4 2" />
+            <line x1="35" y1="125" x2="165" y2="125" stroke="rgba(0, 161, 255, 0.4)" />
+            <line x1="35" y1="180" x2="165" y2="180" stroke="rgba(0, 161, 255, 0.4)" />
+            <line x1="35" y1="235" x2="165" y2="235" stroke="rgba(0, 161, 255, 0.4)" />
+
+            <rect x="295" y="70" width="130" height="220" rx="2" fill="#070d18" stroke="#00a1ff" strokeWidth="1.2" strokeDasharray="4 2" />
+            <line x1="295" y1="125" x2="425" y2="125" stroke="rgba(0, 161, 255, 0.4)" />
+            <line x1="295" y1="180" x2="425" y2="180" stroke="rgba(0, 161, 255, 0.4)" />
+            <line x1="295" y1="235" x2="425" y2="235" stroke="rgba(0, 161, 255, 0.4)" />
+
+            {/* Optical Payload Aperture */}
+            <circle cx="230" cy="92" r="26" fill="#05070a" stroke="#00a1ff" strokeWidth="1.5" />
+            <circle cx="230" cy="92" r="16" fill="#021427" stroke="#38bdf8" strokeWidth="1" />
+            <circle cx="230" cy="92" r="6" fill="#00a1ff" />
+
+            {/* S-Band Patch & Battery Compartment Markers */}
+            <rect x="210" y="165" width="40" height="35" rx="2" fill="#09182a" stroke="#34d399" strokeWidth="1.2" />
+            <circle cx="230" cy="270" r="12" fill="#17120a" stroke="#f59e0b" strokeWidth="1.2" />
+
+            {/* Technical Annotations */}
+            <text x="230" y="25" textAnchor="middle" fill="#00a1ff" fontSize="11" fontFamily="monospace" fontWeight="bold">
+              3U ALUMINUM CHASSIS (CAD DWG-3U-01)
             </text>
-            <text x="200" y="180" textAnchor="middle" fill="#6f8298" fontSize="10" fontFamily="monospace">
-              100x100x340.5mm
+            <text x="230" y="345" textAnchor="middle" fill="#94a3b8" fontSize="10" fontFamily="monospace">
+              STOWED: 100.0 x 100.0 x 340.5 mm // DEPLOYED WINGSPAN: 830.0 mm
             </text>
           </svg>
         </div>
