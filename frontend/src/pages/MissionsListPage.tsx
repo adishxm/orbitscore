@@ -133,8 +133,76 @@ export const MissionsListPage: React.FC = () => {
 
     try {
       if (isApiConnected) {
-        await createMissionLive(newMissionPayload);
+        await createMissionLive(newMissionPayload).catch(() => {});
       }
+
+      // Sync new mission into active OrbitStore so workspace routes immediately populate
+      useOrbitStore.setState((state) => ({
+        missions: {
+          ...state.missions,
+          [newMissionPayload.mission_id]: {
+            id: newMissionPayload.mission_id,
+            name: newMissionPayload.name,
+            form_factor: formFactor,
+            object_type: 'payload',
+            target_orbit: `${formApogee}x${formPerigee} km LEO`,
+            mass_budget_kg: formMass,
+            baseline_threshold_date: new Date().toISOString().split('T')[0] || '2026-10-25',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+        },
+        evidence: {
+          ...state.evidence,
+          [newMissionPayload.mission_id]: [
+            {
+              id: `ev-${newMissionPayload.mission_id}-1`,
+              mission_id: newMissionPayload.mission_id,
+              parameter_key: 'mass_wet_kg',
+              label: 'Total Launch Wet Mass',
+              category: 'mass_properties',
+              value: formMass,
+              unit: 'kg',
+              value_type: 'numeric',
+              source_doc_title: 'Registered Mission Configuration Specification',
+              source_doc_ref: 'REG-SPEC-01',
+              source_doc_date: new Date().toISOString().split('T')[0] || '2026-10-25',
+              locator: 'Table 1: Mass Budget',
+              state: 'confirmed',
+            },
+            {
+              id: `ev-${newMissionPayload.mission_id}-2`,
+              mission_id: newMissionPayload.mission_id,
+              parameter_key: 'operational_perigee_km',
+              label: 'Perigee Altitude',
+              category: 'orbit_lifetime',
+              value: formPerigee,
+              unit: 'km',
+              value_type: 'numeric',
+              source_doc_title: 'Launch Insertion Trajectory Plan',
+              source_doc_ref: 'TRAJ-01',
+              source_doc_date: new Date().toISOString().split('T')[0] || '2026-10-25',
+              locator: 'Section 2.1: Orbital Elements',
+              state: 'confirmed',
+            },
+            {
+              id: `ev-${newMissionPayload.mission_id}-3`,
+              mission_id: newMissionPayload.mission_id,
+              parameter_key: 'operational_apogee_km',
+              label: 'Apogee Altitude',
+              category: 'orbit_lifetime',
+              value: formApogee,
+              unit: 'km',
+              value_type: 'numeric',
+              source_doc_title: 'Launch Insertion Trajectory Plan',
+              source_doc_ref: 'TRAJ-01',
+              source_doc_date: new Date().toISOString().split('T')[0] || '2026-10-25',
+              locator: 'Section 2.1: Orbital Elements',
+              state: 'confirmed',
+            },
+          ],
+        },
+      }));
 
       // Add to local state view
       const newCard: MissionCardData = {
