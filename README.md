@@ -214,7 +214,7 @@ cd frontend
 # Install Node dependencies (Node 18+)
 npm install
 
-# Run unit & accessibility tests (89 tests across 12 suites)
+# Run unit & accessibility tests (96 tests across 14 suites)
 npm test
 
 # Run TypeScript type check
@@ -245,11 +245,11 @@ OrbitScore maintains rigorous testing standards across all tiers:
 
 | Subsystem | Test Framework | Test Count | Focus Areas |
 |---|---|---|---|
-| **Frontend UI** | Vitest + React Testing Library | **89 Passed** (12 suites) | Workspaces, Evidence Register, Export Gate, Agent37 Drawer, Axe a11y, Banned words |
+| **Frontend UI** | Vitest + React Testing Library | **96 Passed** (14 suites) | Workspaces, Evidence Register, Export Gate, Agent37 Drawer, Axe a11y, Banned words |
 | **Backend API** | Pytest + FastAPI TestClient | **86 Passed** | Rule engine, SQLite/PostgreSQL, Provenance SHA-256 chain, ODAR/EOMP generation, Auth |
 | **AI/ML Astrodynamics**| Pytest | **33 Passed** | Decay lifetime regression, CDM risk classification, Artifact Registry, Candidate normalization |
 | **Verification Matrix**| Python Verification Harness | **12 Evaluations** | Complete, gap-heavy, and conflict synthetic missions across DFSM 2030 and FCC rules |
-| **Total Automated** | GitHub Actions CI | **208 Tests** (86 + 33 + 89) | Zero failures, zero type errors, zero lint warnings |
+| **Total Automated** | GitHub Actions CI | **215 Tests** (86 + 33 + 96) | Zero failures, zero type errors, zero lint warnings |
 
 Run the complete validation suite:
 ```bash

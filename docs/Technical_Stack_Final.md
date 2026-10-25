@@ -23,7 +23,7 @@ OrbitScore is a source-linked decision-support/pre-review application. The polic
 
 | Layer | Implemented location | Responsibility | Verification |
 |---|---|---|---|
-| Frontend (Canonical) | `frontend/` | Complete 10-slice orbital review interface, workspace stepper, findings & evidence flow, profile gate, review decision form, export packet view, accessibility | 12 test suites, 89 Vitest tests passed; Axe a11y passed; Vite production build passed |
+| Frontend (Canonical) | `frontend/` | Complete 10-slice orbital review interface, workspace stepper, findings & evidence flow, profile gate, review decision form, export packet view, accessibility | 14 test suites, 96 Vitest tests passed; Axe a11y passed; Vite production build passed |
 | Backend API | `backend/app/main.py` | FastAPI routes, durable SQLite storage, deterministic review/export orchestration, provenance, integrations | Exercised with FastAPI `TestClient`, 86 pytest tests passed |
 | Backend Engine | `backend/app/engine.py` | Selected-profile evaluation, confirmed-field handling, conflict detection, capped prioritization band, bounded counterfactual | 12 fixture/profile matrix cases, 100% deterministic |
 | Backend Provenance | `backend/app/provenance.py` | Canonical JSON SHA-256 event chain and first-sequence tamper detection | Verified with `test_provenance_tamper.py` and verification matrix |
@@ -93,7 +93,7 @@ FastAPI interactive OpenAPI docs are served at `/docs`.
 
 ## Verified commands
 
-- **Canonical Frontend Tests:** `npm test` (or `npm --prefix frontend test`) — 89 tests passed (12 suites)
+- **Canonical Frontend Tests:** `npm test` (or `npm --prefix frontend test`) — 96 tests passed (14 suites)
 - **Canonical Frontend Typecheck:** `npm run typecheck` (or `npm --prefix frontend run lint`) — passed (0 errors)
 - **Canonical Frontend Build:** `npm run build` (or `npm --prefix frontend run build`) — passed (Vite production bundle)
 - **Backend Tests:** `python -m pytest backend/tests` — 86 passed (13 suites)

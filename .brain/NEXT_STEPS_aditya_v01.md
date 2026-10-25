@@ -7,7 +7,7 @@
 >
 > **Repo reality today:** a deterministic, human-gated **mission evidence workspace + pre-review decision-support tool**
 > (React 18/Vite + FastAPI + SQLite; tamper-evident SHA-256 provenance; versioned rule profiles incl. ISRO DFSM 2030 /
-> FCC / NASA / ESA tier matrix; synthetic demo data; 67 frontend + 48 backend + 10 ai_ml tests passing).
+> FCC / NASA / ESA tier matrix; synthetic demo data; 96 frontend (14 suites) + 86 backend + 33 ai_ml tests passing; 215 total).
 >
 > This file is the admitted-vision → shipped-product bridge. Every item below exists to close a specific gap between
 > the application text and the code. **The `README` boundary notice stays authoritative:** nothing here ships as a
@@ -23,7 +23,7 @@
 - [x] **Update `.brain/PROJECT_SIGNOFF.md`**: T008 disposition is `complete` in `project-scope.json` and in sign-off file; OrbitScore scope verified.
 - [x] **Purge lingering "OrbitReady" naming**: `.brain/state.json` (`"project": "orbitscore"`), `.brain/knowledge-manual.md` title, `PROJECT_SIGNOFF.md` scope line → **OrbitScore** everywhere.
 - [x] **Fix dead paths in `.brain/knowledge-manual.md`**: `apps/api/...` → `backend/app/...`, `apps/web/...` → `frontend/...` (pre-monorepo references cleaned).
-- [x] **Sync stale numbers in `docs/Technical_Stack_Final.md`**: verified counts synced to **67 frontend (10 suites) / 54 backend / 13 ai_ml**.
+- [x] **Sync stale numbers in `docs/Technical_Stack_Final.md`**: verified counts synced to **96 frontend (14 suites) / 86 backend / 33 ai_ml (215 total)**.
 - [x] **Re-run the brain baseline** and refresh artifacts:
   ```bash
   python .brain/scripts/validate_brain.py
