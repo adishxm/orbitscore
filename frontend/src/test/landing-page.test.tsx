@@ -4,141 +4,172 @@ import { MemoryRouter } from 'react-router-dom';
 import axe from 'axe-core';
 import { LandingPage } from '../pages/LandingPage';
 
-describe('Slice 9: Reference Landing Page & Motion Layer', () => {
-  it('renders hero section with headline, CTA links, and orbital schematic', () => {
+describe('Slice 9: Aerospace Telemetry Landing Page & Deterministic Command Engine', () => {
+  it('renders hero section with real satellite fleet, TLE box, and telemetry grid', () => {
     render(
       <MemoryRouter>
         <LandingPage />
       </MemoryRouter>
     );
 
-    // Headline and kicker
+    // Headline and punchline
     expect(
-      screen.getByRole('heading', { level: 1, name: /Organize Mission Evidence Before Human Review/i })
+      screen.getByRole('heading', {
+        level: 1,
+        name: /DETERMINISTIC SPACECRAFT VERIFICATION & LIVE ORBITAL TELEMETRY/i,
+      })
     ).toBeInTheDocument();
-    expect(screen.getByText(/Evidence Preparation System/i)).toBeInTheDocument();
-
-    // CTAs
-    const demoCta = screen.getByRole('link', { name: /Open demo workspace/i });
-    expect(demoCta).toBeInTheDocument();
-    expect(demoCta).toHaveAttribute('href', '/missions/asteria-3');
-
-    const howCta = screen.getByRole('link', { name: /How It Works/i });
-    expect(howCta).toBeInTheDocument();
-    expect(howCta).toHaveAttribute('href', '/how-it-works');
-
-    // Metrics pills & Synthetic badges
-    expect(screen.getByText('100% Deterministic Engine')).toBeInTheDocument();
-    expect(screen.getByText('Zero Flight Safety Claims')).toBeInTheDocument();
-    expect(screen.getAllByText('SYNTHETIC DEMO DATA').length).toBeGreaterThan(0);
     expect(
-      screen.getByText(/Illustrative synthetic data — not live tracking, collision prediction, or operational guidance\./i)
+      screen.getByText(/Lock NORAD ephemeris vectors, CAD mass budgets, and thermal vacuum logs/i)
+    ).toBeInTheDocument();
+
+    // Spacecraft fleet tabs (EOS-06, Sentinel-6, CAPSTONE, Landsat-9)
+    expect(screen.getByRole('tab', { name: /EOS-06/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /SENTINEL-6A/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /CAPSTONE/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /LANDSAT-9/i })).toBeInTheDocument();
+
+    // 8-cell telemetry readouts
+    expect(screen.getByText('NORAD CAT ID')).toBeInTheDocument();
+    expect(screen.getByText('COSPAR ID')).toBeInTheDocument();
+    expect(screen.getByText('APOGEE / PERIGEE')).toBeInTheDocument();
+    expect(screen.getByText('ORBITAL VELOCITY')).toBeInTheDocument();
+
+    // Raw TLE Inspector box and action buttons
+    expect(screen.getByText(/RAW CELESTRAK TWO-LINE ELEMENT/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /SYNC LIVE CELESTRAK GP/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /LAUNCH WORKSPACE/i })).toBeInTheDocument();
+  });
+
+  it('switches real spacecraft and updates telemetry readouts and TLE on tab click', () => {
+    render(
+      <MemoryRouter>
+        <LandingPage />
+      </MemoryRouter>
+    );
+
+    // Initial spacecraft is EOS-06 [54361]
+    expect(screen.getByText('54361')).toBeInTheDocument();
+    expect(screen.getByText('2022-158A')).toBeInTheDocument();
+
+    // Switch to Sentinel-6A [46984]
+    const sentinelTab = screen.getByRole('tab', { name: /SENTINEL-6A/i });
+    fireEvent.click(sentinelTab);
+
+    expect(screen.getByText('46984')).toBeInTheDocument();
+    expect(screen.getByText('2020-086A')).toBeInTheDocument();
+  });
+
+  it('renders 6-vector orbital telemetry HUD strips with metrics', () => {
+    render(
+      <MemoryRouter>
+        <LandingPage />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText(/01 \/\/ ORBITAL EPHEMERIS/i)).toBeInTheDocument();
+    expect(screen.getByText(/02 \/\/ DEBRIS FLUX & CONJUNCTION/i)).toBeInTheDocument();
+    expect(screen.getByText(/03 \/\/ DETERMINISTIC RULE ENGINE/i)).toBeInTheDocument();
+    expect(screen.getByText(/04 \/\/ SHA-256 PROVENANCE LEDGER/i)).toBeInTheDocument();
+    expect(screen.getByText(/05 \/\/ HUMAN AUTHORITY GATE/i)).toBeInTheDocument();
+    expect(screen.getByText(/06 \/\/ REGULATORY MISSION DOSSIER/i)).toBeInTheDocument();
+  });
+
+  it('renders engineering benchmark matrix comparing legacy manual vs OrbitScore', () => {
+    render(
+      <MemoryRouter>
+        <LandingPage />
+      </MemoryRouter>
+    );
+
+    expect(
+      screen.getByRole('heading', {
+        level: 2,
+        name: /ELIMINATE SPREADSHEET DRIFT BEFORE FLIGHT READINESS REVIEW/i,
+      })
+    ).toBeInTheDocument();
+    expect(screen.getByText('Cross-Document Audit Time')).toBeInTheDocument();
+    expect(screen.getByText('CAD-to-ICD Mass Discrepancy Catch Rate')).toBeInTheDocument();
+    expect(screen.getByText('TLE Ephemeris Synchronization')).toBeInTheDocument();
+  });
+
+  it('interactive 6-stage phase gate stepper updates gate technical specs on click', () => {
+    render(
+      <MemoryRouter>
+        <LandingPage />
+      </MemoryRouter>
+    );
+
+    // Initial stage: STAGE 00
+    expect(
+      screen.getByText(/Mean motion bounds, orbital decay velocity vectors/i)
+    ).toBeInTheDocument();
+
+    // Click Stage 03 (Deterministic Evaluation)
+    const stage3Tab = screen.getByRole('tab', { name: /STAGE 03/i });
+    fireEvent.click(stage3Tab);
+
+    expect(
+      screen.getByText(/Pure mathematical checks: mass margin, thermal bounds/i)
+    ).toBeInTheDocument();
+
+    // Click Stage 05 (SHA-256 Dossier Export)
+    const stage5Tab = screen.getByRole('tab', { name: /STAGE 05/i });
+    fireEvent.click(stage5Tab);
+
+    expect(
+      screen.getByText(/Generates portable JSON and Markdown audit packets ready for regulatory review/i)
     ).toBeInTheDocument();
   });
 
-  it('renders truth-in-advertising section with What It Is vs What It Is Not', () => {
+  it('filters subsystem parameters by discipline category', () => {
     render(
       <MemoryRouter>
         <LandingPage />
       </MemoryRouter>
     );
 
-    expect(screen.getByText('What OrbitScore Is')).toBeInTheDocument();
-    expect(screen.getByText('What OrbitScore Is NOT')).toBeInTheDocument();
+    // Filter to Structural & ICD
+    const structuralBtn = screen.getByRole('button', { name: /STRUCTURAL & ICD/i });
+    fireEvent.click(structuralBtn);
 
-    // Specific honesty items
-    expect(screen.getByText(/Primary Evidence Register/i)).toBeInTheDocument();
-    expect(screen.getByText(/Not a Flight Safety Certification/i)).toBeInTheDocument();
-    expect(screen.getByText(/Not a Scoring or Grading System/i)).toBeInTheDocument();
-
-    // Mandatory boundary disclaimer
-    expect(
-      screen.getAllByText(
-        /Despite the name, OrbitScore does not score or certify missions; it organizes evidence for human review/i
-      ).length
-    ).toBeGreaterThan(0);
+    expect(screen.getByText('RULE-STR-03')).toBeInTheDocument();
+    expect(screen.getByText('RULE-STR-04')).toBeInTheDocument();
   });
 
-  it('interactive 6-stage workflow stepper updates stage details on click', () => {
+  it('interactive 5-state evidence taxonomy updates state console on click', () => {
     render(
       <MemoryRouter>
         <LandingPage />
       </MemoryRouter>
     );
 
-    // Initial stage: Stage 01
-    expect(screen.getByText(/Stage 01: Mission Context/i)).toBeInTheDocument();
-
-    // Click Stage 04 (Deterministic Checks)
-    const stage4Tab = screen.getByRole('tab', { name: /STAGE 04/i });
-    fireEvent.click(stage4Tab);
-
-    expect(screen.getByText(/Stage 04: Deterministic Checks/i)).toBeInTheDocument();
-    expect(screen.getByText(/Execute pure, deterministic, rule-based verification checks/i)).toBeInTheDocument();
-
-    // Click Stage 06 (Cited Export Dossier)
-    const stage6Tab = screen.getByRole('tab', { name: /STAGE 06/i });
-    fireEvent.click(stage6Tab);
-
-    expect(screen.getByText(/Stage 06: Cited Export Dossier/i)).toBeInTheDocument();
-  });
-
-  it('interactive 5-state evidence model tabs update definition and example', () => {
-    render(
-      <MemoryRouter>
-        <LandingPage />
-      </MemoryRouter>
-    );
-
-    // Initial state: confirmed
-    expect(screen.getByText(/A human team member with named technical role has verified/i)).toBeInTheDocument();
-
-    // Click 'conflicting' tab
-    const conflictingTab = screen.getByRole('tab', { name: /Active source documents disagree/i });
+    // Click 'CONFLICTING' state tab
+    const conflictingTab = screen.getByRole('tab', { name: /CONFLICTING/i });
     fireEvent.click(conflictingTab);
 
+    expect(screen.getByText(/STATE INSPECTION: CONFLICTING/i)).toBeInTheDocument();
     expect(
-      screen.getByText(/Multiple values exist across active engineering documents/i)
+      screen.getByText(/CAD model Z-axis CG at 142\.4 mm exceeds PSLV dispenser interface/i)
     ).toBeInTheDocument();
-    expect(screen.getByText(/3\.82 kg in CAD model vs 4\.15 kg/i)).toBeInTheDocument();
-
-    // Click 'out-of-scope' tab
-    const outOfScopeTab = screen.getByRole('tab', { name: /Parameter belongs outside profile applicability/i });
-    fireEvent.click(outOfScopeTab);
-
-    expect(
-      screen.getByText(/Parameter belongs to a subsystem, payload, or vehicle class outside/i)
-    ).toBeInTheDocument();
-
-    // Verify temporal stale notice is present
-    expect(screen.getByText(/Temporal Currency Notice/i)).toBeInTheDocument();
   });
 
-  it('renders traceability chain and synthetic fixtures launchers', () => {
+  it('renders cryptographic audit lineage and live FastAPI engine status console', () => {
     render(
       <MemoryRouter>
         <LandingPage />
       </MemoryRouter>
     );
 
-    // Traceability chain with honest human decision
-    expect(screen.getByText('ICD-AST3-004')).toBeInTheDocument();
-    expect(screen.getByText('Finding C-03')).toBeInTheDocument();
-    expect(screen.getByText('Accepted for packet')).toBeInTheDocument();
+    expect(screen.getByText(/END-TO-END CRYPTOGRAPHIC SHA-256 AUDIT LINEAGE/i)).toBeInTheDocument();
+    expect(screen.getByText(/SOURCE ARTIFACT CITATION/i)).toBeInTheDocument();
+    expect(screen.getByText(/DETERMINISTIC RULE EXECUTION/i)).toBeInTheDocument();
+    expect(screen.getByText(/CHIEF ENGINEER SIGN-OFF PACKET/i)).toBeInTheDocument();
 
-    // Fixtures
-    expect(screen.getByText('Asteria-3 Technology Demo')).toBeInTheDocument();
-    expect(screen.getByText('Microsat-X ESPA Class')).toBeInTheDocument();
-
-    const asteriaLinks = screen.getAllByRole('link', { name: /Launch Asteria-3 Workspace/i });
-    expect(asteriaLinks.length).toBeGreaterThan(0);
-    expect(asteriaLinks[0]).toHaveAttribute('href', '/missions/asteria-3');
-
-    const microsatLink = screen.getByRole('link', { name: /Inspect Boundary Gate/i });
-    expect(microsatLink).toHaveAttribute('href', '/missions/microsat-x');
-
-    // Closing CTA
-    expect(screen.getByText('Ready to Inspect Mission Evidence?')).toBeInTheDocument();
+    // FastApi engine status bar
+    expect(screen.getByText(/SQLITE WAL PERSISTENCE:/i)).toBeInTheDocument();
+    expect(screen.getByText(/CHIEF ENGINEER GATE:/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /VERIFY MERKLE CHAIN/i })).toBeInTheDocument();
   });
 
   it('passes axe accessibility audit on the reference landing page', async () => {
@@ -149,6 +180,6 @@ describe('Slice 9: Reference Landing Page & Motion Layer', () => {
     );
 
     const results = await axe.run(container);
-    expect(results.violations).toHaveLength(0);
+    expect(results.violations).toEqual([]);
   });
 });

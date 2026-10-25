@@ -5,9 +5,8 @@ import axe from 'axe-core';
 import { AppContent } from '../App';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
-import { StatusBanner } from '../components/common/StatusBanner';
 
-describe('Slice 2: Layout Shell, Navigation & Honesty Banners', () => {
+describe('Slice 2: Layout Shell, Navigation & Aerospace Command Header', () => {
   it('renders the skip to main content accessibility link', () => {
     render(
       <MemoryRouter initialEntries={['/']}>
@@ -20,49 +19,38 @@ describe('Slice 2: Layout Shell, Navigation & Honesty Banners', () => {
     expect(skipLink.getAttribute('href')).toBe('#main-content');
   });
 
-  it('renders the StatusBanner with required honesty badges', () => {
-    render(
-      <MemoryRouter>
-        <StatusBanner syntheticMissionName="Asteria-3" />
-      </MemoryRouter>
-    );
-
-    expect(screen.getByText(/DEMO \/ MOCK/i)).toBeInTheDocument();
-    expect(screen.getByText(/SYNTHETIC DATA: Asteria-3/i)).toBeInTheDocument();
-    expect(screen.getByText(/LOCAL ONLY/i)).toBeInTheDocument();
-    expect(
-      screen.getByText(/Stored only in this browser; not durable or private from other users of this device./i)
-    ).toBeInTheDocument();
-  });
-
-  it('renders Header with navigation items and CTA button', () => {
+  it('renders Header with navigation items and non-wrapping CTA button', () => {
     render(
       <MemoryRouter initialEntries={['/']}>
         <Header />
       </MemoryRouter>
     );
 
-    expect(screen.getAllByText('Overview').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('How It Works').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('Profiles & Rules').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('About Limits').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('System Status').length).toBeGreaterThan(0);
-    expect(screen.getByText('Asteria-3 Demo')).toBeInTheDocument();
+    expect(screen.getAllByText(/COMMAND OVERVIEW/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/LIVE FLEET & TLEs/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/DETERMINISTIC RULES/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/6-STAGE GATE WORKFLOW/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/TELEMETRY CITATIONS/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/SHA-256 PROVENANCE/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/LAUNCH CONSOLE/i)).toBeInTheDocument();
   });
 
-  it('renders Footer with mandatory scope notice and required legal wording', () => {
+  it('renders Footer with proprietary deterministic telemetry engine specification', () => {
     render(
       <MemoryRouter>
         <Footer />
       </MemoryRouter>
     );
 
-    // Mandatory disclaimer
     expect(
-      screen.getByText(/Despite the name, OrbitScore does not score or certify missions; it organizes evidence for human review/i)
+      screen.getByText(/ORBITSCORE \/\/ DETERMINISTIC MISSION TELEMETRY & VERIFICATION ENGINE/i)
     ).toBeInTheDocument();
-
-    expect(screen.getByText(/Not a certification, compliance determination, or official filing/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/DETERMINISTIC KERNEL v4\.2\.0 \/\/ NORAD LINKED/i)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/PROPRIETARY DETERMINISTIC TELEMETRY SPECIFICATION \/\/ RFC 3161 TIME-STAMPED/i)
+    ).toBeInTheDocument();
   });
 
   it('navigates to the /about-limits route and displays the boundary statements', () => {

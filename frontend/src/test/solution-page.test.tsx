@@ -1,10 +1,9 @@
-import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { SolutionPage } from '../pages/SolutionPage';
 
-describe('SolutionPage Component (Astro Sweepers Solution Alignment)', () => {
+describe('SolutionPage Component (OrbitScore Aerospace Solution)', () => {
   beforeEach(() => {
     vi.stubGlobal(
       'fetch',
@@ -29,7 +28,7 @@ describe('SolutionPage Component (Astro Sweepers Solution Alignment)', () => {
     );
   });
 
-  it('renders the Astro Sweepers style Hero with verified orbital copy', () => {
+  it('renders the aerospace Hero with verified orbital copy', () => {
     render(
       <MemoryRouter>
         <SolutionPage />
@@ -58,7 +57,7 @@ describe('SolutionPage Component (Astro Sweepers Solution Alignment)', () => {
     expect(screen.getByText('Custom Simulations & Gating')).toBeInTheDocument();
   });
 
-  it('renders the AI & ML Roadmap with status badges matching Astro Sweepers', () => {
+  it('renders the AI & ML Roadmap with status badges matching aerospace specification', () => {
     render(
       <MemoryRouter>
         <SolutionPage />
