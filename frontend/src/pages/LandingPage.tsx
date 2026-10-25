@@ -196,12 +196,6 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Earth-Limb Horizon Arc Glow Under Hero (Full-bleed, Below Stats Strip) */}
-        <div className={styles.earthLimbWrapper} aria-hidden="true">
-          <div className={styles.earthLimbAtmosphere} />
-          <div className={styles.earthLimbCurve} />
-          <div className={styles.earthLimbSunriseGlow} />
-        </div>
       </section>
 
       {/* =========================================================================

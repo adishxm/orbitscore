@@ -119,8 +119,8 @@ export const GlobalAtmosphere: React.FC = () => {
 
   return (
     <div className={styles.atmosphereRoot} aria-hidden="true">
-      {/* 1. Full-Document Blue Gradient Layer (background.svg) */}
-      <div className={styles.svgBackgroundLayer} />
+      {/* 1. Custom Deep Blue Aura Background Layer */}
+      <div className={styles.wallpaperLayer} />
 
       {/* 2. Top-Hero Ethereal Blue Glow Pool */}
       <div className={styles.topHeroGlow} />

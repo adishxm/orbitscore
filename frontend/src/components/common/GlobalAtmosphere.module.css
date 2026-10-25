@@ -12,26 +12,20 @@
   background-color: var(--bg-0, #050505);
 }
 
-/* Full-Document Blue Gradient Layer (background.svg) - Full-bleed on 4K/Ultrawide */
-.svgBackgroundLayer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 6480px;
-  background-image: url('/background.svg');
+/* Custom Blue Aura Wallpaper - Fixed Viewport Backdrop with Smooth Fill */
+.wallpaperLayer {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background-image: url('/assets/website-bg.jpg');
   background-repeat: no-repeat;
-  background-position: top center;
-  background-size: 100% auto;
-  opacity: 1;
+  background-position: center center;
+  background-size: cover;
+  opacity: 0.95;
   pointer-events: none;
-}
-
-@media (min-width: 2560px) {
-  .svgBackgroundLayer {
-    background-size: cover;
-  }
+  z-index: 0;
 }
 
 /* Ethereal Top-Hero Blue Aurora Glow */
