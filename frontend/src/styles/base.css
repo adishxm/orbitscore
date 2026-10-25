@@ -10,7 +10,12 @@
 
 html {
   font-size: 16px;
-  background-color: var(--os-color-bg-deep);
+  background-color: #000000;
+  background-image: url('/background.svg');
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   color: var(--os-color-text-primary);
   font-family: var(--os-font-sans);
   line-height: var(--os-lh-normal);
@@ -22,7 +27,7 @@ html {
 
 body {
   min-height: 100vh;
-  background-color: var(--os-color-bg-deep);
+  background-color: transparent;
   color: var(--os-color-text-primary);
   display: flex;
   flex-direction: column;
@@ -114,7 +119,7 @@ button:disabled, input:disabled, select:disabled, textarea:disabled {
   left: 1.5rem;
   z-index: var(--os-z-banner);
   background: var(--os-color-accent-cyan);
-  color: #000000;
+  color: #ffffff;
   padding: var(--os-space-3) var(--os-space-5);
   font-weight: 700;
   font-size: var(--os-type-body-s);
@@ -129,14 +134,14 @@ button:disabled, input:disabled, select:disabled, textarea:disabled {
 
 /* 7. Layout Primitives */
 
-/* Centered Container */
+/* Full-Bleed Left-to-Right Edge-to-Edge Container */
 .container {
   width: 100%;
-  max-width: var(--os-container-xl);
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: var(--os-container-pad);
-  padding-right: var(--os-container-pad);
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: clamp(1rem, 2vw, 2rem);
+  padding-right: clamp(1rem, 2vw, 2rem);
 }
 
 /* Focused Content Column (960px max width inside container) */

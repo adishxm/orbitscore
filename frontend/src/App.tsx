@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { StatusBanner } from './components/common/StatusBanner';
 import { Header } from './components/common/Header';
 import { Footer } from './components/common/Footer';
+import { useOrbitStore } from './store/useOrbitStore';
 
 // Route Pages
 import { LandingPage } from './pages/LandingPage';
@@ -19,16 +19,31 @@ import { ScenarioComparisonPage } from './pages/ScenarioComparisonPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 export const AppContent: React.FC = () => {
+  useEffect(() => {
+    // Automatically connect frontend to the live FastAPI backend on startup
+    useOrbitStore.getState().setApiMode('live').catch(() => {});
+  }, []);
+
   return (
-    <div className="app-root">
-      <a href="#main-content" className="skip-link">
+    <div
+      className="app-root relative min-h-screen text-[#ffffff]"
+      style={{
+        backgroundImage: 'url(/background.svg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'top center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
+        backgroundColor: '#000000',
+      }}
+    >
+      <a href="#main-content" className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:p-2 focus:bg-[#0d9488] focus:text-[#FFFFFF]">
         Skip to main content
       </a>
 
-      <StatusBanner />
+      {/* Sticky Full-Bleed Command Header */}
       <Header />
 
-      <main id="main-content" tabIndex={-1}>
+      <main id="main-content" tabIndex={-1} className="relative z-10 w-full focus:outline-none">
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/solution" element={<SolutionPage />} />
@@ -53,6 +68,7 @@ export const AppContent: React.FC = () => {
         </Routes>
       </main>
 
+      {/* Full-Bleed Aerospace Footer */}
       <Footer />
     </div>
   );
