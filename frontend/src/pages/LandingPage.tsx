@@ -195,17 +195,10 @@ export const LandingPage: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {/* Earth-Limb Horizon Arc Glow Under Hero */}
-        <div className={styles.earthLimbWrapper} aria-hidden="true">
-          <div className={styles.earthLimbAtmosphere} />
-          <div className={styles.earthLimbCurve} />
-          <div className={styles.earthLimbSunriseGlow} />
-        </div>
       </section>
 
       {/* =========================================================================
-          SECTION 1B: SPACECRAFT FLEET CARD & BLUEPRINT PANEL (OVERLAPS EARTH LIMB)
+          SECTION 1B: SPACECRAFT FLEET CARD & BLUEPRINT PANEL
           ========================================================================= */}
       <section className={styles.fleetOverlapSection} aria-label="Spacecraft Fleet and Blueprint Details">
         <div className={styles.container}>

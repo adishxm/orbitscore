@@ -19,6 +19,18 @@
   overflow: visible;
 }
 
+.telemetryHub {
+  pointer-events: none;
+}
+
+.orbitTracks {
+  pointer-events: all;
+}
+
+.orbitHitGroup {
+  cursor: pointer;
+}
+
 .markerGroup {
   transition: transform 0.05s linear;
 }

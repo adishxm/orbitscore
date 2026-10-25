@@ -56,5 +56,16 @@ This document records design decisions, technical architecture, and implementati
 2. **Accessible DOM Labels for Vitest Invariants**: Where tests inspect specific navigation labels (e.g. `/COMMAND OVERVIEW/i`, `/LIVE FLEET & TLEs/i`), screen reader accessibility attributes (`sr-only` and `aria-label`) retain these exact strings while presenting unified short labels visually ("Overview", "Fleet", "Rules", "Workflow", "Citations", "Ledger").
 3. **Synthetic Demo Data Disclosure**: Visible disclosure retained as a dedicated amber badge (`--warn`) adhering to honesty constraints.
 4. **Offline Self-Hosted Assets**: Fonts and SVG icons are strictly self-hosted within `frontend/public/fonts/` and inline SVG/Lucide React components. No external CDNs or network requests.
-5. **No Layout Shift & Responsive Breakpoints**: Verified from 390px (mobile) up to 2560px (ultrawide). Zero horizontal scrollbar, zero clipped navigation items.
 6. **Banned Words Compliance**: All `.ts`, `.tsx`, `.css`, and `.html` files strictly pass `banned-words-lint.test.ts` with zero forbidden words.
+
+## Earth Visual Removal & Blue Gradient Background (`background.svg`)
+- **Background System (`background.svg`)**:
+  - Adopted `#050505` base background tokens to match `background.svg`'s canvas rectangle.
+  - Positioned `background.svg` (`1920x6480`) as a document-level ambient layer inside `.atmosphereRoot`, centered at `top center` with smooth responsive width scaling.
+  - Combined with a top-hero ethereal blue aurora (`rgba(3, 31, 167, 0.38)` and `rgba(83, 106, 178, 0.22)`) and stationary fixed twinkling starfield canvas (`position: fixed`).
+- **Earth Visual Elements Removal**:
+  - Removed Earth-limb horizon arc under the hero (`earthLimbWrapper`, `earthLimbAtmosphere`, `earthLimbCurve`, `earthLimbSunriseGlow`) in `LandingPage.tsx` and `LandingPage.module.css`.
+  - Removed central Earth globe and atmosphere gradients in `HeroOrbitVisual.tsx`.
+  - Replaced with a central holographic telemetry radar focal node (`NADIR // 0,0,0` coordinate hub, concentric range reticles at r=22, r=54, r=96, crosshair ticks, and pulsing beacon core).
+  - Unified split back/front orbit arcs into continuous 360° elliptical orbit paths with interactive generous hit targets and active satellite highlight glow.
+

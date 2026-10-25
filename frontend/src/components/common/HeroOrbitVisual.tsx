@@ -147,25 +147,17 @@ export const HeroOrbitVisual: React.FC<HeroOrbitVisualProps> = ({
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* Earth Atmosphere Rim Glow */}
+          {/* Holographic Radar Hub Center Glow */}
           <radialGradient
-            id={`${idPrefix}-earthAtmosphere`}
-            cx="45%"
-            cy="40%"
-            r="60%"
+            id={`${idPrefix}-radarCenter`}
+            cx="50%"
+            cy="50%"
+            r="50%"
           >
-            <stop offset="0%" stopColor="#0d1829" />
-            <stop offset="65%" stopColor="#080e1a" />
-            <stop offset="92%" stopColor="#1e3a6a" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.95" />
-          </radialGradient>
-
-          {/* Sunrise Rim Light */}
-          <linearGradient id={`${idPrefix}-sunriseRim`} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#ffb454" stopOpacity="0.8" />
-            <stop offset="35%" stopColor="#22d3ee" stopOpacity="0.6" />
+            <stop offset="0%" stopColor="#6aa5ff" stopOpacity="0.25" />
+            <stop offset="50%" stopColor="#2563eb" stopOpacity="0.08" />
             <stop offset="100%" stopColor="transparent" stopOpacity="0" />
-          </linearGradient>
+          </radialGradient>
 
           {/* Marker Glow Filter */}
           <filter id={`${idPrefix}-glow`} x="-50%" y="-50%" width="200%" height="200%">
@@ -177,105 +169,102 @@ export const HeroOrbitVisual: React.FC<HeroOrbitVisualProps> = ({
           </filter>
         </defs>
 
-        {/* 1. Back Orbit Arcs (Faked Depth Behind Earth) */}
-        <g className={styles.backOrbits} opacity="0.45">
-          {orbits.map((orb) => {
-            const isSelected = orb.sat.id === selectedSatId;
-            return (
-              <ellipse
-                key={`back-${orb.sat.id}`}
-                cx="240"
-                cy="200"
-                rx={orb.rx}
-                ry={orb.ry}
-                transform={`rotate(${orb.tiltDeg} 240 200)`}
-                stroke={isSelected ? 'var(--accent)' : orb.color}
-                strokeWidth={isSelected ? '2' : '1'}
-                strokeDasharray="4 3"
-                opacity={isSelected ? 0.9 : 0.4}
-              />
-            );
-          })}
-        </g>
-
-        {/* 2. Earth Central Sphere (Radius 78px at 240, 200) */}
-        <g className={styles.earthGroup}>
-          {/* Outer Atmospheric Glow */}
+        {/* 1. Central Holographic Telemetry Hub (Nadir & Radar Range Reticles) */}
+        <g className={styles.telemetryHub}>
+          {/* Ambient Hub Glow */}
           <circle
             cx="240"
             cy="200"
-            r="82"
-            fill="none"
-            stroke="rgba(34, 211, 238, 0.25)"
-            strokeWidth="4"
+            r="96"
+            fill={`url(#${idPrefix}-radarCenter)`}
           />
 
-          {/* Earth Body */}
+          {/* Outer Range Reticle (r=96) */}
           <circle
             cx="240"
             cy="200"
-            r="78"
-            fill={`url(#${idPrefix}-earthAtmosphere)`}
-          />
-
-          {/* Subtle Graticule Lines (Lat/Long) */}
-          <ellipse
-            cx="240"
-            cy="200"
-            rx="78"
-            ry="30"
+            r="96"
             stroke="rgba(148, 170, 210, 0.12)"
             strokeWidth="1"
-            fill="none"
-          />
-          <ellipse
-            cx="240"
-            cy="200"
-            rx="78"
-            ry="60"
-            stroke="rgba(148, 170, 210, 0.08)"
-            strokeWidth="1"
-            fill="none"
-          />
-          <line
-            x1="240"
-            y1="122"
-            x2="240"
-            y2="278"
-            stroke="rgba(148, 170, 210, 0.12)"
-            strokeWidth="1"
+            strokeDasharray="4 6"
           />
 
-          {/* Terminator & Sunrise Atmospheric Edge */}
-          <path
-            d="M 240 122 A 78 78 0 0 1 318 200 A 78 78 0 0 1 240 278 Z"
-            fill="rgba(0, 0, 0, 0.45)"
+          {/* Intermediate Range Reticle (r=54) */}
+          <circle
+            cx="240"
+            cy="200"
+            r="54"
+            stroke="rgba(106, 165, 255, 0.22)"
+            strokeWidth="1"
+            strokeDasharray="2 4"
+          />
+
+          {/* Core Telemetry Node Ring (r=22) */}
+          <circle
+            cx="240"
+            cy="200"
+            r="22"
+            stroke="rgba(106, 165, 255, 0.45)"
+            strokeWidth="1.2"
+            fill="rgba(7, 12, 22, 0.75)"
+          />
+
+          {/* Cardinal Crosshair Ticks */}
+          <line x1="240" y1="168" x2="240" y2="192" stroke="rgba(106, 165, 255, 0.4)" strokeWidth="1" />
+          <line x1="240" y1="208" x2="240" y2="232" stroke="rgba(106, 165, 255, 0.4)" strokeWidth="1" />
+          <line x1="208" y1="200" x2="232" y2="200" stroke="rgba(106, 165, 255, 0.4)" strokeWidth="1" />
+          <line x1="248" y1="200" x2="272" y2="200" stroke="rgba(106, 165, 255, 0.4)" strokeWidth="1" />
+
+          {/* 45-degree angle tick pips */}
+          <circle cx="278" cy="162" r="1.5" fill="rgba(148, 170, 210, 0.3)" />
+          <circle cx="202" cy="162" r="1.5" fill="rgba(148, 170, 210, 0.3)" />
+          <circle cx="278" cy="238" r="1.5" fill="rgba(148, 170, 210, 0.3)" />
+          <circle cx="202" cy="238" r="1.5" fill="rgba(148, 170, 210, 0.3)" />
+
+          {/* Pulsing Central Core Beacon */}
+          <circle
+            cx="240"
+            cy="200"
+            r="4"
+            fill="var(--accent)"
+            filter={`url(#${idPrefix}-glow)`}
           />
           <circle
             cx="240"
             cy="200"
-            r="78"
-            fill="none"
-            stroke={`url(#${idPrefix}-sunriseRim)`}
-            strokeWidth="2.5"
+            r="1.5"
+            fill="#ffffff"
           />
+
+          {/* Technical Telemetry Label */}
+          <text
+            x="240"
+            y="214"
+            textAnchor="middle"
+            fill="var(--text-2)"
+            fontSize="6.5"
+            fontFamily="var(--font-mono)"
+            letterSpacing="0.12em"
+          >
+            NADIR // 0,0,0
+          </text>
         </g>
 
-        {/* 3. Front Orbit Arcs (Over Earth Front Face) */}
-        <g className={styles.frontOrbits}>
+        {/* 2. Unified 360° Spacecraft Orbit Tracks */}
+        <g className={styles.orbitTracks}>
           {orbits.map((orb) => {
             const isSelected = orb.sat.id === selectedSatId;
             const isHighlighted = isSelected || orb.sat.id === hoveredSatId;
             return (
               <g
-                key={`front-${orb.sat.id}`}
+                key={`orbit-${orb.sat.id}`}
                 className={styles.orbitHitGroup}
                 onClick={() => onSelectSatId(orb.sat.id)}
                 onMouseEnter={() => setHoveredSatId(orb.sat.id)}
                 onMouseLeave={() => setHoveredSatId(null)}
                 style={{ cursor: 'pointer' }}
               >
-                {/* Thick invisible stroke for hit target */}
+                {/* Wide invisible stroke for generous hit target */}
                 <ellipse
                   cx="240"
                   cy="200"
@@ -283,10 +272,23 @@ export const HeroOrbitVisual: React.FC<HeroOrbitVisualProps> = ({
                   ry={orb.ry}
                   transform={`rotate(${orb.tiltDeg} 240 200)`}
                   stroke="transparent"
-                  strokeWidth="16"
+                  strokeWidth="20"
                   fill="none"
                 />
-                {/* Visible front stroke */}
+                {/* Subtle base dash track */}
+                <ellipse
+                  cx="240"
+                  cy="200"
+                  rx={orb.rx}
+                  ry={orb.ry}
+                  transform={`rotate(${orb.tiltDeg} 240 200)`}
+                  stroke={orb.color}
+                  strokeWidth="1"
+                  strokeDasharray="3 4"
+                  opacity={isSelected ? 0.3 : 0.2}
+                  fill="none"
+                />
+                {/* Primary orbital ellipse stroke */}
                 <ellipse
                   cx="240"
                   cy="200"
@@ -295,7 +297,9 @@ export const HeroOrbitVisual: React.FC<HeroOrbitVisualProps> = ({
                   transform={`rotate(${orb.tiltDeg} 240 200)`}
                   stroke={isHighlighted ? 'var(--accent)' : orb.color}
                   strokeWidth={isHighlighted ? '2.5' : '1.2'}
-                  opacity={isSelected ? 1 : 0.65}
+                  opacity={isSelected ? 1 : isHighlighted ? 0.85 : 0.55}
+                  filter={isHighlighted ? `url(#${idPrefix}-glow)` : undefined}
+                  fill="none"
                 />
               </g>
             );
