@@ -1,104 +1,132 @@
-/* OrbitHudNav.module.css */
+/* OrbitHudNav.module.css - Compact Single-Line Solid Bottom Status Bar */
 
-.hudNav {
+.statusBar {
   position: fixed;
-  bottom: 1.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 90;
-  background: rgba(9, 13, 18, 0.88);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid var(--os-color-border-bright);
-  border-radius: var(--os-radius-sm);
-  padding: 0.5rem 1rem;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 161, 255, 0.12);
-  max-width: 90vw;
-  width: auto;
-  transition: all var(--os-duration-normal) ease;
-}
-
-.hudInner {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.navSection {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  opacity: 0.65;
-  transition: opacity var(--os-duration-fast) ease;
-}
-
-.navSectionActive {
-  opacity: 1;
-}
-
-.sectionHeader {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.sectionKey {
-  font-family: var(--os-font-mono);
-  font-size: 0.65rem;
-  color: var(--os-color-accent-cyan);
-  font-weight: 700;
-  letter-spacing: var(--os-tracking-wide);
-}
-
-.sectionTitle {
-  font-family: var(--os-font-display);
-  font-size: 0.72rem;
-  color: var(--os-color-text-primary);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: var(--os-tracking-tight);
-}
-
-.subList {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.subBtn {
-  font-family: var(--os-font-sans);
-  font-size: 0.7rem;
-  color: var(--os-color-text-secondary);
-  background: transparent;
-  padding: 0.15rem 0.35rem;
-  border-radius: var(--os-radius-xs);
-  transition: all var(--os-duration-fast) ease;
-}
-
-.subBtn:hover {
-  color: var(--os-color-text-white);
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.progressBarBg {
-  position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 0 0 var(--os-radius-sm) var(--os-radius-sm);
-  overflow: hidden;
+  height: 2.5rem; /* 40px / h-10 */
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  font-family: var(--os-font-mono, monospace);
+  font-size: 0.6875rem;
+  box-sizing: border-box;
+  color: #ffffff;
 }
 
-.progressBarFill {
-  height: 100%;
-  background: var(--os-color-accent-cyan);
-  box-shadow: 0 0 8px var(--os-color-accent-cyan);
-  transition: width 0.1s linear;
-}
-
-@media (max-width: 900px) {
-  .hudNav {
-    display: none;
+@media (min-width: 1024px) {
+  .statusBar {
+    padding: 0 1.5rem;
   }
+}
+
+.statusLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.dotNominal {
+  width: 6px;
+  height: 6px;
+  background-color: #00ff00;
+  display: inline-block;
+}
+
+.statusEngineText {
+  color: #aaaaaa;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .statusEngineText {
+    display: inline;
+  }
+}
+
+.statusCenter {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+}
+
+.jumpList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.jumpBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  padding: 0.2rem 0.4rem;
+  background-color: #080808;
+  border: 1px solid #262626;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.1s ease;
+}
+
+.jumpBtn:hover {
+  color: #ffffff;
+  border-color: var(--os-color-accent-teal, #0d9488);
+}
+
+.jumpBtnActive {
+  color: #ffffff;
+  background-color: #0055ff;
+  border-color: #0055ff;
+}
+
+.jumpCode {
+  color: #aaaaaa;
+}
+
+.jumpBtnActive .jumpCode {
+  color: #ffffff;
+}
+
+.statusRight {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.enginePill {
+  color: #00ff00;
+  background-color: #080808;
+  border: 1px solid #262626;
+  padding: 0.15rem 0.45rem;
+  font-size: 0.625rem;
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .enginePill {
+    display: inline-block;
+  }
+}
+
+.scrollProgressText {
+  color: #ffff00;
+  font-weight: 700;
+  font-size: 0.65rem;
 }

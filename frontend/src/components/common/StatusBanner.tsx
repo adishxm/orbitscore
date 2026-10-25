@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { AlertTriangle, Database, Info, Trash2, X, Radio } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { AlertTriangle, Database, Info, Trash2, X, Radio, CheckCircle2, RefreshCw } from 'lucide-react';
+import { useOrbitStore } from '../../store/useOrbitStore';
 import styles from './StatusBanner.module.css';
 
 interface StatusBannerProps {
@@ -12,11 +13,67 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
   syntheticMissionName = 'Asteria-3',
 }) => {
   const [collapsed, setCollapsed] = useState(false);
-  const [showNotImplemented, setShowNotImplemented] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [connectionFeedback, setConnectionFeedback] = useState<string | null>(null);
+  const bannerRef = useRef<HTMLElement>(null);
+
+  const { apiMode, isApiConnected, apiServerUrl, toggleApiMode } = useOrbitStore();
+
+  // Dynamically synchronize the CSS variable `--os-banner-height` so the sticky Header never collides
+  useEffect(() => {
+    const updateBannerHeight = () => {
+      if (collapsed || !bannerRef.current) {
+        document.documentElement.style.setProperty('--os-banner-height', '0px');
+      } else {
+        const height = bannerRef.current.offsetHeight;
+        document.documentElement.style.setProperty('--os-banner-height', `${height}px`);
+      }
+    };
+
+    updateBannerHeight();
+
+    let resizeObserver: ResizeObserver | null = null;
+    if (bannerRef.current && typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => {
+        updateBannerHeight();
+      });
+      resizeObserver.observe(bannerRef.current);
+    }
+
+    window.addEventListener('resize', updateBannerHeight);
+
+    return () => {
+      if (resizeObserver) resizeObserver.disconnect();
+      window.removeEventListener('resize', updateBannerHeight);
+      document.documentElement.style.setProperty('--os-banner-height', '0px');
+    };
+  }, [collapsed]);
+
+  const handleToggleApi = async () => {
+    setIsConnecting(true);
+    setConnectionFeedback(null);
+    try {
+      await toggleApiMode();
+      // Re-read store state
+      const state = useOrbitStore.getState();
+      if (state.apiMode === 'live' && state.isApiConnected) {
+        setConnectionFeedback(`Connected to live FastAPI backend at ${state.apiServerUrl}`);
+      } else if (state.apiMode === 'live' && !state.isApiConnected) {
+        setConnectionFeedback(`FastAPI backend at ${state.apiServerUrl} is unreachable. Operating in local engine mode.`);
+      } else {
+        setConnectionFeedback('Operating in client-side demonstration mode with LocalStorage persistence.');
+      }
+    } catch {
+      setConnectionFeedback(`Could not connect to ${apiServerUrl}. Defaulted to local browser mode.`);
+    } finally {
+      setIsConnecting(false);
+    }
+  };
 
   return (
     <>
       <aside
+        ref={bannerRef}
         className={`${styles.banner} ${collapsed ? styles.collapsed : ''}`}
         role="region"
         aria-label="Application Environment Status"
@@ -31,26 +88,51 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
               <Database className={styles.badgeIcon} size={13} aria-hidden="true" />
               SYNTHETIC DATA: {syntheticMissionName}
             </span>
-            <span className={`${styles.badge} ${styles.badgeLocal}`}>
+            <span
+              className={`${styles.badge} ${
+                apiMode === 'live' && isApiConnected ? styles.badgeLive : styles.badgeLocal
+              }`}
+            >
               <Info className={styles.badgeIcon} size={13} aria-hidden="true" />
-              LOCAL ONLY (not saved)
+              {apiMode === 'live' && isApiConnected
+                ? 'LIVE API CONNECTED (127.0.0.1:8000)'
+                : 'LOCAL ONLY (Saved in LocalStorage)'}
             </span>
           </div>
 
           <div className={styles.noticeText}>
-            Stored only in this browser; not durable or private from other users of this device.
+            Stored only in this browser; not durable or private from other users of this device. Workspace state persists locally in browser storage.
           </div>
 
           <div className={styles.actions}>
             <button
               type="button"
-              onClick={() => setShowNotImplemented(true)}
-              className={styles.modeToggleBtn}
-              title="Connect to Live Server"
-              aria-label="Connect Live API"
+              onClick={handleToggleApi}
+              disabled={isConnecting}
+              className={`${styles.modeToggleBtn} ${
+                apiMode === 'live' && isApiConnected ? styles.modeToggleActive : ''
+              }`}
+              title={
+                apiMode === 'live' && isApiConnected
+                  ? 'Switch back to local client engine'
+                  : 'Connect to live FastAPI backend on 127.0.0.1:8000'
+              }
+              aria-label="Toggle Live API Connection"
             >
-              <Radio size={12} aria-hidden="true" />
-              <span>Connect Live API</span>
+              {isConnecting ? (
+                <RefreshCw size={12} className={styles.spin} aria-hidden="true" />
+              ) : apiMode === 'live' && isApiConnected ? (
+                <CheckCircle2 size={12} aria-hidden="true" />
+              ) : (
+                <Radio size={12} aria-hidden="true" />
+              )}
+              <span>
+                {isConnecting
+                  ? 'Connecting...'
+                  : apiMode === 'live' && isApiConnected
+                  ? 'Live API Active'
+                  : 'Connect Live API'}
+              </span>
             </button>
 
             {onClearData && (
@@ -65,6 +147,7 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
                 <span>Clear local data</span>
               </button>
             )}
+
             <button
               type="button"
               onClick={() => setCollapsed(!collapsed)}
@@ -76,54 +159,22 @@ export const StatusBanner: React.FC<StatusBannerProps> = ({
             </button>
           </div>
         </div>
-      </aside>
 
-      {/* Not Implemented Modal Panel */}
-      {showNotImplemented && (
-        <div
-          className={styles.modalOverlay}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="not-implemented-title"
-          onClick={() => setShowNotImplemented(false)}
-        >
-          <div
-            className={styles.modalDialog}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className={styles.modalHeader}>
-              <h2 id="not-implemented-title" className={styles.modalTitle}>
-                Not Implemented in This Build
-              </h2>
-              <button
-                type="button"
-                className={styles.modalCloseBtn}
-                onClick={() => setShowNotImplemented(false)}
-                aria-label="Close notification"
-              >
-                <X size={18} aria-hidden="true" />
-              </button>
-            </div>
-            <div className={styles.modalBody}>
-              <p>
-                Live remote API synchronization and external server connectivity are <strong>not implemented in this build</strong>.
-              </p>
-              <p>
-                OrbitScore currently operates entirely in client-side demonstration mode using local browser storage and synthetic test fixtures. All parameter checks execute deterministically inside your browser without outbound network requests.
-              </p>
-            </div>
-            <div className={styles.modalFooter}>
-              <button
-                type="button"
-                className={styles.modalPrimaryBtn}
-                onClick={() => setShowNotImplemented(false)}
-              >
-                Understood
-              </button>
-            </div>
+        {/* Transient connection feedback notification */}
+        {connectionFeedback && (
+          <div className={styles.feedbackBar} role="status">
+            <span>{connectionFeedback}</span>
+            <button
+              type="button"
+              className={styles.feedbackDismiss}
+              onClick={() => setConnectionFeedback(null)}
+              aria-label="Dismiss message"
+            >
+              &times;
+            </button>
           </div>
-        </div>
-      )}
+        )}
+      </aside>
     </>
   );
 };

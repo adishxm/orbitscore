@@ -92,6 +92,52 @@
   color: var(--os-color-accent-cyan);
 }
 
+.modeToggleActive {
+  background-color: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #34d399;
+}
+
+.modeToggleActive:hover {
+  border-color: #34d399;
+  color: #34d399;
+}
+
+.spin {
+  animation: bannerSpin 1s linear infinite;
+}
+
+@keyframes bannerSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.feedbackBar {
+  background-color: rgba(0, 0, 0, 0.95);
+  border-top: 1px solid var(--os-color-border-bright);
+  padding: 0.25rem var(--os-container-pad);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--os-color-accent-cyan);
+  font-family: var(--os-font-mono);
+}
+
+.feedbackDismiss {
+  background: transparent;
+  border: none;
+  color: var(--os-color-text-muted);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.feedbackDismiss:hover {
+  color: var(--os-color-text-white);
+}
+
 .noticeText {
   color: var(--os-color-text-muted);
   font-size: 0.75rem;
@@ -227,7 +273,7 @@
 
 .modalPrimaryBtn {
   background-color: var(--os-color-accent-cyan);
-  color: #000000;
+  color: #ffffff;
   font-family: var(--os-font-mono);
   font-size: var(--os-type-body-s);
   font-weight: 700;

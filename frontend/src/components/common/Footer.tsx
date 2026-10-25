@@ -1,163 +1,127 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShieldAlert, Twitter, Linkedin, Github } from 'lucide-react';
+import { Github } from 'lucide-react';
 import styles from './Footer.module.css';
 
 export const Footer: React.FC = () => {
   return (
     <footer className={styles.footer} role="contentinfo">
-      <div className="container">
-        {/* Top Disclaimer Banner */}
-        <div className={styles.disclaimerBox}>
-          <div className={styles.disclaimerIcon}>
-            <ShieldAlert size={20} aria-hidden="true" />
-          </div>
-          <div className={styles.disclaimerText}>
-            <strong>Mandatory Scope Notice:</strong> Despite the name, OrbitScore does not score or certify missions; it organizes evidence for human review. It does not replace qualified engineering oversight, space agency consultation, or formal regulatory filings.
-          </div>
-        </div>
-
-        {/* 4-Column Footer Grid matching Astro Sweepers */}
+      <div className={styles.container}>
+        {/* Full-Bleed 4-Column Aerospace Grid */}
         <div className={styles.grid}>
-          {/* Col 1: Brand & Mission */}
+          {/* Col 1: Brand & Architecture */}
           <div className={styles.colBrand}>
-            <Link to="/" className={styles.brandTitle} aria-label="OrbitScore Homepage">
-              OrbitScore
+            <Link to="/" className={styles.brandTitle} aria-label="OrbitScore Engine Homepage">
+              <span className={styles.brandDot} />
+              <span>ORBITSCORE</span>
             </Link>
             <p className={styles.brandDesc}>
-              Saving Space, One Satellite at a Time. Real-time debris tracking, deterministic
-              evidence registers, and AI-powered collision avoidance.
+              Deterministic Flight Telemetry, Real Spacecraft Ephemeris &amp; SHA-256 Provenance Verification Engine.
             </p>
-            <div className={styles.statusChip}>
-              <span className={styles.statusDot} />
-              <span>Evidence Register Framework v0.1.0</span>
+            <div className={styles.kernelPill}>
+              <span className={styles.dotGreen} />
+              <span>DETERMINISTIC KERNEL v4.2.0 // NORAD LINKED</span>
             </div>
           </div>
 
-          {/* Col 2: Product */}
+          {/* Col 2: Telemetry & Flight Fleet */}
           <div className={styles.colNav}>
-            <div className={styles.colTitle}>Product</div>
+            <div className={styles.colTitle}>LIVE FLEET &amp; ORBIT</div>
             <ul className={styles.linkList}>
               <li>
-                <Link to="/solution" className={styles.link}>
-                  Solution
-                </Link>
-              </li>
-              <li>
-                <Link to="/missions" className={styles.link}>
-                  Workspaces
+                <Link to="/orbital-environment" className={styles.link}>
+                  NORAD SGP4 Ephemeris
                 </Link>
               </li>
               <li>
                 <Link to="/conjunctions" className={styles.link}>
-                  Conjunctions
+                  Conjunction Probability (Pc)
                 </Link>
               </li>
               <li>
-                <Link to="/orbital-environment" className={styles.link}>
-                  Environment &amp; TLEs
+                <Link to="/missions" className={styles.link}>
+                  Active Mission Workspaces
                 </Link>
               </li>
               <li>
                 <Link to="/scenarios" className={styles.link}>
-                  Scenarios
+                  Atmospheric Decay Scenarios
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 3: Company & Architecture */}
+          {/* Col 3: Rules & Aerospace Standards */}
           <div className={styles.colNav}>
-            <div className={styles.colTitle}>Company</div>
+            <div className={styles.colTitle}>STANDARDS &amp; RULES</div>
             <ul className={styles.linkList}>
               <li>
-                <Link to="/how-it-works" className={styles.link}>
-                  How It Works
-                </Link>
-              </li>
-              <li>
-                <Link to="/about-limits" className={styles.link}>
-                  Operational Limits
+                <Link to="/profiles" className={styles.link}>
+                  NASA-STD-8719.14C Bounds
                 </Link>
               </li>
               <li>
                 <Link to="/profiles" className={styles.link}>
-                  Profiles &amp; Rules
+                  ISO 24113 Space Debris Limits
+                </Link>
+              </li>
+              <li>
+                <Link to="/profiles" className={styles.link}>
+                  ECSS-E-ST-10C Mass &amp; Power
                 </Link>
               </li>
               <li>
                 <Link to="/status" className={styles.link}>
-                  System Status
+                  FastAPI Engine &amp; SQLite WAL
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 4: Legal & Governance */}
+          {/* Col 4: Cryptographic Provenance */}
           <div className={styles.colNav}>
-            <div className={styles.colTitle}>Legal</div>
+            <div className={styles.colTitle}>SECURITY &amp; AUDIT</div>
             <ul className={styles.linkList}>
               <li>
-                <Link to="/about-limits" className={styles.link}>
-                  Scope of Authority
+                <Link to="/about-limits#governance" className={styles.link}>
+                  Human Authority Gate
                 </Link>
               </li>
               <li>
-                <Link to="/about-limits" className={styles.link}>
-                  Privacy Policy
+                <Link to="/status" className={styles.link}>
+                  SHA-256 Merkle Provenance
                 </Link>
               </li>
               <li>
-                <Link to="/about-limits" className={styles.link}>
-                  Terms of Service
+                <Link to="/how-it-works" className={styles.link}>
+                  Deterministic Architecture
                 </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Bottom Bar with Socials & NASA note */}
+        {/* Bottom Bar with Monospace Technical Lineage */}
         <div className={styles.bottomBar}>
           <div className={styles.copyright}>
-            &copy; 2025-2026 OrbitScore. All rights reserved.
+            &copy; 2026 ORBITSCORE // DETERMINISTIC MISSION TELEMETRY &amp; VERIFICATION ENGINE.
           </div>
 
           <div className={styles.socialRow}>
             <a
-              href="https://twitter.com"
+              href="https://github.com/adishxm/orbitscore"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.socialIcon}
-              aria-label="Twitter"
+              aria-label="OrbitScore GitHub Repository"
+              title="OrbitScore GitHub Repository"
             >
-              <Twitter size={18} />
-            </a>
-            <a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.socialIcon}
-              aria-label="LinkedIn"
-            >
-              <Linkedin size={18} />
-            </a>
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.socialIcon}
-              aria-label="GitHub"
-            >
-              <Github size={18} />
+              <Github size={16} />
             </a>
           </div>
 
-          <div className={styles.nasaNote}>
-            Inspired by NASA Space Apps Challenge 2025
-          </div>
-
-          <div className={styles.legalNotice}>
-            Evidence-preparation packet. Not a certification, compliance determination, or official filing.
+          <div className={styles.licenseNotice}>
+            PROPRIETARY DETERMINISTIC TELEMETRY SPECIFICATION // RFC 3161 TIME-STAMPED
           </div>
         </div>
       </div>
