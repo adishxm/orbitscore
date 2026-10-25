@@ -43,8 +43,8 @@ describe('Slice 2: Layout Shell, Navigation & Aerospace Command Header', () => {
     );
 
     expect(
-      screen.getByText(/ORBITSCORE \/\/ DETERMINISTIC MISSION TELEMETRY & VERIFICATION ENGINE/i)
-    ).toBeInTheDocument();
+      screen.getAllByText(/ORBITSCORE \/\/ DETERMINISTIC MISSION TELEMETRY & VERIFICATION ENGINE/i).length
+    ).toBeGreaterThan(0);
     expect(
       screen.getByText(/DETERMINISTIC KERNEL v4\.2\.0 \/\/ NORAD LINKED/i)
     ).toBeInTheDocument();

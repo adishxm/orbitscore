@@ -1,0 +1,345 @@
+/* =========================================================================
+   Spacecraft Blueprint & Hardware Nodes Styling
+   ========================================================================= */
+
+.blueprintCard {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: var(--shadow-card);
+  position: relative;
+}
+
+.blueprintHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+}
+
+.blueprintTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-0);
+}
+
+.iconAccent {
+  color: var(--accent);
+}
+
+.hintChip {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(106, 165, 255, 0.08);
+  border: 1px solid rgba(106, 165, 255, 0.25);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+}
+
+/* Schematic SVG Frame */
+.schematicWrapper {
+  width: 100%;
+  background: rgba(4, 6, 11, 0.7);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.schematicSvg {
+  width: 100%;
+  max-height: 220px;
+}
+
+.svgPart {
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.pulseAlert {
+  animation: pulseCrit 1.8s ease-in-out infinite;
+}
+
+.pulseSelected {
+  animation: pulseAccent 2s ease-in-out infinite;
+}
+
+@keyframes pulseCrit {
+  0% { transform: scale(0.95); opacity: 0.6; }
+  50% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.6; }
+}
+
+@keyframes pulseAccent {
+  0% { transform: scale(0.95); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 0.9; }
+  100% { transform: scale(0.95); opacity: 0.5; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulseAlert, .pulseSelected {
+    animation: none;
+  }
+}
+
+/* 6 Hardware Node Cards */
+.hardwareNodesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 640px) {
+  .hardwareNodesGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hardwareNodeCard {
+  background: rgba(11, 17, 29, 0.65);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.hardwareNodeCard:hover {
+  background: var(--surface-2);
+  border-color: var(--border-strong);
+}
+
+.nodeCardSelected {
+  background: rgba(106, 165, 255, 0.08) !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 16px -4px rgba(106, 165, 255, 0.35);
+}
+
+.nodeCardAlert {
+  border-color: rgba(251, 113, 133, 0.45);
+}
+
+.nodeCardAlert.nodeCardSelected {
+  border-color: var(--crit) !important;
+  box-shadow: 0 0 16px -4px rgba(251, 113, 133, 0.45);
+}
+
+.nodeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nodeIdentity {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dotNominal {
+  background: var(--ok);
+  box-shadow: 0 0 6px var(--ok);
+}
+
+.dotAlert {
+  background: var(--crit);
+  box-shadow: 0 0 8px var(--crit);
+}
+
+.nodeNum {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--text-2);
+}
+
+.nodeName {
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-0);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 170px;
+}
+
+.nodeSpecsStrip {
+  display: flex;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--text-2);
+}
+
+.specChip strong {
+  color: var(--text-1);
+  font-weight: 500;
+}
+
+.specChipCrit strong {
+  color: var(--crit);
+  font-weight: 700;
+}
+
+/* Subsystem Deep Inspection Box */
+.subsystemInspectionBox {
+  background: rgba(4, 6, 11, 0.8);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.inspectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+
+.recordTitleGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+
+.inspectionSubhead {
+  color: var(--text-2);
+}
+
+.inspectionName {
+  color: var(--text-0);
+  font-weight: 700;
+}
+
+.badgeNominal {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--ok);
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+}
+
+.badgeConflict {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--crit);
+  background: rgba(251, 113, 133, 0.12);
+  border: 1px solid rgba(251, 113, 133, 0.35);
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+}
+
+.inspectionGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .inspectionGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.specTile {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.specTileLabel {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  color: var(--text-2);
+}
+
+.citationPillRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.citationPill {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--text-0);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+.copyBtn {
+  color: var(--text-2);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.copyBtn:hover {
+  color: var(--accent);
+}
+
+.specTileVal {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-0);
+}
+
+.specTileValAlert {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--crit);
+}

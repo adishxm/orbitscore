@@ -1,665 +1,500 @@
-/* LandingPage.module.css */
-/* 100% Solid aerospace UI // Zero neon glow // Edge-to-edge full-bleed */
+/* =========================================================================
+   LandingPage.module.css — "Orbital Mission Control at Sunrise"
+   Precision aerospace engineering visual system; Linear/Vercel polish.
+   ========================================================================= */
 
 .landingRoot {
   width: 100%;
-  max-width: none;
   min-height: 100vh;
-  background-color: transparent; /* Allows ScrollEarthBackground to be seen */
-  color: #ffffff;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+  background-color: transparent;
+  color: var(--text-0);
+  font-family: var(--font-sans);
   overflow-x: hidden;
+  position: relative;
+  z-index: 1;
 }
 
-.fullBleedContainer {
+.container {
   width: 100%;
-  max-width: none;
-  padding: 0 1rem;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
   box-sizing: border-box;
 }
 
-@media (min-width: 1024px) {
-  .fullBleedContainer {
-    padding: 0 2rem;
-  }
-}
-
-/* =========================================================================
-   COMMON SECTION HEADINGS
-   ========================================================================= */
+/* Common Section Eyebrows & Headings */
 .sectionTitleBlock {
-  margin-bottom: 2rem;
-  border-left: 4px solid #0055ff;
-  padding-left: 1rem;
+  margin-bottom: 32px;
 }
 
-.sectionCode {
-  font-family: monospace;
+.sectionEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
-  font-weight: 700;
-  color: #0055ff;
+  font-weight: 600;
+  color: var(--accent);
   letter-spacing: 0.1em;
-  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  margin-bottom: 8px;
 }
 
 .sectionHeading {
-  font-family: monospace;
-  font-size: clamp(1.25rem, 2.5vw, 1.85rem);
-  font-weight: 900;
-  color: #ffffff;
-  letter-spacing: 0.04em;
-  margin: 0 0 0.5rem 0;
-  text-transform: uppercase;
+  font-family: var(--font-display);
+  font-size: var(--type-h2);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text-0);
+  margin: 0 0 10px 0;
 }
 
 .sectionLeadLine {
-  font-size: 0.875rem;
-  color: #e2e8f0;
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  color: var(--text-1);
+  line-height: 1.6;
+  max-width: 62ch;
   margin: 0;
-  line-height: 1.4;
 }
 
 /* =========================================================================
    SECTION 1: HERO
    ========================================================================= */
 .heroSection {
-  padding: 3rem 0 4rem;
-  border-bottom: 1px solid #262626;
   position: relative;
-  z-index: 10;
+  padding: clamp(64px, 8vw, 100px) 0 100px;
+  overflow: hidden;
 }
 
-.heroHeaderBar {
-  margin-bottom: 2rem;
+.heroGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 48px;
+  align-items: center;
 }
 
+@media (min-width: 1100px) {
+  .heroGrid {
+    grid-template-columns: 1.15fr 0.85fr;
+  }
+}
+
+.heroLeftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Chip Row */
 .kickerBadgeRow {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 10px;
   flex-wrap: wrap;
-  margin-bottom: 0.75rem;
 }
 
-.badgeSolidBlue {
-  background-color: #0055ff;
-  color: #ffffff;
-  font-family: monospace;
+.badgeVersion {
+  background: rgba(37, 99, 235, 0.12);
+  border: 1px solid rgba(106, 165, 255, 0.3);
+  color: var(--accent);
+  font-family: var(--font-mono);
   font-size: 0.6875rem;
-  font-weight: 700;
-  padding: 0.2rem 0.5rem;
-  letter-spacing: 0.06em;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.05em;
 }
 
-.badgeHairline {
-  background-color: #080808;
-  border: 1px solid #262626;
-  color: #e2e8f0;
-  font-family: monospace;
+.badgeTelemetry {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  color: var(--text-1);
+  font-family: var(--font-mono);
   font-size: 0.6875rem;
-  padding: 0.2rem 0.5rem;
-  letter-spacing: 0.06em;
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.05em;
 }
 
-.badgeHairlineGreen {
-  background-color: #080808;
-  border: 1px solid #00ff00;
-  color: #00ff00;
-  font-family: monospace;
+.badgeDisclosure {
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: var(--warn);
+  font-family: var(--font-mono);
   font-size: 0.6875rem;
-  font-weight: 700;
-  padding: 0.2rem 0.5rem;
-  letter-spacing: 0.06em;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.05em;
 }
 
 .heroHeadline {
-  font-family: monospace;
-  font-size: clamp(1.5rem, 3.2vw, 2.4rem);
-  font-weight: 900;
-  letter-spacing: -0.01em;
-  color: #ffffff;
-  margin: 0 0 0.5rem 0;
-  line-height: 1.15;
+  font-family: var(--font-display);
+  font-size: var(--type-h1);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  color: var(--text-0);
+  margin: 0;
+  max-width: 20ch;
+}
+
+.heroHeadlineGradient {
+  background: linear-gradient(135deg, #6aa5ff 0%, #22d3ee 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  display: inline-block;
 }
 
 .heroSubheader {
-  font-size: 0.95rem;
-  color: #e2e8f0;
+  font-family: var(--font-ui);
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--text-1);
+  max-width: 56ch;
   margin: 0;
-  max-width: 900px;
-  line-height: 1.4;
 }
 
-.heroColumnsGrid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-}
-
-@media (min-width: 1024px) {
-  .heroColumnsGrid {
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-  }
-}
-
-.heroLeftCol, .heroRightCol {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-/* Fleet Selector Bar */
-.fleetSelectorBar {
-  display: flex;
-  gap: 0.5rem;
-  background-color: rgba(0, 0, 0, 0.88);
-  border: 1px solid #262626;
-  padding: 0.35rem;
-  overflow-x: auto;
-}
-
-.fleetTabBtn {
-  flex: 1;
+/* CTA Row */
+.heroCtaRow {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  background: transparent;
-  border: 1px solid transparent;
-  color: #e2e8f0;
-  padding: 0.5rem 0.75rem;
-  font-family: monospace;
-  font-size: 0.75rem;
-  font-weight: 700;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.1s ease;
-}
-
-.fleetTabBtn:hover {
-  color: #ffffff;
-  background-color: #080808;
-}
-
-.fleetTabBtnActive {
-  background-color: #0055ff;
-  border-color: #0055ff;
-  color: #ffffff;
-}
-
-.fleetTabName {
-  letter-spacing: 0.05em;
-}
-
-.fleetTabNorad {
-  font-size: 0.6875rem;
-  opacity: 0.85;
-}
-
-/* 8-Cell Telemetry Readout Grid */
-.telemetryGrid8 {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1px;
-  background-color: #262626;
-  border: 1px solid #262626;
-}
-
-@media (min-width: 640px) {
-  .telemetryGrid8 {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-.telemetryCell {
-  background-color: rgba(0, 0, 0, 0.88);
-  padding: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.cellLabel {
-  font-family: monospace;
-  font-size: 0.625rem;
-  color: #e2e8f0;
-  letter-spacing: 0.06em;
-}
-
-.cellValWhite {
-  font-family: monospace;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  color: #ffffff;
-}
-
-.cellValGreen {
-  font-family: monospace;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  color: #00ff00;
-}
-
-/* Raw Monospace TLE Inspector */
-.tleInspectorBox {
-  background-color: rgba(0, 0, 0, 0.92);
-  border: 1px solid #262626;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.tleHeaderRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  gap: 14px;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  margin-top: 6px;
 }
 
-.tleTitle {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: monospace;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: 0.05em;
-}
-
-.tleStatusTag {
-  font-family: monospace;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  color: #00ff00;
-}
-
-.tlePre {
-  margin: 0;
-  background-color: #080808;
-  border: 1px solid #262626;
-  padding: 0.75rem;
-  font-family: monospace;
-  font-size: 0.6875rem;
-  color: #ffffff;
-  line-height: 1.5;
-  overflow-x: auto;
-}
-
-.tleActionsRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.syncCelestrakBtn {
+.primaryHeroBtn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  background-color: #080808;
-  border: 1px solid #262626;
-  color: #ffffff;
-  font-family: monospace;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.5rem 0.85rem;
-  cursor: pointer;
-  transition: all 0.1s ease;
-}
-
-.syncCelestrakBtn:hover {
-  border-color: #0055ff;
-  color: #0055ff;
-}
-
-.launchWorkspaceBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  background-color: #0055ff;
-  border: 1px solid #0055ff;
-  color: #ffffff;
-  font-family: monospace;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.5rem 1rem;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  background: var(--accent-fill);
+  color: #ffffff !important;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 10px;
   text-decoration: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 4px 16px rgba(37, 99, 235, 0.4);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.primaryHeroBtn:hover {
+  background: #1d4ed8;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 24px -2px rgba(106, 165, 255, 0.6);
+  transform: translateY(-1px);
+}
+
+.primaryHeroBtn:active {
+  transform: scale(0.98);
+}
+
+.secondaryHeroBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 18px;
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  color: var(--text-0);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.secondaryHeroBtn:hover:not(:disabled) {
+  background: var(--surface-2);
+  border-color: var(--accent);
+}
+
+.secondaryHeroBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* Proof Strip */
+.proofStrip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 640px) {
+  .proofStrip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.proofTile {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.proofVal {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-0);
   white-space: nowrap;
 }
 
-.launchWorkspaceBtn:hover {
-  background-color: #0044cc;
-}
-
-/* Right Blueprint & CAD Inspector */
-.blueprintCard {
-  background-color: rgba(0, 0, 0, 0.90);
-  border: 1px solid #262626;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.blueprintHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #262626;
-  padding-bottom: 0.75rem;
-}
-
-.blueprintTitle {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: monospace;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: 0.05em;
-}
-
-.blueprintBadge {
-  font-family: monospace;
+.proofLabel {
+  font-family: var(--font-mono);
   font-size: 0.625rem;
-  font-weight: 700;
-  color: #ffff00;
-  border: 1px solid #ffff00;
-  padding: 0.15rem 0.4rem;
+  color: var(--text-2);
+  letter-spacing: 0.08em;
 }
 
-.hardwareNodesList {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.5rem;
-}
-
-@media (min-width: 640px) {
-  .hardwareNodesList {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.hardwareNodeItem {
+.heroRightCol {
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  background-color: #080808;
-  border: 1px solid #262626;
-  padding: 0.65rem 0.75rem;
-  text-align: left;
-  cursor: pointer;
-  transition: all 0.1s ease;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
 }
 
-.hardwareNodeItem:hover {
-  border-color: #777777;
+/* Earth-Limb Horizon Arc Under Hero */
+.earthLimbWrapper {
+  position: absolute;
+  left: 50%;
+  bottom: -40px;
+  transform: translateX(-50%);
+  width: 180vw;
+  height: 200px;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
 }
 
-.hardwareNodeItemActive {
-  border-color: #0055ff;
-  background-color: #0a0e1a;
+.earthLimbAtmosphere {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, rgba(34, 211, 238, 0.09) 0%, transparent 100%);
+  filter: blur(28px);
 }
 
-.hardwareNodeHeader {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.earthLimbCurve {
+  position: absolute;
+  top: 20px;
+  left: 5%;
+  right: 5%;
+  height: 400px;
+  border-radius: 50%;
+  border-top: 2px solid var(--accent-2);
+  box-shadow: 0 -8px 36px -4px rgba(34, 211, 238, 0.35),
+              0 -2px 14px rgba(106, 165, 255, 0.5);
 }
 
-.hardwareNodeName {
-  font-family: monospace;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #ffffff;
-}
-
-.hardwareNodeMetrics {
-  display: flex;
-  gap: 0.75rem;
-  font-family: monospace;
-  font-size: 0.6875rem;
-  color: #e2e8f0;
-}
-
-.statusDotGreen {
-  width: 6px;
-  height: 6px;
-  background-color: #00ff00;
-  flex-shrink: 0;
-}
-
-.statusDotRed {
-  width: 6px;
-  height: 6px;
-  background-color: #ff0000;
-  flex-shrink: 0;
-}
-
-.textRed {
-  color: #ff0000;
-  font-weight: 700;
-}
-
-.textWhite {
-  color: #ffffff;
-}
-
-.subsystemInspectionBox {
-  background-color: #080808;
-  border: 1px solid #262626;
-  padding: 0.85rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.subsystemInspectionHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #262626;
-  padding-bottom: 0.5rem;
-}
-
-.subsystemInspectionTitle {
-  font-family: monospace;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: 0.05em;
-}
-
-.statusTagGreen {
-  font-family: monospace;
-  font-size: 0.625rem;
-  font-weight: 700;
-  color: #ffffff;
-  background-color: #059669;
-  padding: 0.15rem 0.4rem;
-}
-
-.statusTagRed {
-  font-family: monospace;
-  font-size: 0.625rem;
-  font-weight: 700;
-  color: #ffffff;
-  background-color: #ff0000;
-  padding: 0.15rem 0.4rem;
-}
-
-.subsystemDetailRow {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.75rem;
-}
-
-@media (min-width: 640px) {
-  .subsystemDetailRow {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-.subsystemDetailItem {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.detailLabel {
-  font-family: monospace;
-  font-size: 0.625rem;
-  color: #e2e8f0;
-}
-
-.detailValMonospace {
-  font-family: monospace;
-  font-size: 0.75rem;
-  color: #ffffff;
-  font-weight: 700;
-}
-
-.detailValAlert {
-  font-family: monospace;
-  font-size: 0.75rem;
-  color: #ff0000;
-  font-weight: 700;
+.earthLimbSunriseGlow {
+  position: absolute;
+  top: 16px;
+  left: 42%;
+  width: 25%;
+  height: 70px;
+  background: radial-gradient(ellipse at 50% 0%, rgba(255, 180, 84, 0.45) 0%, transparent 75%);
+  filter: blur(18px);
 }
 
 /* =========================================================================
-   SECTION 2: 6-VECTOR ORBITAL TELEMETRY HUD STRIPS (OVER ZOOMING EARTH)
+   FLEET & BLUEPRINT OVERLAP SECTION (OVERLAPS EARTH LIMB BY 80PX)
+   ========================================================================= */
+.fleetOverlapSection {
+  position: relative;
+  z-index: 10;
+  margin-top: -60px;
+  margin-bottom: var(--section-pad);
+}
+
+.fleetColumnsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 1100px) {
+  .fleetColumnsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.fleetCol {
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================================================================
+   SECTION 2: 6-VECTOR ORBITAL TELEMETRY REGISTER (3x2 GRID)
    ========================================================================= */
 .telemetrySection {
-  padding: 4rem 0;
-  border-bottom: 1px solid #262626;
+  padding: 40px 0 var(--section-pad);
+  border-top: 1px solid var(--border);
   position: relative;
   z-index: 10;
 }
 
-.staggeredHudList {
+.vectorGrid3x2 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 1100px) {
+  .vectorGrid3x2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 680px) {
+  .vectorGrid3x2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vectorCard {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 12px;
+  box-shadow: var(--shadow-card);
+  transition: transform var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
 }
 
-.hudStripCard {
-  width: 100%;
-  max-width: 640px;
-  background-color: rgba(0, 0, 0, 0.90);
-  border: 1px solid #262626;
-  border-left: 4px solid #0055ff;
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  box-sizing: border-box;
+.vectorCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-strong);
+  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.8), 0 0 20px -6px rgba(106, 165, 255, 0.25);
 }
 
-.hudStripLeft {
-  align-self: flex-start;
-}
-
-.hudStripRight {
-  align-self: flex-end;
-}
-
-.hudStripHeader {
+.vectorHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #262626;
-  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
 }
 
-.hudVectorNum {
-  font-family: monospace;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: 0.05em;
-}
-
-.hudBadgeGreen {
-  font-family: monospace;
-  font-size: 0.625rem;
-  font-weight: 700;
-  color: #ffffff;
-  background-color: #059669;
-  padding: 0.15rem 0.4rem;
-}
-
-.hudBadgeYellow {
-  font-family: monospace;
-  font-size: 0.625rem;
-  font-weight: 700;
-  color: #ffffff;
-  background-color: #d97706;
-  padding: 0.15rem 0.4rem;
-}
-
-.hudBadgeRed {
-  font-family: monospace;
-  font-size: 0.625rem;
-  font-weight: 700;
-  color: #ffffff;
-  background-color: #ff0000;
-  padding: 0.15rem 0.4rem;
-}
-
-.hudLead {
-  font-size: 0.8125rem;
-  color: #f1f5f9;
-  line-height: 1.45;
-  margin: 0;
-}
-
-.hudMetricsGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.5rem 1rem;
-  background-color: #080808;
-  border: 1px solid #262626;
-  padding: 0.65rem;
-  font-family: monospace;
+.vectorNum {
+  font-family: var(--font-mono);
   font-size: 0.6875rem;
-}
-
-.mLabel {
-  color: #e2e8f0;
-}
-
-.mVal {
-  color: #ffffff;
   font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-0);
 }
 
-.mValGreen {
-  color: #00ff00;
-  font-weight: 700;
+.badgeOk {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: var(--ok);
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
 }
 
-.mValYellow {
-  color: #ffff00;
-  font-weight: 700;
+.badgeWarn {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: var(--warn);
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
 }
 
-.mValRed {
-  color: #ff0000;
+.badgeCrit {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: var(--crit);
+  background: rgba(251, 113, 133, 0.12);
+  border: 1px solid rgba(251, 113, 133, 0.35);
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
+}
+
+.vectorDataRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vectorBigVal {
+  font-family: var(--font-mono);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--text-0);
+  font-variant-numeric: tabular-nums;
+}
+
+.vectorBigValAlert {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
   font-weight: 700;
+  color: var(--crit);
+}
+
+.miniVisual {
+  flex-shrink: 0;
+}
+
+.vectorLead {
+  font-size: 0.8125rem;
+  color: var(--text-1);
+  line-height: 1.5;
+  margin: 0;
+  flex: 1;
+}
+
+.vectorFootnote {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--text-2);
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 /* =========================================================================
    SECTION 3: ENGINEERING BENCHMARK MATRIX
    ========================================================================= */
 .matrixSection {
-  padding: 4rem 0;
-  border-bottom: 1px solid #262626;
+  padding: 40px 0 var(--section-pad);
+  border-top: 1px solid var(--border);
   position: relative;
   z-index: 10;
 }
@@ -667,750 +502,780 @@
 .benchmarkTableWrapper {
   width: 100%;
   overflow-x: auto;
-  border: 1px solid #262626;
-  background-color: rgba(0, 0, 0, 0.90);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  box-shadow: var(--shadow-card);
 }
 
 .benchmarkTable {
   width: 100%;
   border-collapse: collapse;
-  font-family: monospace;
+  font-family: var(--font-ui);
   font-size: 0.8125rem;
 }
 
 .benchmarkTable th {
-  background-color: #080808;
-  color: #e2e8f0;
-  padding: 0.85rem 1rem;
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 14px 18px;
   text-align: left;
-  border-bottom: 1px solid #262626;
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
 }
 
 .benchmarkTable td {
-  padding: 1rem;
-  border-bottom: 1px solid #262626;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
   vertical-align: top;
 }
 
 .metricCell {
-  color: #ffffff;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  color: var(--text-0);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
 .legacyCell {
-  color: #e2e8f0;
-  background-color: rgba(255, 0, 0, 0.02);
+  color: var(--text-1);
+  background: rgba(251, 113, 133, 0.02);
 }
 
 .orbitScoreCell {
-  color: #ffffff;
-  background-color: rgba(0, 255, 0, 0.02);
+  color: var(--text-0);
+  background: rgba(52, 211, 153, 0.03);
 }
 
-.tagRed {
+.tagCrit {
   display: inline-block;
-  background-color: #ff0000;
-  color: #ffffff;
+  background: rgba(251, 113, 133, 0.15);
+  border: 1px solid rgba(251, 113, 133, 0.4);
+  color: var(--crit);
+  font-family: var(--font-mono);
   font-size: 0.625rem;
   font-weight: 700;
-  padding: 0.15rem 0.4rem;
-  margin-right: 0.5rem;
-  vertical-align: middle;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-right: 8px;
 }
 
-.tagGreen {
+.tagOk {
   display: inline-block;
-  background-color: #059669;
-  color: #ffffff;
+  background: rgba(52, 211, 153, 0.15);
+  border: 1px solid rgba(52, 211, 153, 0.4);
+  color: var(--ok);
+  font-family: var(--font-mono);
   font-size: 0.625rem;
   font-weight: 700;
-  padding: 0.15rem 0.4rem;
-  margin-right: 0.5rem;
-  vertical-align: middle;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-right: 8px;
 }
 
 .cellDesc {
-  display: inline;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 /* =========================================================================
    SECTION 4: 6-STAGE PHASE GATE PIPELINE
    ========================================================================= */
 .workflowSection {
-  padding: 4rem 0;
-  border-bottom: 1px solid #262626;
+  padding: 40px 0 var(--section-pad);
+  border-top: 1px solid var(--border);
   position: relative;
   z-index: 10;
 }
 
 .stepperNavGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 1px;
-  background-color: #262626;
-  border: 1px solid #262626;
-  margin-bottom: 1.5rem;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 24px;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 900px) {
   .stepperNavGrid {
-    grid-template-columns: repeat(6, 1fr);
-  }
-}
-
-.stepperNavBtn {
-  background-color: rgba(0, 0, 0, 0.88);
-  border: none;
-  padding: 0.85rem 0.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  cursor: pointer;
-  text-align: left;
-  transition: all 0.1s ease;
-}
-
-.stepperNavBtn:hover {
-  background-color: #080808;
-}
-
-.stepperNavBtnActive {
-  background-color: #0055ff;
-}
-
-.stepperNum {
-  font-family: monospace;
-  font-size: 0.625rem;
-  font-weight: 700;
-  color: #ffff00;
-  letter-spacing: 0.06em;
-}
-
-.stepperNavBtnActive .stepperNum {
-  color: #ffffff;
-}
-
-.stepperTitle {
-  font-family: monospace;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  color: #ffffff;
-  line-height: 1.25;
-}
-
-/* Gate Specs Grid (3 Equal-Height Columns) */
-.gateSpecsGrid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-  margin-bottom: 2.5rem;
-}
-
-@media (min-width: 768px) {
-  .gateSpecsGrid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-.gateSpecCard {
-  background-color: rgba(0, 0, 0, 0.90);
-  border: 1px solid #262626;
-  padding: 1rem;
+@media (max-width: 540px) {
+  .stepperNavGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.stepperNavBtn {
+  background: var(--surface-1);
+  border: none;
+  padding: 14px 10px;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 4px;
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.stepperNavBtn:hover {
+  background: var(--surface-2);
+}
+
+.stepperNavBtnActive {
+  background: rgba(106, 165, 255, 0.12) !important;
+  box-shadow: inset 0 2px 0 var(--accent);
+}
+
+.stepperNum {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+}
+
+.stepperTitle {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-0);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gateSpecsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+@media (max-width: 800px) {
+  .gateSpecsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.gateSpecCard {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gateSpecCardAlert {
+  border-color: rgba(251, 113, 133, 0.35);
+  background: rgba(251, 113, 133, 0.04);
 }
 
 .gateSpecHeader {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-family: monospace;
+  gap: 8px;
+  font-family: var(--font-mono);
   font-size: 0.6875rem;
   font-weight: 700;
-  color: #ffffff;
-  border-bottom: 1px solid #262626;
-  padding-bottom: 0.5rem;
-}
-
-.gateSpecText {
-  font-size: 0.8125rem;
-  color: #f1f5f9;
-  line-height: 1.45;
-  margin: 0;
-}
-
-.gateSpecCardAlert {
-  border-color: #ff0000;
-  background-color: rgba(20, 0, 0, 0.85);
+  letter-spacing: 0.06em;
+  color: var(--text-0);
 }
 
 .gateSpecHeaderAlert {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-family: monospace;
+  gap: 8px;
+  font-family: var(--font-mono);
   font-size: 0.6875rem;
   font-weight: 700;
-  color: #ff0000;
-  border-bottom: 1px solid #ff0000;
-  padding-bottom: 0.5rem;
+  letter-spacing: 0.06em;
+  color: var(--crit);
+}
+
+.gateSpecText {
+  font-size: 0.8125rem;
+  color: var(--text-1);
+  line-height: 1.5;
+  margin: 0;
 }
 
 .gateSpecTextAlert {
   font-size: 0.8125rem;
-  color: #ffffff;
-  font-weight: 600;
-  line-height: 1.45;
+  color: #fda4af;
+  line-height: 1.5;
   margin: 0;
 }
 
-/* Subsystem Parameter Register */
+.iconAccent { color: var(--accent); }
+.iconOk { color: var(--ok); }
+.iconCrit { color: var(--crit); }
+
+/* Parameter Register */
 .registerBlock {
-  background-color: rgba(0, 0, 0, 0.90);
-  border: 1px solid #262626;
-  padding: 1.25rem;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 16px;
 }
 
 .registerHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #262626;
-  padding-bottom: 0.75rem;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
 }
 
 .registerTitle {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-family: monospace;
+  gap: 8px;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 700;
-  color: #ffffff;
+  letter-spacing: 0.06em;
+  color: var(--text-0);
 }
 
 .registerCounters {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  font-family: monospace;
+  gap: 12px;
+  font-family: var(--font-mono);
   font-size: 0.6875rem;
+  color: var(--text-2);
 }
 
-.counterItem {
-  color: #e2e8f0;
-}
-
-.counterItemGreen {
-  color: #00ff00;
-}
-
-.counterItemRed {
-  color: #ff0000;
-}
-
-.counterItemYellow {
-  color: #ffff00;
-}
+.counterItem strong { color: var(--text-0); }
+.counterItemOk strong { color: var(--ok); }
+.counterItemCrit strong { color: var(--crit); }
+.counterItemWarn strong { color: var(--warn); }
 
 .registerColumns {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
+  grid-template-columns: 200px 1fr;
+  gap: 16px;
 }
 
-@media (min-width: 1024px) {
+@media (max-width: 900px) {
   .registerColumns {
-    grid-template-columns: 1fr 3fr;
+    grid-template-columns: 1fr;
   }
 }
 
 .registerFilters {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 6px;
 }
 
 .filterBtn {
-  background-color: #080808;
-  border: 1px solid #262626;
-  color: #e2e8f0;
-  padding: 0.6rem 0.75rem;
-  font-family: monospace;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-1);
+  font-family: var(--font-mono);
   font-size: 0.6875rem;
-  font-weight: 700;
+  font-weight: 600;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
   text-align: left;
   cursor: pointer;
-  transition: all 0.1s ease;
+  transition: all var(--duration-fast) var(--ease-out);
 }
 
 .filterBtn:hover {
-  color: #ffffff;
-  border-color: #777777;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-0);
 }
 
 .filterBtnActive {
-  background-color: #0055ff;
-  border-color: #0055ff;
-  color: #ffffff;
+  background: rgba(106, 165, 255, 0.12) !important;
+  border-color: var(--accent) !important;
+  color: var(--text-0) !important;
 }
 
 .registerTableWrapper {
   overflow-x: auto;
-  border: 1px solid #262626;
-  background-color: #080808;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
 }
 
 .registerTable {
   width: 100%;
   border-collapse: collapse;
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.6875rem;
 }
 
 .registerTable th {
-  background-color: #000000;
-  color: #e2e8f0;
-  padding: 0.65rem 0.75rem;
+  background: var(--surface-2);
+  color: var(--text-2);
+  padding: 10px 12px;
   text-align: left;
-  border-bottom: 1px solid #262626;
-  font-size: 0.625rem;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: 0.06em;
 }
 
 .registerTable td {
-  padding: 0.65rem 0.75rem;
-  border-bottom: 1px solid #262626;
-  vertical-align: middle;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
 }
 
-.ruleIdCell {
-  color: #ffffff;
+.ruleIdCell { color: var(--accent); font-weight: 700; }
+.standardCell { color: var(--text-1); }
+.measuredCell { color: var(--text-0); font-weight: 600; }
+.thresholdCell { color: var(--text-2); }
+.citationCell { color: var(--text-1); }
+.shaCell code { color: var(--text-2); }
+
+.badgeSolidOk {
+  background: rgba(52, 211, 153, 0.15);
+  border: 1px solid rgba(52, 211, 153, 0.4);
+  color: var(--ok);
+  padding: 2px 6px;
+  border-radius: 4px;
   font-weight: 700;
 }
 
-.standardCell {
-  color: #0055ff;
-}
-
-.measuredCell {
-  color: #ffffff;
-}
-
-.thresholdCell {
-  color: #e2e8f0;
-}
-
-.citationCell {
-  color: #e2e8f0;
-}
-
-.shaCell code {
-  color: #e2e8f0;
-  font-size: 0.625rem;
-}
-
-.badgeSolidGreen {
-  display: inline-block;
-  background-color: #059669;
-  color: #ffffff;
+.badgeSolidCrit {
+  background: rgba(251, 113, 133, 0.15);
+  border: 1px solid rgba(251, 113, 133, 0.4);
+  color: var(--crit);
+  padding: 2px 6px;
+  border-radius: 4px;
   font-weight: 700;
-  padding: 0.15rem 0.4rem;
-  font-size: 0.625rem;
 }
 
-.badgeSolidRed {
-  display: inline-block;
-  background-color: #ff0000;
-  color: #ffffff;
+.badgeSolidWarn {
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  color: var(--warn);
+  padding: 2px 6px;
+  border-radius: 4px;
   font-weight: 700;
-  padding: 0.15rem 0.4rem;
-  font-size: 0.625rem;
-}
-
-.badgeSolidYellow {
-  display: inline-block;
-  background-color: #d97706;
-  color: #ffffff;
-  font-weight: 700;
-  padding: 0.15rem 0.4rem;
-  font-size: 0.625rem;
 }
 
 /* =========================================================================
-   SECTION 5: 5-STATE EVIDENCE TAXONOMY & AUDIT LINEAGE
+   SECTION 5: 5-STATE TAXONOMY & PROVENANCE
    ========================================================================= */
 .statesSection {
-  padding: 4rem 0;
-  border-bottom: 1px solid #262626;
+  padding: 40px 0 var(--section-pad);
+  border-top: 1px solid var(--border);
   position: relative;
   z-index: 10;
 }
 
 .statesGrid5 {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1px;
-  background-color: #262626;
-  border: 1px solid #262626;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 900px) {
   .statesGrid5 {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .statesGrid5 {
+    grid-template-columns: 1fr;
   }
 }
 
 .stateGridCell {
-  background-color: rgba(0, 0, 0, 0.88);
-  border: none;
-  padding: 1rem;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 8px;
   text-align: left;
   cursor: pointer;
-  transition: all 0.1s ease;
+  transition: all var(--duration-fast) var(--ease-out);
 }
 
 .stateGridCell:hover {
-  background-color: #080808;
+  background: var(--surface-2);
+  border-color: var(--border-strong);
 }
 
 .stateGridCellActive {
-  background-color: #0a0e1a;
-  border-top: 3px solid #0055ff;
+  background: rgba(106, 165, 255, 0.08) !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 16px -4px rgba(106, 165, 255, 0.35);
 }
 
 .stateCellTop {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
 .stateColorSquare {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
   flex-shrink: 0;
 }
 
 .stateCellName {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 700;
-  color: #ffffff;
-  letter-spacing: 0.05em;
+  color: var(--text-0);
+  letter-spacing: 0.04em;
 }
 
 .stateCellDesc {
   font-size: 0.75rem;
-  color: #e2e8f0;
+  color: var(--text-1);
   line-height: 1.4;
   margin: 0;
 }
 
 .stateDetailConsole {
-  background-color: rgba(0, 0, 0, 0.90);
-  border: 1px solid #262626;
-  padding: 1.25rem;
-  margin-bottom: 2.5rem;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 14px;
+  margin-bottom: 24px;
 }
 
 .stateConsoleHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #262626;
-  padding-bottom: 0.75rem;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
 }
 
 .stateConsoleTitle {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-family: monospace;
-  font-size: 0.8125rem;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-0);
 }
 
 .stateColorDot {
   width: 8px;
   height: 8px;
+  border-radius: 50%;
 }
 
 .stateExportGateNotice {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.6875rem;
-  font-weight: 700;
-  color: #ffff00;
+  color: var(--warn);
 }
 
 .stateConsoleGrid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 700px) {
   .stateConsoleGrid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 }
 
 .stateConsoleBlock {
-  background-color: #080808;
-  border: 1px solid #262626;
-  padding: 0.85rem;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 6px;
 }
 
 .consoleBlockLabel {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.625rem;
-  color: #e2e8f0;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
+  color: var(--text-2);
 }
 
 .consoleBlockText {
   font-size: 0.8125rem;
-  color: #ffffff;
-  line-height: 1.45;
+  color: var(--text-0);
+  line-height: 1.5;
   margin: 0;
 }
 
-/* 3-Node Lineage */
+/* Cryptographic Lineage */
 .lineageBlock {
-  background-color: rgba(0, 0, 0, 0.90);
-  border: 1px solid #262626;
-  padding: 1.25rem;
-  margin-bottom: 2.5rem;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .lineageHeader {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-family: monospace;
+  gap: 8px;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 700;
-  color: #ffffff;
-  border-bottom: 1px solid #262626;
-  padding-bottom: 0.75rem;
-  margin-bottom: 1rem;
+  letter-spacing: 0.06em;
+  color: var(--text-0);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
 }
 
 .lineageNodesGrid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  position: relative;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 800px) {
   .lineageNodesGrid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr;
   }
 }
 
 .lineageNodeCard {
-  background-color: #080808;
-  border: 1px solid #262626;
-  padding: 1rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 8px;
   position: relative;
 }
 
 .lineageStepNum {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.625rem;
   font-weight: 700;
-  color: #0055ff;
+  color: var(--accent);
+  letter-spacing: 0.08em;
 }
 
 .lineageSubject {
-  font-family: monospace;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-0);
 }
 
 .lineageDesc {
   font-size: 0.75rem;
-  color: #e2e8f0;
-  line-height: 1.4;
+  color: var(--text-1);
+  line-height: 1.45;
   margin: 0;
 }
 
 .lineageHashTag {
-  margin-top: 0.5rem;
-  font-family: monospace;
-  font-size: 0.625rem;
-  color: #00ff00;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--ok);
+  background: rgba(52, 211, 153, 0.08);
+  border: 1px solid rgba(52, 211, 153, 0.25);
+  padding: 3px 8px;
+  border-radius: 4px;
+  width: fit-content;
 }
 
 .lineageArrow {
-  display: none;
+  position: absolute;
+  top: 50%;
+  right: -10px;
+  transform: translateY(-50%);
+  color: var(--accent);
+  font-size: 1.25rem;
+  z-index: 2;
+  pointer-events: none;
 }
 
-/* Live FastAPI Engine Status Bar */
+@media (max-width: 800px) {
+  .lineageArrow {
+    display: none;
+  }
+}
+
+/* FastAPI Engine Console */
 .fastApiConsole {
-  background-color: rgba(0, 0, 0, 0.92);
-  border: 1px solid #262626;
-  padding: 1rem 1.25rem;
+  background: rgba(4, 6, 11, 0.9);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 14px;
 }
 
 .fastApiHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #262626;
-  padding-bottom: 0.75rem;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
 }
 
 .fastApiStatus {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
-.dotGreen {
-  width: 8px;
-  height: 8px;
-  background-color: #00ff00;
-}
-
-.dotAmber {
-  width: 8px;
-  height: 8px;
-  background-color: #ffff00;
-}
+.dotOk { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 6px var(--ok); }
+.dotWarn { width: 8px; height: 8px; border-radius: 50%; background: var(--warn); }
 
 .fastApiTitle {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-0);
 }
 
 .fastApiEndpoint code {
-  font-family: monospace;
+  color: var(--text-2);
   font-size: 0.6875rem;
-  color: #e2e8f0;
 }
 
 .fastApiActions {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 10px;
 }
 
 .apiToggleBtn, .apiVerifyBtn {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  background-color: #080808;
-  border: 1px solid #262626;
-  color: #ffffff;
-  font-family: monospace;
+  gap: 6px;
+  padding: 6px 12px;
+  font-family: var(--font-mono);
   font-size: 0.6875rem;
-  font-weight: 700;
-  padding: 0.45rem 0.75rem;
+  font-weight: 600;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.1s ease;
+  transition: all var(--duration-fast) var(--ease-out);
 }
 
-.apiToggleBtn:hover, .apiVerifyBtn:hover {
-  border-color: #0055ff;
-  color: #0055ff;
+.apiToggleBtn {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-0);
+}
+
+.apiToggleBtn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border-strong);
+}
+
+.apiVerifyBtn {
+  background: rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  color: var(--ok);
+}
+
+.apiVerifyBtn:hover {
+  background: rgba(52, 211, 153, 0.2);
 }
 
 .fastApiMetrics {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.75rem;
-  font-family: monospace;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  font-family: var(--font-mono);
   font-size: 0.6875rem;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 700px) {
   .fastApiMetrics {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr;
   }
 }
 
 .fastApiMetricItem {
   display: flex;
-  gap: 0.5rem;
   align-items: center;
+  gap: 8px;
 }
 
+.mLabel { color: var(--text-2); }
+.mValOk { color: var(--ok); font-weight: 600; }
+.mValCrit { color: var(--crit); font-weight: 700; }
+
 /* =========================================================================
-   SECTION 6: MISSION WORKSPACE LAUNCHPAD
+   SECTION 6: ACTIVE MISSION WORKSPACES
    ========================================================================= */
 .launchpadSection {
-  padding: 4rem 0 6rem;
+  padding: 40px 0 var(--section-pad);
+  border-top: 1px solid var(--border);
   position: relative;
   z-index: 10;
 }
 
 .workspacesGrid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.25rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
 }
 
-@media (min-width: 640px) {
+@media (max-width: 1024px) {
   .workspacesGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (min-width: 1024px) {
+@media (max-width: 560px) {
   .workspacesGrid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1fr;
   }
 }
 
 .workspaceCard {
-  background-color: rgba(0, 0, 0, 0.90);
-  border: 1px solid #262626;
-  padding: 1.25rem;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  transition: border-color 0.1s ease;
+  gap: 10px;
+  box-shadow: var(--shadow-card);
+  transition: all var(--duration-fast) var(--ease-out);
 }
 
 .workspaceCard:hover {
-  border-color: #0055ff;
+  transform: translateY(-2px);
+  border-color: var(--border-strong);
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.8), 0 0 20px -6px rgba(106, 165, 255, 0.25);
 }
 
 .workspaceCardHeader {
@@ -1420,82 +1285,71 @@
 }
 
 .workspaceNoradBadge {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.625rem;
-  font-weight: 700;
-  color: #00ff00;
-  background-color: #080808;
-  border: 1px solid #262626;
-  padding: 0.15rem 0.4rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(106, 165, 255, 0.08);
+  border: 1px solid rgba(106, 165, 255, 0.25);
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
 .workspaceOrbitBadge {
-  font-family: monospace;
+  font-family: var(--font-mono);
   font-size: 0.625rem;
-  color: #e2e8f0;
+  color: var(--text-2);
 }
 
 .workspaceName {
-  font-family: monospace;
+  font-family: var(--font-ui);
   font-size: 0.9375rem;
-  font-weight: 700;
-  color: #ffffff;
+  font-weight: 600;
+  color: var(--text-0);
   margin: 0;
-  line-height: 1.2;
 }
 
 .workspaceBus {
   font-size: 0.75rem;
-  color: #e2e8f0;
+  color: var(--text-2);
   margin: 0;
 }
 
 .workspaceSpecs {
-  background-color: #080808;
-  border: 1px solid #262626;
-  padding: 0.6rem;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.4rem;
-  font-family: monospace;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-family: var(--font-mono);
   font-size: 0.625rem;
-  color: #ffffff;
+  color: var(--text-0);
+  margin: 4px 0;
 }
 
-.specLabel {
-  color: #e2e8f0;
-}
+.specLabel { color: var(--text-2); }
 
 .workspaceCtaBtn {
-  margin-top: auto;
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #080808;
-  border: 1px solid #262626;
-  color: #ffffff;
-  padding: 0.6rem 0.75rem;
-  font-family: monospace;
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  color: var(--text-0);
+  font-family: var(--font-mono);
   font-size: 0.6875rem;
-  font-weight: 700;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 8px;
   text-decoration: none;
-  transition: all 0.1s ease;
+  transition: all var(--duration-fast) var(--ease-out);
+  margin-top: auto;
 }
 
 .workspaceCtaBtn:hover {
-  background-color: #0055ff;
-  border-color: #0055ff;
-}
-
-/* Utilities */
-.iconBlue {
-  color: #0055ff;
-}
-
-.iconGreen {
-  color: #00ff00;
-}
-
-.iconRed {
-  color: #ff0000;
+  background: var(--accent-fill);
+  border-color: var(--accent-fill);
+  color: #ffffff;
 }

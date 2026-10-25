@@ -1,0 +1,382 @@
+/* =========================================================================
+   Fleet Card Module Styling — 4x2 Hairline Grid, Tabs & TLE Block
+   ========================================================================= */
+
+.fleetCardRoot {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: var(--shadow-card);
+  position: relative;
+}
+
+/* 1. Satellite Tabs (Segmented Control Track) */
+.tabsTrack {
+  display: flex;
+  gap: 4px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 4px;
+  overflow-x: auto;
+}
+
+.tabBtn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-1);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.tabBtn:hover {
+  color: var(--text-0);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tabBtnActive {
+  background: rgba(106, 165, 255, 0.12) !important;
+  color: var(--text-0) !important;
+  border: 1px solid rgba(106, 165, 255, 0.35);
+  box-shadow: 0 0 16px -4px rgba(106, 165, 255, 0.35);
+}
+
+.tabName {
+  letter-spacing: -0.01em;
+}
+
+.tabNorad {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--text-2);
+}
+
+.tabBtnActive .tabNorad {
+  color: var(--accent);
+}
+
+/* 2. 8-Cell Hairline Metrics Grid (4x2) */
+.metricsGrid8 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .metricsGrid8 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.metricTile {
+  background: rgba(11, 17, 29, 0.95);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+}
+
+.microLabel {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.dataValue {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-0);
+  font-variant-numeric: tabular-nums;
+}
+
+.dataUnit {
+  font-size: 0.6875rem;
+  color: var(--text-2);
+  margin-left: 2px;
+}
+
+.dataValueAccent {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.dataValueOk {
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ok);
+  font-variant-numeric: tabular-nums;
+}
+
+.metricVisualRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.massMarginWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.massSubtext {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--text-2);
+}
+
+.progressBarBg {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressBarFill {
+  height: 100%;
+  background: var(--ok);
+  border-radius: 2px;
+}
+
+.integrityChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(52, 211, 153, 0.08);
+  border: 1px solid rgba(52, 211, 153, 0.25);
+  padding: 3px 8px;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.lockIcon {
+  color: var(--ok);
+}
+
+.integrityText {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--ok);
+  letter-spacing: 0.04em;
+}
+
+/* 3. Raw TLE Inspector Box */
+.tleInspectorBox {
+  background: rgba(4, 6, 11, 0.85);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tleHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+
+.tleTitleGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.iconTerminal {
+  color: var(--accent);
+}
+
+.tleTitle {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-0);
+}
+
+.tleMetaGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.demoBadge {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: var(--warn);
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
+}
+
+.tleStatusTag {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--ok);
+}
+
+.codeBlockWrapper {
+  position: relative;
+  background: #020408;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 10px 12px;
+}
+
+.tleCode {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--text-0);
+  overflow-x: auto;
+}
+
+.tleLineRow {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.lineNumber {
+  color: var(--text-2);
+  user-select: none;
+  font-size: 0.6875rem;
+}
+
+.copyTleBtn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  color: var(--text-1);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.copyTleBtn:hover {
+  background: var(--surface-2);
+  color: var(--text-0);
+  border-color: var(--border-strong);
+}
+
+/* Actions Row */
+.tleActionsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.syncBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 16px;
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  color: var(--text-0);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.syncBtn:hover:not(:disabled) {
+  background: var(--surface-2);
+  border-color: var(--accent);
+}
+
+.syncBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+.launchBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 18px;
+  background: var(--accent-fill);
+  border-radius: 10px;
+  color: #ffffff !important;
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 2px 10px rgba(37, 99, 235, 0.4);
+  transition: all var(--duration-fast) var(--ease-out);
+  white-space: nowrap;
+}
+
+.launchBtn:hover {
+  background: #1d4ed8;
+  box-shadow: 0 0 20px -2px rgba(106, 165, 255, 0.5);
+}
+
+.launchBtn:hover .btnArrow {
+  transform: translateX(2px);
+}
+
+.btnArrow {
+  transition: transform var(--duration-fast) var(--ease-out);
+}

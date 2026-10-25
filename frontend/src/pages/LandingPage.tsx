@@ -8,10 +8,11 @@ import {
   Database,
   Lock,
   FileText,
-  Activity,
-  Terminal,
 } from 'lucide-react';
 import { OrbitHudNav } from '../components/common/OrbitHudNav';
+import { HeroOrbitVisual } from '../components/common/HeroOrbitVisual';
+import { FleetCard } from '../components/common/FleetCard';
+import { SpacecraftBlueprint } from '../components/common/SpacecraftBlueprint';
 import { useOrbitStore } from '../store/useOrbitStore';
 import { fetchCelesTrakGPLive, CelesTrakGPResponse } from '../api/backend';
 import {
@@ -35,9 +36,6 @@ export const LandingPage: React.FC = () => {
   const [activeSubsystemId, setActiveSubsystemId] = useState<string>(
     activeSatellite.subsystems[0]?.id || 'sub-bus'
   );
-  const activeSubsystem =
-    activeSatellite.subsystems.find((sub) => sub.id === activeSubsystemId) ||
-    activeSatellite.subsystems[0]!;
 
   // Stepper Selection
   const [selectedStageIndex, setSelectedStageIndex] = useState<number>(0);
@@ -67,6 +65,7 @@ export const LandingPage: React.FC = () => {
 
   const [liveGpData, setLiveGpData] = useState<CelesTrakGPResponse | null>(null);
   const [tleSyncStatus, setTleSyncStatus] = useState<string>('CELESTRAK SYNCED // EPOCH 26298');
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
 
   // Real backend CelesTrak GP integration
   useEffect(() => {
@@ -88,6 +87,7 @@ export const LandingPage: React.FC = () => {
   }, [activeSatellite.noradId, apiServerUrl]);
 
   const handleSyncCelesTrak = async () => {
+    setIsSyncing(true);
     setTleSyncStatus(`FETCHING LIVE NORAD ${activeSatellite.noradId} GP FROM FASTAPI...`);
     try {
       const data = await fetchCelesTrakGPLive(activeSatellite.noradId, 'JSON', true, apiServerUrl);
@@ -95,6 +95,8 @@ export const LandingPage: React.FC = () => {
       setTleSyncStatus(`FASTAPI LIVE // NORAD ${data.norad_cat_id} [${data.badge || 'LIVE'}]`);
     } catch {
       setTleSyncStatus(`VERIFIED // NORAD ${activeSatellite.noradId} GP ACTIVE`);
+    } finally {
+      setIsSyncing(false);
     }
   };
 
@@ -110,333 +112,288 @@ export const LandingPage: React.FC = () => {
       <OrbitHudNav />
 
       {/* =========================================================================
-          SECTION 1: FULL-BLEED ORBITAL TELEMETRY COMMAND HERO
+          SECTION 1: HERO (TWO-COLUMN DESKTOP + CENTERPIECE ORBIT VISUAL)
           ========================================================================= */}
       <section id="hero-section" className={styles.heroSection} aria-labelledby="hero-title">
-        <div className={styles.fullBleedContainer}>
-          {/* Header Punchlines */}
-          <div className={styles.heroHeaderBar}>
-            <div className={styles.kickerBadgeRow}>
-              <span className={styles.badgeSolidBlue}>ORBITSCORE v4.2.0</span>
-              <span className={styles.badgeHairline}>DETERMINISTIC FLIGHT TELEMETRY</span>
-              <span className={styles.badgeHairlineGreen}>NORAD GP LINK ACTIVE</span>
-            </div>
-            <h1 id="hero-title" className={styles.heroHeadline}>
-              DETERMINISTIC SPACECRAFT VERIFICATION &amp; LIVE ORBITAL TELEMETRY
-            </h1>
-            <p className={styles.heroSubheader}>
-              Lock NORAD ephemeris vectors, CAD mass budgets, and thermal vacuum logs into SHA-256 audit-ready mission dossiers.
-            </p>
-          </div>
-
-          <div className={styles.heroColumnsGrid}>
-            {/* Left 6 Cols: Spacecraft Fleet Selector, 8-Cell Telemetry Grid & Raw TLE */}
+        <div className={styles.container}>
+          <div className={styles.heroGrid}>
+            {/* Left Column: Headlines, CTAs & Proof Strip */}
             <div className={styles.heroLeftCol}>
-              {/* Live Spacecraft Selector Tabs */}
-              <div className={styles.fleetSelectorBar} role="tablist" aria-label="Real Spacecraft Fleet">
-                {REAL_SATELLITES.map((sat) => {
-                  const isActive = sat.id === selectedSatId;
-                  return (
-                    <button
-                      key={sat.id}
-                      type="button"
-                      role="tab"
-                      aria-selected={isActive}
-                      className={`${styles.fleetTabBtn} ${isActive ? styles.fleetTabBtnActive : ''}`}
-                      onClick={() => {
-                        setSelectedSatId(sat.id);
-                        if (sat.subsystems[0]) setActiveSubsystemId(sat.subsystems[0].id);
-                      }}
-                    >
-                      <span className={styles.fleetTabName}>{sat.commonName}</span>
-                      <span className={styles.fleetTabNorad}>[{sat.noradId}]</span>
-                    </button>
-                  );
-                })}
+              {/* Chip Row */}
+              <div className={styles.kickerBadgeRow}>
+                <span className={styles.badgeVersion}>OrbitScore v4.2.0</span>
+                <span className={styles.badgeTelemetry}>Deterministic flight telemetry</span>
+                <span className={styles.badgeDisclosure}>Synthetic demo data</span>
               </div>
 
-              {/* Live 8-Cell Telemetry Readout Grid */}
-              <div className={styles.telemetryGrid8}>
-                <div className={styles.telemetryCell}>
-                  <span className={styles.cellLabel}>NORAD CAT ID</span>
-                  <span className={styles.cellValWhite}>{activeSatellite.noradId}</span>
-                </div>
-                <div className={styles.telemetryCell}>
-                  <span className={styles.cellLabel}>COSPAR ID</span>
-                  <span className={styles.cellValWhite}>{activeSatellite.cosparId}</span>
-                </div>
-                <div className={styles.telemetryCell}>
-                  <span className={styles.cellLabel}>APOGEE / PERIGEE</span>
-                  <span className={styles.cellValWhite}>
-                    {apogeeVal} / {perigeeVal} KM
-                  </span>
-                </div>
-                <div className={styles.telemetryCell}>
-                  <span className={styles.cellLabel}>INCLINATION</span>
-                  <span className={styles.cellValWhite}>{inclinationVal}°</span>
-                </div>
-                <div className={styles.telemetryCell}>
-                  <span className={styles.cellLabel}>ORBITAL VELOCITY</span>
-                  <span className={styles.cellValGreen}>{activeSatellite.velocityKmS} KM/S</span>
-                </div>
-                <div className={styles.telemetryCell}>
-                  <span className={styles.cellLabel}>MEAN MOTION</span>
-                  <span className={styles.cellValWhite}>
-                    {activeSatellite.meanMotionRevDay.toFixed(4)} REV/D
-                  </span>
-                </div>
-                <div className={styles.telemetryCell}>
-                  <span className={styles.cellLabel}>WET MASS MARGIN</span>
-                  <span className={styles.cellValGreen}>
-                    +{activeSatellite.massMarginPct.toFixed(2)}% ({activeSatellite.wetMassKg} KG)
-                  </span>
-                </div>
-                <div className={styles.telemetryCell}>
-                  <span className={styles.cellLabel}>SHA-256 INTEGRITY</span>
-                  <span className={styles.cellValGreen}>LOCKED &amp; VERIFIED</span>
-                </div>
+              {/* H1 in sentence case with accent-to-accent2 gradient */}
+              <h1 id="hero-title" className={styles.heroHeadline}>
+                Deterministic spacecraft verification &amp;{' '}
+                <span className={styles.heroHeadlineGradient}>live orbital telemetry</span>
+              </h1>
+
+              {/* Subtitle */}
+              <p className={styles.heroSubheader}>
+                Lock NORAD ephemeris vectors, CAD mass budgets, and thermal vacuum logs into SHA-256 audit-ready mission dossiers.
+              </p>
+
+              {/* CTA Row */}
+              <div className={styles.heroCtaRow}>
+                <Link
+                  to={`/missions/${activeSatellite.id}`}
+                  className={styles.primaryHeroBtn}
+                  aria-label="Launch mission console"
+                >
+                  <span>Launch workspace</span>
+                  <ArrowRight size={15} />
+                </Link>
+
+                <button
+                  type="button"
+                  onClick={handleSyncCelesTrak}
+                  disabled={isSyncing}
+                  className={styles.secondaryHeroBtn}
+                >
+                  <RefreshCw size={14} className={isSyncing ? styles.spin : ''} />
+                  <span>Sync live ephemeris</span>
+                </button>
               </div>
 
-              {/* Raw Monospace Two-Line Element (TLE) Box */}
-              <div className={styles.tleInspectorBox}>
-                <div className={styles.tleHeaderRow}>
-                  <div className={styles.tleTitle}>
-                    <Terminal size={14} className={styles.iconBlue} />
-                    <span>RAW CELESTRAK TWO-LINE ELEMENT (TLE)</span>
-                  </div>
-                  <span className={styles.tleStatusTag}>{tleSyncStatus}</span>
+              {/* Proof Strip Computed From Real App Data */}
+              <div className={styles.proofStrip} aria-label="Real Engine Specifications">
+                <div className={styles.proofTile}>
+                  <span className={styles.proofVal}>{REAL_SATELLITES.length} SATELLITES</span>
+                  <span className={styles.proofLabel}>TRACKED FLEET</span>
                 </div>
-                <pre className={styles.tlePre}>
-                  <code>{`${tleLine1Val}\n${tleLine2Val}`}</code>
-                </pre>
-                <div className={styles.tleActionsRow}>
-                  <button
-                    type="button"
-                    onClick={handleSyncCelesTrak}
-                    className={styles.syncCelestrakBtn}
-                  >
-                    <RefreshCw size={13} />
-                    <span>SYNC LIVE CELESTRAK GP</span>
-                  </button>
-                  <Link
-                    to={`/missions/${activeSatellite.id}`}
-                    className={styles.launchWorkspaceBtn}
-                  >
-                    <span>LAUNCH WORKSPACE &rarr;</span>
-                  </Link>
+                <div className={styles.proofTile}>
+                  <span className={styles.proofVal}>{PHASE_GATE_STAGES.length} HARD GATES</span>
+                  <span className={styles.proofLabel}>STRICT VERIFICATION</span>
+                </div>
+                <div className={styles.proofTile}>
+                  <span className={styles.proofVal}>SHA-256 MERKLE</span>
+                  <span className={styles.proofLabel}>AUDIT LINEAGE</span>
+                </div>
+                <div className={styles.proofTile}>
+                  <span className={styles.proofVal}>CELESTRAK SGP4</span>
+                  <span className={styles.proofLabel}>EPHEMERIS FEED</span>
                 </div>
               </div>
             </div>
 
-            {/* Right 6 Cols: Interactive Spacecraft CAD & Subsystem Blueprint Inspector */}
+            {/* Right Column: Centerpiece Orbit Visual */}
             <div className={styles.heroRightCol}>
-              <div className={styles.blueprintCard}>
-                <div className={styles.blueprintHeader}>
-                  <div className={styles.blueprintTitle}>
-                    <Activity size={14} className={styles.iconGreen} />
-                    <span>SPACECRAFT SUBSYSTEM BLUEPRINT // {activeSatellite.busType.toUpperCase()}</span>
-                  </div>
-                  <span className={styles.blueprintBadge}>CLICK HARDWARE NODES</span>
-                </div>
+              <HeroOrbitVisual
+                selectedSatId={selectedSatId}
+                onSelectSatId={(satId) => {
+                  setSelectedSatId(satId);
+                  const sat = REAL_SATELLITES.find(s => s.id === satId);
+                  if (sat && sat.subsystems[0]) {
+                    setActiveSubsystemId(sat.subsystems[0].id);
+                  }
+                }}
+              />
+            </div>
+          </div>
+        </div>
 
-                {/* Subsystem Hardware Nodes Grid */}
-                <div className={styles.hardwareNodesList}>
-                  {activeSatellite.subsystems.map((sub) => {
-                    const isSelected = sub.id === activeSubsystemId;
-                    const isNominal = sub.status === 'nominal';
-                    return (
-                      <button
-                        key={sub.id}
-                        type="button"
-                        onClick={() => setActiveSubsystemId(sub.id)}
-                        className={`${styles.hardwareNodeItem} ${isSelected ? styles.hardwareNodeItemActive : ''}`}
-                      >
-                        <div className={styles.hardwareNodeHeader}>
-                          <span
-                            className={
-                              isNominal
-                                ? styles.statusDotGreen
-                                : styles.statusDotRed
-                            }
-                          />
-                          <span className={styles.hardwareNodeName}>{sub.name}</span>
-                        </div>
-                        <div className={styles.hardwareNodeMetrics}>
-                          <span>{sub.massKg} KG</span>
-                          <span>{sub.powerW} W</span>
-                          <span className={sub.tempC > 65 ? styles.textRed : styles.textWhite}>
-                            {sub.tempC}°C
-                          </span>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
+        {/* Earth-Limb Horizon Arc Glow Under Hero */}
+        <div className={styles.earthLimbWrapper} aria-hidden="true">
+          <div className={styles.earthLimbAtmosphere} />
+          <div className={styles.earthLimbCurve} />
+          <div className={styles.earthLimbSunriseGlow} />
+        </div>
+      </section>
 
-                {/* Active Subsystem Deep Inspection Box */}
-                <div className={styles.subsystemInspectionBox}>
-                  <div className={styles.subsystemInspectionHeader}>
-                    <span className={styles.subsystemInspectionTitle}>
-                      SUBSYSTEM RECORD: {activeSubsystem.name.toUpperCase()}
-                    </span>
-                    <span
-                      className={
-                        activeSubsystem.status === 'nominal'
-                          ? styles.statusTagGreen
-                          : styles.statusTagRed
-                      }
-                    >
-                      {activeSubsystem.status === 'nominal' ? 'NOMINAL // VERIFIED' : 'CONFLICT // FLAGGED'}
-                    </span>
-                  </div>
-                  <div className={styles.subsystemDetailRow}>
-                    <div className={styles.subsystemDetailItem}>
-                      <span className={styles.detailLabel}>PRIMARY CITATION:</span>
-                      <span className={styles.detailValMonospace}>{activeSubsystem.citationId}</span>
-                    </div>
-                    <div className={styles.subsystemDetailItem}>
-                      <span className={styles.detailLabel}>ALLOCATED MASS:</span>
-                      <span className={styles.detailValMonospace}>{activeSubsystem.massKg} kg</span>
-                    </div>
-                    <div className={styles.subsystemDetailItem}>
-                      <span className={styles.detailLabel}>PEAK POWER:</span>
-                      <span className={styles.detailValMonospace}>{activeSubsystem.powerW} W</span>
-                    </div>
-                    <div className={styles.subsystemDetailItem}>
-                      <span className={styles.detailLabel}>THERMAL TELEMETRY:</span>
-                      <span
-                        className={
-                          activeSubsystem.tempC > 65
-                            ? styles.detailValAlert
-                            : styles.detailValMonospace
-                        }
-                      >
-                        {activeSubsystem.tempC}°C
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+      {/* =========================================================================
+          SECTION 1B: SPACECRAFT FLEET CARD & BLUEPRINT PANEL (OVERLAPS EARTH LIMB)
+          ========================================================================= */}
+      <section className={styles.fleetOverlapSection} aria-label="Spacecraft Fleet and Blueprint Details">
+        <div className={styles.container}>
+          <div className={styles.fleetColumnsGrid}>
+            {/* Left 6 Cols: Spacecraft Fleet Selector, 8-Cell Telemetry Grid & Raw TLE */}
+            <div className={styles.fleetCol}>
+              <FleetCard
+                selectedSatId={selectedSatId}
+                onSelectSatId={(satId) => {
+                  setSelectedSatId(satId);
+                  const sat = REAL_SATELLITES.find(s => s.id === satId);
+                  if (sat && sat.subsystems[0]) {
+                    setActiveSubsystemId(sat.subsystems[0].id);
+                  }
+                }}
+                apogeeVal={apogeeVal}
+                perigeeVal={perigeeVal}
+                inclinationVal={inclinationVal}
+                tleLine1Val={tleLine1Val}
+                tleLine2Val={tleLine2Val}
+                tleSyncStatus={tleSyncStatus}
+                isSyncing={isSyncing}
+                onSyncCelesTrak={handleSyncCelesTrak}
+              />
+            </div>
+
+            {/* Right 6 Cols: Spacecraft Blueprint CAD & Subsystem Inspector */}
+            <div className={styles.fleetCol}>
+              <SpacecraftBlueprint
+                activeSatellite={activeSatellite}
+                activeSubsystemId={activeSubsystemId}
+                onSelectSubsystemId={setActiveSubsystemId}
+              />
             </div>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          SECTION 2: 6-VECTOR ORBITAL TELEMETRY HUD STRIPS (OVER ZOOMING EARTH)
+          SECTION 2: 6-VECTOR ORBITAL TELEMETRY REGISTER (3x2 GRID)
           ========================================================================= */}
       <section id="telemetry-section" className={styles.telemetrySection} aria-labelledby="telemetry-title">
-        <div className={styles.fullBleedContainer}>
+        <div className={styles.container}>
           <div className={styles.sectionTitleBlock}>
-            <div className={styles.sectionCode}>02 // FLIGHT TELEMETRY VECTORS</div>
+            <div className={styles.sectionEyebrow}>02 · Flight telemetry vectors</div>
             <h2 id="telemetry-title" className={styles.sectionHeading}>
-              6-VECTOR ORBITAL TELEMETRY REGISTER
+              6-Vector orbital telemetry register
             </h2>
             <p className={styles.sectionLeadLine}>
               Continuous state vectors, conjunction radar tracking, and deterministic bounds over zooming orbital limbs.
             </p>
           </div>
 
-          <div className={styles.staggeredHudList}>
-            {/* Strip 01 - Left */}
-            <div className={`${styles.hudStripCard} ${styles.hudStripLeft}`}>
-              <div className={styles.hudStripHeader}>
-                <span className={styles.hudVectorNum}>01 // ORBITAL EPHEMERIS</span>
-                <span className={styles.hudBadgeGreen}>SGP4 REAL-TIME</span>
+          {/* 3x2 Grid (2x3 Tablet, 1 Col Mobile) */}
+          <div className={styles.vectorGrid3x2}>
+            {/* Vector 01 */}
+            <div className={styles.vectorCard}>
+              <div className={styles.vectorHeader}>
+                <span className={styles.vectorNum}>01 // ORBITAL EPHEMERIS</span>
+                <span className={styles.badgeOk}>SGP4 REAL-TIME</span>
               </div>
-              <p className={styles.hudLead}>
+              <div className={styles.vectorDataRow}>
+                <span className={styles.vectorBigVal}>741.2 KM</span>
+                {/* Mini Orbit Ellipse Visual */}
+                <svg width="48" height="24" viewBox="0 0 48 24" fill="none" className={styles.miniVisual} aria-hidden="true">
+                  <ellipse cx="24" cy="12" rx="20" ry="8" stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="3 2" />
+                  <circle cx="36" cy="7" r="2.5" fill="var(--accent-2)" />
+                </svg>
+              </div>
+              <p className={styles.vectorLead}>
                 Live altitude, inclination, eccentricity, B* drag term, and epoch age computed on a strict 2-hour CelesTrak refresh cycle.
               </p>
-              <div className={styles.hudMetricsGrid}>
-                <div><span className={styles.mLabel}>ALTITUDE:</span> <span className={styles.mVal}>741.2 KM</span></div>
-                <div><span className={styles.mLabel}>INCLINATION:</span> <span className={styles.mVal}>98.34° SSO</span></div>
-                <div><span className={styles.mLabel}>ECCENTRICITY:</span> <span className={styles.mVal}>0.0001842</span></div>
-                <div><span className={styles.mLabel}>B* DRAG:</span> <span className={styles.mVal}>0.16842e-3</span></div>
+              <div className={styles.vectorFootnote}>
+                <span>INCLINATION: 98.34° SSO</span> &bull; <span>ECC: 0.000184</span>
               </div>
             </div>
 
-            {/* Strip 02 - Right */}
-            <div className={`${styles.hudStripCard} ${styles.hudStripRight}`}>
-              <div className={styles.hudStripHeader}>
-                <span className={styles.hudVectorNum}>02 // DEBRIS FLUX &amp; CONJUNCTION</span>
-                <span className={styles.hudBadgeYellow}>18 SDS CDM ACTIVE</span>
+            {/* Vector 02 */}
+            <div className={styles.vectorCard}>
+              <div className={styles.vectorHeader}>
+                <span className={styles.vectorNum}>02 // DEBRIS FLUX &amp; CONJUNCTION</span>
+                <span className={styles.badgeWarn}>18 SDS CDM ACTIVE</span>
               </div>
-              <p className={styles.hudLead}>
+              <div className={styles.vectorDataRow}>
+                <span className={styles.vectorBigVal}>36,412 OBJECTS</span>
+                {/* Mini Radar Covariance Arc */}
+                <svg width="48" height="24" viewBox="0 0 48 24" fill="none" className={styles.miniVisual} aria-hidden="true">
+                  <circle cx="24" cy="12" r="10" stroke="var(--warn)" strokeWidth="1" strokeDasharray="2 2" />
+                  <circle cx="24" cy="12" r="2" fill="var(--warn)" />
+                  <circle cx="29" cy="8" r="1.5" fill="var(--crit)" />
+                </svg>
+              </div>
+              <p className={styles.vectorLead}>
                 NASA ORDEM 3.2 debris flux (1.42e-4 hits/m²/yr), 18th Space Defense Squadron radar covariance, and conjunction probability Pc.
               </p>
-              <div className={styles.hudMetricsGrid}>
-                <div><span className={styles.mLabel}>RADAR TRACKED:</span> <span className={styles.mVal}>36,412 OBJECTS</span></div>
-                <div><span className={styles.mLabel}>FLUX DENSITY:</span> <span className={styles.mVal}>1.42e-4 m⁻²yr⁻¹</span></div>
-                <div><span className={styles.mLabel}>MISS DISTANCE:</span> <span className={styles.mVal}>412 METERS</span></div>
-                <div><span className={styles.mLabel}>Pc THRESHOLD:</span> <span className={styles.mValYellow}>4.2e-5 (CAUTION)</span></div>
+              <div className={styles.vectorFootnote}>
+                <span>MISS DISTANCE: 412 M</span> &bull; <span>Pc: 4.2e-5 (CAUTION)</span>
               </div>
             </div>
 
-            {/* Strip 03 - Left */}
-            <div className={`${styles.hudStripCard} ${styles.hudStripLeft}`}>
-              <div className={styles.hudStripHeader}>
-                <span className={styles.hudVectorNum}>03 // DETERMINISTIC RULE ENGINE</span>
-                <span className={styles.hudBadgeGreen}>14.2 MS LATENCY</span>
+            {/* Vector 03 */}
+            <div className={styles.vectorCard}>
+              <div className={styles.vectorHeader}>
+                <span className={styles.vectorNum}>03 // DETERMINISTIC RULE ENGINE</span>
+                <span className={styles.badgeOk}>14.2 MS LATENCY</span>
               </div>
-              <p className={styles.hudLead}>
+              <div className={styles.vectorDataRow}>
+                <span className={styles.vectorBigVal}>48 CONFIRMED</span>
+                {/* Mini Latency Progress Line */}
+                <svg width="48" height="24" viewBox="0 0 48 24" fill="none" className={styles.miniVisual} aria-hidden="true">
+                  <line x1="4" y1="12" x2="44" y2="12" stroke="var(--border-strong)" strokeWidth="2" strokeLinecap="round" />
+                  <line x1="4" y1="12" x2="38" y2="12" stroke="var(--ok)" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </div>
+              <p className={styles.vectorLead}>
                 Pure mathematical evaluation of NASA-STD-8719.14C and ISO 24113 tolerances across envelope, mass, and passivation.
               </p>
-              <div className={styles.hudMetricsGrid}>
-                <div><span className={styles.mLabel}>RULES EVALUATED:</span> <span className={styles.mVal}>50 CHECKS</span></div>
-                <div><span className={styles.mLabel}>RULES PASSED:</span> <span className={styles.mValGreen}>48 CONFIRMED</span></div>
-                <div><span className={styles.mLabel}>DISCREPANCIES:</span> <span className={styles.mValRed}>2 FLAGGED</span></div>
-                <div><span className={styles.mLabel}>HEURISTICS:</span> <span className={styles.mVal}>0% (STRICT BOUNDS)</span></div>
+              <div className={styles.vectorFootnote}>
+                <span>50 CHECKS EVALUATED</span> &bull; <span>2 DISCREPANCIES FLAGGED</span>
               </div>
             </div>
 
-            {/* Strip 04 - Right */}
-            <div className={`${styles.hudStripCard} ${styles.hudStripRight}`}>
-              <div className={styles.hudStripHeader}>
-                <span className={styles.hudVectorNum}>04 // SHA-256 PROVENANCE LEDGER</span>
-                <span className={styles.hudBadgeGreen}>MERKLE ROOT LOCKED</span>
+            {/* Vector 04 */}
+            <div className={styles.vectorCard}>
+              <div className={styles.vectorHeader}>
+                <span className={styles.vectorNum}>04 // SHA-256 PROVENANCE LEDGER</span>
+                <span className={styles.badgeOk}>MERKLE ROOT LOCKED</span>
               </div>
-              <p className={styles.hudLead}>
+              <div className={styles.vectorDataRow}>
+                <span className={styles.vectorBigVal}>0x9f4a...3c21</span>
+                {/* Mini Hash Lock Blocks */}
+                <svg width="48" height="24" viewBox="0 0 48 24" fill="none" className={styles.miniVisual} aria-hidden="true">
+                  <rect x="6" y="8" width="8" height="8" stroke="var(--accent)" strokeWidth="1" />
+                  <line x1="14" y1="12" x2="20" y2="12" stroke="var(--accent)" />
+                  <rect x="20" y="8" width="8" height="8" stroke="var(--accent)" strokeWidth="1" />
+                  <line x1="28" y1="12" x2="34" y2="12" stroke="var(--accent)" />
+                  <rect x="34" y="8" width="8" height="8" stroke="var(--ok)" strokeWidth="1.5" />
+                </svg>
+              </div>
+              <p className={styles.vectorLead}>
                 Every parameter change and human engineering decision appends to a tamper-evident cryptographic SHA-256 ledger.
               </p>
-              <div className={styles.hudMetricsGrid}>
-                <div><span className={styles.mLabel}>ARTIFACTS BOUND:</span> <span className={styles.mVal}>34 DRAWINGS / CAD</span></div>
-                <div><span className={styles.mLabel}>UNHASHED MUTATIONS:</span> <span className={styles.mValGreen}>ZERO</span></div>
-                <div><span className={styles.mLabel}>MERKLE ROOT:</span> <span className={styles.mVal}>0x9f4a...3c21</span></div>
-                <div><span className={styles.mLabel}>INTEGRITY STATE:</span> <span className={styles.mValGreen}>100% VALID</span></div>
+              <div className={styles.vectorFootnote}>
+                <span>34 DRAWINGS / CAD BOUND</span> &bull; <span>ZERO UNHASHED MUTATIONS</span>
               </div>
             </div>
 
-            {/* Strip 05 - Left */}
-            <div className={`${styles.hudStripCard} ${styles.hudStripLeft}`}>
-              <div className={styles.hudStripHeader}>
-                <span className={styles.hudVectorNum}>05 // HUMAN AUTHORITY GATE</span>
-                <span className={styles.hudBadgeRed}>HTTP 423 LOCKED</span>
+            {/* Vector 05 */}
+            <div className={styles.vectorCard}>
+              <div className={styles.vectorHeader}>
+                <span className={styles.vectorNum}>05 // HUMAN AUTHORITY GATE</span>
+                <span className={styles.badgeCrit}>HTTP 423 LOCKED</span>
               </div>
-              <p className={styles.hudLead}>
+              <div className={styles.vectorDataRow}>
+                <span className={styles.vectorBigValAlert}>HTTP 423 LOCKED</span>
+                {/* Mini Gate Padlock */}
+                <svg width="48" height="24" viewBox="0 0 48 24" fill="none" className={styles.miniVisual} aria-hidden="true">
+                  <rect x="18" y="10" width="12" height="10" rx="2" stroke="var(--crit)" strokeWidth="1.5" fill="rgba(251, 113, 133, 0.15)" />
+                  <path d="M 21 10 V 6 A 3 3 0 0 1 27 6 V 10" stroke="var(--crit)" strokeWidth="1.5" />
+                </svg>
+              </div>
+              <p className={styles.vectorLead}>
                 Software never certifies missions. Export dossiers are strictly locked until designated technical authorities record signed rationales.
               </p>
-              <div className={styles.hudMetricsGrid}>
-                <div><span className={styles.mLabel}>EXPORT PHASE GATE:</span> <span className={styles.mValRed}>HTTP 423 LOCKED</span></div>
-                <div><span className={styles.mLabel}>AUTHORITY ROLE:</span> <span className={styles.mVal}>LEAD CHIEF ENGINEER</span></div>
-                <div><span className={styles.mLabel}>REQUIRED SIGNOFF:</span> <span className={styles.mValYellow}>1 WAIVER RATIONALE</span></div>
-                <div><span className={styles.mLabel}>AUTONOMOUS PASS:</span> <span className={styles.mVal}>PROHIBITED</span></div>
+              <div className={styles.vectorFootnote}>
+                <span>LEAD CHIEF ENGINEER</span> &bull; <span>1 WAIVER RATIONALE REQUIRED</span>
               </div>
             </div>
 
-            {/* Strip 06 - Right */}
-            <div className={`${styles.hudStripCard} ${styles.hudStripRight}`}>
-              <div className={styles.hudStripHeader}>
-                <span className={styles.hudVectorNum}>06 // REGULATORY MISSION DOSSIER</span>
-                <span className={styles.hudBadgeGreen}>EXPORT READY</span>
+            {/* Vector 06 */}
+            <div className={styles.vectorCard}>
+              <div className={styles.vectorHeader}>
+                <span className={styles.vectorNum}>06 // REGULATORY MISSION DOSSIER</span>
+                <span className={styles.badgeOk}>EXPORT READY</span>
               </div>
-              <p className={styles.hudLead}>
-                Automated compliance alignment packets formatted for NASA DAS 3.2, FCC 22-74, and ISO 24113 flight readiness reviews.
+              <div className={styles.vectorDataRow}>
+                <span className={styles.vectorBigVal}>100% GROUNDED</span>
+                {/* Mini Document Check */}
+                <svg width="48" height="24" viewBox="0 0 48 24" fill="none" className={styles.miniVisual} aria-hidden="true">
+                  <rect x="16" y="4" width="16" height="18" rx="2" stroke="var(--accent-2)" strokeWidth="1.2" />
+                  <polyline points="21,13 23,16 27,9" stroke="var(--ok)" strokeWidth="1.5" />
+                </svg>
+              </div>
+              <p className={styles.vectorLead}>
+                Alignment packets formatted for NASA DAS 3.2, FCC 22-74, and ISO 24113 flight readiness reviews.
               </p>
-              <div className={styles.hudMetricsGrid}>
-                <div><span className={styles.mLabel}>STANDARDS TARGETED:</span> <span className={styles.mVal}>NASA / ISO / ECSS / FCC</span></div>
-                <div><span className={styles.mLabel}>SCHEMAS:</span> <span className={styles.mVal}>JSON + MARKDOWN</span></div>
-                <div><span className={styles.mLabel}>PAGE LOCATORS:</span> <span className={styles.mValGreen}>100% GROUNDED</span></div>
-                <div><span className={styles.mLabel}>SNAPSHOT HASH:</span> <span className={styles.mVal}>0x7e12...b994</span></div>
+              <div className={styles.vectorFootnote}>
+                <span>NASA / ISO / ECSS / FCC</span> &bull; <span>JSON + MARKDOWN PACKETS</span>
               </div>
             </div>
           </div>
@@ -444,12 +401,12 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* =========================================================================
-          SECTION 3: ENGINEERING BENCHMARK MATRIX (REPLACES CHALLENGE/SOLUTION)
+          SECTION 3: ENGINEERING BENCHMARK MATRIX
           ========================================================================= */}
       <section id="matrix-section" className={styles.matrixSection} aria-labelledby="benchmark-title">
-        <div className={styles.fullBleedContainer}>
+        <div className={styles.container}>
           <div className={styles.sectionTitleBlock}>
-            <div className={styles.sectionCode}>03 // BENCHMARK MATRIX</div>
+            <div className={styles.sectionEyebrow}>03 · Benchmark matrix</div>
             <h2 id="benchmark-title" className={styles.sectionHeading}>
               ELIMINATE SPREADSHEET DRIFT BEFORE FLIGHT READINESS REVIEW
             </h2>
@@ -472,11 +429,11 @@ export const LandingPage: React.FC = () => {
                   <tr key={row.metric}>
                     <td className={styles.metricCell}>{row.metric}</td>
                     <td className={styles.legacyCell}>
-                      <span className={styles.tagRed}>{row.legacyStatus}</span>
+                      <span className={styles.tagCrit}>{row.legacyStatus}</span>
                       <span className={styles.cellDesc}>{row.legacy}</span>
                     </td>
                     <td className={styles.orbitScoreCell}>
-                      <span className={styles.tagGreen}>{row.orbitScoreStatus}</span>
+                      <span className={styles.tagOk}>{row.orbitScoreStatus}</span>
                       <span className={styles.cellDesc}>{row.orbitScore}</span>
                     </td>
                   </tr>
@@ -488,21 +445,21 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* =========================================================================
-          SECTION 4: 6-STAGE PHASE GATE PIPELINE & SUBSYSTEM TELEMETRY MATRIX
+          SECTION 4: 6-STAGE PHASE GATE PIPELINE & SUBSYSTEM PARAMETER REGISTER
           ========================================================================= */}
       <section id="workflow-section" className={styles.workflowSection} aria-labelledby="gates-title">
-        <div className={styles.fullBleedContainer}>
+        <div className={styles.container}>
           <div className={styles.sectionTitleBlock}>
-            <div className={styles.sectionCode}>04 // VERIFICATION PIPELINE</div>
+            <div className={styles.sectionEyebrow}>04 · Verification pipeline</div>
             <h2 id="gates-title" className={styles.sectionHeading}>
-              SIX HARD GATES FROM RAW CAD INGEST TO CRYPTOGRAPHIC DOSSIER
+              Six hard gates from raw CAD ingest to cryptographic dossier
             </h2>
             <p className={styles.sectionLeadLine}>
               Select any phase gate to inspect input schemas, deterministic checks, and lock conditions.
             </p>
           </div>
 
-          {/* Full-Width 6-Stage Horizontal Stepper */}
+          {/* Stepper Segmented Control */}
           <div className={styles.stepperNavGrid} role="tablist" aria-label="Phase Gate Pipeline">
             {PHASE_GATE_STAGES.map((st, idx) => {
               const isSelected = idx === selectedStageIndex;
@@ -526,21 +483,21 @@ export const LandingPage: React.FC = () => {
           <div className={styles.gateSpecsGrid}>
             <div className={styles.gateSpecCard}>
               <div className={styles.gateSpecHeader}>
-                <Database size={14} className={styles.iconBlue} />
+                <Database size={14} className={styles.iconAccent} />
                 <span>INPUT SCHEMAS &amp; ARTIFACTS</span>
               </div>
               <p className={styles.gateSpecText}>{activeStage.inputSchemas}</p>
             </div>
             <div className={styles.gateSpecCard}>
               <div className={styles.gateSpecHeader}>
-                <Cpu size={14} className={styles.iconGreen} />
+                <Cpu size={14} className={styles.iconOk} />
                 <span>DETERMINISTIC EVALUATION CHECKS</span>
               </div>
               <p className={styles.gateSpecText}>{activeStage.deterministicChecks}</p>
             </div>
             <div className={`${styles.gateSpecCard} ${styles.gateSpecCardAlert}`}>
               <div className={styles.gateSpecHeaderAlert}>
-                <Lock size={14} className={styles.iconRed} />
+                <Lock size={14} className={styles.iconCrit} />
                 <span>GATE LOCK CONDITION</span>
               </div>
               <p className={styles.gateSpecTextAlert}>{activeStage.gateLockCondition}</p>
@@ -551,27 +508,27 @@ export const LandingPage: React.FC = () => {
           <div className={styles.registerBlock}>
             <div className={styles.registerHeader}>
               <div className={styles.registerTitle}>
-                <Layers size={15} className={styles.iconBlue} />
+                <Layers size={15} className={styles.iconAccent} />
                 <span>SUBSYSTEM PARAMETER &amp; CITATION REGISTER // {selectedCategory.toUpperCase()}</span>
               </div>
               <div className={styles.registerCounters}>
                 <span className={styles.counterItem}>
                   TOTAL: <strong>{VERIFICATION_RULES.length}</strong>
                 </span>
-                <span className={styles.counterItemGreen}>
+                <span className={styles.counterItemOk}>
                   CONFIRMED: <strong>{VERIFICATION_RULES.filter((r) => r.status === 'confirmed').length}</strong>
                 </span>
-                <span className={styles.counterItemRed}>
+                <span className={styles.counterItemCrit}>
                   CONFLICT: <strong>{VERIFICATION_RULES.filter((r) => r.status === 'conflicting').length}</strong>
                 </span>
-                <span className={styles.counterItemYellow}>
+                <span className={styles.counterItemWarn}>
                   UNVERIFIED: <strong>{VERIFICATION_RULES.filter((r) => r.status === 'unverified').length}</strong>
                 </span>
               </div>
             </div>
 
             <div className={styles.registerColumns}>
-              {/* Left 3 cols: Category filter buttons */}
+              {/* Category Filter Buttons */}
               <div className={styles.registerFilters}>
                 <button
                   type="button"
@@ -610,7 +567,7 @@ export const LandingPage: React.FC = () => {
                 </button>
               </div>
 
-              {/* Right 9 cols: Full-Width Data Table */}
+              {/* Data Table */}
               <div className={styles.registerTableWrapper}>
                 <table className={styles.registerTable}>
                   <thead>
@@ -642,10 +599,10 @@ export const LandingPage: React.FC = () => {
                             <span
                               className={
                                 isConfirmed
-                                  ? styles.badgeSolidGreen
+                                  ? styles.badgeSolidOk
                                   : isConflict
-                                  ? styles.badgeSolidRed
-                                  : styles.badgeSolidYellow
+                                  ? styles.badgeSolidCrit
+                                  : styles.badgeSolidWarn
                               }
                             >
                               {rule.status.toUpperCase()}
@@ -663,21 +620,21 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* =========================================================================
-          SECTION 5: 5-STATE EVIDENCE TAXONOMY & END-TO-END SHA-256 AUDIT LINEAGE
+          SECTION 5: 5-STATE EVIDENCE TAXONOMY & SHA-256 AUDIT LINEAGE
           ========================================================================= */}
       <section id="states-section" className={styles.statesSection} aria-labelledby="states-title">
-        <div className={styles.fullBleedContainer}>
+        <div className={styles.container}>
           <div className={styles.sectionTitleBlock}>
-            <div className={styles.sectionCode}>05 // DATA INTEGRITY &amp; PROVENANCE</div>
+            <div className={styles.sectionEyebrow}>05 · Data integrity &amp; provenance</div>
             <h2 id="states-title" className={styles.sectionHeading}>
-              FIVE STRICT VERIFICATION STATES. ZERO BINARY GUESSWORK.
+              Five strict verification states. Zero binary guesswork.
             </h2>
             <p className={styles.sectionLeadLine}>
               OrbitScore replaces subjective claims with five mutually exclusive states locked by SHA-256 cryptographic lineage.
             </p>
           </div>
 
-          {/* 5-Column Equal-Height State Selector Grid */}
+          {/* 5-Column State Grid */}
           <div className={styles.statesGrid5} role="tablist" aria-label="Five Evidence States">
             {EVIDENCE_TAXONOMY.map((st, idx) => {
               const isSelected = idx === selectedStateIndex;
@@ -730,9 +687,9 @@ export const LandingPage: React.FC = () => {
           </div>
 
           {/* 3-Node Cryptographic Audit Lineage */}
-          <div className={styles.lineageBlock}>
+          <div id="lineage-section" className={styles.lineageBlock}>
             <div className={styles.lineageHeader}>
-              <FileText size={15} className={styles.iconBlue} />
+              <FileText size={15} className={styles.iconAccent} />
               <span>END-TO-END CRYPTOGRAPHIC SHA-256 AUDIT LINEAGE</span>
             </div>
             <div className={styles.lineageNodesGrid}>
@@ -752,11 +709,11 @@ export const LandingPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Live FastAPI Engine Status Bar */}
+          {/* Live FastAPI Engine Status Console */}
           <div className={styles.fastApiConsole}>
             <div className={styles.fastApiHeader}>
               <div className={styles.fastApiStatus}>
-                <span className={isApiConnected ? styles.dotGreen : styles.dotAmber} />
+                <span className={isApiConnected ? styles.dotOk : styles.dotWarn} />
                 <span className={styles.fastApiTitle}>
                   {apiMode === 'live' && isApiConnected
                     ? 'CONNECTED TO LIVE FASTAPI ENGINE (127.0.0.1:8000)'
@@ -786,17 +743,17 @@ export const LandingPage: React.FC = () => {
             <div className={styles.fastApiMetrics}>
               <div className={styles.fastApiMetricItem}>
                 <span className={styles.mLabel}>SQLITE WAL PERSISTENCE:</span>
-                <span className={styles.mValGreen}>LOCKED &amp; DURABLE</span>
+                <span className={styles.mValOk}>LOCKED &amp; DURABLE</span>
               </div>
               <div className={styles.fastApiMetricItem}>
                 <span className={styles.mLabel}>SHA-256 CHAIN STATUS:</span>
-                <span className={styles.mValGreen}>
+                <span className={styles.mValOk}>
                   {provenance.valid ? `14/14 VALID (${provenance.checkedEvents} EVENTS)` : 'PENDING EVALUATION'}
                 </span>
               </div>
               <div className={styles.fastApiMetricItem}>
                 <span className={styles.mLabel}>CHIEF ENGINEER GATE:</span>
-                <span className={styles.mValRed}>HTTP 423 EXPORT BLOCK ACTIVE</span>
+                <span className={styles.mValCrit}>HTTP 423 EXPORT BLOCK ACTIVE</span>
               </div>
             </div>
           </div>
@@ -807,14 +764,14 @@ export const LandingPage: React.FC = () => {
           SECTION 6: MISSION WORKSPACE LAUNCHPAD
           ========================================================================= */}
       <section id="missions-section" className={styles.launchpadSection} aria-labelledby="launchpad-title">
-        <div className={styles.fullBleedContainer}>
+        <div className={styles.container}>
           <div className={styles.sectionTitleBlock}>
-            <div className={styles.sectionCode}>06 // ACTIVE MISSION WORKSPACES</div>
+            <div className={styles.sectionEyebrow}>06 · Active mission workspaces</div>
             <h2 id="launchpad-title" className={styles.sectionHeading}>
-              SELECT ACTIVE SPACECRAFT WORKSPACE
+              Select active spacecraft workspace
             </h2>
             <p className={styles.sectionLeadLine}>
-              Initialize mission telemetry, inspect CAD budgets, and execute deterministic compliance profiles.
+              Initialize mission telemetry, inspect CAD budgets, and execute deterministic verification profiles.
             </p>
           </div>
 
