@@ -147,7 +147,7 @@
 .submitBtn {
   background-color: var(--os-color-accent-cyan);
   border: none;
-  color: #000000;
+  color: #ffffff;
   border-radius: var(--os-radius-xs);
   padding: var(--os-space-2) var(--os-space-4);
   font-family: var(--os-font-mono);

@@ -9,7 +9,7 @@
 .kicker {
   font-family: var(--os-font-mono);
   font-size: var(--os-type-caption);
-  color: var(--os-color-accent-cyan);
+  color: var(--os-color-accent-teal, #0d9488);
   text-transform: uppercase;
   letter-spacing: var(--os-tracking-wide);
   margin-bottom: var(--os-space-1);
@@ -30,7 +30,7 @@
   gap: var(--os-space-3);
   background-color: var(--os-color-surface-sunken);
   border: 1px solid var(--os-color-border-subtle);
-  border-left: 3px solid var(--os-color-accent-cyan);
+  border-left: 3px solid var(--os-color-accent-teal, #0d9488);
   border-radius: var(--os-radius-sm);
   padding: var(--os-space-3) var(--os-space-4);
   margin-bottom: var(--os-space-6);
@@ -40,7 +40,7 @@
   font-family: var(--os-font-mono);
   font-size: var(--os-type-caption);
   font-weight: 700;
-  color: var(--os-color-accent-cyan);
+  color: var(--os-color-accent-teal, #0d9488);
   text-transform: uppercase;
   letter-spacing: var(--os-tracking-wide);
   margin-bottom: var(--os-space-1);
@@ -96,9 +96,9 @@
 }
 
 .findingTabActive {
-  background-color: rgba(0, 161, 255, 0.08);
-  border-color: var(--os-color-accent-cyan);
-  color: var(--os-color-accent-cyan);
+  background-color: rgba(13, 148, 136, 0.08);
+  border-color: var(--os-color-accent-teal, #0d9488);
+  color: var(--os-color-accent-teal, #0d9488);
   font-weight: 600;
 }
 
@@ -235,9 +235,9 @@
 .input:focus,
 .select:focus,
 .textarea:focus {
-  outline: 2px solid var(--os-color-accent-cyan);
+  outline: 2px solid var(--os-color-accent-teal, #0d9488);
   outline-offset: 1px;
-  border-color: var(--os-color-accent-cyan);
+  border-color: var(--os-color-accent-teal, #0d9488);
 }
 
 .textarea {
@@ -251,8 +251,8 @@
 }
 
 .recordedSignoffBox {
-  background-color: rgba(52, 211, 153, 0.08);
-  border: 1px solid rgba(52, 211, 153, 0.3);
+  background-color: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.3);
   border-radius: var(--os-radius-sm);
   padding: var(--os-space-3) var(--os-space-4);
   margin-bottom: var(--os-space-4);
@@ -274,21 +274,21 @@
   align-items: center;
   justify-content: center;
   gap: var(--os-space-2);
-  background-color: var(--os-color-accent-cyan);
-  color: #000000;
-  border: none;
-  border-radius: var(--os-radius-xs);
+  background-color: var(--os-color-accent-teal, #0d9488);
+  color: #ffffff;
+  border: 1px solid var(--os-color-accent-teal, #0d9488);
+  border-radius: var(--os-radius-xs, 2px);
   padding: var(--os-space-2) var(--os-space-4);
   font-family: var(--os-font-mono);
   font-size: var(--os-type-body-s);
   font-weight: 700;
   cursor: pointer;
   min-height: 42px;
-  transition: opacity var(--os-duration-fast) var(--os-ease-standard);
+  transition: background-color var(--os-duration-fast) var(--os-ease-standard);
 }
 
 .saveButton:hover {
-  opacity: 0.9;
+  background-color: var(--os-color-accent-teal-hover, #0f766e);
 }
 
 .saveButton:disabled {

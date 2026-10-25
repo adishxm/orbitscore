@@ -123,7 +123,7 @@
   align-items: center;
   gap: var(--os-space-2);
   background-color: var(--os-color-accent-cyan);
-  color: #000000;
+  color: #ffffff;
   border: none;
   border-radius: var(--os-radius-sm);
   padding: var(--os-space-2) var(--os-space-5);

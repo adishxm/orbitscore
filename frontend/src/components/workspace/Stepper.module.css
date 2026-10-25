@@ -87,19 +87,19 @@
 
 /* Active Step */
 .active .stepButton {
-  background-color: rgba(0, 161, 255, 0.08);
-  border-color: var(--os-color-accent-cyan);
+  background-color: rgba(13, 148, 136, 0.08);
+  border-color: var(--os-color-accent-teal, #0d9488);
   color: var(--os-color-text-white);
 }
 
 .active .stepNumber {
-  background-color: var(--os-color-accent-cyan);
-  border-color: var(--os-color-accent-cyan);
-  color: #000000;
+  background-color: var(--os-color-accent-teal, #0d9488);
+  border-color: var(--os-color-accent-teal, #0d9488);
+  color: #ffffff;
 }
 
 .active .stepSubtext {
-  color: var(--os-color-accent-cyan);
+  color: var(--os-color-accent-teal, #0d9488);
 }
 
 /* Completed Step */
@@ -110,12 +110,18 @@
 }
 
 @media (max-width: 768px) {
+  .stepList {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--os-space-2);
+  }
+
   .stepSubtext {
     display: none;
   }
 
   .stepItem {
-    min-width: 110px;
+    min-width: 0;
   }
 
   .stepButton {

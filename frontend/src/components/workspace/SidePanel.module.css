@@ -191,21 +191,21 @@
   align-items: center;
   justify-content: center;
   gap: var(--os-space-2);
-  background-color: var(--os-state-confirmed-text);
-  color: #000000;
-  border: none;
-  border-radius: var(--os-radius-xs);
+  background-color: var(--os-color-accent-teal, #0d9488);
+  color: #ffffff;
+  border: 1px solid var(--os-color-accent-teal, #0d9488);
+  border-radius: var(--os-radius-xs, 2px);
   padding: var(--os-space-3) var(--os-space-4);
   font-family: var(--os-font-mono);
   font-size: var(--os-type-caption);
   font-weight: 700;
   cursor: pointer;
   min-height: 42px;
-  transition: opacity var(--os-duration-fast) var(--os-ease-standard);
+  transition: background-color var(--os-duration-fast) var(--os-ease-standard);
 }
 
 .confirmButton:hover {
-  opacity: 0.9;
+  background-color: var(--os-color-accent-teal-hover, #0f766e);
 }
 
 .deleteButton {
@@ -232,7 +232,7 @@
 .fullLocator {
   font-family: var(--os-font-mono);
   font-size: var(--os-type-caption);
-  color: var(--os-color-accent-cyan);
+  color: var(--os-color-accent-teal, #0d9488);
   margin-top: 4px;
 }
 
