@@ -1,0 +1,151 @@
+/* =========================================================================
+   ConnectionStatus Module — Precision Aerospace Status Indicator
+   ========================================================================= */
+
+.statusWrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: rgba(11, 17, 29, 0.7);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  user-select: none;
+}
+
+.statusWrapper:hover,
+.statusWrapper:focus-visible {
+  border-color: var(--border-strong);
+  background: var(--surface-2);
+}
+
+.statusWrapper.compact {
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.indicatorTrack {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 8px Status Dot with soft glow */
+.statusDot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dotLive {
+  background: var(--ok);
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.6);
+}
+
+.dotDemo {
+  background: var(--warn);
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
+}
+
+/* 2s Pulsing Ring for Live Status */
+.pulseRing {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1px solid var(--ok);
+  animation: pulse 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulseRing {
+    animation: none;
+    display: none;
+  }
+}
+
+.statusText {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-0);
+  white-space: nowrap;
+}
+
+.endpointLabel {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--text-2);
+  border-left: 1px solid var(--border);
+  padding-left: var(--space-2);
+  white-space: nowrap;
+}
+
+/* Tooltip Popup */
+.tooltipBox {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: var(--os-z-modal, 400);
+  width: 240px;
+  background: var(--surface-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: none;
+  animation: tooltipFade var(--duration-fast) var(--ease-out);
+}
+
+@keyframes tooltipFade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tooltipRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+}
+
+.tooltipKey {
+  color: var(--text-2);
+}
+
+.tooltipVal {
+  color: var(--text-0);
+  font-weight: 500;
+}
+
+.tooltipValOk {
+  color: var(--ok);
+  font-weight: 600;
+}

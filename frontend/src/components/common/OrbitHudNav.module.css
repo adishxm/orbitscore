@@ -1,132 +1,149 @@
-/* OrbitHudNav.module.css - Compact Single-Line Solid Bottom Status Bar */
+/* =========================================================================
+   Slim 36px Mission Status Bar (Bottom Docked Glass)
+   ========================================================================= */
 
-.statusBar {
+.statusBarWrapper {
   position: fixed;
-  bottom: 0;
+  bottom: 12px;
   left: 0;
   right: 0;
-  height: 2.5rem; /* 40px / h-10 */
-  background-color: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  z-index: 1000;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0 16px;
+  z-index: var(--os-z-sticky, 100);
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .statusBarWrapper {
+    display: none; /* Hidden under 768px per Section 7 */
+  }
+}
+
+.statusBar {
+  pointer-events: auto;
+  width: 100%;
+  max-width: 1100px;
+  height: 36px;
+  background: rgba(7, 11, 20, 0.75);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1rem;
-  font-family: var(--os-font-mono, monospace);
-  font-size: 0.6875rem;
-  box-sizing: border-box;
-  color: #ffffff;
-}
-
-@media (min-width: 1024px) {
-  .statusBar {
-    padding: 0 1.5rem;
-  }
+  gap: var(--space-4);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .statusLeft {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;
   flex-shrink: 0;
 }
 
 .dotNominal {
   width: 6px;
   height: 6px;
-  background-color: #00ff00;
-  display: inline-block;
+  border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 6px var(--ok);
 }
 
 .statusEngineText {
-  color: #aaaaaa;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .statusEngineText {
-    display: inline;
-  }
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-2);
 }
 
 .statusCenter {
   display: flex;
   align-items: center;
-  overflow-x: auto;
+  flex: 1;
+  justify-content: center;
 }
 
 .jumpList {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   list-style: none;
   padding: 0;
   margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 .jumpBtn {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  font-size: 0.625rem;
-  font-weight: 700;
-  color: #f1f5f9;
-  padding: 0.2rem 0.4rem;
-  background-color: #080808;
-  border: 1px solid #262626;
+  gap: 4px;
+  padding: 3px 8px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--text-2);
+  background: transparent;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.1s ease;
+  transition: all var(--duration-fast) var(--ease-out);
 }
 
 .jumpBtn:hover {
-  color: #ffffff;
-  border-color: var(--os-color-accent-teal, #0d9488);
+  color: var(--text-0);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .jumpBtnActive {
-  color: #ffffff;
-  background-color: #0055ff;
-  border-color: #0055ff;
+  color: var(--accent) !important;
+  font-weight: 600;
+  background: rgba(106, 165, 255, 0.08);
 }
 
 .jumpCode {
-  color: #aaaaaa;
-}
-
-.jumpBtnActive .jumpCode {
-  color: #ffffff;
+  color: var(--text-2);
+  opacity: 0.75;
 }
 
 .statusRight {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 12px;
   flex-shrink: 0;
 }
 
-.enginePill {
-  color: #00ff00;
-  background-color: #080808;
-  border: 1px solid #262626;
-  padding: 0.15rem 0.45rem;
-  font-size: 0.625rem;
-  display: none;
+.scrollProgressTrack {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(11, 17, 29, 0.8);
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 22px;
 }
 
-@media (min-width: 640px) {
-  .enginePill {
-    display: inline-block;
-  }
+.scrollProgressBar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(106, 165, 255, 0.2);
+  pointer-events: none;
+  transition: width 0.1s linear;
 }
 
 .scrollProgressText {
-  color: #ffff00;
-  font-weight: 700;
-  font-size: 0.65rem;
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--text-0);
+  font-weight: 600;
+  white-space: nowrap;
 }

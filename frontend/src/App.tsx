@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { Header } from './components/common/Header';
 import { Footer } from './components/common/Footer';
 import { GlobalAtmosphere } from './components/common/GlobalAtmosphere';
@@ -20,10 +20,29 @@ import { ScenarioComparisonPage } from './pages/ScenarioComparisonPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 export const AppContent: React.FC = () => {
+  const location = useLocation();
+
   useEffect(() => {
     // Automatically connect frontend to the live FastAPI backend on startup
     useOrbitStore.getState().setApiMode('live').catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const scrollToHash = () => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      };
+      scrollToHash();
+      const timer = setTimeout(scrollToHash, 120);
+      return () => clearTimeout(timer);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+    }
+  }, [location.pathname, location.hash]);
 
   return (
     <div className="app-root relative min-h-screen text-[var(--text-0)] bg-[var(--bg-0)]">

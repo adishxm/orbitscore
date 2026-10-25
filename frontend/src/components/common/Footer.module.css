@@ -1,66 +1,134 @@
+/* =========================================================================
+   Footer Module Styling — Faint Orbit Divider, 4-Column Layout, Dark Glass
+   ========================================================================= */
+
 .footer {
-  margin-top: auto;
-  background-color: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(8px);
-  border-top: 1px solid #262626;
-  padding: 3rem 0 5rem; /* pb-16 equivalent + clearance for h-10 bottom HUD */
-  font-family: var(--os-font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace);
-  color: #e2e8f0;
   width: 100%;
+  background: var(--bg-0);
+  position: relative;
+  z-index: 10;
+  padding-bottom: 56px; /* Extra padding to prevent bottom status bar overlap */
+}
+
+.orbitDivider {
+  width: 100%;
+  height: 24px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.dividerSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .container {
   width: 100%;
-  max-width: none;
-  padding: 0 1.5rem;
-}
-
-@media (min-width: 1024px) {
-  .container {
-    padding: 0 2rem;
-  }
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 2.5rem;
-  padding-bottom: 2.5rem;
-  border-bottom: 1px solid #262626;
-}
-
-.colBrand {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
   display: flex;
   flex-direction: column;
-  gap: 0.875rem;
-  max-width: 420px;
+  gap: 36px;
+}
+
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 20px;
+}
+
+.brandGroup {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .brandTitle {
-  font-family: var(--os-font-mono, monospace);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
   font-size: 1.125rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-0);
   text-decoration: none;
-  letter-spacing: 0.08em;
-  display: inline-flex;
+}
+
+.logomark {
+  width: 20px;
+  height: 20px;
+}
+
+.tagline {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--text-2);
+  letter-spacing: 0.05em;
+}
+
+.sectionNav {
+  display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
-.brandTitle:hover {
-  color: var(--os-color-accent-teal, #0d9488);
+.secLink {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-2);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
 }
 
-.brandDot {
-  width: 8px;
-  height: 8px;
-  background-color: var(--os-color-accent-teal, #0d9488);
+.secLink:hover {
+  color: var(--accent);
 }
 
-.brandDesc {
-  color: #cbd5e1;
+/* 4-Column Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.colTitle {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-0);
+  text-transform: uppercase;
+}
+
+.colText {
   font-size: 0.8125rem;
+  color: var(--text-1);
   line-height: 1.5;
   margin: 0;
 }
@@ -68,112 +136,79 @@
 .kernelPill {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  background-color: #080808;
-  border: 1px solid #262626;
-  padding: 0.25rem 0.625rem;
-  font-family: var(--os-font-mono, monospace);
-  font-size: 0.6875rem;
-  color: #00ff00;
+  gap: 6px;
+  background: rgba(11, 17, 29, 0.8);
+  border: 1px solid var(--border);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--text-2);
   width: fit-content;
-  letter-spacing: 0.04em;
 }
 
 .dotGreen {
   width: 6px;
   height: 6px;
-  background-color: #00ff00;
-}
-
-.colNav {
-  display: flex;
-  flex-direction: column;
-  gap: 0.875rem;
-}
-
-.colTitle {
-  font-family: var(--os-font-mono, monospace);
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 6px var(--ok);
 }
 
 .linkList {
   list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .link {
-  color: #e2e8f0;
+  font-family: var(--font-ui);
   font-size: 0.8125rem;
+  color: var(--text-1);
   text-decoration: none;
-  transition: color 0.1s ease;
+  transition: color var(--duration-fast) var(--ease-out);
 }
 
 .link:hover {
-  color: #ffffff;
+  color: var(--text-0);
 }
 
+/* Bottom Bar */
 .bottomBar {
-  padding-top: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 1rem;
-  font-family: var(--os-font-mono, monospace);
-  font-size: 0.6875rem;
-  color: #cbd5e1;
+  gap: 12px;
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
 }
 
 .copyright {
-  color: #cbd5e1;
-  letter-spacing: 0.04em;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--text-2);
 }
 
 .socialRow {
   display: flex;
   align-items: center;
-  gap: 1rem;
 }
 
 .socialIcon {
-  color: #cbd5e1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.1s ease;
+  color: var(--text-2);
+  transition: color var(--duration-fast) var(--ease-out);
 }
 
 .socialIcon:hover {
-  color: #ffffff;
+  color: var(--text-0);
 }
 
 .licenseNotice {
-  letter-spacing: 0.04em;
-  color: #cbd5e1;
-}
-
-@media (max-width: 900px) {
-  .grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-  }
-}
-
-@media (max-width: 600px) {
-  .grid {
-    grid-template-columns: 1fr;
-    gap: 1.75rem;
-  }
-  .bottomBar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--text-2);
 }
