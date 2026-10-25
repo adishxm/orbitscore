@@ -65,6 +65,30 @@
       "allowed_dispositions": ["complete", "deferred_by_owner"],
       "current_disposition": "complete",
       "note": "Cryptographic model registry, research inference runner, and isolated /research/cdm-forecast endpoint."
+    },
+    "T026": {
+      "title": "Live telemetry data modes and spatio-temporal store",
+      "allowed_dispositions": ["complete", "deferred_by_owner"],
+      "current_disposition": "complete",
+      "note": "Three-mode telemetry in space_track and nasa_spark with strict data mode labeling and fallback."
+    },
+    "T027": {
+      "title": "Orbital intelligence endpoints (pathway, alerts, decay)",
+      "allowed_dispositions": ["complete", "deferred_by_owner"],
+      "current_disposition": "complete",
+      "note": "Deterministic SGP4 ground-track pathway, heuristic CDM alert bands, and research-gated decay paths."
+    },
+    "T028": {
+      "title": "Space Credit Index explanation and fleet batching",
+      "allowed_dispositions": ["complete", "deferred_by_owner"],
+      "current_disposition": "complete",
+      "note": "Wired 4-pillar index with missing evidence disclosure and fleet-wide calculation."
+    },
+    "T029": {
+      "title": "ODAR and EOMP report generator with watermarked PDF",
+      "allowed_dispositions": ["complete", "deferred_by_owner"],
+      "current_disposition": "complete",
+      "note": "Automated NASA ODAR and ISRO EOMP generation with ReportLab watermarked PDF output."
     }
   },
   "completion_scope_warning": "This defines tracked MVP scope only; it cannot prove every possible product requirement, domain correctness, market success, regulatory fitness, or production readiness."

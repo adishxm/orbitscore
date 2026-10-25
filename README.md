@@ -140,7 +140,7 @@ Deterministic, 4-pillar readiness index evaluating spacecraft missions on a 0–
 │   │   ├── db.py           # SQLModel SQLite / PostgreSQL persistence with Alembic migrations
 │   │   ├── adapters/       # Telemetry adapters (Space-Track, CelesTrak, NASA SPARK baselines)
 │   │   └── main.py         # REST API endpoints and middleware
-│   └── tests/              # Pytest test suite (64+ tests including v04 regression suite)
+│   └── tests/              # Pytest test suite (86 tests across 13 suites including v04 regression & hardening suites)
 │
 ├── ai_ml/                  # Astrodynamics ML & Document Extraction
 │   ├── training/           # ESA CDM offline training and cross-validation pipelines

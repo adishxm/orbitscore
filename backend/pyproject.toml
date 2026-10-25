@@ -3,7 +3,18 @@ name = "orbitscore-api"
 version = "1.0.0"
 description = "Source-linked debris-mitigation evidence pre-review API"
 requires-python = ">=3.10"
-dependencies = ["fastapi>=0.110,<1", "uvicorn[standard]>=0.27,<1", "pydantic>=2.6,<3", "orbitscore-ai-ml"]
+dependencies = [
+    "fastapi>=0.110,<1",
+    "uvicorn[standard]>=0.27,<1",
+    "pydantic>=2.6,<3",
+    "httpx>=0.27,<1",
+    "reportlab>=4.0.0",
+    "alembic>=1.13.0",
+    "pypdf>=4.0.0",
+    "python-multipart>=0.0.9",
+    "tzdata",
+    "orbitscore-ai-ml"
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
