@@ -1,5 +1,7 @@
-/* OrbitScore CSS Design Tokens */
-/* Derived from EnduroSat reference and engineered for WCAG 2.2 AA */
+/* =========================================================================
+   OrbitScore CSS Design Tokens — "Orbital Mission Control at Sunrise"
+   Derived from EnduroSat/SpaceX/Linear visual language; WCAG 2.2 AA accessible.
+   ========================================================================= */
 
 /* Self-Hosted Typefaces with font-display: swap */
 @font-face {
@@ -13,7 +15,7 @@
 @font-face {
   font-family: 'Space Grotesk';
   src: url('/fonts/spacegrotesk-700.ttf') format('truetype');
-  font-weight: 700;
+  font-weight: 600 700;
   font-style: normal;
   font-display: swap;
 }
@@ -45,177 +47,168 @@
 @font-face {
   font-family: 'JetBrains Mono';
   src: url('/fonts/jetbrainsmono-600.ttf') format('truetype');
-  font-weight: 600;
+  font-weight: 600 700;
   font-style: normal;
   font-display: swap;
 }
 
 :root {
-  /* Surfaces & Backgrounds (Translucent Glassmorphic Palette letting background.svg shine through) */
-  --os-color-bg-deep: rgba(9, 13, 22, 0.85);
-  --os-color-bg-base: rgba(12, 18, 32, 0.75);
-  --os-color-surface-sunken: rgba(9, 14, 24, 0.80);
-  --os-color-surface-subtle: rgba(16, 23, 38, 0.75);
-  --os-color-surface-card: rgba(17, 24, 39, 0.80);
-  --os-color-surface-hover: rgba(22, 32, 51, 0.85);
-  --os-color-surface-overlay: rgba(12, 18, 32, 0.90);
+  /* =========================================================================
+     1. Primary Palette (Deep-space navy-black & atmospheric sunrise glow)
+     ========================================================================= */
+  --bg-0: #04060b;         /* Page primary background */
+  --bg-1: #070b14;         /* Alternating section background */
+  --surface-1: #0b111d;    /* Base card / container surface */
+  --surface-2: #101828;    /* Elevated surface / hover state */
+  --surface-3: #162036;    /* Highly elevated modal / tooltip surface */
 
-  /* Hairline Architectural Structural Borders */
-  --os-color-border-subtle: #1e293b;
-  --os-color-border-mid: #334155;
-  --os-color-border-bright: #475569;
-  --os-color-border-cyan: #0d9488;
-  --os-color-border-teal: #0d9488;
-  --os-color-border-interactive: #334155;
+  /* Hairline Borders */
+  --border: rgba(148, 170, 210, 0.14);
+  --border-strong: rgba(148, 170, 210, 0.30);
+  --border-focus: rgba(34, 211, 238, 0.7);
 
-  /* Text & Labels (White & Crisp Light Shades) */
-  --os-color-text-white: #ffffff;
-  --os-color-text-primary: #ffffff;
-  --os-color-text-secondary: #f1f5f9;
-  --os-color-text-muted: #e2e8f0;
-  --os-color-text-dim: #cbd5e1;
+  /* Text & Labels (Off-White & Crisp Slate Shades) */
+  --text-0: #eef3ff;       /* Primary headlines and high-contrast text */
+  --text-1: #b4c0da;       /* Secondary body copy, descriptions (max 62ch) */
+  --text-2: #8394b3;       /* Micro-labels, units, and structural metadata */
 
-  /* Calm Brand Teal Accent (Accessible Dark Teal) */
-  --os-color-accent-teal: #0d9488;
-  --os-color-accent-teal-hover: #0f766e;
-  --os-color-accent-teal-active: #115e59;
-  --os-color-accent-teal-subtle: rgba(13, 148, 136, 0.12);
-  --os-color-accent-teal-border: rgba(13, 148, 136, 0.35);
+  /* Accents & Highlights */
+  --accent: #6aa5ff;       /* Primary electric blue for text, borders, subtle glow */
+  --accent-fill: #2563eb;  /* Solid primary button fill with pure white text */
+  --accent-2: #22d3ee;     /* Secondary cool cyan atmospheric glow */
+  --sun: #ffb454;          /* Rare sunrise amber highlight */
 
-  /* Aliases for backwards compatibility */
-  --os-color-accent-cyan: #0d9488;
-  --os-color-accent-cyan-hover: #0f766e;
-  --os-color-accent-cyan-muted: rgba(13, 148, 136, 0.15);
-  --os-color-accent-amber: #f59e0b;
-  --os-color-accent-crimson: #ef4444;
-  --os-color-accent-orange: #f97316;
-  --os-color-accent-green: #10b981;
+  /* Semantic Status Colors (Used strictly for telemetry status) */
+  --ok: #34d399;           /* Confirmed integrity, nominal hardware, pass state */
+  --warn: #fbbf24;         /* Caution state, review required, demo data notice */
+  --crit: #fb7185;         /* Flawed integrity, thermal alert, locked gate */
 
-  /* 5 Evidence State Tokens - Semantic Non-Color Distinct Categories */
-  --os-state-confirmed-text: #10b981; /* Calm Emerald Green - Confirmed */
-  --os-state-confirmed-bg: rgba(16, 185, 129, 0.12);
-  --os-state-confirmed-border: rgba(16, 185, 129, 0.35);
+  /* =========================================================================
+     2. Geometry, Spacing & Elevation
+     ========================================================================= */
+  --radius-sm: 8px;        /* Chips, telemetry badges, inputs */
+  --radius-md: 14px;       /* Primary cards, application panels */
+  --radius-pill: 999px;    /* Status pills and segmented active tracks */
 
-  --os-state-unconfirmed-text: #f59e0b; /* Amber - Awaiting Review */
-  --os-state-unconfirmed-bg: rgba(245, 158, 11, 0.12);
-  --os-state-unconfirmed-border: rgba(245, 158, 11, 0.35);
+  /* 4px Spacing Base */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-18: 72px;
+  --space-28: 112px;
 
-  --os-state-missing-text: #ef4444; /* Red - Missing Mandatory Field */
-  --os-state-missing-bg: rgba(239, 68, 68, 0.12);
-  --os-state-missing-border: rgba(239, 68, 68, 0.35);
+  --section-pad: clamp(72px, 10vw, 140px);
 
-  --os-state-conflicting-text: #c084fc; /* Purple - Document Conflict */
-  --os-state-conflicting-bg: rgba(168, 85, 247, 0.12);
-  --os-state-conflicting-border: rgba(168, 85, 247, 0.35);
+  /* Elevation Shadows */
+  --shadow-card: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 24px 48px -28px rgba(0, 0, 0, 0.8);
+  --shadow-accent-glow: 0 0 0 1px rgba(106, 165, 255, 0.45), 0 0 32px -8px rgba(106, 165, 255, 0.4);
+  --shadow-subtle: 0 4px 16px rgba(0, 0, 0, 0.4);
 
-  --os-state-outofscope-text: #94a3b8; /* Neutral Slate - Out of Scope */
-  --os-state-outofscope-bg: rgba(148, 163, 184, 0.12);
-  --os-state-outofscope-border: rgba(148, 163, 184, 0.25);
+  /* Motion Timing & Curves */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-deliberate: 600ms;
 
-  /* Separate Stale Status Badge Tokens (Distinct from Confirmed) */
-  --os-badge-stale-text: #fb923c;
-  --os-badge-stale-bg: rgba(251, 146, 60, 0.12);
-  --os-badge-stale-border: rgba(251, 146, 60, 0.35);
+  /* =========================================================================
+     3. Typography Hierarchy
+     ========================================================================= */
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-ui: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 
-  /* Light / Print Canvas Evidence State Tokens (Contrast >= 4.5:1 on #FFFFFF) */
-  --os-state-confirmed-print-text: #047857; /* Emerald 700 - 5.8:1 */
-  --os-state-confirmed-print-bg: #ecfdf5;
+  /* Fluid Scale */
+  --type-h1: clamp(2.5rem, 1.2rem + 4.6vw, 4.75rem);
+  --type-h2: clamp(1.9rem, 1rem + 2.6vw, 3rem);
+  --type-h3: clamp(1.125rem, 1rem + 0.5vw, 1.25rem);
+  --type-body: 1rem;
+  --type-data: 1.35rem;
+  --type-micro: 0.7rem;
 
-  --os-state-unconfirmed-print-text: #b45309; /* Amber 700 - 5.2:1 */
-  --os-state-unconfirmed-print-bg: #fffbeb;
+  /* =========================================================================
+     4. Backward Compatibility Aliases for Existing Components
+     ========================================================================= */
+  --os-color-bg-deep: var(--bg-0);
+  --os-color-bg-base: var(--bg-1);
+  --os-color-surface-sunken: var(--bg-0);
+  --os-color-surface-subtle: var(--surface-1);
+  --os-color-surface-card: var(--surface-1);
+  --os-color-surface-hover: var(--surface-2);
+  --os-color-surface-overlay: var(--surface-3);
 
-  --os-state-missing-print-text: #b91c1c; /* Red 700 - 6.1:1 */
-  --os-state-missing-print-bg: #fef2f2;
+  --os-color-border-subtle: var(--border);
+  --os-color-border-mid: var(--border-strong);
+  --os-color-border-bright: rgba(148, 170, 210, 0.4);
+  --os-color-border-cyan: var(--accent);
+  --os-color-border-teal: var(--accent);
+  --os-color-border-interactive: var(--border-strong);
 
-  --os-state-conflicting-print-text: #7e22ce; /* Purple 700 - 6.4:1 */
-  --os-state-conflicting-print-bg: #faf5ff;
+  --os-color-text-white: var(--text-0);
+  --os-color-text-primary: var(--text-0);
+  --os-color-text-secondary: var(--text-1);
+  --os-color-text-muted: var(--text-2);
+  --os-color-text-dim: #64748b;
 
-  --os-state-outofscope-print-text: #475569; /* Slate 600 - 5.4:1 */
-  --os-state-outofscope-print-bg: #f1f5f9;
+  --os-color-accent-teal: var(--accent);
+  --os-color-accent-teal-hover: var(--accent-fill);
+  --os-color-accent-cyan: var(--accent);
+  --os-color-accent-cyan-hover: var(--accent-fill);
+  --os-color-accent-amber: var(--warn);
+  --os-color-accent-crimson: var(--crit);
+  --os-color-accent-green: var(--ok);
 
-  /* Typography Families */
-  --os-font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --os-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --os-font-mono: 'JetBrains Mono', 'IBM Plex Mono', Menlo, Consolas, monospace;
+  --os-state-confirmed-text: var(--ok);
+  --os-state-confirmed-bg: rgba(52, 211, 153, 0.12);
+  --os-state-confirmed-border: rgba(52, 211, 153, 0.35);
 
-  /* Fluid Typography Scale */
-  --os-type-hero: clamp(2.25rem, 5vw + 0.75rem, 4.5rem);
-  --os-type-title-1: clamp(1.75rem, 3.2vw + 0.5rem, 2.75rem);
-  --os-type-title-2: clamp(1.35rem, 2vw + 0.4rem, 2rem);
-  --os-type-title-3: clamp(1.125rem, 1.25vw + 0.25rem, 1.5rem);
-  --os-type-body-l: clamp(1.0625rem, 0.5vw + 0.875rem, 1.25rem);
-  --os-type-body: 1rem;
-  --os-type-body-s: 0.875rem;
-  --os-type-caption: 0.75rem;
-  --os-type-mono-xs: 0.6875rem;
+  --os-state-unconfirmed-text: var(--warn);
+  --os-state-unconfirmed-bg: rgba(251, 191, 36, 0.12);
+  --os-state-unconfirmed-border: rgba(251, 191, 36, 0.35);
 
-  /* Line Heights */
-  --os-lh-tight: 1.1;
-  --os-lh-snug: 1.25;
-  --os-lh-normal: 1.55;
-  --os-lh-relaxed: 1.75;
+  --os-state-missing-text: var(--crit);
+  --os-state-missing-bg: rgba(251, 113, 133, 0.12);
+  --os-state-missing-border: rgba(251, 113, 133, 0.35);
 
-  /* Letter Spacings */
-  --os-tracking-tighter: -0.04em;
-  --os-tracking-tight: -0.02em;
-  --os-tracking-normal: 0em;
-  --os-tracking-wide: 0.05em;
-  --os-tracking-caps: 0.1em;
+  --os-state-conflicting-text: #c084fc;
+  --os-state-conflicting-bg: rgba(192, 132, 252, 0.12);
+  --os-state-conflicting-border: rgba(192, 132, 252, 0.35);
 
-  /* Spacing Scale (4px base) */
-  --os-space-1: 0.25rem;  /* 4px */
-  --os-space-2: 0.5rem;   /* 8px */
-  --os-space-3: 0.75rem;  /* 12px */
-  --os-space-4: 1.0rem;   /* 16px */
-  --os-space-5: 1.25rem;  /* 20px */
-  --os-space-6: 1.5rem;   /* 24px */
-  --os-space-8: 2.0rem;   /* 32px */
-  --os-space-10: 2.5rem;  /* 40px */
-  --os-space-12: 3.0rem;  /* 48px */
-  --os-space-16: 4.0rem;  /* 64px */
-  --os-space-24: 6.0rem;  /* 96px */
-  --os-space-32: 8.0rem;  /* 128px */
+  --os-state-outofscope-text: var(--text-2);
+  --os-state-outofscope-bg: rgba(131, 148, 179, 0.12);
+  --os-state-outofscope-border: rgba(131, 148, 179, 0.25);
 
-  /* Containers & Dimensions */
-  --os-container-sm: 640px;
-  --os-container-md: 960px;
-  --os-container-lg: 1200px;
-  --os-container-xl: 1360px;
-  --os-content-max: 960px;
-  --os-container-pad: clamp(1.25rem, 4vw, 3.5rem);
+  --os-font-display: var(--font-display);
+  --os-font-sans: var(--font-sans);
+  --os-font-mono: var(--font-mono);
 
-  /* Geometry & Radii */
-  --os-radius-xs: 2px;
-  --os-radius-sm: 4px;
-  --os-radius-md: 6px;
-  --os-radius-lg: 8px;
-  --os-radius-pill: 9999px;
+  --os-radius-xs: 4px;
+  --os-radius-sm: var(--radius-sm);
+  --os-radius-md: var(--radius-md);
+  --os-radius-lg: var(--radius-md);
+  --os-radius-pill: var(--radius-pill);
 
-  /* Shadows (Zero Glow, Zero Soft Shadow, Straight Flat Only) */
-  --os-shadow-sm: none;
-  --os-shadow-md: none;
-  --os-shadow-lg: none;
-  --os-shadow-cyan: none;
+  --os-space-1: var(--space-1);
+  --os-space-2: var(--space-2);
+  --os-space-3: var(--space-3);
+  --os-space-4: var(--space-4);
+  --os-space-6: var(--space-6);
+  --os-space-8: var(--space-8);
+  --os-space-12: var(--space-12);
 
-  /* Z-Index Hierarchy */
-  --os-z-below: -1;
+  --os-duration-fast: var(--duration-fast);
+  --os-duration-normal: var(--duration-normal);
+  --os-duration-deliberate: var(--duration-deliberate);
+  --os-ease-standard: var(--ease-out);
+
   --os-z-canvas: 0;
   --os-z-content: 10;
   --os-z-sticky: 100;
   --os-z-header: 250;
-  --os-z-drawer: 300;
   --os-z-modal: 400;
-  --os-z-toast: 500;
   --os-z-banner: 600;
-
-  /* Motion & Easing */
-  --os-ease-standard: cubic-bezier(0.51, 0.01, 0.2, 1);
-  --os-ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
-  --os-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-
-  --os-duration-fast: 150ms;
-  --os-duration-normal: 300ms;
-  --os-duration-medium: 450ms;
-  --os-duration-deliberate: 600ms;
-  --os-duration-long: 800ms;
 }

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Header } from './components/common/Header';
 import { Footer } from './components/common/Footer';
+import { GlobalAtmosphere } from './components/common/GlobalAtmosphere';
 import { useOrbitStore } from './store/useOrbitStore';
 
 // Route Pages
@@ -25,18 +26,10 @@ export const AppContent: React.FC = () => {
   }, []);
 
   return (
-    <div
-      className="app-root relative min-h-screen text-[#ffffff]"
-      style={{
-        backgroundImage: 'url(/background.svg)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'top center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-        backgroundColor: '#000000',
-      }}
-    >
-      <a href="#main-content" className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:p-2 focus:bg-[#0d9488] focus:text-[#FFFFFF]">
+    <div className="app-root relative min-h-screen text-[var(--text-0)] bg-[var(--bg-0)]">
+      <GlobalAtmosphere />
+
+      <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
 

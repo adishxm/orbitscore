@@ -1,7 +1,8 @@
-/* OrbitScore Base CSS & Layout Primitives */
-/* WCAG 2.2 AA accessible reset, typography baseline, focus states & layout primitives */
+/* =========================================================================
+   OrbitScore Base CSS & Atmospheric Layer — "Mission Control at Sunrise"
+   WCAG 2.2 AA accessible baseline, global atmosphere, crisp typography.
+   ========================================================================= */
 
-/* 1. Box Sizing & Baseline Reset */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -10,15 +11,10 @@
 
 html {
   font-size: 16px;
-  background-color: #000000;
-  background-image: url('/background.svg');
-  background-size: cover;
-  background-position: top center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  color: var(--os-color-text-primary);
-  font-family: var(--os-font-sans);
-  line-height: var(--os-lh-normal);
+  background-color: var(--bg-0);
+  color: var(--text-0);
+  font-family: var(--font-sans);
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
@@ -27,66 +23,91 @@ html {
 
 body {
   min-height: 100vh;
-  background-color: transparent;
-  color: var(--os-color-text-primary);
+  background-color: var(--bg-0);
+  color: var(--text-0);
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+  position: relative;
 }
 
-/* 2. Custom Scrollbar */
+/* 1. Selection & Scroll Anchoring */
+::selection {
+  background: rgba(106, 165, 255, 0.30);
+  color: #ffffff;
+}
+
+:target {
+  scroll-margin-top: 80px;
+}
+
+/* 2. Thin Precision Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--os-color-bg-base);
+  background: var(--bg-0);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--os-color-border-bright);
-  border-radius: var(--os-radius-sm);
+  background: rgba(148, 170, 210, 0.22);
+  border-radius: var(--radius-pill);
+  transition: background var(--duration-fast) var(--ease-out);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--os-color-accent-cyan);
+  background: var(--accent);
 }
 
 /* 3. Typography Hierarchy */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--os-font-display);
-  color: var(--os-color-text-white);
-  font-weight: 700;
-  line-height: var(--os-lh-tight);
-  letter-spacing: var(--os-tracking-tight);
+  font-family: var(--font-display);
+  color: var(--text-0);
+  font-weight: 600;
+  margin: 0;
+  text-rendering: optimizeLegibility;
 }
 
-h1 { font-size: var(--os-type-title-1); }
-h2 { font-size: var(--os-type-title-2); }
-h3 { font-size: var(--os-type-title-3); }
-h4 { font-size: var(--os-type-body-l); }
-h5 { font-size: var(--os-type-body); }
-h6 { font-size: var(--os-type-body-s); }
+h1 {
+  font-size: var(--type-h1);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+}
+
+h2 {
+  font-size: var(--type-h2);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+h3 {
+  font-size: var(--type-h3);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
 
 p {
-  color: var(--os-color-text-secondary);
-  font-size: var(--os-type-body);
-  line-height: var(--os-lh-normal);
+  color: var(--text-1);
+  font-size: 1rem;
+  line-height: 1.65;
+  max-width: 62ch;
 }
 
 code, pre, kbd, samp {
-  font-family: var(--os-font-mono);
-  font-size: 0.875em;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
 }
 
 small {
-  font-size: var(--os-type-caption);
-  color: var(--os-color-text-muted);
+  font-size: var(--type-micro);
+  color: var(--text-2);
 }
 
 /* 4. Interactive Baseline */
 a {
   color: inherit;
   text-decoration: none;
-  transition: color var(--os-duration-fast) var(--os-ease-standard);
+  transition: color var(--duration-fast) var(--ease-out);
 }
 
 button, input, select, textarea {
@@ -107,122 +128,48 @@ button:disabled, input:disabled, select:disabled, textarea:disabled {
 
 /* 5. Accessibility Focus Ring (WCAG 2.2 AA) */
 :focus-visible {
-  outline: 2px solid var(--os-color-accent-cyan);
+  outline: 2px solid var(--accent-2);
   outline-offset: 2px;
-  border-radius: var(--os-radius-xs);
+  border-radius: var(--radius-sm);
 }
 
-/* 6. Skip to Main Content Link */
+/* 6. Accessible Skip Link */
 .skip-link {
   position: absolute;
   top: -120px;
   left: 1.5rem;
-  z-index: var(--os-z-banner);
-  background: var(--os-color-accent-cyan);
+  z-index: 9999;
+  background: var(--accent-fill);
   color: #ffffff;
-  padding: var(--os-space-3) var(--os-space-5);
-  font-weight: 700;
-  font-size: var(--os-type-body-s);
-  border-radius: var(--os-radius-xs);
+  padding: 8px 16px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: var(--radius-sm);
   text-decoration: none;
-  transition: top var(--os-duration-fast) ease;
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.5);
+  transition: top var(--duration-fast) var(--ease-out);
 }
 
 .skip-link:focus {
   top: 1.5rem;
 }
 
-/* 7. Layout Primitives */
-
-/* Full-Bleed Left-to-Right Edge-to-Edge Container */
-.container {
-  width: 100%;
-  max-width: none;
-  margin-left: 0;
-  margin-right: 0;
-  padding-left: clamp(1rem, 2vw, 2rem);
-  padding-right: clamp(1rem, 2vw, 2rem);
-}
-
-/* Focused Content Column (960px max width inside container) */
-.containerNarrow {
-  width: 100%;
-  max-width: var(--os-content-max);
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: var(--os-container-pad);
-  padding-right: var(--os-container-pad);
-}
-
-/* Standard Section Rhythm */
-.section {
-  padding: var(--os-space-12) 0;
-  border-bottom: 1px solid var(--os-color-border-subtle);
-  margin-bottom: var(--os-space-12);
-}
-
-/* Layout Grids */
-.grid2 {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--os-space-6);
-}
-
-@media (max-width: 768px) {
-  .grid2 {
-    grid-template-columns: 1fr;
-  }
-}
-
-.grid3 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--os-space-6);
-}
-
-@media (max-width: 1024px) {
-  .grid3 {
-    grid-template-columns: 1fr;
-  }
-}
-
-.grid4 {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--os-space-4);
-}
-
-@media (max-width: 1024px) {
-  .grid4 {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 640px) {
-  .grid4 {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Stack: Vertical flow with consistent gap */
-.stack {
-  display: flex;
-  flex-direction: column;
-  gap: var(--os-space-4);
-}
-
-/* Cluster: Horizontal wrap flow */
-.cluster {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--os-space-3);
+/* 7. Screen Reader Utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* 8. Reduced Motion Override */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
-    /* Required by master prompt to disable motion for sensitive users */
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
