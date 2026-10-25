@@ -149,13 +149,16 @@ export const ConjunctionWorkspacePage: React.FC = () => {
     setForecastError(null);
     setForecastResult(null);
 
+    const prob = Math.max(1e-15, Math.min(1.0, event.collision_probability || 1e-4));
+    const logRisk = Math.min(0.0, Math.log10(prob));
+
     try {
       const res = await runCdmForecastLive({
         event_id: event.cdm_id,
         time_to_tca_days: 2.0,
         miss_distance_m: event.miss_distance_meters,
         relative_speed_m_s: event.relative_speed_kms * 1000,
-        latest_early_risk: event.collision_probability,
+        latest_early_risk: logRisk,
       });
       setForecastResult(res);
     } catch (err: unknown) {
@@ -423,17 +426,19 @@ export const ConjunctionWorkspacePage: React.FC = () => {
 
               {forecastResult && (
                 <div className={styles.cdmResult}>
-                  <div><strong>Model Status:</strong> {forecastResult.model_status || 'RESEARCH_BASELINE'}</div>
-                  <div><strong>Artifact ID:</strong> {forecastResult.model_artifact_id || 'Baseline-Regression'}</div>
+                  <div><strong>Model Status:</strong> {forecastResult.model_status || (forecastResult.research_only ? 'RESEARCH_EVALUATED' : 'BASELINE_PERSISTENCE')}</div>
+                  <div><strong>Artifact ID:</strong> {forecastResult.model_artifact_id || forecastResult.model_version || 'Baseline-Regression'}</div>
                   <div>
-                    <strong>Predicted Miss Distance at TCA:</strong>{' '}
-                    {typeof forecastResult.predicted_miss_distance_m === 'number'
+                    <strong>Reported Log10 Risk:</strong>{' '}
+                    {typeof forecastResult.forecasted_final_log10_risk === 'number'
+                      ? `${forecastResult.forecasted_final_log10_risk.toFixed(2)} (${(10 ** forecastResult.forecasted_final_log10_risk).toExponential(2)} Pc)`
+                      : typeof forecastResult.predicted_miss_distance_m === 'number'
                       ? `${forecastResult.predicted_miss_distance_m.toFixed(1)} m`
                       : 'N/A'}
                   </div>
-                  <div><strong>Forecast Risk Classification:</strong> {forecastResult.forecast_alert_tier || 'MONITORING'}</div>
+                  <div><strong>Risk Classification:</strong> {forecastResult.forecast_alert_tier || (forecastResult.derived_high_risk_flag ? 'CRITICAL / ACTION REQUIRED' : 'ADVISORY / MONITORING')}</div>
                   <div style={{ marginTop: '6px', fontSize: '11px', color: 'var(--os-color-text-muted)' }}>
-                    Limitation: {forecastResult.notes || 'Research exploratory forecast.'}
+                    Limitation: {forecastResult.notes || forecastResult.disclaimer || 'Research exploratory forecast.'}
                   </div>
                 </div>
               )}

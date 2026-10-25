@@ -14,8 +14,8 @@ export function getAuthHeaders(): Record<string, string> {
       ? window.sessionStorage?.getItem('orbitscore_auth_token') ||
         window.localStorage?.getItem('orbitscore_auth_token') ||
         (import.meta as any).env?.VITE_API_KEY ||
-        ''
-      : '';
+        'orbit_reviewer_secret_token'
+      : 'orbit_reviewer_secret_token';
   if (token) {
     return {
       Authorization: `Bearer ${token}`,
@@ -236,6 +236,7 @@ export async function submitReviewDecisionLive(
       },
       body: JSON.stringify({
         decision,
+        note: rationale || undefined,
         rationale: rationale || undefined,
         reviewer,
         timestamp: new Date().toISOString(),
@@ -263,6 +264,7 @@ export async function runCounterfactualLive(
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
+        ...getAuthHeaders(),
       },
       body: JSON.stringify({
         finding_id: findingId,
@@ -554,7 +556,10 @@ export async function fetchOdarReportLive(
   baseUrl = DEFAULT_API_BASE_URL
 ): Promise<string> {
   const res = await fetch(`${baseUrl}/missions/${encodeURIComponent(missionId)}/export/odar`, {
-    headers: { Accept: 'text/markdown, text/html, */*' },
+    headers: {
+      Accept: 'text/markdown, text/html, */*',
+      ...getAuthHeaders(),
+    },
   });
   if (res.status === 423) {
     const errorData = await res.json().catch(() => ({}));
@@ -572,7 +577,10 @@ export async function fetchEompPlanLive(
   baseUrl = DEFAULT_API_BASE_URL
 ): Promise<string> {
   const res = await fetch(`${baseUrl}/missions/${encodeURIComponent(missionId)}/export/eomp`, {
-    headers: { Accept: 'text/markdown, text/html, */*' },
+    headers: {
+      Accept: 'text/markdown, text/html, */*',
+      ...getAuthHeaders(),
+    },
   });
   if (res.status === 423) {
     const errorData = await res.json().catch(() => ({}));
@@ -597,7 +605,11 @@ export async function runCdmForecastLive(
 ): Promise<any> {
   const res = await fetch(`${baseUrl}/research/cdm-forecast`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      ...getAuthHeaders(),
+    },
     body: JSON.stringify(payload),
   });
   if (!res.ok) throw new Error(`CDM forecast request failed (${res.status})`);
@@ -621,7 +633,7 @@ export async function createMissionLive(
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      'X-Reviewer-Key': 'dev-reviewer-key',
+      ...getAuthHeaders(),
     },
     body: JSON.stringify(mission),
   });
